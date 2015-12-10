@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /setting/.
+Disallow: /spool/.
+Disallow: /imm-art/.
+Disallow: /bin/.
+Disallow: /plugins/.

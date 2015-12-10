@@ -1,0 +1,58 @@
+Agua Gest - Condizioni di pagamento                                                                 
+<p style=\"text-align: center;\"><strong><span style=\"font-size: medium;\">Inserire le condizioni di Pagamento:</span></strong></p>
+<p><span style=\"font-size: x-small;\">Le condizioni di pagamento vengono inserite in questa sezione del programma (Contatti, condizioni pagamento), e vengono riprese in tutto il programma, dagli ordini acquisti, agli ordini e fatture di vendita. Il programma fornisce gi&agrave; delle tabelle pre-caricate, ma in ogni caso &egrave; sempre possibile variare o inserire altre modalit&agrave;. Dal menu principale, scegliamo gestione contatti, poi dal menu laterale clicchiamo condizioni pagamento, ed ancora dal menu\' laterale clicchiamo , inserisci nuovo pagamento, dovrebbe apparirvi un a finestra cos&igrave;:</span></p>
+<p><img src=\"agua/aguagest/manuale/pagamenti_n.png\" alt=\"\" width=\"60%\" border=\"0\" /></p>
+<p style=\"text-align: left;\"><strong>Descrizione dei campi:</strong></p>
+<table style=\"text-align: left; width: 90%;\" border=\"1\">
+<tbody>
+<tr style=\"height: 80%;\" align=\"center\" valign=\"middle\">
+<td>Codice</td>
+<td>Campo di 4 caratteri alfanumerici associati al pagamento. Es. R60F, come per ricevuta bancaria 60gg. Fine mese.</td>
+</tr>
+<tr>
+<td>Descrizione</td>
+<td>Campo di alfanumerici, che contiene la descrizione della modalit&agrave; scritta per esteso, riportata in tutti i documenti.</td>
+</tr>
+<tr>
+<td>% di sconto Praticato</td>
+<td>Eventuale sconto da applicare sul pagamento espresso in percentuale.</td>
+</tr>
+<tr>
+<td>Rata IVA 1/2/3/4</td>
+<td>Indicare in quale rata deve essere pagata l\'IVA del documento 1 = IVA divisa sulle rate (standard) 2 = IVA inserita totalmente sulla prima rata 3 = IVA inserita totalmente sull\' ultima rata 4 = La prima &egrave; l\'iva, ed l\'imponibile viene diviso tra le rimanenti rate.</td>
+</tr>
+<tr>
+<td>Giorno di scadenza fisso.</td>
+<td>In questa casella viene indicato, se voluto un giorno preciso della scadenza delle rate. (esempio il 10 del mese). Esso avr&agrave; priorita assoluta in caso di fine mese. Se noi facciamo ri.ba. 30 gg al 10 del mese. Sar&agrave; al successivo mese. Ovvero un pagamento da 40 g.g.</td>
+</tr>
+<tr>
+<td>Primo mese escluso.</td>
+<td>Indicare eventualmente, il numero corrispondente alla mensilt&agrave; che si intente saltare dal calcolo delle rate. Classico &egrave; il mese di agosto. La ricevuta sar&agrave; spostata in automatico al mese successivo il giorno 10, anche se non viene specificato.</td>
+</tr>
+<tr>
+<td>Secondo mese escluso</td>
+<td>Indicare eventualmente il secondo mese escluso, come per agosto un altro classico &egrave; dicembre.</td>
+</tr>
+<tr>
+<td>Tipo di rata 0/1/2/3/4/5/6</td>
+<td>Indica il tipo di pagamento che andiamo a fare, se rimessa diretta, ricevuta bancaria ecc.</td>
+</tr>
+<tr>
+<td>Numero Rate</td>
+<td>Numero di rate che compongono il pagamento, qui va indicato il numero, come 1 se la rata &egrave; in una unica soluzione, 2 de l\'importo &egrave; diviso in due come 60/90 ecc. Se indicato 0 verr&agrave; generata una scadenza con data uguale a quella della fattura.</td>
+</tr>
+<tr>
+<td>Giorni prima scadenza</td>
+<td>N. di giorni che intercorrono dalla data della fattura alla prima scadenza, del caso di un pagamento a 90 giorni va\' indicato 90. Al fine di una corretta generazione delle scadenze, nella maggior parte dei casi, &egrave; opportuno indicare in questo campo 30 e multipli di 30.</td>
+</tr>
+<tr>
+<td>Giorni tra le scadenze</td>
+<td>Qui va indicato il numero di giorni che passa tra una scadenza ed un\'altra. Quindi se noi abbiamo un pagamento 60/90 va indicato 30.</td>
+</tr>
+<tr>
+<td>Fine mese</td>
+<td style=\"text-align: left;\">Qui va scelto se il giorno della scadenza della rata &egrave; da ritenersi come la data della fattura, o spostata a fine mese.</td>
+</tr>
+</tbody>
+</table>
+<p style=\"text-align: left;\"><span style=\"font-size: x-small;\">Una volta inserito tutti questi campi, si procede all\'inserimento con il tasto inserisci, automaticamente la modalit&agrave; di pagamento viene inserta all\'interno degli archivi. Pu&ograve; succedere che erroneamente si utilizzi un codice gi&agrave; esistente, in questo caso il programma avvisa del problema, e con un link sotto con scritto &ldquo;torna indietro&rdquo; fa ritornare alla pagina di reinserimento senza perdere i dati scritti. A questo punto dobbiamo verificare se il codice &egrave; gi&agrave; stato creato, o se abbiamo fatto qualche errore. Condizioni di pagamento particolari: Pu&ograve; succedere che le condizioni di pagamento devono essere create in modo tale che il pagamento delle fatture emesse, vada a cadere in periodi stabiliti. Ecco alcuni esempi di pagamenti che possono servire come esempio per la generazione di nuovi codici. Pagamento a 60 giorni data fattura fine mese al 10 del mese successivo, la fattura &egrave; del 11/05 e il pagamento dovrebbe essere il 31/07 ma verr&agrave; spostato al 10 di agosto. Giorno scadenza fisso: 10 Scadenza DF/FM: FM Num. Giorni prima scadenza 60 Pagamento a 60 giorni data fattura fine mese, al mese 10 del mese successivo, inserito un mese escluso tipo agosto. Giorno scadenza fisso: 10 Scadenza DF/FM: FM Num. Giorni prima scadenza 60 Primo mese escluso 8 In questo caso se la fattura &egrave; datata 11/05 la scadenza sarebbe il 10 di agosto ma essendo stato inserito di saltare il mese di agosto la scadenza sar&agrave; il 10 di settembre.</span></p>

@@ -1,0 +1,2061 @@
+Gestionale AGUA GPL
+Grigolin Massimo.
+http://aguagest.sourceforge.net/
+massimo@mcetechnik.it
+
+
+-VERSIONE 1.2.3 Rc 4 del 
+-1 ADMIN
+-   1   Fatto un piccolo programmino per poter lanciare delle query sql direttamente
+-       nella sezione admin / gestione archivi
+
+-2  VENDITE
+-   1   Sistemato Bug sul corpo dei documenti, quando si agganciava un articolo
+-       correlato non prendeva correttamente gli sconti.
+
+-3  ANAGRAFICHE
+-   1   Nuova tabella destinazioni, Ora un cliente può avere fino a 99 destinazioni
+-       o sedi diverse, inserita la possibilità di aggiungere nella anagrafica clienti
+-       oltre alla sede legale anche l'amministrativa.
+
+-4  UTENTI
+-   1   Nuova sezione utente, ora ogni utente può selezionarsi la grandezza dello
+-       schermo, i colori e il tipo di carattere.
+
+-5  STAMPE
+-   1   Nuovo programma stampe etichette, così ora è possibile stampare tutte le
+-       le destinazioni inserite.. !
+
+--------------------------------------------------------------------------------
+-VERSIONE 1.2.3 Rc 3 del 23/11/2015
+-1 ADMIN
+-   1   Sistemato bug qui e li per l'impaginazione delle finestre ed le stampe
+-   2   Aggiornato un po' il menu.. ora è più fluido
+
+-2  MANUALE
+-   1   Aggiornate le pagine del manuale per quanto riguarda l'installazione e 
+-       l'aggiornamento.
+
+-3  ALL
+-   1   Continuazione della sistemazione schermate / Stampe
+--------------------------------------------------------------------------------
+-Versione 1.2.3 Rc 2 del 06/11/2015
+-1 ADMIN
+-   1   Sistemato la parte del programma che riguarda l'installazione dello stesso
+-       da zero.
+
+- TUTTE LE SEZIONI
+-   Continuazione della sistemazione colori programma e gestione della grandezza
+-   schermata e font
+
+
+
+--------------------------------------------------------------------------------
+-Versione 1.2.3 Rc 1 del 04/11/2015
+
+-1  ADMIN
+-   1   Iniziato il passaggio alla gestione delle nuove stampe anche con gli altri
+-       Browser
+-   2   Sistemazione nuovi pdf, non è più necessario l'uso html2pdf come plug-in
+-       alleggerendo di molto il programma ben 10MB.
+-   3   Nuova schermata gestione base dell'estetica del programma.. Ora agua è 
+-       ancor più personalizzabile..
+-   4   Nuovi colori del menù e nuova visione globale e più coerente della 
+-       schermata, con una dimensione più consona.
+-   5   Pulizia vecchi file obsoleti, nella cartella setting.
+-   6   Nuove schermate su personalizza i colori del programma.
+
+
+-2  ANAGRAFICHE
+-   1   Sistemato bug ricerca tabelle banche per il numero di campi passati alla
+-       funzione
+-   2   Nuovo situazione stampa scheda articolo.
+
+-3  MAGAZZINO
+-   1   Sistemata la ricerca degli articoli nel magazzino attuale.
+
+-4  VENDITE
+-   1   Nuovo programma stampa richiamo effetti.. 
+-   2   Sistemato bug errore modifica fattura..
+
+--------------------------------------------------------------------------------
+-Versione 1.2.2 Rc 2 del 20/10/2015
+-1  VENDITE
+-   1   Sistemato elenco documenti, ora appare correttamente l'inoltro dei documenti
+
+-2  CONTABILITA
+-   1   Sistemato bug dell'errore riporto iva corrente durante la modifica delle
+-       fatture acquisto
+-   2   Sistemato il bug durante l'importazione delle distinte in contabilità
+
+--------------------------------------------------------------------------------
+-Versione 1.2.2 Rc 1 del 09/10/2015
+-1  STAMPE
+-   1   Nuovo programma delle stampe ricarichi ora il guadagno effettivo si
+-       mostra in tutta la sua bellezza.
+-   2   Data la possibilità nelle stampe di magazzino di risalire fino all'inizio
+-       dei tempi.
+
+-2  VENDITE
+-   1   Data la possibilità di inserire una riga vuova semplicemente mettendola
+-       come codice da ricercare.
+-   2   Data la possibilità di allegare un secondo files all'inoltro dei documenti
+
+-3 MAGAZZINO
+-   1   Sistemata la schermata del magazzino durante le ricerche dei prodotti
+-       ora visualizza anche la quantità
+
+-4  ADMIN
+-   1   Sistemato il programma di ricostruzione dei muovimenti di magazzino, ora 
+-       i calcoli sono corretti.
+    
+-5 SCADENZIARIO
+-   1   Data la possibilità di poter spostare un gruppo di scadenze ad una data
+-       prestabilita dell'utente.. senza dover modificarle una ad una.. 
+
+--------------------------------------------------------------------------------
+-Versione 1.2.1 Rc 3 del 20/09/2015
+-1 ADMIN
+-   1   possibilità di stampare gli errori del programma..
+-   2   Sistemazione bug minori
+-   3   Sistemazione del menù
+
+-2  CONTABILITA
+-   1   Sistemazione errore annullamento registrazione
+-   2   Riporto in contabilità della chiusura degli effetti nel portafoglio vendite..
+-   3   Aggiornato bug stampa effetti in portafoglio
+-   4   Ora quando si salda un effetto singolo viene riportato anche in contabilità
+
+
+-3  VENDITE
+-   1   Sistemazione Errore Fattura immediata
+-   2   Possibilità dalla visualizzazione del documento, di poter passare alla
+-       visualizzazione del documento successivo..
+-   3   In caso di contabiiltà aperta nel portafoglio appare anche
+-       il numero della registrazione
+
+--------------------------------------------------------------------------------
+-Versione 1.2.1 Rc 2 del 07/09/2015
+-1  AGGIORNAMENTO VESTE GRAFICA CON NUOVO MENU' COMPLETO DI TUTTE LE OPZIONI
+-   Admin Sistemato il reparto errori programma
+-2  Sistemato Bug ingresso amministratore..
+
+
+-2  ANAGRAFICHE
+-   1   Sistemato il codice iban nella anagrafica clienti ora quando lo si
+-       visualizza il cliente, appare tutto intero
+
+-3  CONTABILITA
+-   1   il link a fine registrazione ora si può inserire una nuova registrazione
+-       direttamente..
+-   2   Ampliamento campo descrizione registrazione, passato da 50 a 100
+
+
+
+--------------------------------------------------------------------------------
+-Versione 1.2.1 Rc 1 del 28/08/2015
+-1  NUOVA VESTE GRAFICA CON NUOVO MENU' COMPLETO DI TUTTE LE OPZIONI
+
+-2  ANAGRAFICHE
+-   1   Modificata la ricerca articoli ora è possibile anche cercare gli articoli
+-       nella descrizione interna..
+
+-3  CONTABILITA
+-   1   Sistemata l'impaginazione dell'elenco fatture in sospeso
+
+
+
+--------------------------------------------------------------------------------
+-Versione 1.2.0 Rc 3 del 08/05/2015
+-1  MAGAZZINO
+-   1   Sistemata la stampa delle rimanenze di magazzino
+
+-2  CONTABILITA
+-   1   Sistemata la schermata della prima nota ora tutto funziona..
+-   2   Sistemato anche l'alliniamento della stampa schede.
+
+-3  ADMIN
+-   1   Continuazione della sostituzione del menu naviga, sistemato anche quello
+-       del reparto vendite fatture vendite..
+-   2   Sistemato riconoscimento cartella plug-ins
+
+--------------------------------------------------------------------------------
+-Versione 1.2.0 Rc 2 del 06/05/2015
+-1  CONTABILITA
+-   1   Inserito un nuovo campo nella schermata di inserimento fatture acquisto
+-       Ora è possibile cercare un cliente anche con la partita iva..    
+-   2   Inserite protezioni in primanota per non inserire righe vuote
+-   3   Sistemato il collegamento tra l'inserimento della prima nota ed lo schedario
+-   4   Inserita la possibilità di inserire una fattura acquisto tramite la ricerca
+-       fornitore a mezzo partita iva
+-   5   Nuovo programma intrastrat.. ora elenca anche le fatture di acquisto..
+-   6   Modificato ed aggiornato le stampe della liquidazione iva periodica
+
+
+
+-2  ADMIN
+-   1   Inserita in recupero muovimenti di magazzino, la possibilità di selezionare
+-       l'anno così da recuperare eventualemnte anche gli anni vecchi..
+-   2   Inizio passaggio alla nuova struttuta dei menu.. eliminando naviga.php
+-   3   Eliminati files di guida e creazione di font, sia su htmltopdf che in
+-       in fpfgen, in quanto davano errore durante la creazione dei binari rpm
+-       per un uso multipiattaforma..
+
+-----------------------------------------------------------------------------
+Versione 1.2.0 Rc 1 del 03/04/2015
+-1 SCADENZIARIO
+-   1   Inserita la possibilità di vedere lo scadenziario all'ingresso del programma
+-   2   Continua lo sviluppo della procedura di aggancio scedenziario alla contabilità.
+
+-2  CONTABILITA
+-   1   Aggiornato il programma dello spesometro.
+
+--------------------------------------------------------------------------------
+Versione 1.1.9 Rc 3 del 02/04/2015
+-1  ADMIN
+-   1   Eliminata la libreria lib_comode a favore di lib_html
+
+-2 CONTABILITA
+-   1   Aggiornato lo spesometro Ora nella stampa appaiono anche i clienti
+
+-3  ANAGRAFICHE
+-   1   Aggiornato il controllo iva sui fornitori per baypassare il discorso
+-       CARBU e RISTO che sono rispettivemte il schede carburanti e ristoranti.
+
+-4  SCADENZIARIO
+-   1   Inserita la possibilità di aggiungere le note..
+-   2   Iniziato ad agganciare lo scadenziario alla prima nota..
+
+--------------------------------------------------------------------------------
+-Versione 1.1.9 Rc 2 del 20/03/2015
+-1  ADMIN
+-   1   Aggiornamento programma, controlla archivi e ripara archivi ora il programma
+-       pulisce i basket ed il suplus dell'archivio, il tutto con le librerie nuove
+-   2   Nuova veste grafica.. ora appare il todo appena entrati.. ogni utente vede il suo
+-       e l'amministratore vede tutti..
+
+
+-2  SCADENZIARIO
+-   1   Nuova interfaccia dello scadenziario ora è possibile vedere tutte le scandenze
+-       del mese proprio come un calendario..
+
+-   USER
+-   1   Inizio nuova interfaccia index con la visione del to-do
+-   2   Nuova veste grafica, ora ci sono tutti i programmi per gestire le cose da fare..
+
+-------------------------------------------------
+-Versione 1.1.9 Rc 1 del 06/03/2015
+-1  CONTABILITA
+-   1   Aggiornata la schermata dell'importazione delle fatture ora, appare
+-       correttamente il valore complessivo della fattura.
+
+-2  ANAGRAFICHE
+-   1   Completata l'importazione dei file METEL, con la possibilità di inserire
+-       o aggiornare l'anagrafica esistente.
+-   2   Come importazione ora è possibile importare anche il file con i gruppi
+-       statistici.
+-   3   Inserita anche la possibilità di importare un file csv..
+
+-3  STAMPE
+-   1   Sistemato le stampe annuali di magazzino, ora i dati vengono esposti in 
+-       maniera corretta..
+
+--------------------------------------------------------------------------------
+-Versione 1.1.8 Rc 3 del 27/02/2015
+-1  CONTABILITA
+-   1   Aggiornata la schermata importa fattura, ora la schermata fa vedere tutte
+-       le fatture in sospeso..
+-   2   Aggiornata la schermata importa distinte, ora elenca tutte le distinte in 
+-       sospeso.
+-   3   Aggiornati ed eliminati due bug sulla generazione della liquidazione iva
+-       periodica ed annuale..
+-   4   Sistemato bug sulla registrazione in contabilità della data effetto e registrazione
+-   5   Aggiornato il programma eliminazione, ora è possibile ripristinare un effetto
+-       eliminando la registrazione dalla contabilità    
+
+-2  VENDITE
+-   1   Modificata la data pagamento dell'effetto in caso di pagamento in contati
+-       viene presa la data di generazione degli effetti..
+-   2   Aggiornato anche il programma altri campi cliente per la conversione
+-       dell'anagrafica categorie mercerologiche..
+-   3   Aggiornamento del programma di gestione dei prezzi personalizzati, con
+-       l'aggiunta della possibilità di stampare tutti i prezzi inseriti.
+
+-1  ADMIN
+-   1   Aggiornato il programma della ricostruzione dei muovimenti di magazzino
+-       Ora ricostruisce l'intero indice del magazzino indipendente dall'anno in 
+-       corso...
+
+
+--------------------------------------------------------------------------------
+-Versione 1.1.8 Rc 2 del 09/02/2015
+-1  VENDITE
+-   1   Aggiornato bug selezione documento per numero
+
+-2  ANAGRAFICHE
+-   1   Sistemazione bug funzione inserimento partita iva provvisoria..
+-   2   Completato importazione listino metel su aggiornamento prezzi acquisto e
+-       vendita.
+
+-3  ADMIN
+-   1   Sistemazione bug errore segnalazione asterisco prezzi netti..
+-   2   Sistemato schermata avvisi aggiornamento
+
+-4  MAGAZZINO
+-   1   Aggiornamato elenco documenti in sospeso, ora appaiono anche quelli senza
+-       numero protocollo iva
+
+-5  MANUALE
+-   1   Sistemato ordine pagine manuale per capitolo
+-   2   Passato file da txt a html, per una miglior interpretazione
+
+
+--------------------------------------------------------------------------------
+-Versione 1.1.8 Rc 1 del 30/01/2015
+-1 Admin
+-   1   Nuovo programma per cancellare i tentativi di intromissione nel programma
+-   2   Nuova estetica programma per la gestione estetica dei documenti
+
+-2  Anagrafiche
+-   1   Inserito un nuovo campo in tutte le anagrafiche, clienti, fornitori, articoli e banche
+-       per poter escludere la riga dalla selezione dei menù a tendina
+-   2   Anagrafica articoli inseriti tutti i nuovi campi per la sincronizzazione 
+-       con la struttura dei listini METEL   
+-   3   Sistemato Bug gestione elenco pagamenti
+-   4   Aggiunti nuovi campi alla anagrafica, ora è possibile associare fino a tre articoli correlati
+-   5   Aggiunti alla scheda scheda stampa articoli i nuovi campi..
+
+-3  Vendite
+-   1   Aggiunta alla maschera quantità i nuovi campi articoli correlati, ora e possibile aggiungere
+-   2   Al documento di vendita in automatico fino a tre correlati in automatico
+-   3   Aggiornato l'atomatismo di esclusione dell'intestazione dalla stampa..
+-   4   Sistemato errore sulla selezione dei documenti nell'anno passato
+
+-4  Magazzino
+-   1   Sistemato errore selezione ordini fornitore
+-   2   ddt acq sistemato errore selezione documenti.
+
+--------------------------------------------------------------------------------
+-Versione 1.1.7 Rc 3 del 22/01/2015
+-1  Admin
+-   1   Sistemato problema visualizzazione degli errori 8192..
+-   2   Aggiunto un nuovo parametro per attivare la modatità visiva degli errori
+-   3   Sistemato bug sulla gestione delle immagini aziendali
+-   4   Sistemato permessi scrittura sulla cartella setting
+-   5   Sistemato bug gestione contabilita parametri azienda
+
+-2  Vendite
+-   1   Sistemato bug riporto del saldo sul parziale dell'effetto
+
+-3  Stampe
+-   1   Sistemato bug stampe clienti e fornitori
+
+
+--------------------------------------------------------------------------------
+-Versione 1.1.7 Rc 2 del 15/01/2015
+-1  Anagrafiche
+-   1   Sistemato Bug selezione banca clienti fornitori
+-   2   Inizio programma per l'importazione dei listini in formato METEL
+
+-2  Vendite
+-   1   Sistemato bug selezione banca nella maschera effetti
+-   2   Sistemato bug maschera nuova distinta
+-   3   Conversione stampa ed esporta distinta alla nuova versione
+
+-3  Contabilità
+-   1   sistemato bug banche in inserisci registrazione
+
+--------------------------------------------------------------------------------
+-Versione 1.1.7 Rc 1 del 10/01/2015
+-1  Vendite
+-   1   Inserita la possibilità di esportare la fattura per la pubblica amministrazione
+-   2   Distinte sistemato bug modifica distinta ora è possibile aggiornare e modificare
+-       Le distinte bancarie
+-   3   Immesso filtro durante l'inserimento dei documenti, per evitare possibili
+-       documenti errati o vuoti oppure con numeri impazziti.
+
+
+-2  Admin
+-   1   Inseriti nuovi campi all' interno della sezione parametri azienda
+-   2   Rinnovata tutta la veste grafica della sezioni parametri azienda.   
+-   3   Nuovo Programma Di installazione.
+-   4   Nuovi programmi per la eseguzione delle copie del programma, ora è possibile
+-       Eseguire i salvataggi dei settaggi, delle fatture pubblica amministrazione
+-       ed anche delle foto degli articoli
+-   5   Eliminata la cartella UPLOAD
+-   6   Nuovo sistema di gestione degli aggiornamenti con la possibilità di andare
+-       a vedere se ci sono gli ultimi aggiornamenti
+
+-3  Anagrafiche
+-   1   Inseriti nuovi parametri all'interno della anagrafica clienti per le utenze pubbliche
+-       Mettendo due nuovi campi, uno per l'indice univoquo ente pubblico ovvero indicePA
+-       Il secondo è la possibilità di inserire il nostro codice presso il cliente, fornitore    
+
+-4  Magazzino
+-   1   Sistemazione bug stampe report magazzino..
+
+-5  Plugins
+-   1   Aggiornata la cartella, e messa in sicurezza
+
+
+--------------------------------------------------------------------------------
+-Versione 1.1.6 Rc 4 del 31/12/2014
+-1  Vendite
+-   1   Sistemato bug preventivo, ora riporta la data scadenza giusta
+-   2   Sistemato bug sulla calce del documento ora riporta il peso e le note corrette
+-   3   Sistemato bug aggiornamento magazzino sullo scarico..
+-   4   Sistemato bug errori provvigioni..
+-   5   Sistemato bug errori sulla data di scadenza dei preventivi.
+-   6   Sistemato bug generazione fatture ora è possibile generare le fatture
+-       Nell anno scorso per i ddt dell'anno scorso..        
+-
+----------------------------------------------------------------------------------
+-Versione 1.1.6 Rc 3 del 30/12/2014
+-1   Admin
+-    1   Proseguimento sulla modalita di sicurezza per poter usare il programma
+-        anche in sola lettura
+-    2   Contunuazione sulla rimozione del vecchio programma di gestione documenti
+-        basato sulle vecchie librerie
+-    3   Aggiornamento della sicurezza sul passaggio alle librerie PDO
+-    4   Inserito nel reparto Admin la gestione avanzata dello status dei documenti
+-
+-2   Vendite
+-    1   Passaggio definitivo al nuovo motore documenti in versione PDO sicuro e protetto
+-    2   Inserita in schermata quantità elenco ivee disponibili.
+-    3   Sistemato bug inserimento errato riga occupata
+-
+-3   Anagrafiche
+-    1   Passaggio alle librerie PDO della anagrafica clienti fornitori
+-
+-4   Manuale
+-    1   Sistemato bug sul riporto del titolo..
+-    2   Aggiornamento pagine del manuale..
+-
+
+--------------------------------------------------------------------------------
+Versione 1.1.6 Rc 2 del 12/12/2014
+
+1   Magazzino
+    1   Sistemazione del bug stampa inevasi acquisti
+
+2   Stampe
+    1   Nuova stampa etichette clienti per la spedizione
+    2   Possibilità in stampa di poter regolare l'interlinea del corpo documenti
+
+3   Admin
+    1   Sistemato bug cambio password
+    2   Sistemato il programma delle copie.. ora è possibile fare le copie
+        tranquillamente del programma..
+
+
+
+--------------------------------------------------------------------------------
+Versione 1.1.6 Rc 1 del 01/12/2014
+
+1   Magazzino
+    1   Sistemato bug stampe inventario magazzino.
+    2   Sistemato bug stampe rimamenze di magazzino.
+
+2   Admin
+    1   Nuovo sistema di autenticazione dell'utente e messa in sicurezza di tutti
+        i file all'interno del programma
+    2   Nuovo sistema di autenticazione e protezione delle directory interne
+    3   Nuovo database intrusi alla quinta volta non ci si può più accedere.
+    4   Nuovo sistema di protezione ora è possibile bloccare o sbloccare un utente
+    5   Nuovo programma di installazione..
+    6   Eliminazione retrocompatibilità con le versioni antecedenti al 28 database e 
+        alla versione 1.0.0
+
+
+3   Utente
+    1   Riscritto l'intero programma di gestione dell'utente per il cambio password
+
+--------------------------------------------------------------------------------
+Versione 1.1.5 Rc 2 Del 10/11/2014
+1   Vendite
+    1   Sistemato bug invio multiplo fatture per e-mail
+
+2   Anagrafiche
+    1   Sistemazione grandezza icone anagtafica articoli
+
+3   Admin
+    1   Sistemato la pagina documenti ora è possibile scrivere correttamente
+        la frase in calce alla e-mail spedita via posta.
+
+4   Manuale
+    1   Inserita la prima bozza del manuale, ora è possibile scrivere e leggere
+        parte dei manuali
+
+--------------------------------------------------------------------------------
+Versione 1.1.5 Rc 1 Del 13/10/2014
+1   Generale
+    1   Durante l'invio di una e-mail da quasiasi programma ora è possibile
+        Inserire più destinatari in copia al messaggio
+    2   Sempre durante l'invio del messaggio ora è possibile anche allegare al
+        documento allegato anche un altro allegato a piacimento dell'utente
+
+2   Anagrafica
+    1   Anagrafica articoli corretto il bug sulla ricerca dello storico articolo
+        Ora la maschera risulta corretta
+    2   Nuovo Programma per stampare lo storico articolo per cliente, ora si puo
+        cercare velocemente tutti gli aricoli venduti ad un singolo cliente
+    3   Nuovo menù a icone nell'anagrafica articoli..
+    4   Inserito qui e li un po di tag autofocus
+    
+3   VENDITE
+    1   Aggiunta la possibilità di inserire e modificare anche la seconda ragione
+        sociale di destinazione
+    2   Aggiornato Errore sulla vendita a cottimo ora è possibile aggiornare il
+        totale sull'importo generato.
+
+--------------------------------------------------------------------------------
+Versione 1.1.4 Rc 1 Del 19/09/2014
+
+1   Stampe
+    1   Aggiornato il programma listini vendita figurato, ora è possibile ordinare
+        il listino per poter stampare anche con un secondo ordine
+2   Vendite
+    1   Sistemato bug sulla gestione dell'iva multipla durante la evasione dei 
+        documenti
+    2   Sistemato bug sugli arrotondamenti dei conteggi e dei totali..
+    3   Sistemato il bug sul link che rimanda alla scadenze
+
+3   Scadenziario
+    1   Aggiornamento link scadenze
+
+4   Anagrafica
+    1   Inserito il controllo partita iva e del codice fiscale anche per i clienti 
+        e fornitori esteri
+    2   Anagrafica articoli, inserito un nuovo campo per la gestione degli articoli
+        esenti sconto ma da inserire in fattura.
+
+----------------------------------------------------------------------------
+Versione 1.1.3 Rc 2 Del 29/07/2014
+
+1   Vendite
+    1   Aggiornato bug sulla selezione multipla degli articoli
+    2   Aggiornato bug su gli eventuali apostrofi inseriti negli articoli durante
+        l'importazione
+    3   Gestione scadenza portafoglio.. aggiornato tutta la stampa con la
+        possibilità di filtrare i risultati
+    4   Sistemato bug sul collegamento con il segnacollo corriere e la schermata
+        visualizza documenti
+    5   Sistemato Bug sulla generazione degli effetti e le date a scadenza multiple
+
+2   Schedario
+    1   Inseriti due campi nuovi, pagamento e status
+
+3   Indice
+    1   Nel menu generale appaiono le scadenze come promemoria
+
+4   Anagrafiche
+    1   Aggiornate le schermate sulla modifica e selezione dei pagamenti
+
+
+------------------------------------------------------------------------------
+Versione 1.1.3 Rc 1 Del 25/06/2014
+1   Anagrafiche
+    1   Aggiornata tutta l'anagrafica agenti e preparata per introduzioni future
+
+2   Vendite
+    1   Aggiornato errore importazione preventivi
+
+3   Contabilità
+    1   Inserita nella stampa estratti conti il saldo della scheda al momento precedente..
+    2   Sistemato il programma chiusura e riapertura dei conti di magazzino..
+
+
+
+------------------------------------------------------------------------------
+Versione 1.1.2 Rc 2 del 27/05/2014
+1	Admin
+	1	Nuovo programma per l'eliminazione dei preventini inevasi anno precedenti
+
+2	Vendite
+	1	Aggiornato il programma per la preparazione degli ordini.. ora è più preciso..
+	2	Aggiornato il programma stampa inevaso..
+	3	Correzzione errori generali ed errori miniri per il miglior funzionamento.
+	4	Aggiornamento preventivi, ora è stata inserita la scadenza
+
+3	Contabilità
+	1	Aggiornata la stampa del bilancio..
+
+
+
+
+------------------------------------------------------------------------
+Versione 1.1.2 Rc1 del 16/05/2014
+
+1	Contabilità
+	1	Aggiornata la funzione modifica registrazione ora viene presa anche la modifica della descrizione
+		della registrazione
+	2	Aggiornato il programma importi/scadenze.. ora le scadenza divise tra gli importi vengono prese
+		correttamente e divise con importi corretti
+	3	Sistemato il bug sulla registrazione degli insoluti in contabilità, ora vengono riportati correttamente
+		in contabilità.
+	4	Sistemato il problema sulla stampa del bilancio..
+
+
+2	Vendite
+	1	Tutto nuovo il programma vendite, ora la evasione dell'ordine avviene in maniera diversa..
+		Completamente nuovo il motore documenti.. passato alle nuove librerie PDO.
+	2	Nuova grafica e nuovi colori per il programma di vendite..
+
+
+3	Acquisti
+	1	Nuova grafica e nuove funzioni per l'importazione totale ed parziale degli ordini fi acquisto
+
+
+---------------------------------------------------------------------
+
+Versione 1.1.1 non pubblicata solo per uso interno
+
+---------------------------------------------------------------------
+Versione 1.1.0 Rc 1 del 10/03/2014
+
+
+1	Stampe
+	1	Nuova anagrafica etichette articolo, Ora è possibile formulare qualsiasi tipologia di etichetta
+		basta inserirla nell'archivio etichette selezionabile dal reparto admin, parametri documenti.
+
+
+2	Admin
+	1	Aggiornato il programma creazione documenti ora è possibile inserire e variare le etichette 
+		articoli
+
+
+3	Anagrafiche
+	1	Aggiornato la anagrafica articoli ora è possibile accedere direttamente al documento di vendite
+		cliccando direttamente nel numero documento
+	2	Inserita la nuova anagrafica codici a barre..
+		Ora è possibile gestire una molteplicità di codici per ogni articolo, di base il codice a barre numero
+		1 è quello identico all'articolo, detto anche codice scaffale, poi si possono associare moltissimi
+		codici a barre per ogni, articolo. E possibile con questa anagrafica aggiungerne modificarli ed
+		eliminarli.
+	3	Aggiornamento maschera articoli, ora la descrizione del sito si trova in prima pagina, e presso
+		i dettagli articolo è possibile visionare tutti i codici a barre associati all'articolo.
+	4	Aggiornata la maschera articoli, ora è possibile dalla lista dei muovimenti andare direttamente 
+		A cercare tutti i muovimenti presso la ricerca di magazzino.
+
+
+4	Vendite
+	1	Aggiunto sulla stampa dei ddt il codice a barre relativo al numero documento
+	2	Aggiunto nell'elenco delle conferme ordine inevase il codice a barre relativo al numero documento
+		con l'anno.
+	3	Aggiunta la possibilità di cercare il documento direttamente con il codice a barre.
+
+
+5	Contabilità
+	1	Aggiunta sulla scheda contabile il numero del protocollo acquisti ed anche in stampa.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.9 Rc 4 del 12/02/2014
+1	Vendite
+	1	Sistemato il bug sul richiamo effetto
+	2	Sistemato Bug genera effetti ora la generazione è più sicura..
+
+2	Contabilità
+	1	Inserito un nuovo parametro sulle spese bancarie
+	2	Sistemato Bug sul richiamo dell'effetto e la scrittura in contabilita
+	3	Bloccata la possibilità di cambiare la data giornale durante le registrazioni.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.9 Rc 3 del 30/01/2014
+1	Magazzino
+	1	Aggiornato il programma di ricerca dei documenti nel magazzino storico e attuale
+
+2	Vendite
+	1 Cambiato la maschera degli effetti ora non è più abilitato di default il check per la registrazione
+		in contabilità
+
+3	Anagrafiche
+	1	Aggiornata la maschera articoli ora dalla visualizzazione articoli è possibile andare direttamente
+		all'articolo sostitutivo.
+
+4	Scadenziario
+	1	Aggiunto la possibilità di ricercare una scadenza per varie tipologie
+	2	Sistemata la stampa delle scadenze ora si può selezionare anche la data di fine ricerca
+		ed è visualizzato anche il numero dell'effetto.
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.9 Rc 2 22/01/2014
+1	Vendite
+	1	Aggiornato alle nuove librerie il programma effetti modifica ecc..
+
+2	Contabilità
+	1	Aggiornato il programma importa fatture vendita
+	2	Aggiornato il programma importa effetti
+	3	Aggiornata la schermata fatture acquisto ora alla fine è possibile modificare in diretta
+		la schadenza appena generata.
+	4	Aggiornata e sistemata la schermata della contabilità sulle registrazioni.
+	5	Approntato la possibilità di vedere il saldo scheda dall'inizio dell'anno.
+
+3	Scadenziario
+	1	Aggiornata la stampa delle scadenze ora è possibile filtrare i risultati
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.9 Rc 1 20/01/2014
+1	Vendite
+	1	Sistemato bug. invio documenti multipli per e-mail
+	2	Aggiornato la visualizzazione dei documenti, ora l'inoltro si vede anche nella lista dei documenti
+	3	Aggiornato il programma di generazione effetti.. ora le date non sono un problema
+	4	Effetti
+		1	Sistemazione programma generazione effetti / modifica
+		2	Sistemazione programma modifica ed elimina ed annulla distinte bancarie
+
+
+2	Contabilità
+	1 Aggiornamento programma importazione effetti in contabilità
+
+3	Scadenziario
+	1	sistemazione leggera del programma in attesa di riscriverlo
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.8 Rc 3 del 25/11/2013
+
+1 Admin
+	1	Sistemato Bug relativo alla ricerca di file inesistenti.. come le maschere per gli articoli, clienti
+		fornitori
+	2	Sistemato bug copie relative ai parametri base del programma.
+
+2	Vendite
+	1	Aggiunto sull'elenco documenti il totale dell'imponibile
+	2	Ridotto il carattere sulle condizioni di vendita
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.8 Rc 2 del 06/11/2013
+
+1 Admin
+	1	Aggiornamento Database includendo l'esenzione spesometro ed aggiunta una nuovo campo
+		in parametri contabilità, ora è possibile inserire il codice attività
+	2	Sistemato grazie a Stefano Boggian la autocompilazione del campo con autonumeric
+
+2	Anagrafica
+	1	Rinnovata la maschera clienti fornitori, aggiunto un nuovo campo spesometro alla sezione contabilità
+	2	Aggiornato la maschera della aliquota iva, ora è necessario impostare il tipo di esenzione dell'articolo
+
+3	Contabilità
+	1	Nelle registrazioni di prima nota ultima schermata è possibile tramite apposito campo escludere 
+		una registrazione dallo spesometro.
+	2	Nuovo Programma Spesometro.
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.8 Rc 1 del 25/09/2013
+
+1	Admin
+	1	Aggiornamento programma sessioni, ora non scade più eseguita una chiamata ajax per rinnovare
+		il time session
+	2	Aggiornato il file vars.php
+
+2	Anagrafica
+	1	Data la possibilità di visualizzare gli articoli durante la ricerca degli stessi
+
+3	Vendite
+	1	Data la possibilità di visualizzare gli articoli durante le operazioni di ricerca e vendita
+	2	Sistemato bug eliminazione Fattura creata da ddt diretto fornitore.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.7 RC 3 del 17/07/2013
+
+1 Vendite
+	1	Aggiornato Bug gestione documento, quindi stampa ddt vendita
+	2	Aggiornato Bug gestione impostazione conferme ordine parziale
+
+2	Stampe
+	1	Stampe Inserita la possibilità di stampare fatturati più vecchi
+	2	Cambiato formato stampa annuale del venduto di magazzino
+
+3	Contabilità
+	1	Sistemato bug errore gestione della stampa del giornale
+	2	Sistemato bug errore stampa prelievo file partitari pdf
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.7 RC 2 del 16/07/2013
+1	Admin
+	1	Aggiornamento sistema gestione delle sessioni, ora non dovrebbe più scadere.
+
+2	Scadenziario
+	1 Aggiunta la somma completa della scandenze.
+
+3	Vendite
+	1	Aggiunta la possibilità di gestire e fatturare un ddt diretto dal fornitore al nostro cliente
+	2	Inserito un blocco durante la evasione dei documenti, ora non è più possibile reinserire un
+		secondo documento
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.7 del 28/05/2013
+1	Admin
+	Continuo passaggio al nuovo sistema PDO
+	Aggiornamento jquery con datapicker
+	Aggiornamento tnymce per il nuovo programma di scrittura..
+
+1	Vendite
+	1	Aggiunto il totale sullo scadenziario ora visualizza anche la somma totale degli effetti.
+	2	Aggiunta la possibilità di saldare parzialmente gli effetti emessi.. con la scrittura automatica
+		in contabilità
+
+2	Contabilità
+	1	Sistemazione archivio e programmi per l'inserimento modifica della causali.
+	2	Sistemato anche l'impaginazione dell'iva periodica, ora sono in ordine anche le fatture vendite.
+
+3	Anagrafica
+	1	Riscritto tutta la anagraficha banca, ora il programma verifica e controlla anche il piano dei conti.
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.6 RC 5 del 30/04/2013
+1	Vendite
+	1	Sistemato errore nella schermata ddt che non permetteva la ricerca del documento
+	2	Aggiunto un ulteriore filtro sulla generazione delle fatture anche durante la generazione manuale
+	3	Sistemato errore carico ddt perziale da reso fornitore.
+
+2	Contabilità
+	1	Sistemato errore scrittura funzione automatica di scrittura degli insoluti.
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.6 RC 4 del 18/04/2013
+1	Admin
+	1	Ingrandito il campo nome immagine sul database layout ora è 45 caratteri
+	2	Bisogna eseguire il travaso degli archivi alle tabelle nuove..
+	3	Bisogna eseguire la ricostruzione dei muovimenti del magazzino.
+
+2	Stampe
+	1	Sistemazione delle stampe clienti fornitori che non funzionavano..
+
+3	Contabilità
+	1	Sistemazione stampa bilancio, corretto errore tabelle..
+	2	Sistemazione estratto schede clienti fornitori, ora viene scelto l'anno e non il periodo
+	3	Sistemazione stampa iva periodica..
+
+4	Vendite
+	1	Sistemazione riconoscimento documento durante la modifica del documento stesso 
+		Ed in teoria il bug sulla eliminazione del documento è stata risolta in attesa di nuovi sviluppi
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.6 RC 3 del 09/04/2013
+1	Admin
+	1	Aggiornamento programma copie, ora è possibile selezionare il tipo di copie da effettuare, 
+		se solo dati oppura la struttura ecc..
+	2	Passaggio al database 30 con l'aggiunta dell not null sulla colonna rsaldo delle conferme ordine
+		ed ordini fornitore.
+
+
+1	Vendite
+	1	Sistemato bug errore ricognizione maschera corpo documenti, non veniva riconosciuta la fattura	
+		Immediata.
+	2	Aggiunta la somma dei documenti nell'elenco documenti.
+	3	Aggiunta la consegna durante l'importazione del file dall' codice a barre.
+	4	Persiste il problema eliminazione fattura immediata saltuariamente non ripristina la conferma.
+
+
+2	Contabilità
+	1	Data la possibilità di stampare il piano dei conti con la visualizzazione anche di tutti i clienti e
+		Fornitori.
+
+3	Anagrafica
+	1	Corretto l'invio scheda articolo, non prendeva correttamente le e-mail di spedizione
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.6 RC 2 del 05/03/2013
+1	Admin
+	1	Eliminazione file vecchi in cartella setting non più utilizzati
+	2	Inserimento nuovo conto in parametri contabilità, per il discorso della compensazione cli/for
+	3	Inserita la riga nel file di confizurazione sul fuso orario del programma
+        4       Nuovo Programma installazione di agua gest
+        5       Nuovo programma per effettuare le copie ora sono più sicure..
+        6       Aggiornate le libreire PHPMailer alla versione 5.2.4 con la rimozione delle funzioni deprecate
+        7       Inizio programmazione agli oggetti per la connessione a mysql ora
+                si necessitano delle librerie PDO e pdo_mysql.
+        8       Inizio passaggio al database NR 29 con la collocazione di tutte
+                le tabelle a UTF8 con la supportazione dei caratteri accentuati.
+
+2	Contabilità
+	1	Data la possibilità in maschera effetti di saldare la scadenza per compensazione cli forn.
+
+3	Anagrafica
+	1	Sistemato errore visualizzazione muovimenti vendite in anagrafica articolo
+	2	Sistemata la visualizzazione degli articoli impegnati sia in vendita che in acquisto.
+
+---------------------------------------------------------------------------------------------------------------------
+Versione 1.0.6 RC 1 del 28/03/2013
+1   Admin
+    1   Nuovo passaggio e metodo di autentificazione degli utenti
+    2   Continuazione del passaggio tabelle al nuovo motore anagrafica
+    3   Nuova struttura base delle pagine con restituzione sulla connessione
+	4	 Nuova parte del programma con la nuova gestione degli errori, ora se dovesse succedere un errore
+		 viene memorizzato all'interno di un file log..
+	5	Nuovo programma rlevazione Errori di gestione anche esso è registrato all'interno di un file log
+		Visibile all'interno della cartella admin errori programma.
+	6	Riprogrammato tutta la sezione anagrafica articolo passando al nuovo programma motore anagrafiche
+		inclusa anche tutta la ricerca degli errori con la scrittura.
+
+2	Contabilità
+	1	Sistemato bug Calcolo iva al 4 percento.
+	2	Sistemato bug di non riconoscimento esenzioni iva
+	3	Sistemato errore anno visivo stampa liquidazione annuale iva
+
+3	Anagrafiche
+	1	Sistemato il bug stampa categorie mercerologiche
+	2	Inserito un nuovo programma per l'importazione e l'aggiornamento dei listini di acquisto con la
+		possibilità di inserire prodotti nuovi, o aggiornarne il codice acquisto ecc..
+4	Vendite
+	1	Sistemato il problema sul bug altri campi clienti
+
+
+-----------------------------------------------------------------------------------------------------------------------
+Versione 1.0.5 RC 3 del 01/03/2013
+1	Anagrafiche:
+	1	Aggiunta la possibilità di inviare una scheda articolo per e-mail ed inoltre aver rimpaginato la pagina
+		per una migliore visivilità
+
+2	Contabilità
+	1	Sistemata la stampa delle fatture acquisto e ventita in sospeso, ora è molto più chiara sia la
+		videata che la stampa..
+	2	Sistemato BUG pagamenti ed incassi, c'era una sovrapposizione di numero di protocollo con il
+		numero del documento, ora è più peciso e sicuro
+	3	Sistemato bug seconda riga nel corpo della prima nota che non prendeva l'anno selezionato, e 
+		non permetteva l'aggiunta di nuove righe correttamente.
+	4	Aggiunta la possibilità di stampare sia in htmnl che in pdf la liquidazione annuale dell'iva.
+	5	Aggiunta la possibilità di stampare sia in html che in PDF la tabella di tutti i versamenti periodici
+		dell'iva.
+	6	Aggiunto la possibilità di gestire completamente l'acconto dell'iva di dicembre creando tutte le
+		registrazioni necessarie.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.5 RC 2 del 20/02/2013
+1 Aggiunta la possibilità di inserire nell'anagrafica Vettori il link per la pagina dove vedere il traking
+	del pacco effettuato.
+2	Inserito il nuovo motore anagrafiche, ora tutte le funzioni della gestione delle tabelle si troveranno
+	in un unico file motore_anagrafiche.php
+3	Sistemato un po di bug qui e li..
+4	Nuovo programma per la gestione delle e-mail, ora è possibile in via sperimentale ottenere anche il
+	riscotro della e-mail inviata.
+5	Inseriti due nuovi campi nelle impostazioni dell'azienda, dove bisogna specificare la porta di
+	destinazione della posta in uscita e ance la possibilità di effettuare il mascheramento del server
+	interno.
+6	Aggiornato il programma phpmail con la nuova versione 5.0
+7	Data la possibilità di poter effettuare un invio multiplo delle fatture per e-mail.
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versione 1.0.5 RC 1 del 01/02/2013
+1   Aggiunta la possibilità di stampare l'inventario anche per tipologia articolo
+2   Aggiunta la possibilità di inserire una descrizione aggiuntiva sulle registrazioni 
+    di contabilità così da poter immettere delle note relative alla stessa.
+3   Trasportato le stampe dell'inventario e quelle delle rimamenze all'interno del
+    programma di stampe documenti. Ora è possibile modificare le stampe degli stessi
+    come le righe ecc.
+4   inizio aggiornamento del programma sicurezza e privacy con tempi di sessioni visibili
+5   Pulizia programmi vecchi, file vecchi, cose obsolete.
+6   Aggiornamento schermate e pulizia delle stesse
+7   Unificato il programma della stampa del listino figurato, ora l'ultima versione è a disposizione
+    dell'utente, tenendo sempre in conto la possibilità di preparare tutti i files per la stampa della
+    tipografia, per poter preparare tutti i file singoli per preparere gli A3. Che saranno reperibili 
+    presso la cartella spool/listino.
+
+
+--------------------------------------------------------------------------------
+Versione 1.0.4 RC 1 del 13/10/2012
+1   Sistemato errore durante la creazione dell'ordine fornitore con il codice a 
+    barre.
+2   Sistemato errore durante la creazione della stampa del libro giornale di
+    contabilità
+3   Aggiornato il programma di invio e-mail
+4   Sistemata impaginazione dei files in pdf.
+5   Visualizzazione dei preventivi durante l'inserimento di una conferma ordine.
+
+--------------------------------------------------------------------------------
+Versione 1.0.3 RC 2 del 13/07/2012
+1   Aggiornata la disposizione dei pulsanti nelle anagrafiche..
+2   Sistemato il programma della giacenza di magazzino che non funzionava..
+3   Aggiornato il programma travaso documenti in quanto non riportava corret-
+    tamente le spese varie durante la esportazione della conferma ordine in 
+    fattura immediata
+4   Sistemato errore durante la cancellazione degli articoli in magazzino.
+5   Sistemato errore nel ripristino della cancellazione della fattura.
+6   Data la possibilità di andare dall'elenco ricevute emesse in portafoglio effetti
+    alla anagrafica contabile del cliente nell'anno
+7   Cambiato l'ordine dell'elenco effetti
+8   Inizio preparazione stampa intrastrat.
+9   Aggiornamento permessi amministratore..
+
+--------------------------------------------------------------------------------
+Versione 1.0.3 RC 1 del 19/06/2012
+1   Aggiornamento sulla sicurezza del programma..
+    Inserito blocco articoli di magazzino, non si può inserire un articolo
+    vuoto o senza codice o senza descrizione..
+    non si può neanche sbagliare articolo..
+
+2   Inserito blocco durante l'inserimento e la modifica del documento quando alla
+    fine della modifica si tende a tornare indietro..
+
+3   Data la possibilità di iniziare un documento anche dalla anagrafica clienti
+    fornitori
+4   Completata la gestione delle zone..
+5   Data la possibilità di Stampare gli inevasi per cliente
+6   Iniziata la procedura di completamento dei permessi..
+7   Sistemato la valorizzazione dei documenti nella visualizzazione dei ddt di carico
+    Magazzino
+8   Sistemato la visualizzazione dei totali sull'inventario di magazzino
+9   Aggiunta la possibilità di immettere delle spese in calce ai documenti generati
+    come bolle, conferme ecc.
+10  Sistemato la evasione parziale delle conferme ordine, in quanto non riportavano 
+    il saldo corretto.
+11  Data la possibilità di spedire gli avvisi degli insoluti anche via e-mail
+12  Sistemata l'anagrafica clienti - fornitori..
+
+
+
+--------------------------------------------------------------------------------
+Vesione 1.0.2 RC 4 del 01/05/2012
+1   Corretto il bug sulle righe del documento, ora è più sicuro digitare il cambio delle
+    righe durante la creazione e modifica del documento di vendita
+2   Iniziato ad inserire il nuovo motore per il parsing del html, per generare
+    PDF visibile sul programma stampa privacy
+3   Corretto il bug sulla contabilità per la stampa delle schede contabili..
+4   Corretto il bug sulla stampa delle schede contabili dal cliente..
+5   Inizio sistemazione dei permessi sul programma
+
+
+--------------------------------------------------------------------------------
+Versione 1.0.2 RC 3 del 20/04/2012
+1   Corretto bug sul cambio rigo durante l'inserimento del documento..
+2   Corretto il bug durante l'inserimento dell'anagrafica articoli che non
+    riportava la data di inserimento.
+3   Corretto il programma dupplica articoli in quando i campi risultavano sfalsati
+
+
+--------------------------------------------------------------------------------
+Versione 1.0.2 del 06/04/2012 relase 2
+1   Sistemazione calcolo iva su ordini fornitore
+2   Problema inserimento clienti, che non funzionava
+3   Sistemazione menu tendina prima nota
+4   Corretta la visualizzazione clienti e fornitori
+
+
+--------------------------------------------------------------------------------
+Versione 1.0.2 del 06/04/2012 relase 1
+1   Introduzione spesometro 2011, il programma da la possibilità di marcare le
+    operazioni inerenti allo spesometro.
+2   Nuova veste grafica per quanto riguarda l'anagrafica clienti fornitori e
+    Articoli. Ora con il menu a tabelle.
+3   Nuovi campi per l'anagrafica articoli, ora è possibile specificare anche un
+    terzo fornitore. Poi è stato introdotto la possiilità di inserire
+    nella descrizione pubblica anche gli effetti sul testo.
+4   Nuovo motore di stampa, ora le stampe html dovrebbero essere molto più
+    stabili e precise.
+5   Correbbo bug durante la importazione del file di testo inerente le transazioni  
+    con il lettore codici a barre..
+6   Immesso durante immissioni delle date, il blocco dei solo numeri ed anche
+    la possibilità di scegliere la data trammite la funzione calendario.
+7   Sistemato il bug del calcolo dell'iva..
+8   Aggiunta del campo articolo alternativo per avvisare l'utente di un eventuale
+    Codice sostitutivo..
+
+
+--------------------------------------------------------------------------------
+VERSIONE 1.0.1 20/03/2012 relase 4
+ 
+1   Inserite le righe verticali nel corpo dei ducumenti..
+2   Aggiornato il programma delle stampe dei documenti per cliente.
+3   Aggiustato errore durante il carico del magazzino, in modifica non riportava
+    Il codice del fornitore.
+4   Data la possibilità di salvare e ripristinare le impostazioni utente
+     sono i 5 file base
+    Contenenti i dati base, come connessione, database, impost. contabilità ecc.
+5   Sistemata la stampa delle fatture immediate.. Ora appare correttemente anche
+    L'esenzione
+6   Nuovo Programma Recovery..
+    Ora è possibile recuperare le vecchie copie e anche le vecchie installazioni
+7   Schiarito un po la visione della schermata parametri aziendali.
+
+
+--------------------------------------------------------------------------------
+Versione 1.0.1 del 27/02/2012
+1   Aggiornato il sistema di archiviazione dei documenti, ora tutti i documenti
+    sono inseriti all'interno di un database, così si potranno anche salvare con
+    facilità
+2   Aggiornato il sistema di gestione delle stampe dei documenti, si andrà sempre
+    per la unificazione del motore di stampa.
+3   Data la possibilità di importare all'interno dei documenti una immagine perso
+    nalizzata.
+4   Nuova Gestione dell'iva..
+5   Importazione dei documenti di acquisto nel nuovo motore chiamato documenti.
+6   Stampa delle schede clienti in formato PDF.
+7   Stampa dei mastrini in formato PDF ovvero dei partitari, obbligatori.
+8   Sistemate un po' le schermate utente, ora sono più leggibili e ordinate
+9   Inserita la possibilità di togliere dal fondo dei documenti le condizioni
+    generali di vendita con il foro competente.
+10  Importato nel nuovo motore dei documenti tutto il magazzini incluso anche 
+    gli ordini fornitori, ora nell'elenco degli ordini fornitori è possibile vedere
+    tutti gli ordini inseriti.
+11  Eliminato il bug degli ordini parziali, ora quando si annulla l'operazione
+    tutti i documenti vengono ripristinati con lo stesso status in cui erano prima
+    della modifica.
+12  Cambio nome directory parametri tabelle, tutti i parametri in file non saranno più
+    sotto la directoty report ma settings.
+13  Cambio nome della directory pdf-gen, tutti i documenti generati dal programma
+    saranno sotto la directory spool, in modo che si possa volendo copiarla oppure
+    durante delle copie fisiche anche non copiarla..
+14  Tutti i programmi che salveranno dentro la cartella upload verranno spostati 
+    dentro la cartella spool..
+15  Nuovo programma per l'aggiornamento di agua, ora è molto più sicuro ed
+    i nuovi aggiornamenti verranno caricati con più facilita.
+
+
+
+--------------------------------------------------------------------------------
+
+Versione 1.0.0 del 25/08/2011
+1   Aggiornata l'anagrafica clienti / fornitori con la selezione automatica del
+    numero che tocca..
+2   Aggiornato il database, ora tutti i campi di precisione sono stati aumentati
+    ad una precisione ulteriore, da float a dauble.
+3   Cambiato il tipo di codice cliente/forntitore, ora tutti i clienti e fornitori
+    sono obbligatoriemente in formato numerico.
+4   Aggiornato nel menu admin, i programmi di fine anno, ora è stata aggiunta la
+    funzione di apertutura e chiusura dei conti contabili aziendali.
+    Ed aggiornata la funzione anche del magazzino.
+5   Sistemazione Salto pagina fatture immediate in PDF
+6   Applicazione della nuova aliquota iva 21%
+
+
+--------------------------------------------------------------------------------
+Versione 0.9.9 del 13/06/2011
+1   Inserita nelle vendita la causale VENDITA che stranemente mancava..
+2   Inserita in contabilità il controllo delle date immesse durante le registrazioni
+3   Aggiornato nelle dististe portafoglio il problema della cancellazione delle
+    distinte bancarie liberando gli effetti oppure eliminandoli..
+4   Sistemata la visualizzazione del bilancio.. ORa i conti sono giusti.. !
+5   Sistemata la visualizzazione delle schede contabili ora la data che conta
+    è quella contabile..
+6   In magazzino è stata data la possibilità di stampare le rimanenze di magazzino
+    In base all'anno e alla data..
+7   Inserita la protezione contro la possibilità di inserire contemporaneamente
+    due documenti..
+
+
+------------------------------------------
+Versione 0.9.8 del 27/04/2011
+
+1   Inserita Tutta la nuova gestione delle foto degli articoli..
+    Ora è possibile inserire, cancellare, rinominare tutte le foto degli articoli
+2   Sistemato l'errore del riporto dell'iva durante la stampa delle fatture.
+3   Data la possibilità della fatturazione a cottimo..
+4   Sistemazione stampe registrazioni e bilancio ora è molto più accurato:
+5   Data la possibilità di saldare i documenti in contabilità non solo quelli di
+    fatturazione ma anche quelli di incasso in modo tale da poter chiudere
+    definitivamente la scheda contabile.
+
+-------------------
+
+
+Versione 0.9.7 del 04/03/2011
+
+1   Inserita la possibilità di stampare più documenti in una unica soluzione
+2   Sistemato l'errore di visualizzazione del corpo sulla prima nota dopo aver
+    modificato la registrazione..
+3   Inseriti i blocchi sulla cancellazione degli articoli, cliente, fornitori
+    ora solo l'amministratore può cancellare tutto..
+4   Inserito la possibilità di chiudere i ddt non di vendita come quelli di reso
+    in garanzia. Trovabili presso il menù del magazzino.
+5   Completata l'esportazione delle schede clienti, fornitori, in formato CSV
+    Per la comunicazione allo studio contabile..
+6   Data la possibilita in contabilità di poter chiudere i documenti manualemnte
+7   Nuova tutta la gestione per poter caricare e gestire tutte le immagini degli
+    Articoli..
+8   Tutta nuovo il reparto scadenziazio... Ora è possibile aggiungere, eliminare
+    e gestire tutte le scadenze di pagamento.
+
+
+--------------------------------------------------------------------------------
+Versione 0.9.6 del 25/02/2011
+1   Sistemato la problematica con la stampa della seconda pagina
+2   Data la possibilità di stampare anche un bilancino provvisorio...
+3   Sistemazione dell'annullamento del documento durante la modifica
+     o la costruzione
+4   Data la possibilità di saldare gli effetti in modo automatico..
+5   Inserita la stampa della dichiarazione della iva periodica come da legge..
+6   Modificata la schermata della prima nota ora è possibile sciegliere il
+    codice iva dall'anagrafica iva..
+7   Aggiornato il programma bilancio inclusa la stampa..
+8   Aggiornata la liquidazione ina periodica.
+9   Aggiornato e corretta la suddivisione dell'iva separata
+10  Aggiornato e corretto la registrazione delle fatture acquisto in contabilità
+11  Aggiornato e corretto la generazione delle fatture e delle ricevute bancarie
+12  Aggiornata l'anagrafica aliquote IVA
+13  Aggiornata l'anagrafica clienti
+14  Aggiornata l'anagrafica Fornitori e anche Banche
+
+--------------------------------------------------------------------------------
+Versione 0.9.5 del 29/01/2011
+1   Nuovo upgrade programma upload..
+2   Revisionato la procedura delle causali contabili.. ora si ha la possibilità
+    di inserire fino a 10 parametri contabili da riportare nella schermata corpo
+    prima nota quando si seleziona una causale contabile..
+3   Sistemato errore in anagrafica fornitori che non restitiva il parametro giusto
+    del piano dei conti in confronto ai parametri di contabilita..
+4   Inserita la prima bozza del programma che crea il bilancio aziendale..
+
+--------------------------------------------------------------------------------
+Versione 0.9.3 del 27/01/2011
+1   Inserita la nuova funzione di aggiornamento automatico del programma...
+    Ora dalla sezione amministratore è possibile aggiornare direttamente il programma
+2   Sistemato il problema in contabilità del riporto delle fatture..
+3   Sistemato il problema della mancanza banca quando vengono saldati i pagamenti
+    nel portafoglio.
+4   Aggiunta la possibilità di inserire le spese bancarie nel portafoglio effetti
+    quando il cliente genera un insoluto.
+5   Inseriti nuovi parametri contabilità da aggiornare obbligatoriamente in caso
+    Si voglia Getire la liquidazione dell'iva periodica..
+6   Inserita tutta la gestione automatizzata dell'iva periodica..
+    Ora il programma genera e blocca i movimenti che sono soggetti ad iva, ed
+    da la possibilità di saldare con eventuali scritture il versamento all'erario
+    nei confronti della banca..
+
+
+--------------------------------------------------------------------------------
+Versione 0.9.2 del 06/01/2011
+1   In contabilità è stat inserita la possibilità di gestire in base alla riga
+    anche la sua iva, così poi da tener le ive separate anche per la liquidazione
+2   Durante l'importazione delle fatture di vendita in conabilità ora viene giustamente
+    separate tutte le ive diverse..
+3   Data ora la possibilità di generare le fatture differite direttamente con una
+    data a nostra scelta.
+4   Data le possibilità di generare gli effetti con una data a piacere..
+5   Data la possibilità di preparare una distinta bancaria con data a piacimento.
+6   Inserita in contabilità la funzione di controllo quadratura., il programma
+    Controllo se ci sono registrazioni sbilanciate e ne elenca quelle errate.. 
+
+--------------------------------------------------------------------------------
+Versione 0.9.1 del 28/12/2010
+1   Aggiornamento programma per poter utilizzare i documenti dell'anno vecchio
+    finché si è nell'anno nuovo.
+2   Aggiornamento ive separate.. Ora il programma separa e gestisce correttamente
+    le ive diverse..
+3   Aggiornamento programmi di stampa.. Ora è possibile stampare con semplicità
+    anche i documenti vecchi semplicemnte cambiando anno.
+4   Possibilità di stampare i gruppi merceologici
+5   Sistemato il programma di stampa inventario.
+6   Nella sezione amministrore è stata inserita la possibilità di riparare gli
+    indici delle tabelle, e ci fare la pulizia dei dati non utilizzabili.
+7   Completamente rinnovato il programma della chiusura e riapertura dei conti di
+    magazzino.. Ora è molto più stabile e sicuro.
+
+
+--------------------------------------------------------------------------------
+Versione 0.9.0 del 22/12/2010
+1   Passaggio archivi alla versione 1.8 Con l'aggiunta della gestione registrazione
+    Ive diverse in fattura vendita.
+2   Completamento Gestione Libro giornale, ora è possibile stampare le intestaizioni
+    dei registri ed anche tutto il libro giornale passandolo anche in definitivo.
+3   Aggiornata la scheramta della prima nota includendo anche la colonna iva.
+4   Immessa sicurezza nella registrazione della prima nota, ora non è più possibile
+    inserire un documento posticipato alla data odierna.
+5   Immessa sicurezza, durante il programma di importazione delle fatture vendite
+    in prima nota il programma scarta avvisando in automatico i documenti che non
+    hanno al cliente codice dic controconto.
+6   Migliorato sensibilmente il programma delle scadenze, con possibilità di stampa..
+
+
+--------------------------------------------------------------------------------
+Versione 0.8.9 del 04/12/2010
+1   Sistemato Errore del files CBI per la presentazione delle ricevute bancarie
+    on line.. ora è perfettamente compatibile con tutte le banche.
+2   Inserita la possibilità di scegliere se le ricevute bancarie sono da presentare
+    in sbf o allo sconto.
+3   Aggiornamento archivi alla versione 1.7 con la aggiunta del modulo di contabilità
+    attualmente ancora allo stato base, ma abbastanza funzionante.
+4   Implementazioni sulla sicurezza del programma per quanto riguarda la scrittura
+    dei dati e degli archivi.
+5   Inserimento della procedura degli automatismi contabili per poter portare le
+    fatture in contabilità impostabili nella sezione parametri di contabilità
+6   Inserito programma per la prima nota base.
+7   Inserito la possibilità di visualizzare le schede contabili.
+8   Inserito un piano dei conti base con relarivo programma di modifica e stampa.
+9   Inserita la possibilità di stampare le modalità di pagamento.
+10  Ridata la possibilità di vedere una volta inviate le fatture per email, l'esito
+    nelle schermate..
+
+
+
+--------------------------------------------------------------------------------
+Versione 0.8.8 del 07/10/2010
+1   Completato finalmente tutta la gestione delle ricevute bancarie dalla loro
+    creazione alla loro cancellazione modifica, incluso lo status degli insoluti
+    dei pagamenti ecc. è attivo anche lo scadenziario ed la esportazione delle
+    distinte in formato CBI per i flussi elettronici interbancari..
+    Ora Manca solamente la esportazione in PDF delle distinte e dei richiami
+2   Aggiornato il campo partita iva.. è stato portato a 14 cifre per poter inserire
+    tutte le partite ive comunitarie, come la svezia che ne arriva fino a 14 cifre.
+3   Inserita la possibilità di stampare la scheda dell'articolo, cosi da poter inviare
+    o darla ai clienti..
+
+
+
+--------------------------------------------------------------------------------
+Versione 0.8.7 del 15/07/2010
+1	Inizio Passaggio al programma di vendite nuovo..
+	con mille novita, tra la quali la possibilità di sportare le righe nel documento ed tante tante altre..
+	ma soprattutto, è più stabile e più sicuro..
+2	Ora è possibile durante l'esportazione dei documenti selezionando quale documento esportare lasciando
+	inevasi quelli non spuntati, in più c'è un doppio controllo sui campi immessi..
+3	Nuovo programma di gestione dei codici a barre, ora agua gest supporta altre alla normale lettura del codice
+	a barre data dal lettore in modalità tastiera, supporta anche i terminali portatili di codici a barre.
+	Basta andare nei parametri programma ed abilitare il programma, terminal code..
+	apparirà nella schermata seleziona un campo dove immettere il file di testo generato dal lettore.
+	ed in men che non si dica tutto il file viene immesso nel corpo del documento.
+4       Ora Entrando nei parametri aziendali Basta Abilitare la funzione e specificare che tipo di
+        nome ha il file da importare in automatico.
+5	Sistemato l'errore bug, sulla generazione delle fatture, ora tutti i conti sono giusti.
+
+-------------------------------------------------------------------------------
+Versione 0.8.6 del 22/02/2010
+1   Sistemazione di un po di bug qui e li..
+2   Aggiornamento sulla sicurezza del calcolo, sistemato un errore sul calcolo degli
+    sconti, ora il conto sulla quantita per il prezzo netto e piu preciso.
+3   Sistemato anche la possibilita di un eventuale errore nella modifica di tutte le anagrafiche
+    e anche nella modifica del documenti, ora non puo piu sbagliare.
+4   Aggiornato anche la stampa del listino figurato, ora è piu bello e piu preciso.
+
+
+--------------------------------------------------------------------------------
+Versione 0.8.5 del 06/02/2010
+1   Aggiunto un programma nuovo per il controllo incrociato dei numeri di carico
+    se manca quache numero o per errore è stato saltato il programma avvisa..
+2   Aggiornamento programma password.., Ora il programma fa più controlli prima di
+    cambiare le password utente.
+3   Aggiornamento programma ping pong del magazzino, ora il programma effettua più controlli
+    prima di procedere al travaso del magazzino dall'anno vacchio al nuovo.
+4   Nuova protezione, all'apertura del programma esso controlla che l'anno, inserito nel
+    programma corrisponda all'anno in corso, così da evitare che si generino muovimenti
+    in anni diversi. L'unica possibilità di accedere al programma è l'amministratore che
+    potrà effettuare i vari controlli..
+5   Nuovissimo programma gestione documenti... Ora è possibile personalizzare
+    l'aspetto di tutti i documenti di vendita direttamente dalla sezione
+    paramentri all'interno della sezione configurazione accessibile solo dall'amministratore
+    di agua.
+6   Sistemazione Programma genera effetti, sistemato l'errore sul calcolo delle date..
+7   Aggiunta la possibilità di cambiare la banca cliente in fase di inserimento della fattura
+    di vendita, nota credito ecc..
+8   Sistemata la ricerca dei vecchi movimenti, ora i documenti sono tutti in ordine di data
+    e numero..
+9   Nuovo programma di aggiornamento Ora vengono effettuati molti controlli durante
+    L'aggiornamento del programma...
+10  Nuovo prgramma invio documenti, ora è possibile inviare tutti i documenti per email
+    tramite pdf.
+
+
+
+
+--------------------------------------------------------------------------------
+Versione 0.8.4 del 16/12/2009
+1   Sistemazione programma qui e li qualche errore
+2   aggiunta nella ricerca dell'articolo anche la possibilità immediata di ricercare
+    direttamente con il codice.
+3   Sistemazione delle nuove causali di vendita nel documento d.d.t.
+4   Nuova gestione in acquisti dei d.d.t. di reso conto lavoro, ora è possibile emettere
+    un d.d.t. di conto lavoro, e quando arriva il reso gestirlo in maniera ottima
+    ricaricando il magazzino con molte opzioni.
+5   E' allo studio il nuovo sistema della stampa dei documenti, come ddt, fatture ecc.
+
+
+--------------------------------------------------------------------------------
+Versione 0.8.3 del 21/11/2009
+1   Nuovo programma di stampa venduto di magazzino, ora la visualizzazione del venduto
+    di magazzino e visibile in forma annuale, con tutti i mesi, selezionabile per
+    gruppo merceologico, tipologia, clienti e fornitori
+2   Inserite delle protezioni durante l'evasione dei documenti ora se un documento e
+    evaso parzialmente non e piu possibile evaderlo o moficarlo
+3   Nuovo programma genera prezzi di vendita, ora e possibile generare i prezzi di vendita
+    partendo dagli acquisti e impostando dei paramentri di moltiplicazione
+4   Inserita la data di consegna in preventivi e conferme ordine..
+5   Inserito la possibilità di visualizzare direttamete il documento di carico magazzino
+    dall'anagrafica articoli in visualizza codice.
+6   Inserita la possibilita di avere le opzioni di stampa personalizabili di default
+
+
+------------------------------------------------------------------------------------
+Versione 0.8.2 del 06/10/2009
+1   Sistemati un po di errori nella visualizzazione e nell utilizzo dei programmi
+    di carico magazzino e vendite in quanto non riportava giusti i codici.
+2   Inserimento in anagrafica articoli dei seguenti campi:
+    articolo correlato, che verrà in futuro visualizzato durante la gestione vendite
+    Posizione articolo, sara possibile indicare la posizione dell'articolo in magazzino
+    Con esattamente = settore, scaffale, ripiano, cassetto.
+3   Sistemato l'errore del riporto dei pesi durante la modifica del documento
+4   Data la possibilita di collegare l'articolo correlado durante la selezione
+    della quantita in gestione dei documenti vendita
+
+--------------------------------------------------------------------------------
+Versione 0.8.1 del 20/08/2009
+1   Nuovo programma stampa clienti e fornitori nella sezione stampe, ora si possono
+    stampare tutti i clienti e fornitori per nome e per altre mille maniere..
+    Nello sviluppo prossimo e prevista anche la possibilita di esportare il tutto
+    in pdf, e anche in altri formati.
+2   Messo un bloco durante la reazione dei documenti, ora se non si seleziona un
+    cliente fornitore, il programma blocca la procedura
+3   Sistemato il passaggio di fine anno.. ora riporta correttamente tutti i campi.
+
+
+--------------------------------------------------------------------------------
+Versione 0.8.0 del 07/08/2009
+1	Aggiornato tutta la procedure calcolo iva, e ive separate ora manca solo la
+	personalizzazione dei report.
+2	Data la possibilita di inserire anche valori letterari nel campo protocollo iva
+	in inserimento ddt acquisto
+3	Completata la gestione del peso del documento, ed ache il cambio di valore, ora
+	il valore peso articolo e definitivamente in kg, con la possibilita di inserire
+	anche i grammi dell' articolo.
+4	aggiornato il programma degli aggiornamenti, ora è possibile aggiornare agua in
+	maniera automatica.
+
+---------------------------------------------------------------------------------
+Versione 0.8.0b del 09/07/2009
+1	Sistemazione delle aliquote iva diverse su tutti i documenti
+2	Inizio dei programmi per l'inserimento e la cancellazione inclusa
+	la modifica delle aliquote iva.
+3	Iniziata la possibilita di poter inserire le righe all interno dei documenti
+4	Corretti i bug durante il carico del magazzino ed anche durante gli ordini ai
+	fornitori, ora se si sbaglia articolo o non lo si prende non si rischia di
+	uscire dalla procedura.
+
+-----------------------------------------------------------------------
+Versione 0.8.0a del 08/06/2009
+1	Sistemta la schermata del corpo ducumenti quando si cancellavano
+	tutti i muovimenti che spariva quasi tutta la schermata
+2	Sistemazione gestione Iva multiple.. ora il programma fa quasi i conti
+	giusti
+3	Sistemati qua e la alcuni problemi di allineamento delle schermate.
+4	Inizio collegamento parti del programma alla nuova quida On.line sul
+	sito ufficiale di AGUA GEST
+5	Inizio gestione del peso durante la avasione del documento.
+6	Data la possibilita di effettuare una fattura di vendita con gli articoli
+	della anagrafica scollegati dal magazzino.
+7	Iniziata la nuova grafica dei sottomenu,come ddt ecc. ora ci sono le icone.
+8	Continuzione della gestione ive diverse..
+9	Inserita una protezione durante la creazione delle fatture vendita
+	Ora se succedesse di sbagliare numero e andare sopra ad un numero gia esistente
+	Si blocca l'operazione e si viene avvisati.
+10	Data la possibilita di chiudere anche una bolla diversa da vendita, quindi
+	non solo resi.
+
+--------------------------------------------------------------------
+VERSIONE 0.7.9A del 18/05/2009
+1	Aggiornate le librerie Fpdf alla nuova relase 1.6
+2	Sistemata la gestione dei muovimenti e la sua ricerca nel magazzino
+	ora e possibile vedere con facilita tutti i muovimenti di carico
+	e scarico sia degll'anno in corso sia negli storici incluso il
+	numero di protocollo iva, con la ricerca.
+
+
+-------------------------------------------------------------------
+VERSIONE 0.7.9 del 27/03/2009
+1	Corretti un po di bug qui e la..
+2	Inizio gestione verso nuova major relase..
+
+
+--------------------------------------------------------------------
+VERSIONE 0.7.8 del 12/02/2009
+1	Inserita la possibilità inserire un testo per modificare la e-mail
+	in allegato al documento appena generato come fattura preventivo
+	conferma d'ordine
+
+
+----------------------------------------------------------------------
+VERSIONE 0.7.7 del 29/12/2008
+1	Completata la gestione della generazione degli effetti, ora e inclusa
+	anche la sezione importi relativi alle scadenze iva.
+2	Completata l'anagrafica pagamenti includendo le dipendenze sull'inserimento
+	dell'iva nella prima o ultima rata.
+3	Sistemato il link al magazzino.
+4	Sistemati un po di bugs nella grafica del programma.
+5	Aggiunto nel controllo giacenze articolo la visualizzazione degli ultimi movimenti
+	di acquisto e vendita dell'anno in corso e dell'anno precedente
+
+
+------------------------------------------------------------------------
+VERSIONE 0.7.6 del 15/12/2008
+1	Sistemato il problema riguardante le bolle di carico.. ora i campi
+	codice fornitore e articolo interno sono stati invertiti.
+2	Nuovo programma istallazione.. Ora agua ha un programma tutto suo per
+	installarsi..
+3	Nuovo programma per l'aggiornamento, ora il programma controlla se il
+	programma installato ed i parametri interni corrispondono..
+4	Per proseguire all'aggiornamento ora si deve puntare su update.php
+
+
+------------------------------------------------------------------------
+VERSIONE 0.7.5 del 23/11/2008
+1	Nuovo menu di benvenuto con l'inserimento dell'icona contabilità
+2	Aggiornamento cartelle programma con lo spostamento della sezione contatti
+	e articoli di magazzino nella nuova sezione anagrafiche. Ora il tutto è dentro
+	un unico settore.
+3	Sistemazione bug imballi, ora la funzione di gestione degli imballi funziona
+	correttamente
+4	Nel reparto amministratori sistemato il programma per l'inserimento dei dati
+	si anagrafica azienda.
+5	Inserita la possibilità di vedere i preventivi cliente in ordine di cliente
+6	Data la possibilità di cambiare banca cliente durante la modifica della
+	fattura., quindi oltre al pagamento anche la banca di appoggio.
+
+----------------------------------------------------------------------------------
+VERSIONE 0.7.4 del 16/10/2008
+1	Completata la gestione delle distinte bancarie, ora è possibile presentarle
+	modificarle, eliminarle, e anche liberare gli effetti, l'unica cosa che mancante
+	è l'esportazione del file nel formato CBI bancario che è attualmente rimandata
+	a quando la gestione degli effetti sara ultimata.
+2	Nuova ricerca della bolla di carico magazzino tramite il numero di protocollo
+	iva della contabilità.
+-----------------------------------------------------------------------------------
+VERSIONE 0.7.3 del 03/10/2008
+1	Inserita la possibilit  di poter stampare una etichetta articoli
+	per gli scaffali con tanto di foto relativa all'articolo.
+2	Inserito un avviso, quando si carica un ddt acquisto. se il fornitore ha un
+	ordine in corso non ancora evaso viene segnalato.
+3	Inserito un avviso durante gli ordini presso i fornitori. Se l'articolo
+	che si va ad ordinare   gia in ordine oppure non   stata saldata la
+	consegna il programma avvisa l'utente dicendogli che ordini ha in sospeso
+	e con che quantit  inevase.
+4	Corretti due bugs, ed inserito il nuovo menu a tendita in parti in cui
+	necessitava.
+
+-----------------------------------------------------------------------------------
+VERSIONE 0.7.2 DEL 20/08/2008
+1	Completato il nuovo passaggio da d.d.t a fatture ora sono stati sistemati
+	anche i bugs
+2	Completata la generazione degli effetti, ora   possibile presentare
+	gli effetti generati direttamente da programma e creare una distinta.
+
+-----------------------------------------------------------------------------------
+VERSIONE 0.7.1 11/08/2008
+1	Nuovo programma per la generazione delle fatture..
+	Ora il passaggio   molto pi  veloce ed intuitivo..
+2	Sistemazione di un po di bugs sull'esposrtazione delle bolle.
+-----------------------------------------------------------------------------------
+
+VERSIONE 0.7.0 05/08/2008
+1	Inserita la possibilit  di poter evadere parzialmente le conferme
+	Ordine.. cosi da poter emettere d.d.t. vedita sulle conferme.
+
+-----------------------------------------------------------------------------------
+VERSIONE 0.6.9 02/08/2008
+1	Finito di sistemare l'importazione parziale dell'ordine fornitore
+	ora   possibile a man mano che la merce arriva caricare il magazzino.
+2	Inserito il nuovo menu un po in giro.
+3	Sistemato un errore sulla gestione dei d.d.t. emessi per sostituzione in garanzia
+
+-----------------------------------------------------------------------------------
+VERSIONE 0.6.8 06/05/2008
+1	Aggiornato il programma vendite gestione conteggi iva..
+
+-------------------------------------------------
+versioni in mezzo mi son dimenticato di aggionare
+-------------------------------------------------
+VERSIONE 0.6.5 09/04/2008
+1	Inserita la possibilità di aggiornare i prezzi dell'anagrafica articoli
+	durante l'inserimento di un ddt acquisto, ed indifferentemente dal fornitore
+	Viene aggiornato il proprio prezzo.
+
+-----------------------------------------------------------------------------------
+VERSIONE 0.6.4 bis 03/04/2008
+1	Inserito nuovo parametro globale, gestione IVA ora e possibile risolvere
+	l'arrotondamento dell'iva, in caso di documenti molto lunghi. Si può decidere
+	se gestile le ive diverse per ogni cliente oppure gestire una unica iva globale
+	ovvero quella di sistema.
+2	Gestione anagrafiche banche
+3	Inserimento scelta istituto bancario durante l'inserimento della anagrafica
+	cliente/fornitore/agente
+4	Possibilità di modifica istituto bancario durante l'inserimento della
+	anagrafica cliente/fornitore/agente
+
+--------------------------------------------------------------------------------------
+VERSIONE 0.6.3 26/03/2008
+1	Completata la messa in sicurezza del corpo documenti ora se per sbaglio si
+	preme cancella viene richiesta la conferma
+2	Nuovo menù più preciso ed aggiornato, ed inserito in molte pagine
+
+------------------------------------------------------------------------------------------
+VERSIONE 0.6.2 11/03/2008
+1	Completata la scelta multipla degli articoli nel reparto ddt acquisto
+	e finalmente sistemato anche il tasto annulla documento
+2	Completata la scelta multipla degli articoli con inserimento in automatico
+	della quantità minima ordinabile, ed completato anche la funzione annulla
+	documento.
+3	Inizio messa in sicurezza del corpo articoli.
+
+
+-------------------------------------------------------------------------------------------
+VERSIONE 0.6.1 08/03/2008
+1	In visualizzazione clienti inserita anche la possibilita di visionare direttamente
+	anche gli ultimi 5 muovimenti di vendita dell'anno precedente
+2	Spostate in cartella report tutte le etichette, ora è possibile midificarle e personalizzarle
+	a piacimento.
+3	Sistemato il bug annulla documenti in ddt. acquisti ora si annulla correttamente il documento
+4	Sistemata anche un po la grafica.. ora la visualizzazione è un po più chiara.
+5	Inserita la possibilità della scelta multipla articoli anche nel reparto fatture
+
+-------------------------------------------------------------------------------------------
+VERSIONE 0.6.0 02/03/2008
+1	Sistemazione bug inventario magazzino ora la stampa degli anni precedenti
+	risulta corretta
+2	Sistemazione bug rimanenze di magazzino, ora si può procedere a stampare
+	l'anno precedente senza problemi
+3	Sistemazione del campo username, ora risulta più lungo
+4	Sistemazione della sezione plugis, ora è possibile inserire e eliminare e richiedere senza
+	problemi programmi proprietari, con la comodità di copiarli all'interno della
+	directory e poterli usufruire subito.
+5	Nuova funzione duplica codice in anagrafica articoli, ora è possibile duplicare un codice
+	senza doverlo riscrivere
+-------------------------------------------------------------------------------------------
+VERSIONE 0.5.9 25/02/2008
+1	Sistemato schermata visualizza articolo ora la immagine compare giusta
+2	Sistemato bug inventario magazzino, ora si possono vedere anche gli inventari
+	degli anni precedenti.
+
+--------------------------------------------------------------------------------------------
+VERSIONE 0.5.8 02/01/2008
+1	Sistemato errore nel programma inventario magazzino, ora la funzione non fa apparire
+	gli articoli non hanno muovimenti, ne giacenza
+2	Sitemato il programma P2 ovvero la giacenza di magazzino per schede, ora la giacenza
+	Viene inserita con la data del primo gennaio dell'anno corrente..
+3	Sistemata la descrizione del programma, ovvero nelle stampe di magazzino, sostituta la scritta
+	ricarico con differenza.
+
+
+----------------------------------------------------------------------------------------------
+VERSIONE 0.5.7 30/12/2007
+1	Inserita in amministrazione la possibilita di recuperare la giacenza
+	iniziale di un singolo gruppo merceologico da anno vecchio a anno nuovo
+
+---------------------------------------------------------------------------------------------
+VERSIONE 0.5.6 11/12/2007
+1	Correzione bug scontistica nei documenti acquisto
+2	Inserimento nelle anagrafiche di sue nuovi campi, IBAN, SWIFT
+
+----------------------------------------------------------------------------------------------
+VERSIONE 0.5.5 31/10/2007
+1	Corretto la gestione delle bolle di reso ora il programma scarica in negativo il carico
+	di magazzino
+2	Corretto anche il programma per chiudere le bolle di reso, altrimenti resterebbe inevaso
+	il documento
+
+----------------------------------------------------------------------------------------------
+VERSIONE 0.5.4 19/10/2007
+1	Inserita la possibilità di poter eseguire le bolle di reso in ddt vendita
+2	Inserita la possibilità di registrare e saldare i ddt di reso nelle bolle di carico
+	tramite la nota credito del fornitore
+
+----------------------------------------------------------------------------------------------
+VERSIONE 0.5.3 10/10/2007
+1	Inserita la possibilità di cambiare intestatario sui documenti non evasi, in preventivi,
+	ordini, ddt, e conferme
+2	Sistemato la causale dei documenti ora è possibile fatturare in ddt con valore 0 e quantità 1
+	soltanto usando la causale sostituzione in garanzia, perchè puo essere esente iva.. altrimenti
+	bisogna mettere l'iva e tenere un registro iva degli omaggi.
+
+
+-----------------------------------------------------------------------------------------------
+
+VERSIONE 0.5.2 alpha 31/08/2007
+1	Corretti un po di bugs
+2	Iniziata la possibilità di poter fare una selezione multipla degli articoli
+	durante l'emissione dei documenti.
+
+
+VERSIONE 0.5.1 29/08/2007
+1	Corretti un po di bug qui e li
+2	Inserita la possibilità di poter inserire al volo delle spese bancarie durante
+	la importazione delle bolle differite in fattura.
+3	Inserita la revisione dei documenti per i preventivi, le conferme d'ordine, e gli ordini clienti
+	ora ogni volta che il documento viene modificato il numero sale di una unità fino  a 999
+4	Sistemato il problema delle date rovesce nell'importazione dei documenti
+
+-----------------------------------------------------------------------------------------------
+VERSIONE 0.5.0 STABLE 13/08/2007
+1	Completata l'anagrafica vettori ora è possibile inserire modificare e cancellare
+	i vettori
+2	Sistemazione Bug qui e li
+3	Durante l'inserimento delle bolle di magazzino ora è possibile visionare la media dei
+	prezzi di acquisto ed anche la giacenza del magazzino
+4	Sistemato il problema di invio dei documenti per e-mail
+5	Sistemato il report statistiche mensili di magazzino
+
+-------------------------------------------------------------------------------------------------
+VERSIONE 0.4.9 STABLE 24/07/2007
+1	Sistemato un paio di bug qui e li
+2	Inserita la possibilità di poter stampare i documenti con o senza intestazione
+3	Inserito la possibilita di visionare anche le conferme d'ordine in ordine di cliente.
+
+-------------------------------------------------------------------------------------------------
+
+VERSIONE 0.4.8 STABLE 02/07/2007
+1	Sistemata finalmente il controllo utenza e permessi ora agua è piu sicuro
+2	Completata la possibilità di modificare i dati aziendali dal pannello di controllo
+	admin "GESTIONE AZIENDA PARAMETRI"
+
+
+VERSIONE 0.4.8 beta 27/06/2007
+1	Ristrutturazione della sezione agenti...
+2	Immessa nuova funzione di forzatura cancellazione articoli
+3	Completata la gestione agenti.. ora e possibili inserirli modificarli ed eliminarli
+
+-------------------------------------------------------------------------------------------------
+
+VERSIONE 0.4.8 alpha 01/06/2007
+1	Iniziata la possibilità di scegliere la tipologia di privacy
+2	Corretti un po' di bug
+3	Inserito un link di collegamento in tutte le pagine di importazione ed inserimento
+	dei documenti che permette le modifica del documento appena generato o inserito senza
+	dover ricercarlo di volta in volta.
+
+-------------------------------------------------------------------------------------------------
+
+VERSIONE 0.4.7 06/04/2007
+1	Sistemato qui e la piccoli bug, ed errori di visualizzazione
+2	Aggiunto la possibilità di stampare un listino figurato in modalità pdf
+3	Sistemazione in corso reparto provvigioni, con aggiunta della data fattura.
+4	Nuovi elenchi privvigioni con stampa delle provvigioni egenti n carta bianca
+---------------------------------------------------------------------------------------------------
+VERSIONE 0.4.6 stable 20/02/2007
+1	Ampliato la scheda prodotti con la visualizzazione muovimenti
+	degli anni precedenti.
+2	Aggiornata la scheda privacy con indicazioni sul campo mancante.
+
+-----------------------------------------------------------------------------------------------------
+VERSIONE 0.4.6 ALPHA 19/01/207
+1	Modificato la struttura di agua modificato il menù principale
+	ora è possibile utilizzare dei programmi personalizzati (plug-in), indifferentemente
+	dalla versione in atto.
+2	Sistemato tre errori nel programma delle giacenze iniziali
+3	Sistemato un errore nel programma inventario
+
+-----------------------------------------------------------------------------------------------------
+VERSIONE 0.4.5 10/01/2007
+1	Inserita la possibilità di personalizzare la maschera degli articoli
+	in base alle proprie esigenze, modificando il file maschera_art.php contenuto all'interno
+	della cartella report.
+2	Inserita la possibilità di bloccare un utente ad entrare nel reparto vendite.
+3	Inserita la possibilità di bloccare un utente ad entrare nel programma.
+
+-----------------------------------------------------------------------------------------------------
+VERSIONE 0.4.5 alpha 30/12/2006
+1	Inserito in Anagrafica clienti e fornitore la gestionel dell'allegato
+	Clienti Fornitori di fine anno, con la possibilità di scegliere il tipo di soocietà
+	ed il tipo di inserimento. Così è possibile scegliere se inserire il soggetto nella stampa.
+2	Inserito in anagrafica clienti due campi relativi alla lettera d'intento del cliente per
+	L'esenzione dell'iva, ed il nostro numero di protocollo da riportare nei documenti di vendita.
+3	Possibilità di personalizzare la maschera clienti e fornitori in base ai campi di proprio necessito.
+
+------------------------------------------------------------------------------------------------------
+VERSIONE 0.4.4 beta2 26/12/2006
+1 - 	Inserito in Anagrafica due nuovi campi uno per il vettore ed uno per il porto
+	Cosi ora quando si crea un nuovo docuemnto abbiamo anche l'assegnazione in automatico
+	del corriere.
+2	Revisionata la grafica ed l'insegna.
+------------------------------------------------------------------------------------------------------
+VERSIONE 0.4.4 Beta 20/12/2006
+1 - Completata la esportazione parziale ordine cliente in conferma d'ordine.
+2 - Sistemati un po di bug qui e li ed errori di scrittura
+3 - In fase di completamento il carico parziale ordine fornitore.
+4 - Creata la cartella dedicata al manuale
+5 - Cambiato nome cartella contatti da clifor a contatti.
+6 - Nuovo menu breve completo delle nuove funzioni.
+
+--------------------------------------------------------------------------------------------------------
+
+Versione 0.4.4 Alpha 27/10/06
+1 - Iniziata l'evasione parziale dell'ordine di acquisto in d.d.t. acquisto
+2 - Iniziato di conseguenza anche la sistemazione di tutto il reparto acquisti a
+	a livello di errori di bug.
+3 - Aggiunta sicurezza sulla creazione della fattura.. in caso di righe con importo uguale a zero
+	blocca il programma.
+4 - Inserito l'avviso durante la generazione di un documento che l'utente è senza
+	codice fiscale.
+
+--------------------------------------------------------------------------------------------------------
+
+Versione 0.4.3 Stable 29/09/2006
+1 - Quasi completata l'evasione parziale dell'ordine cliente
+2 - Inserita la possibilita di stampare le etichette dei clienti anche per la destinazione
+3 - Inserita la possibilità di stampare anche il listino prezzi acquisto.
+4 - Inserite un giro per il programma un po' di protezioni contro eventuali eliminazioni per errori.
+5 - Inserita l'evasione dell'ordine fornitore con carico del magazzino e bolla di carico.
+
+
+---------------------------------------------------------------------------------------------------------
+Versione 0.4.2 Stable 05/07/2006
+1 - Inserita la protezione per l'annullamento del programma.
+2 - Inserito il programma che stampa la privacy con il nome del cliente.
+3 - Aggiustamento di qualche bugs il giro per il programma.
+5 - Terminato la gestione ordini clienti
+6 - Inizio evasione parziale dell'ordine cliente
+
+--------------------------------------------------------------------------------------------------------
+
+Versione 0.4.2 Aplha
+1 - Messa in sicurezza del reparto vendite.. praticamente se un utente sta modificando un
+	Documento un'altro utente non pu modificarlo stamparlo o evaderlo.
+2 - Inserita la possibilit di visualizzare il fornitore prima di modificarlo...
+3 - Rinnovo grafica reparto vendite
+4 - Quasi terminata la gestione ordini cliente
+
+--------------------------------------------------------------------------------------------------------
+
+Versione 0.4.1 Stable
+1 - Inizio correzione Report d.d.t. per poter aver la stampa identica
+	Nonostante le varie tipologie di browser e sistemi operativi.
+	Grazie ai CSS.
+2 - Sviluppato elenco bolle inserite in ordine di cliente con la somma dei documenti e la
+	possibilit di poterlo stampare su una pagina separata senza lo sfondo.
+3 - Sviluppato un programma nuovo dal nome L5 ovvero (Prezzi cliente). che permette la ricerca dello storico di un
+	articolo in base al cliente. dando cos la possibilita all'utente di poter verificare
+	l'andamento del prezzo di vendita durante il tempo. poi si ha anche la possibilit di
+	andare a vedere il muovimento direttamente cliccado il numero del documento.
+
+-----------------------------------------------------------------
+Versione 0.4.1 Alpha
+1 - Corretto il bug in eliminazione ddt acquisto
+-----------------------------------------------------------------------
+Versione 0.4.0 Stable
+1 - Corretti sempre un po di bug qui e li..
+2 - Data la possibilit di evadere le fatture sia in modalit ricerca con il nome
+	sia direttamente con il numero della fattura. Cos se si e emessa una ricevuta
+	bancaria si pu scrivere anche il numero e l'anno.
+3 - Data la possibilit di poter stampare il venduto di magazzino per varie forme..
+----------------------------------------------------------------------------
+Versione 0.4.0 Alpha
+1 - Corretti un po di bug qui e li..
+2 - Corretto definitivamente la chiusura e riapertura dei conti
+	ed spostato il programma all'interno dell'aerea admin.
+3 - Inserita e completata la gestione della privacy, ora il programma quando si emette
+	qualsiasi documento, avvisa l'utente che la privacy non  stata firmata.
+4 - Sul reparto d.d.t.  stato aggiunto un comodo programma che elenca le bolle da fatturare
+	in ordine per cliente ed la somma dei relati importi ivati.
+5 - Iniziato lo sviluppo della ricerca dei muovimenti dell'anno precedente.
+6 - Corretto l'importazione dei documenti dall'anno passato all'anno nuovo, ora
+	si pu importare una conferma o un preventivo dell'anno precedente ad un d.d.t.
+	dell'anno nuovo tranquillamente.
+7 - inserita la possibilit di cercare i movimenti del magazzino nell'anno in corso
+8 - Inserito un link dai d.d.t carico ai muovimenti di magazzino storici per effettuare una
+	ricerca.
+
+
+-----------------------------------------------------------------------------
+Versione 0.3.9 Stable
+1 - Corretti un po di bug..
+2 - Sistemato il problema delle sissioni scadute..
+3 - Aumentato la sicurezza per la chiusura e riapertura dei conti di magazzino
+	Ora controlla se ci sono documenti da evadere.
+4 - Sistemata la stampa dell'inventario ed la esportazione in PDF
+5 - Inserito finalmente il risultato articoli, sia con articolo errato, sia
+	L'impossibilit di inviare campi vuoti
+
+-------------------------------------------------------------------
+Versione 0.3.9 Alpha
+1 - Correttu bug eliminazione articolo ora elimina anche i prezzi
+2 - Inserita la possibilit di inviare preventivi ordini e conferme d'ordine
+	In pdf per e-mail.
+3 - Inserita la possibilit di collegare un'immagine all'articolo
+4 - Inserita la possibilit di assegnare una pagina del catalogo all'articolo
+	Cosi da poter essere messa nel listino prezzi.
+
+-------------------------------------------------------------------
+Versione 0.3.8 Stable
+1 - Corretto qualche link errato
+2 - Completata la chiusura e la riapertura dei conti di magazzino
+3 - Corretti ultimi buchi sulla sicurezza
+4 - Inizio gestione dei permessi.
+5 - Inizio contro domande per eliminazione dei documenti ecc.
+
+-------------------------------------------------------------------
+VERSIONE 0.3.8 ALPHA
+1 - Corretti un po' di bug
+2 - Nuova grafica pi appagante
+3 - Nuovo Nome AGUA
+4 - Inziato la nuova gestione sicurezza ora Agua  pi sicuro
+
+------------------------------------------------------------------------------------------------------
+VERSIONE 0.3.7 Stable
+1 - Corretti un po' di bu qui e li
+2 - Inserita la possibilit di stampare le etichette clienti e fornitori per le spedizioni
+3 - Completata la visualizzazione breve cliente e articolo con la possibilit di vedere gli
+ 	ultimi muovimenti e visualizzarli direttamente.
+------------------------------------------------------------------------------------------------------
+VERSIONE 0.3.6 Stable
+
+1 - Corretti un po di bug qui e la
+2 - Inserita la possibilit di gestire vari tipi di causali
+	Tra cui vendita, omaggio ecc.
+3 - Corretto il problema dell'agente che non veniva riportato.
+4 - Completata la funzione stampa inventario con la possibilit di esportare in PDF
+
+--------------------------------------------------------------------------------------------------------
+VERSIONE 0.3.6 Beta 2
+
+1 - Corretti un po di bug qui e la..
+2 - Inserita la possibilit di gestire pi codici iva con varie esenzioni
+3 - Inserita la possibilit di gestire la fattura immediata con un nome proprio
+4 - Inserita la nota di Debito
+5 - Corretto e quasi pienamente funzionante la gestione inventario
+6 - Corretto e pienamente funzionente la funzione recupero muovimenti magazzino.
+-------------------------------------------------------------------------------------------------------
+VERSIONE 0.3.5 Stable
+
+1 - Corretti un po' di bug qui e la..
+2 - Inserita la possibilit di inserire modificare e cancellare un imballo
+3 - Procedimento in avanzamento gestione admin, con la possibilit di aggiornare gli archivi all'ultima versione
+4 - Possibilit di poter inserire modificare ed eliminare i codici di pagamento.
+5 - Aggiunto benaltri 2 sconti in anagrafica clienti per permettere anche una eventuale maggiornazione
+	esempio sconto 50 -6 quindi uno sconto 50 piu una maggiorazione di 6 logicamente viene riportata
+	in tutti i documenti di vendita.
+
+VERSIONE 0.3.5 beta
+
+1 - Sistemata la funzione esclusione articolo dalla muovimentazione del magazzino
+	creava errori con la fattura immediata
+2 - Completata la funzione blocca cliente, ora anche se ad un cliente  stata emessa una conferma d'ordine
+	essa non pu essere esportata, in quanto il cliente risulta bloccato.
+
+------------------------------------------------------------------------------------------------------
+
+VERSIONE 0.3.5 alpha
+
+1 - Completata la gestione utenti ora il singolo utente pu cambiarsi la password quando vuole ed a piacimento
+	tranquillamente, anche perch l'amministratore ha il potere su tutti.
+2 - Aumenta la parte programmi nella sezione amministratore, ora  possibile fare le copie ed iniziare la manutenzione degli archivi
+	ed iniziamo ad automatizzare la procedura di aggiornamento alla nuova versione
+3 - Data la possibilit di controllare i documenti, se un documento diventa rosso, vuol dire che manca un numero..
+4 - Inserita in articoli la possibilit di isolare un articolo dalla gestione del magazzino, qundi quando si fa un
+	documenti di vendita come il d.d.t. l'articolo non va in negativo nel magazzino.
+5 - Inserito controllo numeri documento, elenca sullo schermo eventuali numeri d.d.t e fattura mancanti
+6 - Iniziata la gestione vettori all'interno della sezione Rapporti..  gia possibile effettuare una ricerca
+
+---------------------------------------------------------------
+VERSIONE 0.3.4 stable
+
+1 - Completato la gestione dei listini di vendita anche con la stampa
+2 - Corretti un po' di bug qui e la..
+
+----------------------------------------------------------------
+Versione 0.3.4 Beta
+
+1 - Salvataggio archivi funzionante su percorso a piacimento
+2 - Creazione archivi prima installazione funzionante
+3 - Corretto cambio utente, stesso computer ( esempio per diventare admin).
+4 - Corretta la selezione articoli durante la ricerca per altri campi diversi da descrizione
+5 - Finita  migrazione a vars.php per sicurezza
+6 - Quasi corretta la generazione della fattura dal d.d.t con esenzione di alcudi d.d.t gi fatturati
+	ora per esportare un d.d.t in fattura  obbligatorio che sia stampato.
+7 - Sistemata la visione dei documenti, ora sono in ordine di numero e e di anno cos si ha la pi velocita nel trovare il numero.
+
+VERSIONE 0.3.4 ALPHA
+
+1 - Conversione per maggior sicurezza il files vars.inc a vars.php,
+ 	Facendo cos  ache visualizzando il codice sorgente dal browser non si legge nessun dato..
+2 - Inserita la modalit ADMIN quindi la gestione delle password per la privacy, gestione utenti ecc.
+	Questo ha portato ad un gradino in su la sicurazza del programma in quanto se non viene utilizato per pi di un ora
+	Horus disconnette l'utente e lo rimanda al login.
+3 - Inserita la possibilit di inserire, variare, cancellare i prezzi personalizzati del cliente per ogni articolo.
+	In oltre si ha la possibilit di mettere anche un descrizione dell'articolo personalizzata.
+4 - Finito il programma ordini fornitore, ora si ha la possibilit di inserire, modificare e cancellare un ordine al fornitore.
+5 - Finito la migrazione ad il nuovo vars.php
+6 - Finalmente funzionante il blocco cliente, ora se si blocca un cliente in anagrafica
+	non si possono pi emettere documenti di vendita
+7 - Inserita la possibilit di gestire fino a 999 listini di ventita in automatico
+8 - Inizio gestione archivi per prima installazione e copie archivi.
+8 - Corretto bug grandezza campo in anagrafica cliente e fornitore
+
+VERSIONE 0.3.3 Stable
+Sistemato l'ordine al fornitore in andata.
+Sistemato l'invio delle fattura per e-mail grazie a phpmailer
+Aggiornato il database
+Sistemato bug inserimento articoli, era invartita il per con la provvigione
+Giro di boa per l'ordine fornitori nuovo
+Inizio Migrazione nuove modifiche di vars.inc
+Inserimento modifica eliminazione Categoria merceologica
+Inserimento modifica eliminazione Tipologia articolo
+Modificato database fatture ora la banca segue il documento una volta generata la fattura incluso abi, cab, cin , cc
+Corretto errore rispristino documenti evasi
+Spostato il files vars.inc ovvero il files configurazione azienda nella cartella report
+il fatto  per una maggior scalabilit del programma e minor possibilit di sovra scrittura
+accidentale da parte utente per gli aggiornamenti.
+Inserita la visualizzazione tipo documento in gestione vendite aggiornato il database
+Sistemazione bugs vari ed eventi, per installazione in ambiente windows con easyphp.
+aggiornamento database per il fornitore e i gruppi merceologici e tipoarticoli.
+
+VERSIONE 0.3.2 Stable
+Completata la possibilit di invio fattura per e-mail, con controllo email ed invio.
+Installato blocco per l'inserimento giacenza articolo con un articolo inesistente.
+Sistemato la descrizione in fattuta sulla zona cliente.
+Sistemato visualizzazione e-mail in fattura immediata e differita.
+Inserita la possibilit di eliminare un cliente con controllo
+Inserita la possibilit di eliminare un fornitore con controllo
+Aggiunto script nell'inserimento del documento che se trova il numero occupato
+Aggiunge un unit in pi e lo inserisce.
+
+Versione 0.3.1 stable
+Completato il procedimento eliminazione articolo.
+Sistemazione modifica fattura immediata
+Data la possibilit di cercare un articolo sia in modifica
+che in magazzino sulle giacenze (P2)
+Sistemazione ultimi bug's
+
+Versione 0.3.0 stable
+Aggiornamento tabelle database
+Aggiornamento programmi inserimento e modifica fornitore
+Sistemazione directory per un utilizzo standard
+Completato il procedimento importazione preventivi in:
+Bolle vendita
+Conferme d'ordine
+Completato il procedimento importazione conferme d'ordine in fattura immediata
+
+Versione 0.2.9 stable
+Completato il programma Giacenze magazzino
+Completato il programma gestione d.d.t. fornitore per carico magazzino
+Iniziato i programmi per l'inserimento anagrafiche fornitore
+Completata la gestione fatturazione con l'anno nuovo
+Completato il report fatture accompagnatorie
+Nuova versione del manuale.
+
+Versione 0.2.8
+Cambiato il database magazzino per la gestione dai carichi
+Quasi completato il programma gestione giacenze
+Quasi terminato il programma stampa inventario magazzino
+Iniziato il programma carico ddt fornitore
+
+Versione 0.2.7
+Cambiato il database inizio gestione programmi chiusura magazzino
+Sistemato il problema con la provincia di destinazione
+
+Versione 0.2.6 stable
+Inserita la possibilità di modificare il destinatario di un d.d.t
+Inserimento cliente
+
+Versione 0.2.5 stable
+
+Inserita la possibilità di modificare un cliente
+Completata la gestione provvigioni agenti per le fatture
+Inserimento ripristino documenti dopo cancellazione fattura
+
+Verione 0.2.0 inferiore al 2004.. si pensa primi agli ultimi periodi del 2003..
+
+Il programma funziona egregiamente, ci sono ancora un po di errori, purtroppo
+mancano ancora tutti i form per inserire i clienti, fornitori, listini,
+ categorie merceologighe ecc.

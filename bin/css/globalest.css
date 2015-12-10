@@ -1,0 +1,207 @@
+
+/*File di css inerente alla stampa complessiva del programma..
+* questo file può essere sovrascritto quando si passa alla funzione stampa html
+*/
+/* css inerenti la stampa di un semplice elenco */
+
+
+
+table.elenco {
+
+
+    font-family: helvetica,arial,sans,serif;
+    font-size: 12px;
+    width: 100%;
+
+}
+
+td.elenco {
+    border: none;
+    font-family: helvetica,arial,sans,serif;
+    font-size: 10px;
+    background-color: #ffffff;
+}
+
+
+/* ----Fine CSS classico per elenchi tipo ddt per cli ecc.--------*/
+
+
+
+
+TD.tabella {
+    border: none;
+    font-family: helvetica,arial,sans,serif;
+    font-size: 13px;
+    color: #ffffff;
+    background-color: blue;
+}
+
+TD.tabella_elenco {
+
+    font-family: helvetica,arial,sans,serif;
+    font-size: 10px;
+    border-left-width: 1px;
+    border-left-color: black;
+    border-right-color: black;
+    border-right-width: 1px;
+    border-left-style: solid;
+    border-right-style: solid;
+}
+
+
+table.elenco_stampa {
+
+    font-family: helvetica,arial,sans,serif;
+    font-size: 12px;
+    background-position: center;
+    position: relative;
+    width: 100%;
+
+}
+
+table.classic {
+
+    font-family: helvetica,arial,sans,serif;
+    font-size: 12px;
+    width: 100%;
+    background-position: center;
+}
+
+tr.titolo {
+
+    background-color: #6699ff;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    color: #ffffff;
+}
+
+
+
+
+
+/*
+Css inerenti la stampa dei documenti di vendita
+è tutto .document
+*/
+
+table.document_logo {
+
+    background-color: #ffffff;
+    width: 750px;
+    border-collapse: collapse;
+    border-spacing: 0px 0px;
+}
+
+
+table.document_testa {
+
+    background-color: #ffffff;
+    width: 735px;
+    //border-collapse: collapse;
+    border-spacing: 0px 0px;
+    //font-size: 10%;
+    line-height: 100%;
+    //alignment-adjust: left;
+}
+
+table.document_sottotesta {
+
+    background-color: #ffffff;
+    width: 735px;
+    border-collapse: collapse;
+    border-spacing: 0px 0px;
+    
+    border-right-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    border-right-color: black;
+    border-left-color: black;
+    border-bottom-color: black;
+    border-top-color: black;
+    line-height: 95%;
+}
+
+
+table.document_corpo {
+
+    background-color: #ffffff;
+    background-position: center;
+    position: relative;
+    //border-spacing: 0px 0px;
+    width: 735px;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+}
+
+td.document_corpo {
+
+    background-color: #ffffff;
+    border-left-color: black;
+    border-left-width: 1px;
+    //border-spacing: 0px 0px;
+    line-height: 95%;
+    
+    border-bottom-width: 1px;
+    border-right-style: hidden;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    
+    border-left-style: solid;
+    border-bottom-style: hidden;
+    border-top-style: hidden;
+}
+
+
+
+td.intesta_corpo {
+
+    background-color: #ffffff;
+    border-left-color: black;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    line-height: 95%;
+}
+
+table.document_calce {
+
+    background-color: #ffffff;
+    width: 735px;
+    border-collapse: collapse;
+    background-position: top, center;
+    line-height: 95%;
+    
+}
+
+table.document_cgv {
+
+    background-color: #ffffff;
+    width: 735px;
+    border-collapse: collapse;
+    background-position: top, center;
+    line-height: 60%;
+    
+}
+/* fine css per documenti di vendita..*/

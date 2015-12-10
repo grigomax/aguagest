@@ -1,0 +1,197 @@
+[Discussioni] Mosaico, GecoProject e i gestionali
+Michele Sciabarra' msciab at eprometeus.com 
+Thu Apr 22 13:33:17 UTC 2004 
+
+Previous message: [Discussioni] Licenza del Kahemba 
+Next message: [Discussioni] Mosaico, GecoProject e i gestionali 
+Messages sorted by: [ date ] [ thread ] [ subject ] [ author ] 
+
+Disclaimer: quanto segue sono MIE IMPRESSIONI, MIE IPOTESI e MIE 
+ILLAZIONI. Nessuna pretesa di verit� assoluta.
+
+>Non posso che confermare quanto dici, anch'io � dal 99 che cerco la stessa
+>cosa.
+>Ma di Mosaico cosa ne pensi?
+>
+Mmmm. 
+
+Linguaggio di programmazione: Delphi 4 (NON portabile a Kylix/ Linux, 
+progetto peraltro semi-abbandonato da Borland).
+Piattaforma: WIndows (e basta) Database: BDE con tabelle Paradox... (mi 
+pare) Un bel po' di librerie proprietarie a contorno per la build (avete 
+letto la lista di ci� che serve per ricostruirlo?). Quanto mi costa SOLO 
+POTERCI SVILUPPARE?
+
+Senza contare che non c'� traccia di un CVS o un bug tracking system. 
+Non mi sembra che agli autori interessasse molto il feedback degli altri 
+sviluppatori Diciamola tutta: A ME SEMBRA prodotto nato proprietario, 
+vecchio,  con presumibili scarsi risultati di vendita che hanno 
+riciclato come open source. Vediamo con che risultati,
+
+Assetto societario: Computer Inside pare dissolta (fallita? hanno 
+litigato?) Rinato con la Whag srl, con un sito MOLTO MENO CURATO del 
+precedente (il che mi d� da pensare... 4 gatti? Due? Uno e mezzo?) La 
+versione 7 SI PAGA PER SCARICARLA (per� no, suvvia, dai, tranquillo, � 
+ancora open source). Gi� gi� gi�. Supporto tecnico con il tassametro: 
+paghi al minuto (e tanto) per� tranquillo al massimo 7 minuti, 20 �. In 
+7 minuti gli racconto appena appena come mi chiamo.  Sanno tanto di 
+disperazione per racimolare qualche euro, diciamocela tutta.
+
+Qualit� del codice. Provo a installarla, su due macchine (win 98)  A ME 
+non riesce. Sar� sfigato. Alla fine riesco (non chiedetemi come) Gioco 
+un po' con programma. La prima volta che ci ho provato si � aperta una 
+finestra MODALE ed � andata in loop, e ho dovuto killare l'applicazione 
+(ops terminarla con il task manager - scusate era in vmware di solito 
+uso linux).  Le GUI mi sembrano tutte uguali, ergo fatte con poco sforzo 
+con il rad di Delphi. Tecnicamente hanno disegnato un database 
+(probabilmente gi� noto) e gli hanno messo sopra le gui con il rad. Il 
+setting writer � una libreria esterna. Quanto lavoro? Non oso dirlo ma 
+non mi pare moltissimo. Sembra una applicazine fatta ad hoc senza 
+pretese per un caso specifico (ed � specifico: gestisce i negozi, mi pare).
+
+E' abbastanza chiaro che non mi ha entusiasmato?
+
+Per� secondo me questo � il massimo che si riesce a fare con uno sforzo 
+COMMERCIALE di una azienda che tenta di venderci sopra i servizi. Il 
+risultato mi ha convinto abbastanza che non funzioner� mai un approccio 
+come questo.
+
+-----
+
+Perch� oggi , se vuoi il servizio, compri il programma. La verit� pura e 
+semplice � questa. I gestionali hanno un margine risicatissimo (sono 
+troppi e tutti uguali) e l'utente non � in grado di distiguere, per cui 
+vai da "un amico", o prendi "quello che ti hanno consigliato, o spesso, 
+quello che usa il concorrente".
+
+Se vai dal computer shop o dalla "software house" o presunta tale, 
+chiedi di comprare il pacchetto. Per� l'utente non lo vuole il 
+pacchetto. Se lo volesse, SE LO COPIEREBBE PIRATA.  Quello che vuole � 
+il negoziante glielo vada a installare (cos� non rompe il computer o non 
+perde tempo o non ammette di non essere capace), e a cui telefonare 
+quando gli appare la scritta "windows non � stato spento correttamente". 
+Se il negoziante gli parla di supporto, pensa "cavolo questi mi vogliono 
+dare una cosa che non funziona e farsi pagare per aggiustarmela".
+
+Quindi il negoziante gli dice "questa � la licenza, ANNUALE, e c'� la 
+garanzia". Ergo quando vendono un pacchetto, i negozianti vendono
+
+- un 30% che danno a quelli che gli hanno fatto il programma, e danno 
+SUPPORTO A LORO
+
+- un 70% che serve a coprire le spese di SUPPORTO al cliente.
+
+In pratica, tutto il mercato dei gestionali � basato sul supporto e 
+sull'assistenza, ma siccome nessuno lo vuole pagare (soprattutto il 
+cliente che quando copra il pacchetto pensa che � come la macchina, o 
+l'aspirapolvere), viene venduto il supporto sotto forma di garanzia.  E 
+quelli che non vogliono pagare la licenza annuale, vengono forzati ad 
+aggiornarsi, perch� "la nuova versione non ha questo problema", 
+qualunque esso sia.
+
+La verit� � che il mercato italiano � fatto di assistenza e supporto 
+(per questo ci sono tanti pacchetti) ma � anche vero che questo servizio 
+viene pagato come LICENZE E PACCHETTI. Perch� una delle pi� importanti 
+norme di marketing � "la  gente compra i pacchetti". Le scatole. O i 
+"pacchi", come pi� spesso succede con i gestionali ;-)
+
+---
+
+Per� una azienda che dia il pacchetto gestionale gratis si ritrover� nei 
+guai. Perch� il cliente capir� solamente che il software � gratis, e 
+vorr� il supporto, che non vorr� pagare. Perch� non � abituato a farlo. 
+E non � una cosa che si cambia perch� tutta l'economia di mercato 
+funziona cos�. Anche le assicurazioni o i conti in banca, servizi allo 
+stato puro, vengono pacchettizzati. Tu compri qualcosa e dai una cifra, 
+il pacchetto � ci� che ottieni per una cifra, e non se ne esce.
+
+Allora come fare a uscire dal circolo? Io penso cos�.
+
+Un progetto OpenSource crea un prodotto gestionale. Uno sforzo reale, 
+comunitario, che produce un SEMILAVORATO che fa il 90%, 95%. Il prodotto 
+pu� essere GPL o BSD o quello che vi pare.
+
+Rimane il fatto che deve dare la libert� di prendere il prodotto, 
+completarlo e infiocchettarlo per l'utente finale e rivenderlo, COME 
+PACCHETTO, CON I SERVIZI.  Deve esserci l'obbligo di dire "derivato da 
+opengest" o quello che �,  per rendere pi� noto il progetto ma senza 
+altre limitazioni (oltre a dare il sorgente e dover ridistribuire i 
+derivati ovviamente).
+
+Ci saranno sicuramente chi ne approfitter�, certo. Inevitabile. Ma io 
+credo che I MIGLIORI a poter dare servizi, saranno quelli che 
+MAGGIORMENTE sono coinvolti nello sviluppo e partecipano alla comunit�. 
+E quando un programma va bene sono tanti a dare servizio e supporto a 
+quel programma. Prendiamo i casi di Linux, Apache, Qmail, OpenOffice.
+
+Il motivo per cui non far� mai il lavoro DA SOLO � questo. Perch� fare 
+questo lavoro significa dare ad altri la possibilit� di guadagnare. 
+Perch� saranno sforzi diversi (marketing, supporto) quelli che 
+porteranno ad un ritorno economico. Sono disponibile a dare il mio 
+lavoro a un altro e a una comunit�, se l'altro, o la comunit�, fa una 
+parte del lavoro, e il risultato finale, maggiore della somma delle 
+parti, consente di guadagnare, con servizi, supporto, personalizzazione, 
+a me come a loro.
+
+Ma fare il lavoro da soli significa non arrivare a nulla. Cosa succede?
+
+- l'inizio � difficoltoso, sei solo con le tue idee
+- finch� ti diverti, fai qualcosa e lo rendi pubblico
+- ma a quel punto, chi lo user�? chi lo tester�?
+- arriveranno le critiche: non funziona, non fa quello, aspetter� che...
+- e la documentazione?
+
+a quel punto, se nasce la comunit�, si procede: qualcuno lo testa, un 
+altro risponde alle email, un terzo fa una patch provvisoria e un altro 
+scrive il codice, e si procede insieme verso la nuova versione... 
+Altrimenti ti scoraggi, molli tutto e diventa l'eterno progetto lasciato 
+l� a morire su sourceforge...
+
+La prova? Ecco uno stralcio dell'intervista agli autori di GecoProject 
+che sar� pubblicata prossimamente su Linux Journal (ed italiana...) 
+Spero che non si incavolino di questo anticipo:
+
+  Michele Sciabarr�: Il progetto sembra fermo da settembre 2003 alla 
+versione 0.9.9, a quanto il rilascio definitivo? Come mai da 6 mesi non 
+andate avanti?
+   Alessio Costanzi: Questa domanda � stata pi� volte riproposta anche 
+nel forum.Il motivo � che siamo profondamente delusi dalla comunit� open 
+source italiana che si � interessata a Geco; questa attendeva 
+silenziosamente il rilascio release dopo release, scaricava puntualmente 
+la versione e si rimetteva in attesa della successiva.
+....
+Questa fase � stata preceduta da quella che noi denominiamo dei 
+"professori": al momento della pubblicazione della prima release e 
+relativa descrizione del software, la maggior pare degli utenti non ha 
+avuto altro da dire o fare se non criticare la tecnologia utilizzata, 
+suggerendo il passaggio a Java, XHTML, XML, e chi pi� ne ha pi� ne 
+metta, in alcuni casi non sapendo bene nemmeno quello di cui stavano 
+parlando.
+...
+Il 99% degli utenti pensa solo a scaricare e utilizzare il programma, 
+non abbiamo ricevuto neppure una mail con una riga di codice che 
+implementasse altre funzionalit� o correggesse almeno i bug pi� 
+semplici. Addirittura c'� giunta una mail che ci segnalava la 
+realizzazione di un software  per la gestione affitti. Abbiamo scoperto 
+che il software era praticamente Geco con al posto degli ordini gli 
+Immobili, le immagini e tutto il sorgente era il nostro ed � stato 
+rimosso il file copyleft.inc che visualizzava i credits del progetto 
+(cio� i nostri nomi e cognomi).
+
+Bello vero? Questo � quello che vi aspetta, se osate...
+
+In pratica dipende tutto DALLA COMUNITA'. Non per nulla il progetto 
+Apache cerca sempre e comunque di incubare COMUNITA' prima che codice. 
+Prima deve nascere una comunit� con un consenso, poi da quella nasce il 
+codice, e cresce e migliora con un processo meritocratico.
+
+Senza contare che il fatto di essere membro di una comunit� di quel 
+genere porta a MOOOLTI vantaggi, che strapagano lo sforzo compiuto. 
+Questo l'ho gi� potuto constatare di persona.
+
+
+
+Previous message: [Discussioni] Licenza del Kahemba 
+Next message: [Discussioni] Mosaico, GecoProject e i gestionali 
+Messages sorted by: [ date ] [ thread ] [ subject ] [ author ] 
+More information about the Discussioni mailing list

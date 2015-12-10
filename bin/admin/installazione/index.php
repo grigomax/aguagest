@@ -1,0 +1,4 @@
+<?
+require "../../../install.php";
+
+?>

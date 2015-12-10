@@ -1,0 +1,145 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13-lug-2015, 8.28.27
+    Author     : maxmobile
+*/
+
+span.dropBottom,
+span.dropRight {
+    display: block;
+    box-shadow: inset 3px 0px 0px #000099;
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    
+}
+
+span.dropLeft {
+    display: block;
+    box-shadow: inset 3px 0px 0px #FFFF00;
+    position: absolute;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    
+}
+
+
+span.dropBottom {
+    box-shadow: inset 0px 2px 0px #FFFF00;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    
+}
+
+nav.menu {
+    display: table;
+    //margin: 0px auto;
+    //position: absolute;
+    visibility: visible;
+    //width: 200%;
+    
+
+}
+
+ul.menu {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    
+}
+
+ul.menu ul {
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    visibility: hidden;
+    //width: 100%;
+    //transition: all .1s ease;
+    //-webkit-transition: all .1s ease;
+
+}
+
+ul.menu ul ul {
+    top: 0%;
+    left: 100%;
+    
+}
+
+ul.menu ul li:hover > ul {
+    top: 0%;
+    left: 100%;
+    opacity: 1;
+    visibility: visible;
+
+}
+
+ul.menu li:hover > ul {
+    opacity: 1;
+    top: 100%;
+    visibility: visible;
+    
+}
+
+ul.menu ul li {
+    float: none;
+    background-color: ivory;
+    
+}
+
+ul.menu li {
+   text-decoration: none;
+    background-color: #3B5998;
+    cursor: pointer;
+    float: left;
+    position: relative;
+}
+
+ul.menu a {
+    text-decoration: none;
+    display: block;
+    color: #FFFFFF;
+    padding: 4px 10px;
+    width: 7em;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+ul.menu li:hover {
+    background-color: #999999;
+    //text-decoration: none;
+    color: #FFFFFF;
+}
+
+ul.menu li a:hover {
+    background-color: #5C75AA;
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+ul.menu li li a {
+    color: #3B5998;
+    text-align: left;
+    padding: 4px 10px;
+    font-size: 0.9em;
+    width: 12em;
+
+}
+
+
+
+ul.menu li li.icon a{padding-left: 24px}
+ul.menu li li.settings a{background: url(../images/icon_settings.gif) no-repeat 4px 4px}
+ul.menu li li.privacy a{background: url(../images/icon_padlock.gif) no-repeat 4px 4px}
+ul.menu li li.articoli a{background: url(../images/menu/icona_articoli.png) no-repeat 4px 4px}
+ul.menu li li.home a{background: url(../images/pulsante_home.png) no-repeat 4px 4px}
+ul.menu li li.exit a{background: url(../images/icona_exit.png) no-repeat 4px 4px}
+ul.menu li li.help a{background: url(../images/pulsante_aiuto.png) no-repeat 4px 4px}
