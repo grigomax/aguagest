@@ -267,7 +267,7 @@ if ($_SESSION['user']['vendite'] > "1")
 			$_parametri['iva'] = $_ivart;
 			$_parametri['consegna'] = $_consegna;
 			
-			tabella_doc_basket("inserisci", $id, $_rigo, $_anno, $_ndoc, $_codutente, $_articolo, $_parametri);
+			tabella_doc_basket("inserisci", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_codutente, $_articolo, $_parametri);
 
 			$_parametri = "";
 			

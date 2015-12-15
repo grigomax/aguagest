@@ -219,7 +219,7 @@ if ($_SESSION['user']['vendite'] > "2")
             $_parametri['iva'] = $_ivart;
 
 
-            tabella_doc_basket("inserisci", $id, $_rigo, $_anno, $_ndoc, $_codutente, $_articolo, $_parametri);
+            tabella_doc_basket("inserisci", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_codutente, $_articolo, $_parametri);
 
             $_parametri = "";
         }// fine for
@@ -254,7 +254,7 @@ if ($_SESSION['user']['vendite'] > "2")
         printf("<form action=\"corpo.php\" method=\"POST\">");
 
         //faccio apparire la schermata della quantità
-        schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, "vuoto", $_artfor, $_descrizione, $_unita, $_qta, $_listino, $_sca, $_scb, $_scc, $_netto, $_pesoart, $_ivart, $_consegna, $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_agg, $_anno, $_ndoc);
+        schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, "vuoto", $_artfor, $_descrizione, $_unita, $_qta, $_listino, $_sca, $_scb, $_scc, $_netto, $_pesoart, $_ivart, $_consegna, $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_agg, $_anno, $_suffix, $_ndoc);
 
         //inserisco il pulsante..
         //echo "<tr><td colspan=\"9\" align=center>Inserisci >> <input type=\"submit\" name=\"azione\" value=\"inserisci\"></form></td></tr>";
@@ -415,7 +415,7 @@ if ($_SESSION['user']['vendite'] > "2")
         //printf("<form action=\"corpo.php\" method=\"POST\">");
         //faccio apparire la schermata della quantità
 
-        schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_artfor, $_descrizione, $_unita, $_qta, $_listino, $_sca, $_scb, $_scc, $_netto, $_pesoart, $_ivart, $_consegna, $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_agg, $_anno, $_ndoc);
+        schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_artfor, $_descrizione, $_unita, $_qta, $_listino, $_sca, $_scb, $_scc, $_netto, $_pesoart, $_ivart, $_consegna, $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_agg, $_anno, $_suffix, $_ndoc);
 
 
 

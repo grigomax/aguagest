@@ -102,7 +102,7 @@ if ($_SESSION['user']['vendite'] > "1")
             $pdf->SetAuthor($azienda);
         }
 
-        $query = sprintf("SELECT * FROM $_documento where ndoc >=\"%s\" and ndoc <= \"%s\" and anno=\"%s\" order by ndoc", $_docfine, $_ndoc, $_anno);
+        $query = "SELECT * FROM $_documento where ndoc >='$_docfine' and ndoc <= '$_ndoc' and anno='$_anno' AND suffix='$_suffix' order by ndoc";
 
         //echo $query;
         // Esegue la query...
@@ -307,7 +307,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 //azzeriamo l'oggetto..:
                 $_oggetto = null;
                 //generazione del files..
-                $_pdf = "$_file" . "_" . "$dati[ndoc].pdf";
+                $_pdf = $_file."_".$dati[ndoc]."_".$_suffix.".pdf";
                 $pdf->Output("../../spool/$_pdf", F);
                 //oggeto
                 $_oggetto = "Invio $_tdoc $dati[ndoc] $azienda";
@@ -511,13 +511,15 @@ if ($_SESSION['user']['vendite'] > "1")
             }
 
             //generazione del files..
-            $_pdf = "$_file" . "_" . "$_ndoc.pdf";
+            //$_pdf = "$_file" . "_" . "$_ndoc.pdf";
+            $_pdf = $_file."_".$dati[ndoc]."_".$_suffix.".pdf";
             $pdf->Output("../../spool/$_pdf", F);
 
             //passiamo alla funzione maschera documenti..
             $_parametri['tdoc'] = $_tdoc;
             $_parametri['ndoc'] = $_ndoc;
             $_parametri['anno'] = $_anno;
+            $_parametri['suffix'] = $_suffix;
             $_parametri['BODY'] = $datidoc['BODY'];
 
             maschera_invio_posta("documento", $_percorso, $_pdf, $_emailmittente, $_emaildestino, "", $_parametri);
@@ -540,7 +542,7 @@ if ($_SESSION['user']['vendite'] > "1")
              */
             if ($_azione == "Inoltra")
             {
-                echo "<center><a href=\"stampa_doc.php?tdoc=$_tdoc&anno=$dati[anno]&ndoc=$dati[ndoc]&azione=Invia&intesta=$_GET[intesta]&prezzi=$_GET[prezzi]&dataora=$_GET[dataora]&lingua=$_GET[lingua]\n";
+                echo "<center><a href=\"stampa_doc.php?tdoc=$_tdoc&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$dati[ndoc]&azione=Invia&intesta=$_GET[intesta]&prezzi=$_GET[prezzi]&dataora=$_GET[dataora]&lingua=$_GET[lingua]\n";
                 echo "\">Per inoltrare il documento via E-mail a " . "$_emaildestino" . " clicca QUI !</a><br>";
             }
 

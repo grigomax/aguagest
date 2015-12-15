@@ -2444,20 +2444,20 @@ function suffisso($_cosa, $_select, $_parametri)
     global $conn;
     global $dec;
     global $_percorso;
-    global $SUFFIX_DEFAULT;
+    global $SUFFIX_DDT;
     
         
     if($_cosa == "select")
     {
         echo "<select name=\"$_select\">\n";
         
-        if($SUFFIX_DEFAULT == "")
+        if($SUFFIX_DDT == "")
         {
            echo '<option value="0">Scegli il suffisso..</option>';
         }
         else
         {
-            echo "<option value=\"$SUFFIX_DEFAULT\">$SUFFIX_DEFAULT</option>\n";
+            echo "<option value=\"$SUFFIX_DDT\">$SUFFIX_DDT</option>\n";
         }
         
 
@@ -3828,7 +3828,7 @@ function tabella_magazzino($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, 
 
     if ($_cosa == "elimina_documento")
     {
-        $query = sprintf(" delete from magazzino where tdoc=\"%s\"and anno=\"%s\" and ndoc=\"%s\"", $_tdoc, $_anno, $_ndoc);
+        $query = sprintf(" delete from magazzino where tdoc=\"%s\" and anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_tdoc, $_anno, $_suffix, $_ndoc);
 
         $result = $conn->exec($query);
 

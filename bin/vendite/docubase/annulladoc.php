@@ -73,7 +73,7 @@ if ($_azione == "Abbandona")
 
 	//svuotiamo il cestino
 	//
-	$_errori = tabella_doc_basket("azzera_sessione", $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri);
+	$_errori = tabella_doc_basket("azzera_sessione", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri);
 
 	if ($_errori != "OK")
 	{

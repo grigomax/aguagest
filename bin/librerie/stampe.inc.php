@@ -391,7 +391,16 @@ function testata_doc($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamen
 		echo "<td bgcolor=\"#FFFFFF\" align=\"left\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC001</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br>&nbsp; $datidoc[ST_NDOC] </font></td>\n";
 		echo "<td bgcolor=\"#FFFFFF\" align=\"left\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC002</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br><center><center> $_causale</center></font></td>\n";
 		echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC003</i><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br>$_pg / $pagina</font></font></td>\n";
-		echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"2\" valign=\"top\"><i>$TC004</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br><b><BIG>$dati[ndoc]/$dati[anno]</BIG></b></font></font></td>\n";
+		echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"2\" valign=\"top\"><i>$TC004</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br><b><BIG>\n";
+                if($dati['suffix'] != $SUFFIX_DDT)
+                {
+                    echo "$dati[ndoc] - $dati[suffix] / $dati[anno]";
+                }
+                else
+                {
+                    echo "$dati[ndoc]/$dati[anno]";
+                }
+                echo "</BIG></b></font></font></td>\n";
 		echo "</tr><tr>\n";
 		echo "<td bg color=\"#FFFFFF\" align=\"left\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC005</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br><b>&nbsp; $_porto</b></font></font></td>\n";
 		echo "<td colspan=\"2\" bg color=\"#FFFFFF\" valign=\"top\" align=\"left\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\"><i>$TC006</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"> $dati[vettore]<br>$dativ[indirizzo]</font></font></td>\n";
@@ -399,7 +408,7 @@ function testata_doc($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamen
 		echo "</tr><tr>";
 		echo "<td colspan=\"2\" bgcolor=\"#FFFFFF\"align=\"left\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC008</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br><font face=\"arial\" size=\"2\">&nbsp; $dati2[contatto]</font></font></td>\n";
 		echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC009</i><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br>$dati2[codagente]</font></font></td>\n";
-		echo "<td align=\"center\" width=\"250\"><img src=$_percorso/tools/barcode/barcode.php?barcode=$dati[anno]$dati[ndoc]&width=200&height=40&text=0></td>\n";
+		echo "<td align=\"center\" width=\"250\"><img src=$_percorso/tools/barcode/barcode.php?barcode=$dati[suffix]$dati[anno]$dati[ndoc]&width=200&height=40&text=0></td>\n";
 		echo "</tr></table>\n";
 	}//fine sotto testata
 
@@ -424,7 +433,17 @@ function testata_doc($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamen
 		echo "<TD WIDTH=\"8%\" ALIGN=\"CENTER\"><FONT FACE=\"$datidoc[ST_FONTESTACALCE]\"><FONT SIZE=\"1\" STYLE=\"font-size: 6pt;\"><I>$TC003</I></FONT></FONT>\n";
 		echo "<br><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\">$_pg / $pagina</FONT></FONT></TD>\n";
 		echo "<TD COLSPAN=\"2\" WIDTH=\"17%\" ALIGN=\"CENTER\" BGCOLOR=\"#00ffff\"><FONT FACE=\"$datidoc[ST_FONTESTACALCE]\"><FONT SIZE=\"1\" STYLE=\"font-size: 8pt;\"><I>$TC004</I></FONT></FONT>\n";
-		echo "<br><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><big><b>$dati[ndoc] / $dati[anno]</b></big></FONT></FONT></TD>\n";
+		echo "<br><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><big><b>\n";
+                if($dati['suffix'] != $SUFFIX_DDT)
+                {
+                    echo "$dati[ndoc] - $dati[suffix] / $dati[anno]";
+                }
+                else
+                {
+                    echo "$dati[ndoc]/$dati[anno]";
+                }
+                
+                echo "</b></big></FONT></FONT></TD>\n";
 		echo "</TR>\n";
 		echo "<TR VALIGN=TOP><TD COLSPAN=\"5\" WIDTH=\"60%\" align=\"left\"><FONT FACE=\"$datidoc[ST_FONTESTACALCE]\"><FONT SIZE=\"1\" STYLE=\"font-size: 6pt;\"><I>$TC013</I></FONT></FONT>\n";
 		echo "<br><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\">$_pagamento</FONT></FONT></TD>\n";

@@ -9,6 +9,28 @@
  * Visto che la libreria html diciamo è la struttura base del programma vorrei passarle anche la funzione di sicurezza..
  * 
  *  */
+
+/*ISTRUZIONI  VELOCI PER IL COLLEGAMENTO AL DATABASE PDO
+ * 
+ * $query;
+ * $result = $conn->query($query);
+ * if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
+ * Poi qui o la multipla con un forearc
+ * foreach ($result as $return)
+ * 
+ * oppure la singola con 
+ * $dati = $result->fetch(PDO::FETCH_ASSOC);
+ *  
+ */
+
 //define("gestione_errori", "gestione_errori");
 
 if(isset($DEBUG))
@@ -2408,7 +2430,8 @@ function maschera_invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $
     {
         echo "<tr><td>Tipo doc</td><td><input type=\"radio\" name=\"tdoc\" value=\"$_parametri[tdoc]\" checked>$_parametri[tdoc] \n";
         echo "<input type=\"radio\" name=\"anno\" value=\"$_parametri[anno]\" checked>Anno $_parametri[anno] \n";
-        echo "<input type=\"radio\" name=\"ndoc\" value=\"$_parametri[ndoc]\" checked>Numero $_parametri[ndoc]</td>\n";
+        echo "<input type=\"radio\" name=\"ndoc\" value=\"$_parametri[ndoc]\" checked>Numero $_parametri[ndoc]\n";
+        echo "<input type=\"radio\" name=\"suffix\" value=\"$_parametri[suffix]\" checked>suff.$_parametri[suffix]</td>\n";
         echo "</tr>\n";
     }
 

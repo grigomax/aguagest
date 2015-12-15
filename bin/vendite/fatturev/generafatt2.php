@@ -50,6 +50,7 @@ if ($_SESSION['user']['vendite'] > "2")
     //settiamo le variabili globali..
     $_tdoc_end = "FATTURA";
     $_tdoc_start = "ddt";
+    $_suffix_end = $_POST['suffix'];
     $_archivi_end = archivio_tdoc("FATTURA");
     $_archivi_start = archivio_tdoc("ddt");
 
@@ -63,8 +64,9 @@ if ($_SESSION['user']['vendite'] > "2")
     foreach ($_numero as $_annondoc)
     {
         //dobbiamo dividere i vari campi in quanto abbiamo anche l'anno..
-        $_anno_start = substr($_annondoc, '0', '4');
-        $_ndoc_start = substr($_annondoc, '4', '6');
+        $_anno_start = substr($_annondoc, "0", "4");
+        $_suffix_start = substr($_annondoc, "4", "1");
+        $_ndoc_start = substr($_annondoc, "5", "11");
 
         // bisogna fare una sicurezza sull'elenco altrimenti si fatturano bolle eraatew.
         //	Funzione di controllo verifica prezzi.. controllo che non ci siano righe senza prezzo o a valore 0
@@ -188,7 +190,15 @@ if ($_SESSION['user']['vendite'] > "2")
         $_rigo = $_rigo + 1;
         $ddt = $dati_start['ndoc'];
         $_codice = "vuoto";
-        $_descrizione = "D.D.T. n. $ddt del $_datait";
+        if($_suffix_start != $SUFFIX_DDT)
+        {
+            $_descrizione = "D.D.T. n. $ddt / $_suffix_start del $_datait";
+        }
+        else
+        {
+            $_descrizione = "D.D.T. n. $ddt del $_datait";
+        }
+        
         $_parametri['unita'] = "";
         $_parametri['quantita'] = "";
         $_parametri['listino'] = "";
@@ -211,7 +221,7 @@ if ($_SESSION['user']['vendite'] > "2")
         // bisogna modificare lo stato documento
         // setto a modo evaso il documento in eleborazione..
         // ed inserisco il numero dosumento fattura
-        $status = gestisci_testata("aggiorna_chiudi", $_utente, $_tdoc_start, $_anno_start, $_suffix_start, $_ndoc_start, $_datareg, $_archivi_start, array('status' => 'evaso', 't_doc_end' => $_tdoc_end, 'ndoc_end' => $_ndoc_end, 'anno_end' => $_anno_end));
+        $status = gestisci_testata("aggiorna_chiudi", $_utente, $_tdoc_start, $_anno_start, $_suffix_start, $_ndoc_start, $_datareg, $_archivi_start, array('status' => 'evaso', 't_doc_end' => $_tdoc_end, 'ndoc_end' => $_ndoc_end, 'anno_end' => $_anno_end, 'suffix_end' => $_suffix_end));
 
         // Esegue la query...
         if ($status['errori'] != "OK")
@@ -221,7 +231,7 @@ if ($_SESSION['user']['vendite'] > "2")
         }
         else
         {
-            echo "Aggiornamento ddt nr $dati_start[ndoc] <br>\n";
+            echo "Aggiornamento ddt nr $dati_start[ndoc] / $_suffix_start<br>\n";
         }
 
         // leggo il corpo documenti

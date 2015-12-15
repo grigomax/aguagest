@@ -61,6 +61,7 @@ if ($_SESSION['user']['vendite'] > "2")
     {
         //prendo il resto delle varibili
         $_anno = $_SESSION['anno'];
+        $_suffix = $_SESSION['suffix'];
         $_ndoc = $_SESSION['ndoc'];
     }
 
@@ -73,7 +74,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
         $_POST['programma'] = $_programma;
 
-        $result = tabella_doc_basket("delete_rigo", $id, $_POST['rigo'], $_anno, $_ndoc, $_utente, $_POST['articolo'], $_POST);
+        $result = tabella_doc_basket("delete_rigo", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['articolo'], $_POST);
 
 
         if ($result['errori'] != "OK")
@@ -100,12 +101,26 @@ if ($_SESSION['user']['vendite'] > "2")
         {
             $_anno = $_GET['anno'];
             $_ndoc = $_GET['ndoc'];
+            $_suffix = $_GET['suffix'];
 
-            $query = sprintf("select * from doc_basket where sessionid=\"%s\" and anno=\"%s\" and ndoc=\"%s\" and rigo=\"%s\"", $id, $_anno, $_ndoc, $_rigo);
+            $query = "select * from doc_basket where sessionid='$id' and anno='$_anno' and suffix='$_suffix' and ndoc='$_ndoc' and rigo='$_rigo'";
+            $result = $conn->query($query);
+
+            if ($conn->errorCode() != "00000")
+            {
+                $_errore = $conn->errorInfo();
+                echo $_errore['2'];
+                //aggiungiamo la gestione scitta dell'errore..
+                $_errori['descrizione'] = "Errore Query $_cosa= $query - $_errore[2]";
+                $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                scrittura_errori($_cosa, $_percorso, $_errori);
+            }
+
+            $dati_carr = $result->fetch(PDO::FETCH_ASSOC);
         }
         else
         {
-            $dati_carr = tabella_doc_basket("leggi_singola", $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri);
+            $dati_carr = tabella_doc_basket("leggi_singola", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri);
         }
 
 
@@ -120,7 +135,7 @@ if ($_SESSION['user']['vendite'] > "2")
         }
 
 
-        schermata_quantita($_tdoc, "modifica", "Modifica", $dati_carr['rigo'], $dati_carr['articolo'], $dati_carr['artfor'], $dati_carr['descrizione'], $dati_carr['unita'], $dati_carr['quantita'], $dati_carr['listino'], $dati_carr['sca'], $dati_carr['scb'], $dati_carr['scc'], $dati_carr['nettovendita'], $_pesoart, $dati_carr['iva'], $dati_carr['consegna'], $dati_carr['qtaevasa'], $dati_carr['qtaestratta'], $dati_carr['qtasaldo'], $dati_carr['rsaldo'], $dati_carr['agg'], $_anno, $_ndoc);
+        schermata_quantita($_tdoc, "modifica", "Modifica", $dati_carr['rigo'], $dati_carr['articolo'], $dati_carr['artfor'], $dati_carr['descrizione'], $dati_carr['unita'], $dati_carr['quantita'], $dati_carr['listino'], $dati_carr['sca'], $dati_carr['scb'], $dati_carr['scc'], $dati_carr['nettovendita'], $_pesoart, $dati_carr['iva'], $dati_carr['consegna'], $dati_carr['qtaevasa'], $dati_carr['qtaestratta'], $dati_carr['qtasaldo'], $dati_carr['rsaldo'], $dati_carr['agg'], $_anno, $_suffix, $_ndoc);
 
         exit;
     }
@@ -129,7 +144,7 @@ if ($_SESSION['user']['vendite'] > "2")
     {
         $_POST['programma'] = $_programma;
 
-        $result = tabella_doc_basket("update", $id, $_POST['rigo'], $_anno, $_ndoc, $_utente, $_POST['articolo'], $_POST);
+        $result = tabella_doc_basket("update", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['articolo'], $_POST);
 
 
         if ($result['errori'] != "OK")
@@ -148,7 +163,7 @@ if ($_SESSION['user']['vendite'] > "2")
         $_POST['programma'] = $_programma;
 
 
-        $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_ndoc, $_utente, $_POST['articolo'], $_POST);
+        $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['articolo'], $_POST);
 
 
         if ($result['errori'] != "OK")
@@ -216,7 +231,7 @@ if ($_SESSION['user']['vendite'] > "2")
             
 
             //e poi lo inseriamo
-            $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_ndoc, $_utente, $_POST['aggancia'], $_POST);
+            $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['aggancia'], $_POST);
 
 
             if ($result['errori'] != "OK")
@@ -281,7 +296,7 @@ if ($_SESSION['user']['vendite'] > "2")
             }
 
             //e poi lo inseriamo
-            $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_ndoc, $_utente, $_POST['aggancia_2'], $_POST);
+            $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['aggancia_2'], $_POST);
 
 
             if ($result['errori'] != "OK")
@@ -346,7 +361,7 @@ if ($_SESSION['user']['vendite'] > "2")
             $_POST['scc'] = $_scc;
 
             //e poi lo inseriamo
-            $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_ndoc, $_utente, $_POST['aggancia_3'], $_POST);
+            $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['aggancia_3'], $_POST);
 
 
             if ($result['errori'] != "OK")

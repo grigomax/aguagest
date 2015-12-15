@@ -142,17 +142,16 @@ if ($_SESSION['user']['setting'] > "3")
 //--------------------------------------------------------------SECONDA TABS-------------------------------------------------------------------------
     echo "<div id=\"tabs-2\">\n";
     echo "<table class=\"tabs\">";
-    echo "
-
-                <tr>
-                    <td>Nome del documento fattura con gestione del magazzino</td>
-                    <td><input type=\"text\" size=\"70\" name=\"nomedoc\" value=\"$nomedoc\"></td>
-                </tr>
-                <tr>
-                    <td>Codice SIA assegnato per riba elettroniche</td>
-                    <td><input type=\"text\" size=\"6\" maxlength=\"5\" name=\"SIA\" value=\"$SIA\"></td>
-                </tr>\n";
     echo "<tr>\n";
+    echo "<td>Nome del documento fattura con gestione del magazzino</td>\n";
+    echo "<td><input type=\"text\" size=\"70\" name=\"nomedoc\" value=\"$nomedoc\"></td>\n";
+    echo "</tr><tr>\n";
+    echo "<td>Lettera suffisso standard per i documenti</td>\n";
+    echo "<td><input type=\"text\" size=\"2\" maxlenght=\"2\" name=\"SUFFIX_DDT\" value=\"$SUFFIX_DDT\"> Lettera Maiuscola dalla A alla Z</td>\n";
+    echo "</tr><tr>\n";
+    echo "<td>Codice SIA assegnato per riba elettroniche</td>\n";
+    echo "<td><input type=\"text\" size=\"6\" maxlength=\"5\" name=\"SIA\" value=\"$SIA\"></td>\n";
+    echo "</tr><tr>\n";
     echo "<td>Tipo di società</td>\n";
     echo "<td><select name=\"TIPOSOC\">\n";
     echo "<option value=\"$TIPOSOC\">$TIPOSOC</option>\n";
@@ -236,7 +235,8 @@ if ($_SESSION['user']['setting'] > "3")
         echo "<span class=\"testo_blu\">";
 
         $res_2 = tabella_aliquota("elenca_codice", $_codiva, $_percorso);
-        foreach ($res_2 AS $dati)
+        foreach ($res_2 AS
+                $dati)
         {
             printf("<option value=\"%s\">%s - %s</option>\n", $dati['codice'], $dati['descrizione'], $dati['codice']);
         }

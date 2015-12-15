@@ -1046,11 +1046,11 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         {
             $query = sprintf("update %s set dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", modpag=\"%s\", vettore=\"%s\",
 		 spesevarie=\"%s\", porto=\"%s\", aspetto=\"%s\", status=\"%s\", note=\"%s\", colli=\"%s\", trasporto=\"%s\", pesotot=\"%s\", totimpo=\"%s\",
-		totiva=\"%s\", totdoc=\"%s\", causale=\"%s\", id_collo=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
+		totiva=\"%s\", totdoc=\"%s\", causale=\"%s\", id_collo=\"%s\" where anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
                     $_parametri['dragsoc2'], $_parametri['dindirizzo'], $_parametri['dcap'], $_parametri['dcitta'], $_parametri['dprov'], $_parametri['modpag'],
                     $_parametri['vettore'], $_parametri['varie'], $_parametri['porto'], $_parametri['aspetto'], $_parametri['status'], $_parametri['notedoc'],
                     $_parametri['colli'], $_parametri['trasporto'], $_parametri['peso'], $_parametri['imponibile'], $_parametri['totimposta'], $_parametri['totdoc'],
-                    $_parametri['causale'], $_parametri['id_collo'], $_anno, $_ndoc);
+                    $_parametri['causale'], $_parametri['id_collo'], $_anno, $_suffix, $_ndoc);
         }
         elseif (( $_tdoc == "FATTURA") OR ( $_tdoc == "NOTA DEBITO") OR ( $_tdoc == "NOTA CREDITO") OR ( $_tdoc == "$nomedoc"))
         {
@@ -1062,7 +1062,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
              cod_iva_1=\"%s\", imponibile_1=\"%s\", imposta_1=\"%s\", cod_iva_2=\"%s\", imponibile_2=\"%s\", imposta_2=\"%s\",
              cod_iva_3=\"%s\", imponibile_3=\"%s\", imposta_3=\"%s\",cod_iva_4=\"%s\", imponibile_4=\"%s\", imposta_4=\"%s\",
              cod_iva_5=\"%s\", imponibile_5=\"%s\", imposta_5=\"%s\",totimpo=\"%s\", totiva=\"%s\",
-             totdoc=\"%s\", totprovv=\"%s\", id_collo=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'], 
+             totdoc=\"%s\", totprovv=\"%s\", id_collo=\"%s\" where anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'], 
                     $_parametri['dragsoc2'], $_parametri['dindirizzo'], $_parametri['dcap'], $_parametri['dcitta'], $_parametri['dprov'],
                     $_parametri['zona'], $_parametri['agente'], $_parametri['modpag'], $_parametri['banca'], $_parametri['abi'], $_parametri['cab'],
                     $_parametri['cin'], $_parametri['cc'], $_parametri['iban'], $_parametri['swift'], $_parametri['spbanca'], $_parametri['spimba'],
@@ -1075,18 +1075,18 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
                     $_parametri['imponibili']['4']['aliquota'], $_parametri['imponibili']['4']['imponibile'], $_parametri['imponibili']['4']['imposta'],
                     $_parametri['imponibili']['5']['aliquota'], $_parametri['imponibili']['5']['imponibile'], $_parametri['imponibili']['5']['imposta'],
                     $_parametri['imponibile'], $_parametri['totimposta'], $_parametri['totdoc'], $_parametri['totprovv'], $_parametri['id_collo'],
-                    $_anno, $_ndoc);
+                    $_anno, $_suffix, $_ndoc);
         }
         elseif ($_tdoc == "fornitore")
         {
             // testacalce documento
             $query = sprintf("update %s set dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", modpag=\"%s\",
 		vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", status=\"%s\", note=\"%s\", colli=\"%s\", pesotot=\"%s\", totimpo=\"%s\",
-		 totiva=\"%s\", totdoc=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
+		 totiva=\"%s\", totdoc=\"%s\" where anno=\"%s\" AND suffix=\"%s\", nd ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
                     $_parametri['dragsoc2'], $_parametri['dindirizzo'], $_parametri['dcap'], $_parametri['dcitta'], $_parametri['dprov'],
                     $_parametri['modpag'], $_parametri['vettore'], $_parametri['porto'], $_parametri['aspetto'], $_parametri['status'],
                     $_parametri['notedoc'], $_parametri['colli'], $_parametri['peso'], $_parametri['imponibile'], $_parametri['totimposta'],
-                    $_parametri['totdoc'], $_anno, $_ndoc);
+                    $_parametri['totdoc'], $_anno, $_suffix, $_ndoc);
         }
         elseif ($_tdoc == "preventivo")
         {
@@ -1095,11 +1095,11 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
             // testacalce documento
             $query = sprintf("update %s set dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", modpag=\"%s\", vettore=\"%s\",
 		 spesevarie=\"%s\", porto=\"%s\", aspetto=\"%s\", status=\"%s\", note=\"%s\", colli=\"%s\", trasporto=\"%s\", pesotot=\"%s\", totimpo=\"%s\",
-		 totiva=\"%s\", totdoc=\"%s\", rev=\"%s\", data_scad=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
+		 totiva=\"%s\", totdoc=\"%s\", rev=\"%s\", data_scad=\"%s\" where anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
                     $_parametri['dragsoc2'], $_parametri['dindirizzo'], $_parametri['dcap'], $_parametri['dcitta'], $_parametri['dprov'],
                     $_parametri['modpag'], $_parametri['vettore'], $_parametri['varie'], $_parametri['porto'], $_parametri['aspetto'], $_parametri['status'],
                     $_parametri['notedoc'], $_parametri['colli'], $_parametri['trasporto'], $_parametri['peso'], $_parametri['imponibile'],
-                    $_parametri['totimposta'], $_parametri['totdoc'], $_rev1, $_parametri['data_scad'], $_anno, $_ndoc);
+                    $_parametri['totimposta'], $_parametri['totdoc'], $_rev1, $_parametri['data_scad'], $_anno, $_suffix, $_ndoc);
         }
         else
         {
@@ -1107,11 +1107,11 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
             // testacalce documento
             $query = sprintf("update %s set dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", modpag=\"%s\", vettore=\"%s\",
 		 spesevarie=\"%s\", porto=\"%s\", aspetto=\"%s\", status=\"%s\", note=\"%s\", colli=\"%s\", trasporto=\"%s\", pesotot=\"%s\", totimpo=\"%s\",
-		 totiva=\"%s\", totdoc=\"%s\", rev=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
+		 totiva=\"%s\", totdoc=\"%s\", rev=\"%s\" where anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
                     $_parametri['dragsoc2'], $_parametri['dindirizzo'], $_parametri['dcap'], $_parametri['dcitta'], $_parametri['dprov'], $_parametri['modpag'],
                     $_parametri['vettore'], $_parametri['varie'], $_parametri['porto'], $_parametri['aspetto'], $_parametri['status'], $_parametri['notedoc'],
                     $_parametri['colli'], $_parametri['trasporto'], $_parametri['peso'], $_parametri['imponibile'], $_parametri['totimposta'], $_parametri['totdoc'],
-                    $_rev1, $_anno, $_ndoc);
+                    $_rev1, $_anno, $_suffix, $_ndoc);
         }
 
         $result = $conn->exec($query);
@@ -1176,7 +1176,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
     {
 
         //qui aggiornaim oil documento e lo chiediamo..
-        $query = "UPDATE $_archivi[testacalce] SET status='$_parametri[status]', tdocevaso='$_parametri[t_doc_end]', evasonum='$_parametri[ndoc_end]', evasoanno='$_parametri[anno_end]' WHERE anno='$_anno' and ndoc='$_ndoc' and utente='$_utente'";
+        $query = "UPDATE $_archivi[testacalce] SET status='$_parametri[status]', tdocevaso='$_parametri[t_doc_end]', evasonum='$_parametri[ndoc_end]', evasoanno='$_parametri[anno_end]', evasosuffix='$_parametri[suffix_end]' WHERE anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'";
 
 
         $result = $conn->exec($query);
@@ -1209,24 +1209,24 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
 
         if (( $_tdoc == "FATTURA") OR ( $_tdoc == "NOTA DEBITO") OR ( $_tdoc == "NOTA CREDITO") OR ( $_tdoc == "$nomedoc"))
         {
-            $query = sprintf("UPDATE %s SET dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", zona=\"%s\", agente=\"%s\", 
+            $query = sprintf("UPDATE $_archivi[testacalce] SET dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", zona=\"%s\", agente=\"%s\", 
 				modpag=\"%s\", banca=\"%s\", abi=\"%s\", cab=\"%s\", cin=\"%s\", cc=\"%s\", iban=\"%s\", swift=\"%s\",
                        nettomerce=\"%s\", cod_iva_1=\"%s\", imponibile_1=\"%s\", imposta_1=\"%s\", cod_iva_2=\"%s\", imponibile_2=\"%s\", imposta_2=\"%s\",
              cod_iva_3=\"%s\", imponibile_3=\"%s\", imposta_3=\"%s\",cod_iva_4=\"%s\", imponibile_4=\"%s\", imposta_4=\"%s\",
              cod_iva_5=\"%s\", imponibile_5=\"%s\", imposta_5=\"%s\",colli=\"%s\", pesotot=\"%s\", trasporto=\"%s\", spesevarie=\"%s\", sp_bancarie=\"%s\", totimpo=\"%s\", totiva=\"%s\", totdoc=\"%s\", totprovv=\"%s\"
-                       where anno=\"%s\" and ndoc=\"%s\" and utente=\"%s\"", $_archivi['testacalce'], $dati3['dragsoc'], $dati3['dragsoc2'], $dati3['dindirizzo'], $dati3['dcap'], $dati3['dcitta'], $dati3['dprov'], $dati3['vettore'], $dati3['porto'], $dati3['aspetto'], $_datiutente['zona'], $_datiutente['codagente'], $dati3['modpag'], $_datiutente['banca'], $_datiutente['abi'], $_datiutente['cab'], $_datiutente['cin'], $_datiutente['cc'], $_datiutente['iban'], $_datiutente['swift'], $_parametri['nettodoc'], $_imponibili['1']['aliquota'], $_imponibili['1']['imponibile'], $_imponibili['1']['imposta'], $_imponibili['2']['aliquota'], $_imponibili['2']['imponibile'], $_imponibili['2']['imposta'], $_imponibili['3']['aliquota'], $_imponibili['3']['imponibile'], $_imponibili['3']['imposta'], $_imponibili['4']['aliquota'], $_imponibili['4']['imponibile'], $_imponibili['4']['imposta'], $_imponibili['5']['aliquota'], $_imponibili['5']['imponibile'], $_imponibili['5']['imposta'], $_parametri['colli'], $_parametri['peso'], $_parametri['trasporto'], $_parametri['varie'], $_parametri['speseb'], $_parametri['imponibile'], $_parametri['imposta'], $_parametri['totdoc'], $_parametri['totprovv'], $_anno, $_ndoc, $_utente);
+                       where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'", addslashes($dati3['dragsoc']), addslashes($dati3['dragsoc2']), addslashes($dati3['dindirizzo']), $dati3['dcap'], addslashes($dati3['dcitta']), $dati3['dprov'], $dati3['vettore'], $dati3['porto'], $dati3['aspetto'], $_datiutente['zona'], $_datiutente['codagente'], $dati3['modpag'], addslashes($_datiutente['banca']), $_datiutente['abi'], $_datiutente['cab'], $_datiutente['cin'], $_datiutente['cc'], $_datiutente['iban'], $_datiutente['swift'], $_parametri['nettodoc'], $_imponibili['1']['aliquota'], $_imponibili['1']['imponibile'], $_imponibili['1']['imposta'], $_imponibili['2']['aliquota'], $_imponibili['2']['imponibile'], $_imponibili['2']['imposta'], $_imponibili['3']['aliquota'], $_imponibili['3']['imponibile'], $_imponibili['3']['imposta'], $_imponibili['4']['aliquota'], $_imponibili['4']['imponibile'], $_imponibili['4']['imposta'], $_imponibili['5']['aliquota'], $_imponibili['5']['imponibile'], $_imponibili['5']['imposta'], $_parametri['colli'], $_parametri['peso'], $_parametri['trasporto'], $_parametri['varie'], $_parametri['speseb'], $_parametri['imponibile'], $_parametri['imposta'], $_parametri['totdoc'], $_parametri['totprovv']);
         }
         elseif (($_tdoc == "ddt") OR ( $_tdoc == "ddt_diretto"))
         {
-            $query = sprintf("UPDATE %s SET dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", banca=\"%s\", vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", modpag=\"%s\",
+            $query = sprintf("UPDATE $_archivi[testacalce] SET dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", banca=\"%s\", vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", modpag=\"%s\",
                         colli=\"%s\", pesotot=\"%s\", trasporto=\"%s\", spesevarie=\"%s\", totimpo=\"%s\", totiva=\"%s\", totdoc=\"%s\", causale=\"%s\"
-                        where anno=\"%s\" and ndoc=\"%s\" and utente=\"%s\"", $_archivi['testacalce'], $dati3['dragsoc'], $dati3['dragsoc2'], $dati3['dindirizzo'], $dati3['dcap'], $dati3['dcitta'], $dati3['dprov'], $_banca, $dati3['vettore'], $dati3['porto'], $dati3['aspetto'], $dati3['modpag'], $_parametri['colli'], $_parametri['peso'], $_parametri['trasporto'], $_parametri['varie'], $_parametri['imponibile'], $_parametri['totimposta'], $_parametri['totdoc'], 'VENDITA', $_anno, $_ndoc, $_utente);
+                        where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'", addslashes($dati3['dragsoc']), addslashes($dati3['dragsoc2']), addslashes($dati3['dindirizzo']), $dati3['dcap'], addslashes($dati3['dcitta']), $dati3['dprov'], $_banca, $dati3['vettore'], $dati3['porto'], $dati3['aspetto'], $dati3['modpag'], $_parametri['colli'], $_parametri['peso'], $_parametri['trasporto'], $_parametri['varie'], $_parametri['imponibile'], $_parametri['totimposta'], $_parametri['totdoc'], 'VENDITA');
         }
         else
         {
-            $query = sprintf("UPDATE %s SET dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", banca=\"%s\", vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", modpag=\"%s\",
+            $query = sprintf("UPDATE $_archivi[testacalce] SET dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", banca=\"%s\", vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", modpag=\"%s\",
                         colli=\"%s\", pesotot=\"%s\", trasporto=\"%s\", spesevarie=\"%s\", totimpo=\"%s\", totiva=\"%s\", totdoc=\"%s\"
-                        where anno=\"%s\" and ndoc=\"%s\" and utente=\"%s\"", $_archivi['testacalce'], $dati3['dragsoc'], $dati3['dragsoc2'], $dati3['dindirizzo'], $dati3['dcap'], $dati3['dcitta'], $dati3['dprov'], $_banca, $dati3['vettore'], $dati3['porto'], $dati3['aspetto'], $dati3['modpag'], $_parametri['colli'], $_parametri['peso'], $_parametri['trasporto'], $_parametri['varie'], $_parametri['imponibile'], $_parametri['imposta'], $_parametri['totdoc'], $_anno, $_ndoc, $_utente);
+                        where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'", addslashes($dati3['dragsoc']), addslashes($dati3['dragsoc2']), addslashes($dati3['dindirizzo']), $dati3['dcap'], addslashes($dati3['dcitta']), $dati3['dprov'], $_banca, $dati3['vettore'], $dati3['porto'], $dati3['aspetto'], $dati3['modpag'], $_parametri['colli'], $_parametri['peso'], $_parametri['trasporto'], $_parametri['varie'], $_parametri['imponibile'], $_parametri['imposta'], $_parametri['totdoc']);
         }
 
         $result = $conn->exec($query);
@@ -1296,7 +1296,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
 
         $query = "UPDATE $_archivi[testacalce] SET dragsoc='$_dragsoc', dragsoc2='$_dragsoc2', dindirizzo='$_dindirizzo', dcap='$_parametri[dcap]',
             dcitta='$_dcitta', dprov='$_parametri[dprov]', vettore='$_parametri[vettore]', porto='$_parametri[porto]', aspetto='$_parametri[aspetto]', colli='$_parametri[colli]',
-                pesotot='$_parametri[peso]', id_collo='$id_collo', note='$_note' WHERE anno='$_anno' and ndoc='$_ndoc'";
+                pesotot='$_parametri[peso]', id_collo='$id_collo', note='$_note' WHERE anno='$_anno' and suffix='$_suffix' AND ndoc='$_ndoc'";
         //echo $query;
 
         $result = $conn->exec($query);
@@ -1314,14 +1314,15 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         else
         {
             $return['errori'] = "OK";
-            $return['tdoc'] = "$_tdoc";
-            $return['ndoc'] = "$_ndoc";
-            $return['anno'] = "$_anno";
+            $return['tdoc'] = $_tdoc;
+            $return['ndoc'] = $_ndoc;
+            $return['anno'] = $_anno;
+            $return['suffix'] = $_suffix;
         }
     }
     elseif($_cosa == "verifica_zero")
     {
-        $query = sprintf("SELECT bv_bolle.anno, bv_bolle.ndoc, bv_bolle.utente, status, articolo, totriga from bv_bolle INNER JOIN bv_dettaglio ON bv_bolle.anno=bv_dettaglio.anno and bv_bolle.ndoc=bv_dettaglio.ndoc WHERE bv_bolle.anno=\"%s\" and bv_bolle.ndoc = \"%s\" AND status = 'stampato' AND causale != 'RESO' AND causale != 'SOSTIT. IN GARANZIA' AND causale != 'RIPARAZIONE' AND causale != 'CONTO DEPOSITO' AND (articolo != 'vuoto' and totriga = '0.00')", $_anno, $_ndoc);
+        $query = "SELECT bv_bolle.anno, bv_bolle.suffix, bv_bolle.ndoc, bv_bolle.utente, status, articolo, totriga from bv_bolle INNER JOIN bv_dettaglio ON bv_bolle.anno=bv_dettaglio.anno and bv_bolle.ndoc=bv_dettaglio.ndoc WHERE bv_bolle.anno='$_anno' AND bv_bolle.suffix='$_suffix' AND bv_bolle.ndoc = '$_ndoc' AND status = 'stampato' AND causale != 'RESO' AND causale != 'SOSTIT. IN GARANZIA' AND causale != 'RIPARAZIONE' AND causale != 'CONTO DEPOSITO' AND (articolo != 'vuoto' and totriga = '0.00')";
 
         $result = $conn->query($query);
 
@@ -1378,7 +1379,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         }
         else
         {
-            $query = sprintf("select * from %s where anno=\"%s\" ORDER BY ndoc DESC LIMIT 1", $_archivi['testacalce'], $_anno);
+            $query = "select * from $_archivi[testacalce] where anno='$_anno' AND suffix='$_suffix' ORDER BY ndoc DESC LIMIT 1";
         }
 
         $result = $conn->query($query);
@@ -1522,11 +1523,11 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
 
         if ($_parametri == "norighe")
         {
-            $query = sprintf("SELECT * from %s where articolo != 'vuoto' AND anno=\"%s\" and ndoc=\"%s\" and utente=\"%s\" order by rigo", $_archivi['dettaglio'], $_anno, $_ndoc, $_utente);
+            $query = "SELECT * from $_archivi[dettaglio] where articolo != 'vuoto' AND anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente' order by rigo";
         }
         else
         {
-            $query = sprintf("SELECT * from %s where anno=\"%s\" and ndoc=\"%s\" and utente=\"%s\" order by rigo", $_archivi['dettaglio'], $_anno, $_ndoc, $_utente);
+            $query = "SELECT * from $_archivi[dettaglio] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente' order by rigo";
         }
 
         //echo $query;
@@ -1705,7 +1706,7 @@ function gestisci_magazzino($_cosa, $id, $_tdoc, $_anno, $_suffix, $_ndoc, $_dat
         // ora procediamo a inserire gli articoli che sono legati al magazzino
         // dopo averlo cancellato lo reinserisco
 
-        $_result = tabella_doc_basket("leggi_sessione", $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri);
+        $_result = tabella_doc_basket("leggi_sessione", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri);
     }
 
     //estrappoliamo i dati..
@@ -1785,15 +1786,13 @@ function gestione_provvigioni($_funzione, $_tdoc, $_anno, $_suffix, $_ndoc, $_ag
         if ($_tdoc != "NOTA CREDITO")
         {//6
             // Inseriamo nell'anagrafica provvigioni la fattura appena generata se �fattura va in positivo
-            $query = sprintf("update provvigioni set codage=\"%s\", totdoc=\"%s\", provvigioni=\"%s\"
-        where ndoc=\"%s\" and anno=\"%s\" and suffix=\"%s\", and tdoc=\"%s\"", $_agente, $_totdoc, $_totprovv, $_ndoc, $_anno, $_suffix, $_tdoc);
+            $query = "update provvigioni set codage='$_agente', totdoc='$_totdoc', provvigioni='$_totprovv' where ndoc='$_ndoc' and anno='$_anno' and suffix='$_suffix' and tdoc='$_tdoc'";
         }//6
         else
         {//7
             // qui carico se una nota credito
             // Inseriamo nell'anagrafica provvigioni la fattura appena generata in negativo perche �un reso
-            $query = sprintf("update provvigioni set codage=\"%s\", totdoc=\"-%s\", provvigioni=\"-%s\"
-             where ndoc=\"%s\" and anno=\"%s\" AND suffix=\"%s\", and tdoc=\"%s\"", $_agente, $_totdoc, $_totprovv, $_ndoc, $_anno, $_suffix, $_tdoc);
+            $query = "update provvigioni set codage='$_agente', totdoc='-$_totdoc', provvigioni='-$_totprovv' where ndoc='$_ndoc' and anno='$_anno' AND suffix='$_suffix', and tdoc='$_tdoc'";
         }//7	fin
     }
     else
@@ -1802,16 +1801,16 @@ function gestione_provvigioni($_funzione, $_tdoc, $_anno, $_suffix, $_ndoc, $_ag
         {
             
             // Inseriamo nell'anagrafica provvigioni la fattura appena generata se e fattura va in positivo
-            $query = sprintf("insert into provvigioni( codage, ndoc, anno, suffix, tdoc, datareg, utente, totdoc, provvigioni )
-             values( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" )", $_agente, $_ndoc, $_anno, $_suffix, $_tdoc, $_datareg, $_codutente, $_totdoc, $_totprovv);
+            $query = "insert into provvigioni( codage, ndoc, anno, suffix, tdoc, datareg, utente, totdoc, provvigioni )
+             values('$_agente', '$_ndoc', '$_anno', '$_suffix', '$_tdoc', '$_datareg', '$_codutente', '$_totdoc', '$_totprovv')";
             #echo $query;
         }
         else
         {
             // qui carico se �una nota credito
             // Inseriamo nell'anagrafica provvigioni la fattura appena generata in negativo perche �un reso
-            $query = sprintf("insert into provvigioni( codage, ndoc, anno, suffix, tdoc, datareg, utente, totdoc, provvigioni )
-             values( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"-%s\", \"-%s\" )", $_agente, $_ndoc, $_anno, $_suffix, $_tdoc, $_datareg, $_codutente, $_totdoc, $_totprovv);
+            $query = "insert into provvigioni( codage, ndoc, anno, suffix, tdoc, datareg, utente, totdoc, provvigioni )
+             values('$_agente', '$_ndoc', '$_anno', '$_suffix', '$_tdoc', '$_datareg', '$_codutente', '-$_totdoc', '-$_totprovv')";
         }
     }
 
@@ -1860,7 +1859,7 @@ function mostra_carrello($_dove, $id, $_tdoc, $IVAMULTI, $ivasis)
     $_colspan = "0";
 
     //leggiamo il carrello..
-    $result = tabella_doc_basket("elenco", $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri);
+    $result = tabella_doc_basket("elenco", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri);
 
     // Tutto procede a meraviglia...
     //printf("<td align=left>%s</td>", $dati['utente']);
@@ -2110,7 +2109,7 @@ function mostra_carrello($_dove, $id, $_tdoc, $IVAMULTI, $ivasis)
 //-------------------------------------------------------------------------------------------
 //
 
-function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_artfor, $_descrizione, $_unita, $_qta, $_listino, $_sca, $_scb, $_scc, $_netto, $_peso, $_iva, $_consegna, $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_agg, $_anno, $_ndoc)
+function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_artfor, $_descrizione, $_unita, $_qta, $_listino, $_sca, $_scb, $_scc, $_netto, $_peso, $_iva, $_consegna, $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_agg, $_anno, $_suffix, $_ndoc)
 {
     //inquesta funzione dobbiamo caricare il tipo del documento per poter prelevare la lunghezza del campo descrizione..
     global $conn;
@@ -2441,7 +2440,7 @@ function impegno_articolo($_cosa, $_articolo)
  * 
  * @return arrey
  */
-function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri)
+function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri)
 {
     global $conn;
     global $_percorso;
@@ -2594,10 +2593,10 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_ndoc, $_utente, $_art
                 $_provvnetto = number_format((($_nettovendita * $_provvart) / 100), $dec, '.', '');
                 $_totrigaprovv = $_provvnetto * $_qtasaldo;
 
-                $query = sprintf("insert into doc_basket( sessionid, rigo, anno, ndoc, utente, articolo, artfor, descrizione, unita, quantita,
+                $query = sprintf("insert into doc_basket( sessionid, rigo, anno, suffix, ndoc, utente, articolo, artfor, descrizione, unita, quantita,
 	    qtaevasa, qtaestratta, qtasaldo, rsaldo, listino, sca, scb, scc, nettovendita, totriga, iva, totrigaprovv, peso, consegna, agg )
 	     values( \"%s\", \"%s\",\"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",
-	     \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri['artfor'], $_parametri['descrizione'], $_parametri['unita'], $_parametri['qta'], $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_parametri['listino'], $_parametri['sca'], $_parametri['scb'], $_parametri['scc'], $_nettovendita, $_totriga, $_parametri['iva'], $_totrigaprovv, $_peso, $_parametri['consegna'], $_parametri['agg']);
+	     \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri['artfor'], $_parametri['descrizione'], $_parametri['unita'], $_parametri['qta'], $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_parametri['listino'], $_parametri['sca'], $_parametri['scb'], $_parametri['scc'], $_nettovendita, $_totriga, $_parametri['iva'], $_totrigaprovv, $_peso, $_parametri['consegna'], $_parametri['agg']);
 
                 $result = $conn->exec($query);
 
@@ -2640,17 +2639,17 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_ndoc, $_utente, $_art
         //
 			//'
 
-        foreach ($result AS $return)
-            ;
+        $return = $result->fetch(PDO::FETCH_ASSOC);
+        
     }
     elseif ($_cosa == "travasa")
     {
         //la funzione mi inserisce gli articoli nel carrello..
 
-        $query = sprintf("insert into doc_basket( sessionid, rigo, anno, ndoc, utente, articolo, artfor, descrizione, unita, quantita,
+        $query = sprintf("insert into doc_basket( sessionid, rigo, anno, suffix, ndoc, utente, articolo, artfor, descrizione, unita, quantita,
 	    qtaevasa, qtaestratta, qtasaldo, rsaldo, listino, sca, scb, scc, nettovendita, totriga, iva, totrigaprovv, peso, consegna )
 	     values( \"%s\", \"%s\",\"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",
-	     \"%s\", \"%s\",\"%s\", \"%s\", \"%s\")", $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri['artfor'], $_parametri['descrizione'], $_parametri['unita'], $_parametri['quantita'], $_parametri['qtaevasa'], $_parametri['qtaestratta'], $_parametri['qtasaldo'], $_parametri['rsaldo'], $_parametri['listino'], $_parametri['scva'], $_parametri['scvb'], $_parametri['scvc'], $_parametri['nettovendita'], $_parametri['totriga'], $_parametri['iva'], $_parametri['totrigaprovv'], $_parametri['peso'], $_parametri['consegna']);
+	     \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri['artfor'], $_parametri['descrizione'], $_parametri['unita'], $_parametri['quantita'], $_parametri['qtaevasa'], $_parametri['qtaestratta'], $_parametri['qtasaldo'], $_parametri['rsaldo'], $_parametri['listino'], $_parametri['scva'], $_parametri['scvb'], $_parametri['scvc'], $_parametri['nettovendita'], $_parametri['totriga'], $_parametri['iva'], $_parametri['totrigaprovv'], $_parametri['peso'], $_parametri['consegna']);
 
         //echo $query;
 
@@ -2661,7 +2660,7 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_ndoc, $_utente, $_art
             $_errore = $conn->errorInfo();
             echo $_errore['2'];
             //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
+            $_errori['descrizione'] = "Errore Query $_cosa= $query - $_errore[2]";
             $_errori['files'] = "motore_doc_pdo.php";
             scrittura_errori($_cosa, $_percorso, $_errori);
             $_errori['errori'] = "NO";
@@ -2871,7 +2870,7 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_ndoc, $_utente, $_art
  * funzione che mi permette di modificare il documento e mi inserisce il tutto nel carrello
  *
  */
-function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_ndoc)
+function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc)
 {
 //passo la variabile globale
     global $conn;
@@ -2883,7 +2882,7 @@ function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_ndoc)
 
         //azzeriamo il bascket
 
-        $errori = tabella_doc_basket("azzera_sessione", $id, $_rigo, $_anno, $_ndoc, $_utente, $_articolo, $_parametri);
+        $errori = tabella_doc_basket("azzera_sessione", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri);
     }
 
     //setto lo status del documento primario prima della modifica in modo che in caso di annullo del parziale sappiamo come reimpostarlo
@@ -2942,7 +2941,7 @@ function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_ndoc)
             $dati2['quantita'] = $dati2['qtacarico'];
             $dati2['totriga'] = $dati2['valoreacq'];
 
-            $errori = tabella_doc_basket("travasa", $id, $dati2['rigo'], $_anno, $_ndoc, $dati2['utente'], $dati2['articolo'], $dati2);
+            $errori = tabella_doc_basket("travasa", $id, $dati2['rigo'], $_anno, $_suffix, $_ndoc, $dati2['utente'], $dati2['articolo'], $dati2);
 
             // Esegue la query...
             if ($errori['errori'] != "OK")
@@ -2999,7 +2998,7 @@ function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_ndoc)
             // inserisco i dati nella tabella del dettaglio
             //Inseriamo il tutto nel bascket
 
-            $errori = tabella_doc_basket("travasa", $id, $dati2['rigo'], $dati2['anno'], $dati2['ndoc'], $dati2['utente'], $dati2['articolo'], $dati2);
+            $errori = tabella_doc_basket("travasa", $id, $dati2['rigo'], $dati2['anno'], $dati2['suffix'], $dati2['ndoc'], $dati2['utente'], $dati2['articolo'], $dati2);
 
             if ($errori['errori'] != "OK")
             {
@@ -3767,7 +3766,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
     }
 
 
-    $basket = tabella_doc_basket("leggi_id", $id, $_rigo, $_anno, $_ndoc, $_codutente, $_articolo, $_parametri);
+    $basket = tabella_doc_basket("leggi_id", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_codutente, $_articolo, $_parametri);
 
     foreach ($basket AS $dati2)
     {
@@ -3850,6 +3849,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
     $_documento['ndoc'] = "$_ndoc";
     $_documento['anno'] = "$_anno";
     $_documento['errori'] = $_return;
+    $_documento['suffix'] = $_suffix;
 
     return $_documento;
 }
@@ -4234,7 +4234,7 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
         }
         else
         {
-            $query = sprintf("select * from %s where anno=\"%s\" and ndoc=\"%s\"", $_archivio['dettaglio'], $_anno, $_ndoc);
+            $query = "select * from $_archivio[dettaglio] WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
         }
 
         $result = $conn->query($query);
@@ -4285,7 +4285,7 @@ function status_documento($_cosa, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, 
 
         //setto lo status del documento primario prima della modifica in modo che in caso di annullo del parziale sappiamo come reimpostarlo
 
-        $query = sprintf("SELECT status from %s where anno=\"%s\" and ndoc=\"%s\"", $_archivio['testacalce'], $_anno, $_ndoc);
+        $query = "SELECT status from $_archivio[testacalce] where anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
 
         $result = $conn->query($query);
 
@@ -4348,7 +4348,7 @@ function status_documento($_cosa, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, 
         }
         else
         {
-            $query = sprintf("select status from %s where anno=\"%s\" and ndoc=\"%s\"", $_archivio['testacalce'], $_anno, $_ndoc);
+            $query = "select status from $_archivio[testacalce] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
         }
 
         $result = $conn->query($query);
@@ -4377,7 +4377,8 @@ function status_documento($_cosa, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, 
             printf("<form action=\"$_form_action\" method=\"POST\">");
             echo "<p align=\"center\">Documento <input type=\"radio\" name=\"tdoc\" value=\"$_tdoc\" checked>$_tdoc
 	    Numero <input type=\"radio\" name=\"ndoc\" value=\"$_ndoc\" checked>$_ndoc
-	     anno <input type=\"radio\" name=\"anno\" value=\"$_anno\" checked>$_anno</p>\n";
+	     anno <input type=\"radio\" name=\"anno\" value=\"$_anno\" checked>$_anno"
+                    . " suff <input type=\"radio\" name=\"suffix\" value=\"$_suffix\" checked>$_suffix</p>\n";
             echo "<p align=\"center\" class=\"tabella_elenco\">ATTENZIONE il documento &egrave; gi&agrave; in uso da un altro utente <br>\n";
 
             if ($_azione == "Elimina")
@@ -4406,7 +4407,8 @@ function status_documento($_cosa, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, 
             printf("<form action=\"$_form_action\" method=\"POST\">");
             echo "<p align=\"center\">Documento <input type=\"radio\" name=\"tdoc\" value=\"$_tdoc\" checked>$_tdoc
 	    Numero <input type=\"radio\" name=\"ndoc\" value=\"$_ndoc\" checked>$_ndoc
-	     anno <input type=\"radio\" name=\"anno\" value=\"$_anno\" checked>$_anno</p>\n";
+	     anno <input type=\"radio\" name=\"anno\" value=\"$_anno\" checked>$_anno"
+                    . "suff <input type=\"radio\" name=\"suffix\" value=\"$_suffix\" checked>$_suffix</p>\n";
 
             if ($_azione == "Elimina")
             {

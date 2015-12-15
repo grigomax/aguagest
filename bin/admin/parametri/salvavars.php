@@ -258,8 +258,7 @@ if ($_SESSION['user']['setting'] > "3")
     if (!$fp)
         die("Errore.. Riga non inserita ?");
 
-    $_commento = 'date_default_timezone_set(\'Europe/
-            Rome\');' . "\n";
+    $_commento = 'date_default_timezone_set(\'Europe/Rome\');' . "\n";
 
     fwrite($fp, $_commento);
     if (!$fp)
@@ -447,8 +446,15 @@ if ($_SESSION['user']['setting'] > "3")
     if (!$fp)
         die("Errore.. Riga non inserita ?");
 
-    $_scrivi = sprintf('$SIA = "%s";' .
-            "\n", $_POST['SIA']);
+    
+        $_scrivi = sprintf('$SUFFIX_DDT = "%s";' . "\n", $_POST['SUFFIX_DDT']);
+    fwrite($fp, $_scrivi);
+    if (!$fp)
+        die("Errore.. Riga non inserita ?");
+    
+    
+    
+    $_scrivi = sprintf('$SIA = "%s";'."\n", $_POST['SIA']);
     fwrite($fp, $_scrivi);
     if (!$fp)
         die("Errore.. Riga non inserita ?");

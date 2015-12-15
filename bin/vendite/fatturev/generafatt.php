@@ -14,6 +14,7 @@ session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
+require $_percorso . "librerie/motore_anagrafiche.php";
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
@@ -96,11 +97,11 @@ if ($_SESSION['user']['vendite'] > "2")
             $_valoretot = 0;
             echo "<tr>";
             printf("<td width=\"100\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datareg']);
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndoc']);
+            echo "<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>$dati[ndoc] / $dati[suffix]</b></span></td>\n";
             printf("<td width=\"40\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['codice']);
             printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
             printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['totimpo']);
-            printf("<td width=\"30\" align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s\"></td>\n", $dati['anno'], $dati['ndoc']);
+            printf("<td width=\"30\" align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s%s\"></td>\n", $dati['anno'], $dati['suffix'], $dati['ndoc']);
             echo "</tr>";
             $_valoretot = $_valoretot + $dati['totdoc'];
             $_codcli1 = $_codcli;
@@ -110,11 +111,11 @@ if ($_SESSION['user']['vendite'] > "2")
             echo "<tr>";
             //printf("<form action=\"generafatt2.php\" method=\"POST\">", $dati['anno']);
             printf("<td width=\"100\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datareg']);
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndoc']);
+            echo "<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>$dati[ndoc] / $dati[suffix]</b></span></td>\n";
             printf("<td width=\"40\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['codice']);
             printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
             printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['totimpo']);
-            printf("<td width=\"30\" align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s\"></td>\n", $dati['anno'], $dati['ndoc']);
+            printf("<td width=\"30\" align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s%s\"></td>\n", $dati['anno'], $dati['suffix'], $dati['ndoc']);
             echo "</tr>";
             $_valoretot = $_valoretot + $dati['totdoc'];
             $_codcli1 = $_codcli;
@@ -126,7 +127,12 @@ if ($_SESSION['user']['vendite'] > "2")
     echo "</td></tr>\n";
     $_data = date('d-m-Y');
     echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
-    echo "<tr><td colspan=\"6\" align=\"right\" class=\"testo_blu\">Genera Fatture con data = <input type=\"text\" class=\"data\" size=\"11\" maxlength=\"10\" name=\"data\" value=\"$_data\"> - <input type=\"submit\" name=\"azione\" value=\"vai\"></td>";
+    echo "<tr><td colspan=\"6\" align=\"right\" class=\"testo_blu\">Genera Fatture con data = <input type=\"text\" class=\"data\" size=\"11\" maxlength=\"10\" name=\"data\" value=\"$_data\">\n";
+    //inseriamo la selezione del suffisso
+    
+    suffisso("select", "suffix", $_parametri);
+    
+    echo "- <input type=\"submit\" name=\"azione\" value=\"vai\"></td>";
     echo "</FORM></table>\n";
 
     

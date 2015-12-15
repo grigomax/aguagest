@@ -106,7 +106,7 @@ if ($_SESSION['user']['vendite'] > "1")
     if ($dati_doc['contabilita'] == "SI")
     {
         echo "<center><br>Nessuna Opzione possibile in quanto il seguente</center>\n";
-        printf("<center>evaso con <a href=\"../effetti/visualizzadoc.php?anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]\"<b>$_tdocevaso</b> numero: %s del: %s </a>", $dati_doc['evasonum'], $dati_doc['evasoanno']);
+        printf("<center>evaso con <a href=\"../effetti/visualizzadoc.php?anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]&suffix=$dati_doc[evasosuffix]\"<b>$_tdocevaso</b> numero: %s del: %s </a>", $dati_doc['evasonum'], $dati_doc['evasoanno']);
         echo "<center><b>Ed oltretutto &egrave; stato registrato in contabilit&agrave;</b><center>\n";
     }
     else
@@ -116,28 +116,27 @@ if ($_SESSION['user']['vendite'] > "1")
             echo "<center>Nessuna Opzione possibile in quanto il seguente</center>\n";
             if($_tdocevaso == "effetto")
             {
-                printf("<center>evaso con <a href=\"../effetti/visualizzadoc.php?anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]\"<b>$_tdocevaso</b> numero: %s del: %s </a>", $dati_doc['evasonum'], $dati_doc['evasoanno']);
+                printf("<center>evaso con <a href=\"../effetti/visualizzadoc.php?anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]&suffix=$dati_doc[evasosuffix]\"<b>$_tdocevaso</b> numero: %s del: %s </a>", $dati_doc['evasonum'], $dati_doc['evasoanno']);
             }
             else
             {
-                printf("<center>evaso con <a href=\"visualizzadoc.php?tdoc=$_tdocevaso&anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]\"<b>$_tdocevaso</b> numero: %s del: %s </a>", $dati_doc['evasonum'], $dati_doc['evasoanno']);
+                echo "<center>evaso con <a href=\"visualizzadoc.php?tdoc=$_tdocevaso&anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]&suffix=$dati_doc[evasosuffix]\"<b>$_tdocevaso</b> numero: $dati_doc[evasonum]/$dati_doc[evasosuffix] del $dati_doc[evasoanno]</a>\n";
             }
             
         }
         elseif (($_status == "parziale") AND ( ($_tdoc == "conferma") OR ( $_tdoc == "fornitore")))
         {
             echo "<center>Attenzione a modificare questo documento in quanto risulta evaso parzialmente</center>";
-            printf("<center>con <a href=\"visualizzadoc.php?tdoc=$_tdocevaso&anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]\"<b>$_tdocevaso</b> numero: %s del: %s </a>", $dati_doc['evasonum'], $dati_doc['evasoanno']);
+            echo "<center> con <a href=\"visualizzadoc.php?tdoc=$_tdocevaso&anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]&suffix=$dati_doc[evasosuffix]\"<b>$_tdocevaso</b> numero: $dati_doc[evasonum]/$dati_doc[evasosuffx] del $dati_doc[evasoanno]</a>\n";
             echo "<center><span class=\"azioni\"><br><b>Azioni possibili</b></center>\n";
-            printf("<center><input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>");
+            echo "<center><input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>\n";
         }
         elseif ($_status == "saldato")
         {
             echo "<center><br>Nessuna Opzione possibile in quanto il seguente</center>\n";
-            printf("<center>evaso con <a href=\"../effetti/visualizzadoc.php?anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]\"<b>$_tdocevaso</b> numero: %s del: %s </a></center>", $dati_doc['evasonum'], $dati_doc['evasoanno']);
+            echo "<center>evaso con <a href=\"visualizzadoc.php?tdoc=$_tdocevaso&anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]&suffix=$dati_doc[evasosuffix]\"<b>$_tdocevaso</b> numero: $dati_doc[evasonum]/$dati_doc[evasosuffx] del $dati_doc[evasoanno]</a>\n";
             echo "<center><b>Ed oltretutto &egrave; stato registrato in contabilit&agrave;</b><center>\n";
         }
-        //http://localhost/agua/bin/vendite/effetti/visualizzadoc.php?anno=2015
         else
         {
             echo "<center><span class=\"azioni\"><br><b>Azioni possibili</b></center>\n";
@@ -147,11 +146,11 @@ if ($_SESSION['user']['vendite'] > "1")
             }
             elseif ($_SESSION['user']['vendite'] == "3")
             {
-                printf("<center><input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>");
+                echo "<center><input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>\n";
             }
             else
             {
-                printf("<center>Non hai i permessi per poter modificare questo documento</center>");
+                echo "<center>Non hai i permessi per poter modificare questo documento</center>\n";
             }
         }
     }
@@ -162,7 +161,7 @@ if ($_SESSION['user']['vendite'] > "1")
         if (($_tdoc == "ddt") OR ( $_tdoc == "$nomedoc"))
         {
             //diamo la possibilità dicambiare i dati della spedizione
-            echo "<form action=\"calce.php?azione=spedizione&tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc\" method=\"POST\">\n";
+            echo "<form action=\"calce.php?azione=spedizione&tdoc=$_tdoc&anno=$_anno&suffix=$_suffix&ndoc=$_ndoc\" method=\"POST\">\n";
             echo "<center><br>Modifica Dati spedizione ed inserisci <input type=\"submit\" value=\"ID_COLLO\"></center>\n";
             echo "</form>\n";
         }

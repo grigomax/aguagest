@@ -89,9 +89,7 @@ if ($_SESSION['user']['vendite'] > "2")
     // cerco nel database testacalce
 
 
-    
-    
-
+   
     if ($_calce == "calce2")
     {
         //prendo il resto delle varibili
@@ -100,6 +98,7 @@ if ($_SESSION['user']['vendite'] > "2")
         $_ndoc = $_SESSION['ndoc'];
         $_tdoc = $_SESSION['tdoc'];
 
+        
         //prendiamoci il documento..
 
         $dati_doc = seleziona_documento("leggi_riga_testata", $_tdoc, $_anno, $_suffix, $_ndoc, $_archivio, $_parametri);
@@ -349,7 +348,7 @@ if ($_SESSION['user']['vendite'] > "2")
     else
     {
         //invertiamo la data..
-        printf("N. documento : <input type=\"radio\" name=\"ndoc\" value=\"%s\" checked>%s</td>", $_ndoc, $_ndoc);
+        printf("N. documento : <input type=\"radio\" name=\"ndoc\" value=\"%s\" checked>%s / $_suffix</td>", $_ndoc, $_ndoc);
         printf("<td align=\"left\" valign=\"center\">Anno doc. <input type=\"radio\" name=\"annodoc\" value=\"%s\" checked>%s</td>", $_anno, $_anno);
         printf("<td align=\"left\" valign=\"center\">Data reg. <input type=\"radio\" name=\"datareg\" value=\"%s\" checked>%s</td></tr>", $_datareg, $_datareg);
         if ($_tdoc == "preventivo")

@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
@@ -40,6 +39,7 @@ if ($_SESSION['user']['vendite'] > "2")
     $_tdoc = $_POST['tdoc'];
     $_ndoc = $_POST['ndoc'];
     $_anno = $_POST['anno'];
+    $_suffix = $_POST['suffix'];
 
     $id = session_id();
     $_azione = $_POST['azione'];
@@ -73,7 +73,7 @@ if ($_SESSION['user']['vendite'] > "2")
     if ($_status == "modifica")
     {
 
-        $_risultato = modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_ndoc);
+        $_risultato = modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc);
 
         //verifichiamo il ritorno, se tutto ok apro le sessioni e passo a corpo altrimenti se cambia
         if ($_risultato['verifica'] == "tutto_ok")
@@ -94,8 +94,9 @@ if ($_SESSION['user']['vendite'] > "2")
             //ottimo passiamo il tutto alla funzione corpo ed apriamo le sessioni di modifica:
             $_SESSION['utente'] = $_codutente;
             $_SESSION['tdoc'] = $_tdoc;
-            $_SESSION['anno'] = "$_anno";
-            $_SESSION['ndoc'] = "$_ndoc";
+            $_SESSION['anno'] = $_anno;
+            $_SESSION['suffix'] = $_suffix;
+            $_SESSION['ndoc'] = $_ndoc;
             $_SESSION['calce'] = "calce2";
             //$_SESSION['status'] = "";
 
