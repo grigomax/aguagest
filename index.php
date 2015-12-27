@@ -12,6 +12,16 @@ echo "<head>\n";
 echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
 echo "<LINK REL=\"shortcut icon\" HREF=\"favicon.ico\">\n";
 echo "<title>Agua Gest</title>\n";
+
+echo "<style>\n";
+echo "input {
+    font-size: 0.9em;
+    }
+\n";
+
+echo "</style>\n";
+
+
 echo "</head>\n";
 echo "<BODY background=\"bin/images/aguaback.jpg\">\n";
 echo "<center><img src=\"bin/images/aguagest.png\" alt=\"logo agua\"><font color=\"yellow\"><br>\n";

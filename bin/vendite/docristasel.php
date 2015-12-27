@@ -41,13 +41,15 @@ if ($_SESSION['user']['vendite'] > "1")
 //prendiamoci i il database..
     $_archivio = archivio_tdoc($_tdoc);
 
-    if ($_POST['anno'] == "")
+    if (($_POST['anno'] == "") AND ($_POST['suffix'] == ""))
     {
         $_anno = date('Y');
+        $_suffix = $SUFFIX_DDT;
     }
     else
     {
         $_anno = $_POST['anno'];
+        $_suffix = $_POST['suffix'];
     }
 
     echo "<table width=\"80%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";
@@ -57,7 +59,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
 
     echo "<form action=\"docristasel.php?tdoc=$_tdoc\" method=\"POST\">\n";
-    echo "Cambia anno => <input type=\"number\" size=\"6\" maxlength=\"4\" name=\"anno\" value=\"$_anno\"><input type=\"submit\" name=\"cambia\">\n";
+    echo "Cambia anno => <input type=\"number\" size=\"6\" name=\"anno\" value=\"$_anno\"> o suffisso <input type=\"text\" size=\"3\" maxlength=\"1\" name=\"suffix\" value=\"$_suffix\"><input type=\"submit\" name=\"cambia\">\n";
 
     echo "</form>\n";
 
@@ -66,7 +68,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
     echo "<td align=\"center\"><a href=\"docristasel.php\">Aggiorna ==><img src=\"../images/reload.png\"></img></a></td></tr>";
 
-    echo "<tr><td align=\"center\" colspan=\"2\"><input type=\"radio\" name=\"anno\" value=\"$_anno\" checked >Anno $_anno<input type=\"radio\" name=\"tdoc\" value=\"$_tdoc\" checked >$_tdoc</td></tr>";
+    echo "<tr><td align=\"center\" colspan=\"2\"><input type=\"radio\" name=\"anno\" value=\"$_anno\" checked >Anno $_anno<input type=\"radio\" name=\"tdoc\" value=\"$_tdoc\" checked >$_tdoc / suffisso<input type=\"radio\" name=\"suffix\" value=\"$_suffix\" checked >$_suffix</td></tr>";
 
     echo "<tr><td align=center colspan=\"2\"><br>";
     echo "<select name=\"ndoc\">\n";

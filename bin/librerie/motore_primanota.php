@@ -585,7 +585,7 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 	elseif ($_cosa == "ultimo_numero")
 	{
 		//funzione che mi restituisce l'ultimo numero inserito..
-		$query = sprintf("SELECT nreg FROM prima_nota where anno=\"%s\" ORDER BY nreg DESC LIMIT 1", $_anno);
+		$query = "SELECT nreg FROM prima_nota where anno='$_anno' ORDER BY nreg DESC LIMIT 1";
 		
 		$result = $conn->query($query);
 		if ($conn->errorCode() != "00000")
@@ -1109,9 +1109,8 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 			$_parametri['status'] == "Inserito";
 		}
 
-		$query = sprintf("INSERT prima_nota (anno, nreg, data_reg, data_cont, descrizione, segno,  causale, conto, desc_conto, iva, dare, avere, ndoc, anno_doc, data_doc, tipopag, nproto, anno_proto, note, status)
-                VALUES
-                (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $_anno, $_nreg, $_data_reg, $_data_gior, $_testo, $_parametri['segno'], $_causale, $_parametri['conto'], $_parametri['desc_conto'], $_parametri['iva'], $_parametri['dare'], $_parametri['avere'], $_parametri['ndoc'], $_parametri['anno_doc'], $_parametri['data_doc'], $_parametri['codpag'], $_parametri['nproto'], $_parametri['anno_proto'], $_parametri['note'], "Inserito");
+		$query = "INSERT prima_nota (anno, nreg, data_reg, data_cont, descrizione, segno,  causale, conto, desc_conto, iva, dare, avere, ndoc, suffix_doc, anno_doc, data_doc, tipopag, nproto, anno_proto, note, status)
+                VALUES ( '$_anno', '$_nreg', '$_data_reg', '$_data_gior', '$_testo', '$_parametri[segno]', '$_causale', '$_parametri[conto]', '$_parametri[desc_conto]', '$_parametri[iva]', '$_parametri[dare]', '$_parametri[avere]', '$_parametri[ndoc]', '$_parametri[suffix_doc]', '$_parametri[anno_doc]', '$_parametri[data_doc]', '$_parametri[codpag]', '$_parametri[nproto]', '$_parametri[anno_proto]', '$_parametri[note]', 'Inserito')";
 
 		$result = $conn->query($query);
 		if ($conn->errorCode() != "00000")

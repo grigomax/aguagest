@@ -295,6 +295,8 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->Cell(10, 5, "$datidoc[ST_NDOC] n. ", 0, 0, 'L');
 	$pdf->SetX(55);
 	$pdf->Cell(10, 5, $dati['ndoc'], 0, 0, 'L');
+        $pdf->Cell(3, 5, '/', 0, 0, 'L');
+	$pdf->Cell(5, 5, $dati['suffix'], 0, 0, 'L');
 	$pdf->Cell(3, 5, '/', 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati['anno'], 0, 0, 'L');
 	$pdf->Cell(13, 5, 'Rev. n. ', 0, 0, 'L');
@@ -497,13 +499,17 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->SetFillColor(255, 255, 255);
 	$pdf->SetX(169);
 	$pdf->Cell(32, 10, '', 1, 0);
-	$pdf->SetX(169);
+	$pdf->SetX(166);
 	//$pdf->SetFillColor(166, 244, 249);
-	$pdf->Cell(17, 10, $dati['ndoc'], 'LT', 0, 'R', true);
-	$pdf->SetX(185);
+	$pdf->Cell(15, 10, $dati['ndoc'], 'LT', 0, 'R', true);
+	$pdf->SetX(180);
+        $pdf->Cell(3, 10, '/', 'T', 0, 'C', true);
+	$pdf->SetX(183);
+	$pdf->Cell(4, 10, $dati['suffix'], '', 0, 'L', true);
+        $pdf->SetX(187);
 	$pdf->Cell(3, 10, '/', 'T', 0, 'C', true);
-	$pdf->SetX(187);
-	$pdf->Cell(14, 10, $dati['anno'], 'TRB', 0, 'L', true);
+	$pdf->SetX(190);
+	$pdf->Cell(11, 10, $dati['anno'], 'TRB', 0, 'L', true);
 
 	// righe inserimento tabella contabilita
 	$pdf->SetXY($MARGINE_SINISTRO, $_y); //90
@@ -547,7 +553,22 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 
 	$pdf->SetXY($MARGINE_SINISTRO, $_y);
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 9);
-	$pdf->Cell(191, 10, $dati2['contatto'], '1', 1, 'L');
+	$pdf->Cell(153, 10, $dati2['contatto'], '1', 0, 'L');
+        
+        $_GET['saved'] = "yes";
+        $_GET['codetype'] = "Code39";
+        $_GET['size'] = "40";
+        $_GET['text'] = $dati[anno].$dati[suffix].$dati[ndoc];
+        include "../tools/barcode_2/barcode.php";
+        
+        $pdf->Image("../../spool/barcode.png", '163','107', 40, 7, png);
+        $pdf->Cell(43, 10,'', '1', 1, 'L');
+        
+        //<img src=$_percorso/tools/barcode/barcode.php?barcode=$dati[anno]$dati[suffix]$dati[ndoc]&width=250&height=40&text=0>
+        
+        
+        
+        
 	//fine inserikmento variabili
 	//rilascio in automatico il puntatore..
 	$_y = $_y + 10;
@@ -571,15 +592,21 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->Cell(18, 10, $_pg, 1, 0, 'C');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'B', 12);
 	$pdf->SetFillColor(255, 255, 255);
-	$pdf->SetX($MARGINE_SINISTRO + 163);
+	$pdf->SetX($MARGINE_SINISTRO + 160);
 	$pdf->Cell(32, 10, '', 1, 0);
-	$pdf->SetX($MARGINE_SINISTRO + 163);
+	$pdf->SetX($MARGINE_SINISTRO + 160);
 	$pdf->SetFillColor(166, 244, 249);
 	$pdf->Cell(16, 10, $dati['ndoc'], 'LT', 0, 'R', true);
-	$pdf->SetX($MARGINE_SINISTRO + 178);
-	$pdf->Cell(3, 10, '/', 0, 0, 'C', true);
-	$pdf->SetX($MARGINE_SINISTRO + 180);
-	$pdf->Cell(15, 10, $dati['anno'], 'RB', 0, 'L', true);
+	$pdf->SetX($MARGINE_SINISTRO + 175);
+	$pdf->Cell(2, 10, '/', 0, 0, 'C', true);
+        $pdf->SetX($MARGINE_SINISTRO + 177);
+	$pdf->Cell(15, 10, $dati['suffix'], 'RB', 0, 'L', true);
+        $pdf->SetX($MARGINE_SINISTRO + 181);
+	$pdf->Cell(2, 10, '/', 0, 0, 'C', true);
+        $pdf->SetX($MARGINE_SINISTRO + 183);
+	$pdf->Cell(12, 10, $dati['anno'], 'RB', 0, 'L', true);
+       
+        
 
 	// righe inserimento tabella contabilita
 	$pdf->SetXY($MARGINE_SINISTRO, $_y); //90

@@ -2643,9 +2643,9 @@ function tabella_effetti($_cosa, $_percorso, $_annoeff, $_numeff, $_parametri)
     elseif ($_cosa == "inserisci_singolo")
     {
 
-        $query = "INSERT INTO effetti( tipoeff, annoeff, numeff, dataeff, scadeff, impeff, tipodoc, annodoc, numdoc, datadoc,
+        $query = "INSERT INTO effetti( tipoeff, annoeff, numeff, dataeff, scadeff, impeff, tipodoc, annodoc, suffixdoc, numdoc, datadoc,
             totdoc, codcli, modpag, bancapp, abi, cab, cin, cc, status, datapag, contabilita )
-            values( '$_parametri[trata]', '$_annoeff', '$_numeff', '$_parametri[dataeff]', '$_parametri[scadeff]', '$_parametri[impeff]', '$_parametri[tdoc]', '$_parametri[anno]', '$_parametri[ndoc]', '$_parametri[datareg]',
+            values( '$_parametri[trata]', '$_annoeff', '$_numeff', '$_parametri[dataeff]', '$_parametri[scadeff]', '$_parametri[impeff]', '$_parametri[tdoc]', '$_parametri[anno]', '$_parametri[suffix]', '$_parametri[ndoc]', '$_parametri[datareg]',
             '$_parametri[totdoc]', '$_parametri[codcli]', '$_parametri[modpag]', '$_parametri[bancapp]', '$_parametri[abi]', '$_parametri[cab]', '$_parametri[cin]', '$_parametri[cc]', '$_parametri[status]', '$_parametri[datapag]', '$_parametri[contabilita]' )";
 
         $result = $conn->query($query);
@@ -2893,7 +2893,7 @@ function tabella_effetti($_cosa, $_percorso, $_annoeff, $_numeff, $_parametri)
  * @param type $_parametri
  * @return string
  */
-function tabella_fatture($_cosa, $_percorso, $_anno, $_ndoc, $_parametri)
+function tabella_fatture($_cosa, $_percorso, $_anno, $_suffix, $_ndoc, $_parametri)
 {
     global $conn;
 
@@ -2901,7 +2901,7 @@ function tabella_fatture($_cosa, $_percorso, $_anno, $_ndoc, $_parametri)
     if ($_cosa == "leggi_singola_testata")
     {
 
-        $query = "SELECT * from fv_testacalce WHERE anno='$_anno' AND ndoc='$_ndoc' limit 1";
+        $query = "SELECT * from fv_testacalce WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' limit 1";
 
         $result = $conn->query($query);
 
@@ -2921,7 +2921,7 @@ function tabella_fatture($_cosa, $_percorso, $_anno, $_ndoc, $_parametri)
     }
     elseif ($_cosa == "aggiorna_status")
     {
-        $query = "UPDATE fv_testacalce SET status='$_parametri[status]', tdocevaso='$_parametri[tdocevaso]', evasonum='$_parametri[evasonum]', evasoanno='$_parametri[evasoanno]' where anno='$_anno' and ndoc='$_ndoc' and utente='$_parametri[utente]'";
+        $query = "UPDATE fv_testacalce SET status='$_parametri[status]', tdocevaso='$_parametri[tdocevaso]', evasonum='$_parametri[evasonum]', evasoanno='$_parametri[evasoanno]' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_parametri[utente]'";
 
         $result = $conn->exec($query);
 

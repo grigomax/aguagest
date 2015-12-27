@@ -706,10 +706,12 @@ function base_html($_cosa, $_percorso)
     height: ".$SCREEN_INPUT_SIZE."em; /*Desired height*/
     }
     
-
-
     \n";
-
+    
+    //iniziamo a spostare man mano i vari css..
+    echo "span.testo_blu {font-family: $SCREEN_FONT_TYPE; font-size: ".($SCREEN_FONT_SIZE-0.2)."em; color: #053487; }\n";
+    
+    
     echo "</style>\n";
 
     if ($_cosa == "chiudi")
@@ -1203,7 +1205,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/index.php\">Home</a><span class=\"dropBottom\"></span>\n";
     echo "<ul class=\"menu\">\n";
     echo "<li class=\"icon home\"><a href=\"$sito/bin/index.php\">Inizio</a></li>\n";
-    echo "<li class=\"icon privacy\"><a href=\"$sito/bin/user/user.php?azione=std\">Gestione utente</a></li>\n";
+    echo "<li class=\"icon utente\"><a href=\"$sito/bin/user/user.php?azione=std\">Gestione utente</a></li>\n";
     echo "<li class=\"icon privacy\"><a href=\"$sito/bin/user/user.php?azione=pwd\">Gestione Password</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/user/todo.php?azione=nuova\">Nuova Cosa da Fare</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/user/lista_todo.php\">Lista Cose da fare</a></li>\n";

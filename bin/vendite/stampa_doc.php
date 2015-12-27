@@ -240,11 +240,11 @@ if ($_SESSION['user']['vendite'] > "1")
             if ($_tdoc == "fornitore")
             {
                 // questa selezione mi permette di avere il numero di pagine ed il numero di righe in anticipo
-                $query = sprintf("select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(artfor,1,'$datidoc[ST_ARTFOR_CT]') AS artfor, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione, scaa AS scva, scab AS scvb, scac AS scvc from $_docdetta where anno=\"%s\" and ndoc=\"%s\" order by rigo", $_anno, $dati['ndoc']);
+                $query = "select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(artfor,1,'$datidoc[ST_ARTFOR_CT]') AS artfor, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione, scaa AS scva, scab AS scvb, scac AS scvc from $_docdetta where anno='$_anno' AND suffix='$_suffix' and ndoc='$dati[ndoc]' order by rigo";
             }
             else
             {
-                $query = "select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione from $_docdetta where anno='$_anno' AND suffix='$_suffix' AND and ndoc='$dati[ndoc]' order by rigo";
+                $query = "select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione from $_docdetta where anno='$_anno' AND suffix='$_suffix' AND ndoc='$dati[ndoc]' order by rigo";
             }
 
             $result = $conn->query($query);
@@ -443,11 +443,11 @@ if ($_SESSION['user']['vendite'] > "1")
         if ($_tdoc == "fornitore")
         {
             // questa selezione mi permette di avere il numero di pagine ed il numero di righe in anticipo
-            $query = sprintf("select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(artfor,1,'$datidoc[ST_ARTFOR_CT]') AS artfor, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione, scaa AS scva, scab AS scvb, scac AS scvc from $_docdetta where anno=\"%s\" AND suffix=\"%s\", and ndoc=\"%s\" order by rigo", $_anno, $_suffix, $_ndoc);
+            $query = "select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(artfor,1,'$datidoc[ST_ARTFOR_CT]') AS artfor, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione, scaa AS scva, scab AS scvb, scac AS scvc from $_docdetta where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
         }
         else
         {
-            $query = sprintf("select *, substring(articolo,1,\"%s\") AS articolo, substring(descrizione,1,\"%s\") AS descrizione from $_docdetta where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo", $datidoc['ST_ARTICOLO_CT'], $datidoc['ST_DESCRIZIONE_CT']);
+            $query = "select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione from $_docdetta where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
         }
 
         $result = $conn->query($query);

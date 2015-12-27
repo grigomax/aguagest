@@ -93,10 +93,10 @@ if ($_SESSION['user']['vendite'] > "2")
             //selezioniamo l'archivio e sovrascriviamo il post passatp.
 
             $_destino = tabella_destinazioni("singola", $dati['codice'], $_POST['destinazione'], $_parametri);
-            $_POST['dragsoc'] = $_destino['dragsoc'];
-            $_POST['dragsoc2'] = $_destino['dragsoc2'];
-            $_POST['dindirizzo'] = $_destino['dindirizzo'];
-            $_POST['dcitta'] = $_destino['dcitta'];
+            $_POST['dragsoc'] = addslashes($_destino['dragsoc']);
+            $_POST['dragsoc2'] = addslashes($_destino['dragsoc2']);
+            $_POST['dindirizzo'] = addslashes($_destino['dindirizzo']);
+            $_POST['dcitta'] = addslashes($_destino['dcitta']);
             $_POST['dcap'] = $_destino['dcap'];
             $_POST['dprov'] = $_destino['dprov'];
             $_POST['dnazione'] = $_destino['dnazione'];

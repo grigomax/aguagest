@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
@@ -41,7 +40,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 
 // Stringa contenente la query di ricerca...
 
-    $query = "select anno, ndoc, ragsoc, utente, ddtfornitore, fatturacq, datareg, protoiva from magazzino INNER JOIN fornitori ON magazzino.utente=fornitori.codice where tdoc='ddtacq' and $_campi like '$_descrizione' order by ndoc ";
+    $query = "select anno, suffix, ndoc, ragsoc, utente, ddtfornitore, fatturacq, datareg, protoiva from magazzino INNER JOIN fornitori ON magazzino.utente=fornitori.codice where tdoc='ddtacq' and $_campi like '$_descrizione' order by ndoc ";
 
     $result = $conn->query($query);
 
@@ -55,16 +54,15 @@ if ($_SESSION['user']['magazzino'] > "1")
         scrittura_errori($_cosa, $_percorso, $_errori);
     }
     // Tutto procede a meraviglia...
-    echo "<table align=\"center\">";
+    echo "<table width=\"95%\" align=\"center\">";
     echo "<tr>";
-
-    //echo "<td width=\"200\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Campo = $_campi</span></td>";
-    echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Datareg</span></td>";
+    echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Anno</span></td>";
     echo "<td width=\"400\" align=\"left\" class=\"logo\"><span class=\"testo_bianco\">Ragione Sociale</span></td>";
-    echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">ddt</span></td>";
+    echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Bolla</span></td>";
     echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Fattura</span></td>";
-    echo "<td width=\"50\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">P. iva</span></td>";
-    echo "<td width=\"50\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Status</span></td>";
+    echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Valore</span></td>";
+    echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">P. Iva</span></td>";
+    echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Status</span></td>";
     echo "<td width=\"70\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Azione</span></td>";
     echo "</tr>";
 
@@ -75,25 +73,26 @@ if ($_SESSION['user']['magazzino'] > "1")
         {
             $_ndoc = $dati['ndoc'];
             echo "<tr>";
-            echo "<form action=\"../../../vendite/docubase/visualizzadoc.php?tdoc=ddtacq\" method=\"POST\">\n";
-            // printf( "<td width=\"200\" align=\"center\"><span class=\"testo_blu\">%s</span></td>",$dati[ $_campi ] );
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datareg']);
-            printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['ddtfornitore']);
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['fatturacq']);
-            printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['protoiva']);
-            printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['status']);
-            printf("<td width=\"70\" height=\"1\" align=\"center\" class=\"testo_blu\"><button type=\"submit\" name=\"annondoc\" value=\"%s%s\">$dati[ndoc]</button>\n", $dati['anno'], $dati['ndoc']);
+            echo "<form action=\"../../../vendite/docubase/visualizzadoc.php?tdoc=ddtacq\" method=\"POST\">";
+            echo "<td align=\"left\"><span class=\"testo_blu\">$dati[anno]</span></td>\n";
+            echo "<td align=\"left\"><span class=\"testo_blu\">$dati[ragsoc]</span></td>\n";
+            printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['ddtfornitore']);
+            printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['fatturacq']);
+            printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['valoreacq']);
+            echo "<td align=\"left\"><span class=\"testo_blu\">$dati[protoiva]</span></td>\n";
+            printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['status']);
+            printf("<td height=\"1\" align=\"center\" class=\"testo_blu\"><button type=\"submit\" name=\"annondoc\" value=\"%s%s%s\">$dati[ndoc]</button>/$dati[suffix]\n", $dati['anno'], $dati['suffix'], $dati['ndoc']);
             echo "</tr></form>";
             echo "<tr>";
-            // 				echo "<td width=\"200\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-            echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-            echo "<td width=\"400\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-            echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-            echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-            echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-            echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-            echo "<td width=\"70\" height=\"1\" align=\"center\" class=\"logo\"></td>";
+
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
 
             echo "</tr>";
         }

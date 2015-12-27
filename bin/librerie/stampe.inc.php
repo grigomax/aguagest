@@ -408,7 +408,7 @@ function testata_doc($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamen
 		echo "</tr><tr>";
 		echo "<td colspan=\"2\" bgcolor=\"#FFFFFF\"align=\"left\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC008</i></font><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br><font face=\"arial\" size=\"2\">&nbsp; $dati2[contatto]</font></font></td>\n";
 		echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"$datidoc[ST_FONTESTACALCE]\" size=\"1\" valign=\"top\"><i>$TC009</i><font face=\"$datidoc[ST_FONTESTACALCE]\" style=\"font-size: $datidoc[ST_FONTESTASIZE]" . "pt;\"><br>$dati2[codagente]</font></font></td>\n";
-		echo "<td align=\"center\" width=\"250\"><img src=$_percorso/tools/barcode/barcode.php?barcode=$dati[suffix]$dati[anno]$dati[ndoc]&width=200&height=40&text=0></td>\n";
+		echo "<td align=\"center\" width=\"250\"><img src=$_percorso/tools/barcode/barcode.php?barcode=$dati[anno]$dati[suffix]$dati[ndoc]&width=250&height=40&text=0></td>\n";
 		echo "</tr></table>\n";
 	}//fine sotto testata
 

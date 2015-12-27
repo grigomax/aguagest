@@ -8,10 +8,15 @@ massimo@mcetechnik.it
 -1 ADMIN
 -   1   Fatto un piccolo programmino per poter lanciare delle query sql direttamente
 -       nella sezione admin / gestione archivi
+-   2   Inizio cambio Browser per l'utilizzo del programma.. 
+-       Passaggio a crome e chromium per la comodità dell'integrazione con l'inoltro
+-       in linea dei pdf
 
 -2  VENDITE
 -   1   Sistemato Bug sul corpo dei documenti, quando si agganciava un articolo
 -       correlato non prendeva correttamente gli sconti.
+-   2   Data la possibilità di avere il suffisso di numerazione dei documenti
+-       ora è possibile fare molti più documenti, dal preventivo alle fatture.
 
 -3  ANAGRAFICHE
 -   1   Nuova tabella destinazioni, Ora un cliente può avere fino a 99 destinazioni

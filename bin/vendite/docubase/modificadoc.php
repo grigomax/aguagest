@@ -60,7 +60,7 @@ if ($_SESSION['user']['vendite'] > "2")
 // azione annulla documento....
     if ($_azione == "Annulla")
     {
-        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_ndoc);
+        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);
         exit;
     }
     else
@@ -129,7 +129,7 @@ if ($_SESSION['user']['vendite'] > "2")
             //richiamo la funzione che mi mostra compilato il carrello
             mostra_carrello($_SESSION['programma'], $id, $_tdoc, $IVAMULTI, $ivasis);
 
-            annulla_doc_vendite($_dove, $_tdoc, $_anno, $_ndoc);
+            annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);
 
             echo "<br></body></html>";
         }
@@ -143,7 +143,7 @@ if ($_SESSION['user']['vendite'] > "2")
     {
 
 
-        $_return = elimina_documento($_status, $_tdoc, $_anno, $_ndoc, $_archivio);
+        $_return = elimina_documento($_status, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivio);
 
         if ($_return == "tuttok")
         {

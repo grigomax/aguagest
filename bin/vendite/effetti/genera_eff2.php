@@ -62,12 +62,15 @@ if ($_SESSION['user']['vendite'] > "1")
 // mi conviene riscriverlo..
 // 	Seleziono il documento..
         //qui dividiamo il numero della fattura con anche l'anno di riferimento alla stessa.
-        $_anno = substr($_annondoc, 0, 4);
-        $_ndoc = substr($_annondoc, 4, 10);
+       
+        $_anno = substr($_annondoc, "0", "4");
+        $_suffix = substr($_annondoc, "4", "1");
+        $_ndoc = substr($_annondoc, "5", "11");
+        
 
         //leggo la fattura singola
 
-        $datiu = tabella_fatture("leggi_singola_testata", $_percorso, $_anno, $_ndoc, $_parametri);
+        $datiu = tabella_fatture("leggi_singola_testata", $_percorso, $_anno, $_suffix, $_ndoc, $_parametri);
         //mi prendo le variabili...
 
         $_datadoc = $datiu['datareg'];
@@ -140,6 +143,7 @@ if ($_SESSION['user']['vendite'] > "1")
             $_parametri['tdoc'] = $datiu['tdoc'];
             $_parametri['anno'] = $datiu['anno'];
             $_parametri['ndoc'] = $datiu['ndoc'];
+            $_parametri['suffix'] = $datiu['suffix'];
             $_parametri['datareg'] = $datiu['datareg'];
             $_parametri['totdoc'] = $datiu['totdoc'];
             $_parametri['codcli'] = $datiu['utente'];
@@ -197,6 +201,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
                     $_parametri['segno'] = "P";
                     $_parametri['ndoc'] = $_eff['numdoc'];
+                    $_parametri['suffix_doc'] = $_eff['suffixdoc'];
                     $_parametri['anno_doc'] = $_eff['annodoc'];
                     $_parametri['data_doc'] = $_eff['datadoc'];
                     $_parametri['codpag'] = $_eff['modpag'];
@@ -232,7 +237,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_parametri['evasoanno'] = $_annoeff;
                 $_parametri['utente'] = $datiu['utente'];
 
-                $result = tabella_fatture("aggiorna_status", $_percorso, $datiu['anno'], $datiu['ndoc'], $_parametri);
+                $result = tabella_fatture("aggiorna_status", $_percorso, $datiu['anno'], $datiu['suffix'], $datiu['ndoc'], $_parametri);
 
                 if ($result == "Ok")
                 {

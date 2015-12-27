@@ -9,7 +9,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso ."../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME); 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
@@ -43,7 +42,7 @@ if ($res = mysql_query($query, $conn))
         {
             echo "<tr>";
             printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datadoc']);
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['numdoc']);
+            echo "<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>$dati[numdoc] / $dati[suffixdoc]</b></span></td>\n";
             printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
             printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);
             printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['scadeff']);

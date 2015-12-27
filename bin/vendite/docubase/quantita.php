@@ -230,7 +230,7 @@ if ($_SESSION['user']['vendite'] > "2")
         mostra_carrello($_SESSION['programma'], $id, $_tdoc, $_calce, $IVAMULTI, $ivasis);
 
         //annulla doc
-        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_ndoc);
+        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);
     }// fine azione
     elseif ($_cosa == "vuota")
     {
@@ -504,7 +504,7 @@ if ($_SESSION['user']['vendite'] > "2")
         echo "<td colspan=\"3\" align=\"center\"><span class=\"testo_blu\">Ultima vendita di questo articolo al cliente.. ==>&nbsp;</span><b>$_ultimavend</b></td></tr>";
 
 
-        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_ndoc);
+        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);
     }
     echo "</table></body></html>\n";
 }

@@ -53,6 +53,10 @@ if ($_SESSION['user']['vendite'] > "1")
         }
         echo "</td></tr>\n";
         echo "<tr><td align=center><br>";
+        echo "Seleziona il suffisso di numerazione\n";
+        suffisso("select", "suffix", $_parametri);
+        echo "</td></tr>\n";
+        echo "<tr><td align=center><br>";
         tabella_fornitori("elenca_select", "utente", $_parametri);
     }
     elseif ($_tdoc == "ddtacq")
@@ -64,6 +68,10 @@ if ($_SESSION['user']['vendite'] > "1")
 
         echo "<input type=radio name=tipodoc value=ddtacq checked>D.D.T. Acquisto&nbsp;";
 
+        echo "</td></tr>\n";
+        echo "<tr><td align=center><br>";
+        echo "Seleziona il suffisso di numerazione\n";
+        suffisso("select", "suffix", $_parametri);
         echo "</td></tr>\n";
         echo "<tr><td align=center><br>";
         tabella_fornitori("elenca_select", "utente", $_parametri);

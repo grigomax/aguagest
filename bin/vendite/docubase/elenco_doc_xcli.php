@@ -51,7 +51,7 @@ if ($_SESSION['user']['vendite'] > "1")
 	
 	echo "<table align=\"center\" width=\"95%\" border=\"0\">\n";
 	echo "<tr><td align=\"center\" valign=\"center\">\n";
-	echo "<span class=\"testo_blu\"><center><b>Elenco $_tdoc non evasi per utente</b>\n";
+	echo "<span class=\"logo\"><center><b><style=\"font-size: 2em;\">Elenco $_tdoc non evasi per utente</b>\n";
 	echo "</td>\n";
 
 	echo "<td align=\"center\" valign=\"center\">\n";

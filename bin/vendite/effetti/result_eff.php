@@ -63,6 +63,7 @@ if ($_SESSION['user']['vendite'] > "1")
         $_impeff = $_POST['impeff'];
         $_tipodoc = $_POST['tipodoc'];
         $_annodoc = $_POST['annodoc'];
+        $_suffixdoc = $_POST['suffixdoc'];
         $_numdoc = $_POST['numdoc'];
         $_totdoc = $_POST['totdoc'];
         $_status = $_POST['status'];
@@ -195,6 +196,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_parametri['segno'] = "P";
                 $_parametri['ndoc'] = $dati_eff['numdoc'];
                 $_parametri['anno_doc'] = $dati_eff['annodoc'];
+                $_parametri['suffix_doc'] = $dati_eff['suffixdoc'];
                 $_parametri['data_doc'] = $dati_eff['datadoc'];
                 $_parametri['codpag'] = $dati_eff['modpag'];
                 $_parametri['conto'] = "$MASTRO_CLI$dati_eff[codcli]";
@@ -247,6 +249,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_parametri['segno'] = "P";
                 $_parametri['ndoc'] = $dati_eff['numdoc'];
                 $_parametri['anno_doc'] = $dati_eff['annodoc'];
+                $_parametri['suffix_doc'] = $dati_eff['suffixdoc'];
                 $_parametri['data_doc'] = $dati_eff['datadoc'];
                 $_parametri['codpag'] = $dati_eff['modpag'];
                 $_parametri['conto'] = "$MASTRO_BANCHE$dati_eff[bancadist]";

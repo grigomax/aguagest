@@ -127,7 +127,7 @@ if ($_SESSION['user']['vendite'] > "1")
         elseif (($_status == "parziale") AND ( ($_tdoc == "conferma") OR ( $_tdoc == "fornitore")))
         {
             echo "<center>Attenzione a modificare questo documento in quanto risulta evaso parzialmente</center>";
-            echo "<center> con <a href=\"visualizzadoc.php?tdoc=$_tdocevaso&anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]&suffix=$dati_doc[evasosuffix]\"<b>$_tdocevaso</b> numero: $dati_doc[evasonum]/$dati_doc[evasosuffx] del $dati_doc[evasoanno]</a>\n";
+            echo "<center> con <a href=\"visualizzadoc.php?tdoc=$_tdocevaso&anno=$dati_doc[evasoanno]&ndoc=$dati_doc[evasonum]&suffix=$dati_doc[evasosuffix]\"<b>$_tdocevaso</b> numero: $dati_doc[evasonum]/$dati_doc[evasosuffix] del $dati_doc[evasoanno]</a>\n";
             echo "<center><span class=\"azioni\"><br><b>Azioni possibili</b></center>\n";
             echo "<center><input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>\n";
         }

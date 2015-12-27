@@ -119,18 +119,18 @@ function seleziona_lingue()
 }
 
 //funzione annulla documento
-function annulla_doc_vendite($_dove, $_tdoc, $_anno, $_ndoc)
+function annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc)
 {
 
     echo "<table border=\"0\" width=\"95%\" align=\"center\">\n";
 
     if (($_dove == "modifica") OR ( $_SESSION['calce'] == "calce2"))
     {
-        printf("<form action=\"annulladoc.php?tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc\" method=\"POST\">");
+        printf("<form action=\"annulladoc.php?tdoc=$_tdoc&anno=$_anno&suffix=$_suffix&ndoc=$_ndoc\" method=\"POST\">");
     }
     elseif (($_dove == "parziale_vendita") OR ( $_dove == "parziale_acquisto") OR ( $_dove == "parziale"))
     {
-        printf("<form action=\"annulladoc.php?cosa=parziale&tdoc=$_tdoc&anno=$_anno\" method=\"POST\">");
+        printf("<form action=\"annulladoc.php?cosa=parziale&tdoc=$_tdoc&anno=$_anno&suffix=$_suffix\" method=\"POST\">");
     }
     else
     {
@@ -383,15 +383,15 @@ function documenti_inevasi($_codutente, $_tdoc)
     {
         $righe = "1";
         echo "<tr><td colspan=\"5\" align=\"center\" class=\"tabella\"><font size=\"3\">Il seguente cliente ha Questi $_documenti inevasi.</font></td></tr>";
-        echo "<tr><td colspan=\"4\" align=\"center\"><font color=RED >Continuare ? <a href=\"annulladoc.php\"> NO </a>  - <a href=\"seleziona.php\"> SI</a></font></td></tr>";
+        echo "<tr><td colspan=\"5\" align=\"center\"><font color=RED >Continuare ? <a href=\"annulladoc.php\"> NO </a>  - <a href=\"seleziona.php\"> SI</a></font></td></tr>";
         echo "<tr><td>anno</td><td>Data Reg.</td><td>ndoc</td><td>valore</td><td>status</td></tr>";
 
         foreach ($result AS $datico)
         {
-            printf(" <tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>", $datico['anno'], $datico['datareg'], $datico['ndoc'], $datico['totdoc'], $datico['status']);
+            echo "<tr><td>$datico[anno]</td><td>$datico[datareg]</td><td>$datico[ndoc] / $datico[suffix]</td><td>$datico[totdoc]</td><td>$datico[status]</td></tr>\n";
         }
 
-        echo "<tr><td colspan=\"4\" align=\"center\"><font color=RED >Continuare ? <a href=\"annulladoc.php\"> NO </a>  - <a href=\"seleziona.php\"> SI</a></font></td></tr>";
+        echo "<tr><td colspan=\"5\" align=\"center\"><font color=RED >Continuare ? <a href=\"annulladoc.php\"> NO </a>  - <a href=\"seleziona.php\"> SI</a></font></td></tr>";
         //echo "</table>";
 
 
@@ -527,7 +527,7 @@ function intesta_html($_tdoc, $_tipo, $dati, $dati_doc)
  * @param <type> $_archivio
  * @return <type>
  */
-function elimina_documento($_risultato, $_tdoc, $_anno, $_ndoc, $_archivio)
+function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivio)
 {
     global $conn;
     global $nomedoc;
@@ -557,7 +557,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_ndoc, $_archivio)
             //leggiamo il corpo del documento
 
 
-            $query = sprintf("SELECT * from %s where anno=\"%s\" and ndoc=\"%s\" ORDER BY rigo", $_archivio['dettaglio'], $_anno, $_ndoc);
+            $query = "SELECT * from $_archivio[dettaglio] where anno='$_anno' suffix='$_suffix' and ndoc='$_ndoc' ORDER BY rigo";
 
             $result = $conn->query($query);
 
@@ -566,7 +566,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_ndoc, $_archivio)
                 $_errore = $conn->errorInfo();
                 echo $_errore['2'];
                 //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
+                $_errori['descrizione'] = "Errore $_risultato Query = $query - $_errore[2]";
                 $_errori['files'] = "motore_doc_pdo.php";
                 scrittura_errori($_cosa, $_percorso, $_errori);
                 $_errori['errori'] = "NO";
@@ -963,12 +963,9 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         elseif ($_tdoc == "fornitore")
         {
             // inserimento testacalce altri doc.
-            $query = sprintf("insert into %s( anno, suffix, ndoc, datareg, utente, dragsoc, dragsoc2, dindirizzo, dcap, dcitta, dprov, modpag, vettore, listino,
+            $query = "insert into $_archivi[testacalce] ( anno, suffix, ndoc, datareg, utente, dragsoc, dragsoc2, dindirizzo, dcap, dcitta, dprov, modpag, vettore, listino,
 	 porto, aspetto, status, note, colli, pesotot, totimpo, totiva, totdoc )
-	values( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",
-	\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\" )", $_archivi['testacalce'], $_anno, $_suffix, $_ndoc, $_datareg, $_utente, $_parametri['dragsoc'], $_parametri['dragsoc2'], $_parametri['dindirizzo'], $_parametri['dcap'], $_parametri['dcitta'],
-                    $_parametri['dprov'], $_parametri['modpag'], $_parametri['vettore'], $_listinocli, $_parametri['porto'], $_parametri['aspetto'],
-                    $_parametri['status'], $_parametri['notedoc'], $_parametri['colli'], $_parametri['peso'], $_parametri['imponibile'], $_parametri['totimposta'], $_parametri['totdoc']);
+	values( '$_anno', '$_suffix', '$_ndoc', '$_datareg', '$_utente', '$_parametri[dragsoc]', '$_parametri[dragsoc2]', '$_parametri[dindirizzo]', '$_parametri[dcap]', '$_parametri[dcitta]', '$_parametri[dprov]', '$_parametri[modpag]', '$_parametri[vettore]', '$_listinocli', '$_parametri[porto]', '$_parametri[aspetto]', '$_parametri[status]', '$_parametri[notedoc]', '$_parametri[colli]', '$_parametri[peso]', '$_parametri[imponibile]', '$_parametri[totimposta]', '$_parametri[totdoc]' )";
         }
         elseif ($_tdoc == "preventivo")
         {
@@ -1019,7 +1016,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         }
         else
         {
-            $query = sprintf("insert into %s( anno, suffix, ndoc, datareg, utente, status) values( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", $_archivi['testacalce'], $_anno, $_suffix, $_ndoc, $_datareg, $_utente, $_parametri['status']);
+            $query = "insert into $_archivi[testacalce] ( anno, suffix, ndoc, datareg, utente, status) values( '$_anno', '$_suffix', '$_ndoc', '$_datareg', '$_utente', '$_parametri[status]')";
         }
 
 
@@ -1080,13 +1077,9 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         elseif ($_tdoc == "fornitore")
         {
             // testacalce documento
-            $query = sprintf("update %s set dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", modpag=\"%s\",
-		vettore=\"%s\", porto=\"%s\", aspetto=\"%s\", status=\"%s\", note=\"%s\", colli=\"%s\", pesotot=\"%s\", totimpo=\"%s\",
-		 totiva=\"%s\", totdoc=\"%s\" where anno=\"%s\" AND suffix=\"%s\", nd ndoc=\"%s\"", $_archivi['testacalce'], $_parametri['dragsoc'],
-                    $_parametri['dragsoc2'], $_parametri['dindirizzo'], $_parametri['dcap'], $_parametri['dcitta'], $_parametri['dprov'],
-                    $_parametri['modpag'], $_parametri['vettore'], $_parametri['porto'], $_parametri['aspetto'], $_parametri['status'],
-                    $_parametri['notedoc'], $_parametri['colli'], $_parametri['peso'], $_parametri['imponibile'], $_parametri['totimposta'],
-                    $_parametri['totdoc'], $_anno, $_suffix, $_ndoc);
+            $query = "update $_archivi[testacalce] set dragsoc='$_parametri[dragsoc]', dragsoc2='$_parametri[dragsoc2]', dindirizzo='$_parametri[dindirizzo]', dcap='$_parametri[dcap]', dcitta='$_parametri[dcitta]', dprov='$_parametri[dprov]', modpag='$_parametri[modpag]',
+		vettore='$_parametri[vettore]', porto='$_parametri[porto]', aspetto='$_parametri[aspetto]', status='$_parametri[status]', note='$_parametri[notedoc]', colli='$_parametri[colli]', pesotot='$_parametri[peso]', totimpo='$_parametri[imponibile]',
+		 totiva='$_parametri[totimposta]', totdoc='$_parametri[totdoc]' where anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
         }
         elseif ($_tdoc == "preventivo")
         {
@@ -1251,11 +1244,11 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
 
         if ($_tdoc == "ddtacq")
         {
-            $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' and ndoc='$_ndoc'";
+            $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' and suffix='$_suffix' AND ndoc='$_ndoc'";
         }
         else
         {
-            $query = sprintf("select * from %s where anno=\"%s\" and ndoc=\"%s\"", $_archivi['testacalce'], $_anno, $_ndoc);
+            $query = "select * from $_archivi[testacalce] where anno='$_anno' and suffix='$_suffix' and ndoc='$_ndoc'";
         }
 
 
@@ -1406,7 +1399,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
     {
         //funzione che mi legge la testata del documento passato..
 
-        $query = sprintf("SELECT * from %s where anno=\"%s\" and utente=\"%s\" and ndoc = \"%s\"", $_archivi['testacalce'], $_anno, $_utente, $_ndoc);
+        $query = "SELECT * from $_archivi[testacalce] where anno='$_anno' AND suffix='$_suffix' and utente='$_utente' and ndoc = '$_ndoc'";
 
         $result = $conn->query($query);
 
@@ -1556,11 +1549,11 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
 
         if ($_tdoc == "fornitore")
         {
-            $query = "UPDATE $_archivi[dettaglio] SET qtaevasa='$_parametri[qtaevasa]', qtaestratta='$_parametri[qtaestratta]', qtasaldo='$_parametri[qtasaldo]', rsaldo='$_parametri[rsaldo]', totriga='$_parametri[totriga]' WHERE anno='$_anno' AND ndoc='$_ndoc' AND rigo='$_rigo' AND utente='$_utente'";
+            $query = "UPDATE $_archivi[dettaglio] SET qtaevasa='$_parametri[qtaevasa]', qtaestratta='$_parametri[qtaestratta]', qtasaldo='$_parametri[qtasaldo]', rsaldo='$_parametri[rsaldo]', totriga='$_parametri[totriga]' WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' AND rigo='$_rigo' AND utente='$_utente'";
         }
         else
         {
-            $query = "UPDATE $_archivi[dettaglio] SET qtaevasa='$_parametri[qtaevasa]', qtaestratta='$_parametri[qtaestratta]', qtasaldo='$_parametri[qtasaldo]', rsaldo='$_parametri[rsaldo]', totriga='$_parametri[totriga]', totrigaprovv='$_parametri[totrigaprovv]' , peso='$_parametri[peso]' WHERE anno='$_anno' AND ndoc='$_ndoc' AND rigo='$_rigo' AND utente='$_utente'";
+            $query = "UPDATE $_archivi[dettaglio] SET qtaevasa='$_parametri[qtaevasa]', qtaestratta='$_parametri[qtaestratta]', qtasaldo='$_parametri[qtasaldo]', rsaldo='$_parametri[rsaldo]', totriga='$_parametri[totriga]', totrigaprovv='$_parametri[totrigaprovv]' , peso='$_parametri[peso]' WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' AND rigo='$_rigo' AND utente='$_utente'";
         }
 
         //echo $query;
@@ -1586,7 +1579,7 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
     elseif ($_cosa == "verifica_saldo")
     {
 
-        $query = sprintf("SELECT * FROM %s where articolo != 'vuoto' AND rsaldo != 'SI' and anno=\"%s\" and ndoc=\"%s\" and utente=\"%s\"", $_archivi['dettaglio'], $_anno, $_ndoc, $_utente);
+        $query = "SELECT * FROM $_archivi[dettaglio] where articolo != 'vuoto' AND rsaldo != 'SI' and anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'";
 
         $result = $conn->query($query);
 
@@ -1616,7 +1609,17 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
     }
     elseif($_cosa == "elimina")
     {
-        $query = "delete from $_archivi[dettaglio] where anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
+        
+        
+        if($_tdoc == "ddtacq")
+        {
+            $query = "delete from $_archivi[dettaglio] where tdoc='ddtacq' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
+        }
+        else
+        {
+            $query = "delete from $_archivi[dettaglio] where anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
+        }
+        
 
         $result = $conn->exec($query);
 
@@ -1640,7 +1643,7 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
     {
         //funzione che mi legge tutte le righe del corpo documento richiesto..
 
-        $query = sprintf("SELECT * from %s where anno=\"%s\" and ndoc=\"%s\" and utente=\"%s\" order by rigo", $_archivi['dettaglio'], $_anno, $_ndoc, $_utente);
+        $query = "SELECT * from $_archivi[dettaglio] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente' order by rigo";
 
         $result = $conn->query($query);
 
@@ -2811,10 +2814,9 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
             $_totrigaprovv = $_provvnetto * $_qta;
         }
 
-        $query = sprintf("update doc_basket SET descrizione=\"%s\", unita=\"%s\", quantita=\"%s\", qtaevasa = \"%s\", qtaestratta=\"%s\", qtasaldo=\"%s\", rsaldo=\"%s\",
-				listino=\"%s\", sca=\"%s\", scb=\"%s\", scc=\"%s\", nettovendita=\"%s\", totriga=\"%s\", iva=\"%s\", totrigaprovv=\"%s\",
-				peso=\"%s\", agg=\"%s\", consegna=\"%s\", rsaldo=\"%s\" WHERE sessionid=\"%s\" AND rigo=\"%s\" AND anno=\"%s\" AND ndoc=\"%s\"", $_parametri['descrizione'], $_parametri['unita'], $_parametri['qta'], $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_parametri['listino'], $_parametri['sca'], $_parametri['scb'], $_parametri['scc'], $_nettovendita, $_totriga, $_parametri['iva'], $_totrigaprovv, $_peso, $_parametri['agg'], $_parametri['consegna'], $_rsaldo, $id, $_rigo, $_anno, $_ndoc);
-
+        $query = sprintf("update doc_basket SET artfor='$_parametri[artfor]', descrizione=\"%s\", unita='$_parametri[unita]', quantita='$_parametri[qta]', qtaevasa = '$_qtaevasa', qtaestratta='$_qtaestratta', qtasaldo='$_qtasaldo', rsaldo='$_rsaldo',
+				listino='$_parametri[listino]', sca='$_parametri[sca]', scb='$_parametri[scb]', scc='$_parametri[scc]', nettovendita='$_nettovendita', totriga='$_totriga', iva='$_parametri[iva]', totrigaprovv='$_totrigaprovv',
+				peso='$_peso', agg='$_parametri[agg]', consegna='$_parametri[consegna]', rsaldo='$_rsaldo' WHERE sessionid='$id' AND rigo='$_rigo' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'" , addslashes($_parametri['descrizione']));
         //echo $query;
         $result = $conn->exec($query);
 
@@ -3318,7 +3320,7 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
             echo "<th bgcolor=\"#FFFFFF\" >Netto acquisto</th>\n";
             echo "<th bgcolor=\"#FFFFFF\" >Tot. Riga</th>\n";
             echo "</tr>\n";
-            $query = sprintf("select * from magazzino INNER JOIN articoli ON magazzino.articolo=articoli.articolo where tdoc='ddtacq' and anno=\"%s\" and ndoc=\"%s\" order by rigo", $_anno, $_ndoc);
+            $query = "select * from magazzino INNER JOIN articoli ON magazzino.articolo=articoli.articolo where tdoc='ddtacq' AND anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
         }
         else
         {
@@ -3346,7 +3348,8 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
 
 
 
-            $query = sprintf("select * from %s where anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\" order by rigo", $_archivio[dettaglio], $_anno, $_suffix, $_ndoc);
+            $query = "select * from $_archivio[dettaglio] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
+
         }
         $result = $conn->query($query);
 
@@ -4017,7 +4020,7 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
         //cerchiamo se il documento è libero..
         if ($_tdoc == "ddtacq")
         {
-            $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' AND ndoc='$_ndoc' ORDER BY ndoc DESC LIMIT 1";
+            $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' ORDER BY ndoc DESC LIMIT 1";
         }
         else
         {
@@ -4046,7 +4049,7 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
             //cerchiamo se il documento è libero..
             if ($_tdoc == "ddtacq")
             {
-                $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' AND ndoc='$_ndoc' ORDER BY ndoc DESC LIMIT 1";
+                $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' ORDER BY ndoc DESC LIMIT 1";
             }
             else
             {
@@ -4167,8 +4170,7 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
 
         if ($_tdoc == "ddtacq")
         {
-            //$query = sprintf("select * from %s where anno=\"%s\" ORDER BY ndoc DESC LIMIT 1", $_archivio['testacalce'], $_anno);
-            $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' ORDER BY ndoc DESC LIMIT 1";
+            $query = "select * from magazzino where tdoc='ddtacq' AND anno='$_anno' AND suffix='$_suffix' ORDER BY ndoc DESC LIMIT 1";
         }
         else
         {
@@ -4200,12 +4202,12 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
 
         if ($_tdoc == "fornitore")
         {
-            $query = sprintf("select * from $_archivio[testacalce] INNER JOIN fornitori ON $_archivio[testacalce].utente = fornitori.codice where anno=\"%s\"order by ndoc desc", $_anno);
+            $query = "select * from $_archivio[testacalce] INNER JOIN fornitori ON $_archivio[testacalce].utente = fornitori.codice where anno='$_anno' AND suffix='$_suffix' order by ndoc desc";
         }
         else
         {
             // Stringa contenente la query di ricerca... solo dei fornitori
-            $query = sprintf("select * from $_archivio[testacalce] INNER JOIN clienti ON $_archivio[testacalce].utente = clienti.codice where anno=\"%s\"order by ndoc desc", $_anno);
+            $query = "select * from $_archivio[testacalce] INNER JOIN clienti ON $_archivio[testacalce].utente = clienti.codice where anno='$_anno' AND suffix='$_suffix' order by ndoc desc";
         }
 
         $result = $conn->query($query);
@@ -4230,7 +4232,7 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
         //seleziona l'elenco..
         if ($_tdoc == "ddtacq")
         {
-            $query = sprintf("select * from magazzino INNER JOIN articoli ON magazzino.articolo=articoli.articolo where tdoc='ddtacq' and anno=\"%s\" and ndoc=\"%s\" order by rigo", $_anno, $_ndoc);
+            $query = "select * from magazzino INNER JOIN articoli ON magazzino.articolo=articoli.articolo where tdoc='ddtacq' and anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
         }
         else
         {
@@ -4344,7 +4346,7 @@ function status_documento($_cosa, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, 
         //vediamo che non sia un ddt di carico..
         if ($_tdoc == "ddtacq")
         {
-            $query = sprintf("select status from %s where tdoc='ddtacq' and anno=\"%s\" and ndoc=\"%s\"", $_archivio['testacalce'], $_anno, $_ndoc);
+            $query = "select status from $_archivio[testacalce] where tdoc='ddtacq' AND anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
         }
         else
         {

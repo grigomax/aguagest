@@ -105,6 +105,7 @@ if ($_SESSION['user']['vendite'] > "2")
         $_impeff = $dati_eff['impeff'];
         $_tipodoc = $dati_eff['tipodoc'];
         $_annodoc = $dati_eff['annodoc'];
+        $_suffixdoc = $dati_eff['suffixdoc'];
         $_numdoc = $dati_eff['numdoc'];
         $_datadoc = $dati_eff['datadoc'];
         $_totdoc = $dati_eff['totdoc'];
@@ -350,7 +351,8 @@ if ($_SESSION['user']['vendite'] > "2")
         echo "<td align=\"left\" colspan=\"1\"><span class=\"testo_blu\"><b>Anno doc. &nbsp;</b></span></td>\n";
         printf("<td class=\"colonna\" colspan=\"2\" align=\"left\"><input type=\"text\" size=\"4\" maxlenght=\"4\" name=\"annodoc\" value=\"%s\"></td></tr>", $_annodoc);
         echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Num. Doc. &nbsp;</b></span></td>\n";
-        printf("<td class=\"colonna\" align=\"left\"><input type=\"text\" size=\"6\" maxlenght=\"6\" name=\"numdoc\" value=\"%s\"></td>", $_numdoc);
+        echo "<td class=\"colonna\" align=\"left\"><input type=\"text\" size=\"6\" maxlenght=\"6\" name=\"numdoc\" value=\"$_numdoc\"> / \n";
+        echo "<input type=\"text\" size=\"2\" maxlenght=\"1\" name=\"suffixdoc\" value=\"$_suffixdoc\"</td>\n";
         echo "<td align=\"left\"><span class=\"testo_blu\"><b>data Doc. :&nbsp;</b></span></td>\n";
         printf("<td class=\"colonna\" align=\"left\"><input type=\"text\" size=\"10\" maxlenght=\"10\" class=\"data\" name=\"datadoc\" value=\"%s\"></td>", $_datadoc);
         echo "<td align=\"left\"><span class=\"testo_blu\"><b>Imp. Doc. :&nbsp;</b></span></td>\n";

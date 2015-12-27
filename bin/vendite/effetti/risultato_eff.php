@@ -96,7 +96,7 @@ if ($_SESSION['user']['vendite'] > "1")
         printf("<form action=\"visualizzadoc.php?anno=$dati[annoeff]\" method=\"POST\">");
         printf("<td width=\"30\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['tipoeff']);
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datafatt']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['numdoc']);
+        echo "<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>$dati[numdoc] / $dati[suffixdoc]</b></span></td>\n";
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['modpag']);
         if ($CONTABILITA == "SI")
         {

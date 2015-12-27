@@ -42,11 +42,7 @@ span.dropBottom {
 
 nav.menu {
     display: table;
-    //margin: 0px auto;
-    //position: absolute;
     visibility: visible;
-    //width: 200%;
-    
 
 }
 
@@ -62,10 +58,6 @@ ul.menu ul {
     position: absolute;
     top: 100%;
     visibility: hidden;
-    //width: 100%;
-    //transition: all .1s ease;
-    //-webkit-transition: all .1s ease;
-
 }
 
 ul.menu ul ul {
@@ -115,7 +107,6 @@ ul.menu a {
 
 ul.menu li:hover {
     background-color: #999999;
-    //text-decoration: none;
     color: #FFFFFF;
 }
 
@@ -139,6 +130,7 @@ ul.menu li li a {
 ul.menu li li.icon a{padding-left: 24px}
 ul.menu li li.settings a{background: url(../images/icon_settings.gif) no-repeat 4px 4px}
 ul.menu li li.privacy a{background: url(../images/icon_padlock.gif) no-repeat 4px 4px}
+ul.menu li li.utente a{background: url(../images/utente.png) no-repeat 4px 4px}
 ul.menu li li.articoli a{background: url(../images/menu/icona_articoli.png) no-repeat 4px 4px}
 ul.menu li li.home a{background: url(../images/pulsante_home.png) no-repeat 4px 4px}
 ul.menu li li.exit a{background: url(../images/icona_exit.png) no-repeat 4px 4px}

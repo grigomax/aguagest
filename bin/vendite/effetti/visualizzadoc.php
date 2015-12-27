@@ -88,7 +88,7 @@ if ($_SESSION['user']['vendite'] > "1")
             </td>
             <td width="50%" bgcolor="#ffFFFF" valign="top" align="left">
                 <i><b><?php echo $dati['tipodoc']; ?></i></b><br>
-                Num. <?php echo $dati['numdoc']; ?> / <?php echo $dati['annodoc']; ?> del <?php echo $dati['datadoc']; ?><br>
+                Num. <?php echo "$dati[numdoc] - $dati[suffixdoc] / $dati[annodoc] del $dati[datadoc]\n"; ?><br>
                 <b>Banca </b><br>
                 <?php echo $dati['bancapp']; ?><br>
                 ABI <?php echo $dati['abi']; ?>  CAB <?php echo $dati['cab']; ?>  CIN <?php echo $dati['cin']; ?>  C/C <?php echo $dati['cc']; ?><br>

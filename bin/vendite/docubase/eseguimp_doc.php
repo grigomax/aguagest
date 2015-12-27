@@ -42,6 +42,7 @@ if ($_SESSION['user']['vendite'] > "1")
     $_tdoc_start = $_POST['start'];
     $_tdoc_end = $_POST['end'];
     $_speseb = $_POST['speseb'];
+    $_suffix_end = $_POST['suffix_end'];
 
     $_utente = $_SESSION['datiutente'];
     //giriamo gia la data in americano
@@ -100,7 +101,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
     if ($_azione == "Annulla")
     {
-        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_ndoc);
+        annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);
 
         chiudi_sessioni();
     }
@@ -128,7 +129,7 @@ if ($_SESSION['user']['vendite'] > "1")
         //facciamo tutto dentro un unico if in modo da che se una cosa non va non va tutto..
         //farei una funzione che mi blocca il numero di documento che blocca inserendone la testa..
         //prima parte
-        $errori = gestisci_testata("blocca_numero", $_codutente, $_tdoc_end, $_anno, $_suffix, $_ndoc, $_datareg, $_archivi_end, $_parametri);
+        $errori = gestisci_testata("blocca_numero", $_codutente, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_datareg, $_archivi_end, $_parametri);
 
         //$errori['result'] = "OK";
 
@@ -162,8 +163,9 @@ if ($_SESSION['user']['vendite'] > "1")
             {
                 //dobbiamo dividere i vari campi in quanto abbiamo anche l'anno..
 
-                $_anno_start = substr($_annondoc, '0', '4');
-                $_ndoc_start = substr($_annondoc, '4', '6');
+                $_anno_start = substr($_annondoc, "0", "4");
+                $_suffix_start = substr($_annondoc, "4", "1");
+                $_ndoc_start = substr($_annondoc, "5", "11");
 
                 //leggiamo la testata del documento..
                 //dinnanzi dobbiamo leggere la testata del documemento per sapere la data di appartenenza di esso..
@@ -180,10 +182,18 @@ if ($_SESSION['user']['vendite'] > "1")
                 if ($_tdoc_end != "ddtacq")
                 {
                     $_codice = "vuoto";
-                    $_descrizione = "NS. $_tdoc_start n. $_ndoc_start del $_datait";
+                    if($_suffix_start != $SUFFIX_DDT)
+                    {
+                        $_descrizione = "NS. $_tdoc_start n. $_ndoc_start / $_suffix_start del $_datait";
+                    }
+                    else
+                    {
+                       $_descrizione = "NS. $_tdoc_start n. $_ndoc_start del $_datait"; 
+                    }
+                    
                     //echo "$_descrizione<br>\n";
                     //qui scriviamo la riga nel database..
-                    $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix, $_ndoc, $_rigo, $_codutente, $_codice, $_descrizione, $_iva, $_parametri);
+                    $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_rigo, $_codutente, $_codice, $_descrizione, $_iva, $_parametri);
 
                     if ($resut_ins['errori'] != "OK")
                     {
@@ -231,7 +241,7 @@ if ($_SESSION['user']['vendite'] > "1")
                                 if ($_errore == "SI")
                                 {
                                     echo "<br> Programma interrotto ....";
-                                    echo "<br> <a href=\"generafatt.php\">Torna all'elenco generazione</a></center> <a href=\"../../index.php\">Oppure torna all'indice fatture</a></center>";
+                                    echo "<br> Si prega di contattare l'amministratore..</center>";
                                     exit;
                                 }
                                 else
@@ -250,7 +260,7 @@ if ($_SESSION['user']['vendite'] > "1")
                             //questa è la riga che va scritta nel nuovo documento..
                             //echo "|$datidettaglio[articolo], $datidettaglio[descrizione]|<br><hr><br>";
                             //qui scriviamo il corpo nuovo..
-                            $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix, $_ndoc, $_rigo, $_codutente, $datidettaglio[articolo], $datidettaglio[descrizione], $datidettaglio[iva], $_parametri);
+                            $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_rigo, $_codutente, $datidettaglio[articolo], $datidettaglio[descrizione], $datidettaglio[iva], $_parametri);
 
                             if ($resut_ins['errori'] != "OK")
                             {
@@ -460,7 +470,7 @@ if ($_SESSION['user']['vendite'] > "1")
                         $_parametri['datareg'] = $_datareg;
                         $_descrizione = addslashes($datidettaglio[descrizione]);
 
-                        $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix, $_ndoc, $_rigo, $_codutente, $datidettaglio[articolo], $_descrizione, $datidettaglio[iva], $_parametri);
+                        $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_rigo, $_codutente, $datidettaglio[articolo], $_descrizione, $datidettaglio[iva], $_parametri);
 
                         if ($resut_ins['errori'] != "OK")
                         {
@@ -476,7 +486,7 @@ if ($_SESSION['user']['vendite'] > "1")
 //calcoliamo il prezzo netto
 // aggiornamo l'ultimo prezzo acquisto
                             @$_ultacq = $_parametri['totriga'] / $_parametri['quantita'];
-                            $query = sprintf("UPDATE articoli SET ultacq=\"%s\" where articolo=\"%s\"", $_ultacq, $datidettaglio['articolo']);
+                            $query = "UPDATE articoli SET ultacq='$_ultacq' where articolo='$datidettaglio[articolo]'";
 // Esegue la query...
                             $result = $conn->exec($query);
 
@@ -530,6 +540,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_parametri['t_doc_end'] = $_tdoc_end;
                 $_parametri['ndoc_end'] = $_ndoc;
                 $_parametri['anno_end'] = $_anno;
+                $_parametri['suffix_end'] = $_suffix_end;
 
 
 
@@ -603,7 +614,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
 
 
-                $result_agg = gestisci_testata("aggiorna_travasa", $_codutente, $_tdoc_end, $_anno, $_suffix, $_ndoc, $_datareg, $_archivi_end, $_parametri);
+                $result_agg = gestisci_testata("aggiorna_travasa", $_codutente, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_datareg, $_archivi_end, $_parametri);
 
                 if ($result_agg['errori'] != "OK")
                 {
@@ -625,7 +636,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 //ora aggiorniamo il magazzino
                 #la veriabile cosa è collegata con l'inizio quindi si arrangia per aggiornare o inserire.
 
-                $_magazzino = gestisci_magazzino("Evadi", $id, $_tdoc_end, $_anno, $_suffix, $_ndoc, $_datareg, $_codutente, $_tut, $_archivi_end, $_parametri);
+                $_magazzino = gestisci_magazzino("Evadi", $id, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_datareg, $_codutente, $_tut, $_archivi_end, $_parametri);
 
                 if ($_magazzino['errori'] != "OK")
                 {
@@ -641,7 +652,7 @@ if ($_SESSION['user']['vendite'] > "1")
             {
 
                 #la variabile cosa è legata alle funzioni secondarie
-                $_provvigioni = gestione_provvigioni("inserisci", $_tdoc_end, $_anno, $_suffix, $_ndoc, $_utente['codagente'], $_datareg, $_codutente, $_totdoc, $_totprovv);
+                $_provvigioni = gestione_provvigioni("inserisci", $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_utente['codagente'], $_datareg, $_codutente, $_totdoc, $_totprovv);
 
 
                 if ($_provvigioni['errore'] != "OK")
@@ -657,6 +668,7 @@ if ($_SESSION['user']['vendite'] > "1")
         $_documento['ndoc'] = $_ndoc;
         $_documento['tdoc'] = $_tdoc_end;
         $_documento['anno'] = $_anno;
+        $_documento['suffix'] = $_suffix_end;
 #generiamo la maschera delle stampe
         if ($_tdoc_end == "ddtacq")
         {
@@ -679,7 +691,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
         echo "<br>";
         echo "<center><h3> Vuoi rimodificare subito questo documento ?</h3><br>";
-        printf("<a href=\"visualizzadoc.php?tdoc=%s&ndoc=%s&anno=%s\">Clikka qui e vai subito!</a>", $_tdoc_end, $_ndoc, $_anno);
+        echo "<a href=\"visualizzadoc.php?tdoc=$_tdoc_end&suffix=$_suffix_end&ndoc=$_ndoc&anno=$_anno\">Clikka qui e vai subito!</a>\n";
         echo "</center>";
         echo "<br>";
 

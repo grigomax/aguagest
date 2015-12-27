@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
@@ -55,6 +54,12 @@ if ($_SESSION['user']['vendite'] > "1")
 		tabella_clienti("elenca_select", "utente", $_parametri);
 	}
 
+        echo "<tr><td align=\"center\"><br><br>Scegli il suffisso di numerazione:\n";
+        
+        suffisso("select","suffix", $_parametri);
+        
+        echo "</td></tr>\n";
+        
 	echo "</table><center><br><input type=\"submit\" name=\"azione\" value=\"Annulla\">&nbsp;<input type=\"submit\" value=\"Avanti\">\n";
 	echo "</form>\n</td>\n";
 	echo "</td>\n</tr>\n";

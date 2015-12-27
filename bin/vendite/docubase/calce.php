@@ -379,7 +379,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
     echo "<tr><td colspan=\"3\" align=right><br><b> Per Inserire il documento  ==> </b><input type=\"submit\" name=\"scrivi\" value=\"$_scrivi\"></td></tr></form></table>";
     echo "<hr>\n";
-    annulla_doc_vendite($_dove, $_tdoc, $_anno, $_ndoc);
+    annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);
 
     echo "</body></html>";
 }

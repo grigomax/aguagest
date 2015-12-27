@@ -312,7 +312,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         echo "";
         foreach ($result AS $dati2)
         {
-            printf("<tr><td align=\"left\" >%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddt&anno=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['datareg'], $_anno, $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
+            printf("<tr><td align=\"left\" >%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddt&anno=%s&suffix=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['datareg'], $_anno, $dati2['suffix'], $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
         }
 
         echo "</tr></table>"; // chiusura tabelle interna
@@ -342,7 +342,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         echo "";
         foreach ($result AS $dati2)
         {
-            printf("<tr><td align=\"left\" >%s</td><td align=\"left\">%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=FATTURA&anno=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['tdoc'], $dati2['datareg'], $_anno, $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
+            printf("<tr><td align=\"left\" >%s</td><td align=\"left\">%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=FATTURA&anno=%s&suffix=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['tdoc'], $dati2['datareg'], $_anno, $dati2['suffix'], $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
         }
 
         echo "</tr></table>"; // chiusura tabelle interna
@@ -376,7 +376,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         echo "";
         foreach ($result AS $dati2)
         {
-            printf("<tr><td align=\"left\" >%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddt&anno=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['datareg'], $_annov, $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
+            printf("<tr><td align=\"left\" >%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddt&anno=%s&suffix=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['datareg'], $_annov, $dati2['suffix'], $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
         }
 
         echo "</tr></table>"; // chiusura tabelle interna
@@ -406,7 +406,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         echo "";
         foreach ($result AS $dati2)
         {
-            printf("<tr><td align=\"left\" >%s</td><td align=\"left\">%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=FATTURA&anno=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['tdoc'], $dati2['datareg'], $_annov, $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
+            printf("<tr><td align=\"left\" >%s</td><td align=\"left\">%s</td><td align=\"left\"><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=FATTURA&anno=%s&suffix=%s&ndoc=%s\">%s</td><td align=\"left\">%s</td></tr>", $dati2['tdoc'], $dati2['datareg'], $_annov, $dati2['suffix'], $dati2['ndoc'], $dati2['ndoc'], $dati2['totdoc']);
         }
     }
     else

@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
@@ -55,7 +54,7 @@ if ($_SESSION['user']['vendite'] > "1")
     }
 
     // Tutto procede a meraviglia...
-    echo "<table align=\"center\">";
+    echo "<table width=\"95%\" align=\"center\">";
     echo "<tr>";
 
     echo "<td width=\"30\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Tipo</span></td>";
@@ -75,7 +74,7 @@ if ($_SESSION['user']['vendite'] > "1")
         printf("<form action=\"visualizzadoc.php?anno=$dati[annoeff]\" method=\"POST\">");
         printf("<td width=\"30\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['tipoeff']);
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datadoc']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['numdoc']);
+        echo "<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>$dati[numdoc] / $dati[suffixdoc]</b></span></td>\n";
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['modpag']);
         printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
         printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);

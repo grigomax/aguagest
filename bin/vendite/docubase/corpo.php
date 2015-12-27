@@ -333,13 +333,9 @@ if ($_SESSION['user']['vendite'] > "2")
             $_codutente = $_utente;
             $_listino = $_prezzi['listino'];
             $_messaggio = $_prezzi['messaggio'];
-            
-            if(($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ("")))
-            {
-                $_POST['sca'] = $_sca;
-                $_POST['scb'] = $_scb;
-                $_POST['scc'] = $_scc;
-            }
+            $_sca = $_prezzi['sca'];
+            $_scb = $_prezzi['scb'];
+            $_scc = $_prezzi['scc'];
 
 
             if (file_exists("../../../plugins/altri_campi_clienti.dir/altricampi.inc"))
@@ -355,10 +351,12 @@ if ($_SESSION['user']['vendite'] > "2")
             $_POST['descrizione'] = $_descrizione;
             $_POST['unita'] = $_articolo['unita'];
             $_POST['listino'] = $_listino;
-
-            $_POST['sca'] = $_sca;
-            $_POST['scb'] = $_scb;
-            $_POST['scc'] = $_scc;
+            if(($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ("")))
+            {
+                $_POST['sca'] = $_sca;
+                $_POST['scb'] = $_scb;
+                $_POST['scc'] = $_scc;
+            }
 
             //e poi lo inseriamo
             $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['aggancia_3'], $_POST);
@@ -410,7 +408,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
 //INSERIAMO QUI L'ANNULLO DEL DOCUMENTO..
 
-    annulla_doc_vendite($_programma, $_tdoc, $_anno, $_ndoc);
+    annulla_doc_vendite($_programma, $_tdoc, $_anno, $_suffix, $_ndoc);
 
 
 

@@ -29,9 +29,10 @@ if ($_POST['campi'] == "barcode")
 
     $_tdoc = $_GET['tdoc'];
     $_anno = substr($_POST['descrizione'], "0", "4");
-    $_ndoc = substr($_POST['descrizione'], "4", "10");
+    $_suffix = substr($_POST['descrizione'], "4", "1");
+    $_ndoc = substr($_POST['descrizione'], "5", "11");
 
-    echo "<meta http-equiv=refresh content=\"1; url=../docubase/visualizzadoc.php?tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc\"></meta>\n";
+    echo "<meta http-equiv=refresh content=\"1; url=../docubase/visualizzadoc.php?tdoc=$_tdoc&anno=$_anno&suffix=$_suffix&ndoc=$_ndoc\"></meta>\n";
     echo "</head>\n";
     echo "<h2>Cerco il documento</h2>\n";
     exit;
@@ -41,10 +42,12 @@ if ($_POST['barcode'] != "")
 {
 
     $_tdoc = $_GET['tdoc'];
+   
     $_anno = substr($_POST['barcode'], "0", "4");
-    $_ndoc = substr($_POST['barcode'], "4", "10");
+    $_suffix = substr($_POST['barcode'], "4", "1");
+    $_ndoc = substr($_POST['barcode'], "5", "11");
 
-    echo "<meta http-equiv=refresh content=\"1; url=../docubase/visualizzadoc.php?tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc\"></meta>\n";
+    echo "<meta http-equiv=refresh content=\"1; url=../docubase/visualizzadoc.php?tdoc=$_tdoc&anno=$_anno&suffix=$_suffix&ndoc=$_ndoc\"></meta>\n";
     echo "</head>\n";
     echo "<h2>Cerco il documento</h2>\n";
     exit;
@@ -128,11 +131,11 @@ if ($_SESSION['user']['vendite'] > "1")
         
         printf("<td width=\"150\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati[$_campi]);
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datareg']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndoc']);
+        echo "<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>$dati[ndoc] / $dati[suffix]</b></span></td>\n";
         printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
         printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['totdoc']);
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['status']);
-        printf("<td width=\"70\" height=\"1\" align=\"center\" class=\"testo_blu\"><button type=\"submit\" name=\"annondoc\" value=\"%s%s\">$dati[ndoc]</button>\n", $dati['anno'], $dati['ndoc']);
+        printf("<td width=\"70\" height=\"1\" align=\"center\" class=\"testo_blu\"><button type=\"submit\" name=\"annondoc\" value=\"%s%s%s\">$dati[ndoc]</button>\n", $dati['anno'], $dati['suffix'], $dati['ndoc']);
         echo "</tr>";
         echo "<tr>";
         echo "<td width=\"150\" height=\"1\" align=\"center\" class=\"logo\"></td>";
