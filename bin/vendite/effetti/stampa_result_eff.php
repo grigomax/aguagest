@@ -21,7 +21,7 @@ $conn = permessi_sessione("verifica_PDO", $_percorso);
 
 
 //carichiamo la base delle pagine:
-        base_html_stampa("chiudi", $_parametri);
+base_html_stampa("chiudi", $_parametri);
 
 
 //carichiamo la testata del programma.
@@ -49,7 +49,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
     echo "<tr>";
     echo "<td width=\"30\" align=\"center\" class=\"tabella\">Tipo</td>";
-    echo "<td width=\"80\" align=\"center\" class=\"tabella\">Data Fatt.</span></td>";
+    echo "<td width=\"100\" align=\"center\" class=\"tabella\">Data Fatt.</span></td>";
     echo "<td width=\"80\" align=\"center\" class=\"tabella\">Fattura</span></td>";
     echo "<td width=\"450\" align=\"left\" class=\"tabella\">Ragione Sociale</span></td>";
     echo "<td width=\"50\" align=\"left\" class=\"tabella\">Valore</span></td>";
@@ -62,25 +62,25 @@ if ($_SESSION['user']['vendite'] > "1")
     {
 
         echo "<tr>";
-        printf("<td width=\"30\" align=\"center\">%s</span></td>", $dati['tipoeff']);
-        printf("<td width=\"80\" align=\"center\">%s</span></td>", $dati['datadoc']);
-        printf("<td width=\"80\" align=\"center\"><b>%s</b></span></td>", $dati['numdoc']);
-        printf("<td width=\"450\" align=\"left\">%s</span></td>", $dati['ragsoc']);
-        printf("<td width=\"50\" align=\"center\">%s</span></td>", $dati['impeff']);
-        printf("<td width=\"80\" align=\"center\">%s</span></td>", $dati['scadeff']);
-        printf("<td width=\"80\" align=\"center\">%s</span></td>", $dati['status']);
-        echo " <td width=\"70\" height=\"1\" align=\"center\" >$dati[numeff]</td>\n";
+        printf("<td align=\"center\">%s</span></td>", $dati['tipoeff']);
+        printf("<td align=\"center\">%s</span></td>", $dati['datadoc']);
+        printf("<td align=\"center\"><b>%s</b></span></td>", $dati['numdoc']);
+        printf("<td align=\"left\">%s</span></td>", $dati['ragsoc']);
+        printf("<td align=\"center\">%s</span></td>", $dati['impeff']);
+        printf("<td align=\"center\">%s</span></td>", $dati['scadeff']);
+        printf("<td align=\"center\">%s</span></td>", $dati['status']);
+        echo " <td height=\"1\" align=\"center\" >$dati[numeff]</td>\n";
 
         echo "</tr>";
         echo "<tr>";
-        echo "<td width=\"30\" height=\"1\" align=\"center\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-        echo "<td width=\"450\" height=\"1\" align=\"center\"></td>";
-        echo "<td width=\"50\" height=\"1\" align=\"center\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-        echo "<td width=\"70\" height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
+        echo "<td height=\"1\" align=\"center\"></td>";
         echo "</tr>";
 
         if ($dati['status'] != "saldato")
@@ -91,14 +91,14 @@ if ($_SESSION['user']['vendite'] > "1")
     echo "<tr>";
     echo "<td colspan=\"8\"><hr></td></tr>\n";
     echo "<tr>";
-    echo "<td width=\"30\" height=\"1\" align=\"center\"></td>";
-    echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-    echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-    echo "<td width=\"450\" height=\"1\" align=\"right\">Totale saldato escluso =></td>";
-    echo "<td width=\"50\" height=\"1\" align=\"center\">$_imptot</td>";
-    echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-    echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-    echo "<td width=\"70\" height=\"1\" align=\"center\"></td>";
+    echo "<td height=\"1\" align=\"center\"></td>";
+    echo "<td height=\"1\" align=\"center\"></td>";
+    echo "<td height=\"1\" align=\"center\"></td>";
+    echo "<td height=\"1\" align=\"right\">Totale saldato escluso =></td>";
+    echo "<td height=\"1\" align=\"center\">$_imptot</td>";
+    echo "<td height=\"1\" align=\"center\"></td>";
+    echo "<td height=\"1\" align=\"center\"></td>";
+    echo "<td height=\"1\" align=\"center\"></td>";
     echo "</tr>";
 
 

@@ -56,17 +56,18 @@ if ($_SESSION['user']['vendite'] > "1")
 // echo $_ndoc;
 // ok per ogni articolo mi prendo tutti i dati dell'articolo
 // echo $_codice;
-    foreach ($_numero as $_annondoc)
+    foreach ($_numero as
+            $_annondoc)
     {
 // echo $_value;
 // mi conviene riscriverlo..
 // 	Seleziono il documento..
         //qui dividiamo il numero della fattura con anche l'anno di riferimento alla stessa.
-       
+
         $_anno = substr($_annondoc, "0", "4");
         $_suffix = substr($_annondoc, "4", "1");
         $_ndoc = substr($_annondoc, "5", "11");
-        
+
 
         //leggo la fattura singola
 
@@ -98,7 +99,9 @@ if ($_SESSION['user']['vendite'] > "1")
 
 // 	Ora per ogni rata genero una riga di effetto.. quindi foreach
 
-        for ($_r = 1; $_r <= $_rate; $_r++)
+        for ($_r = 1;
+                $_r <= $_rate;
+                $_r++)
         {
 
 // 		prendiamo ci la data dell'effetto che tocca

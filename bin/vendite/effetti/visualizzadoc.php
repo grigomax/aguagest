@@ -140,7 +140,7 @@ if ($_SESSION['user']['vendite'] > "1")
             printf("<center><br><input type=\"submit\" name=\"azione\" value=\"Elimina\" onclick=\"if(!confirm('Confermi ELIMINAZIONE Effetto ?')) return false;\" >   <input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>");
             echo "<br>";
         }
-        if ($_status == "presentato")
+        elseif ($_status == "presentato")
         {
             $_SESSION['numeff'] = $dati['numeff'];
             $_SESSION['annoeff'] = $dati['annoeff'];

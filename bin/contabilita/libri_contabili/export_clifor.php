@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME); 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
@@ -71,9 +70,9 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 		fwrite($fp, $_commento);
 
-		$query = "SELECT conto, desc_conto, (SUM( dare ) - SUM( avere ) ) AS diff FROM prima_nota WHERE anno='$_POST[anno]' AND data_cont >= '$_data_start' AND data_cont <= '$_data_end' AND conto like '$MASTRO_CLI%' GROUP BY conto ORDER BY desc_conto";
+		$query = "SELECT conto, descrizione, desc_conto, data_cont, (SUM( dare ) - SUM( avere ) ) AS diff FROM prima_nota WHERE data_cont BETWEEN '$_data_start' AND '$_data_end' AND descrizione NOT LIKE 'Chiusu%' AND conto like '$MASTRO_CLI%' GROUP BY conto ORDER BY desc_conto";
 
-		#echo $query;
+		//echo $query;
 		
 		$result = $conn->query($query);
 		if ($conn->errorCode() != "00000")
@@ -93,7 +92,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 			if ($dati['diff'] != "0.00")
 			{
-				$_corpo = sprintf("%s;%s;%s;%s\n", $dati['conto'], $dati['desc_conto'], $dati['diff'], $_POST['anno']);
+				$_corpo = sprintf("%s;%s;%s;%s\n", $dati['conto'], $dati['desc_conto'], number_format($dati['diff'], $decdoc, ',', ''), $_POST['anno']);
 
 				// nella speranza che sia ok la scriviamo
 				fwrite($fp, $_corpo);
@@ -101,12 +100,23 @@ if ($_SESSION['user']['contabilita'] > "1")
 					die("Errore.. Riga non inserita ?");
 				// in caso di errori
 				// per il momento ci fermiamo e proviamo
+                                $_clienti = $_clienti + $dati['diff'];
 			}
 		}
 
+                //inseriamo una riga con i totali calcolati..
+                
+                $_commento = ";Totale Clienti;$_clienti;;\n";
+
+		fwrite($fp, $_commento);
+                
+                $_commento = "\n\n\n";
+
+		fwrite($fp, $_commento);
 		//
 		//lato fornitori
 		#scriviamo una riga di commento per chiarire le posizioni
+                
 		$_commento = ";Portafoglio Fornitori;;\n";
 
 		fwrite($fp, $_commento);
@@ -117,7 +127,8 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 		fwrite($fp, $_commento);
 
-		$query = "SELECT * , (SUM( avere ) - SUM( dare ) ) AS diff FROM prima_nota WHERE anno='$_POST[anno]' AND data_cont >= '$_data_start' AND data_cont <= '$_data_end' AND conto like '$MASTRO_FOR%'  AND conto != '9802' GROUP BY conto ORDER BY desc_conto";
+                $query = "SELECT conto, descrizione, desc_conto, data_cont, (SUM( avere ) - SUM( dare ) ) AS diff FROM prima_nota WHERE data_cont BETWEEN '$_data_start' AND '$_data_end' AND descrizione NOT LIKE 'Chiusu%' AND conto like '$MASTRO_FOR%' GROUP BY conto ORDER BY desc_conto";
+		//$query = "SELECT * , (SUM( avere ) - SUM( dare ) ) AS diff FROM prima_nota WHERE conto != '$BILANCIO_CHIUSURA' AND data_cont >= '$_data_start' AND data_cont <= '$_data_end' AND conto like '$MASTRO_FOR%'  AND conto != '9802' GROUP BY conto ORDER BY desc_conto";
 
 		$result = $conn->query($query);
 		if ($conn->errorCode() != "00000")
@@ -135,8 +146,9 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 			if ($dati['diff'] != "0.00")
 			{
-				$_corpo = sprintf("%s;%s;%s;%s\n", $dati['conto'], $dati['desc_conto'], $dati['diff'], $_POST['anno']);
+				$_corpo = sprintf("%s;%s;%s;%s\n", $dati['conto'], $dati['desc_conto'], number_format($dati['diff'], $decdoc, ',', ''), $_POST['anno']);
 
+                                $_fornitori = $_fornitori + $dati['diff'];
 				// nella speranza che sia ok la scriviamo
 				fwrite($fp, $_corpo);
 				if (!$fp)
@@ -146,6 +158,9 @@ if ($_SESSION['user']['contabilita'] > "1")
 			}
 		}
 
+                $_commento = ";Totale Fornitori;$_fornitori;;\n";
+
+		fwrite($fp, $_commento);
 
 // chiudiamo il files
 		fclose($fp);
@@ -159,9 +174,6 @@ if ($_SESSION['user']['contabilita'] > "1")
 		echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\">";
 		echo "<tr>";
 		echo "<td>";
-
-		echo "<td width=\"85%\" align=\"center\" valign=\"top\">\n";
-
 		echo "<center>";
 		echo "<h3>Se non appaiono errori a video<br> la esportazione dei dati &egrave; stata <br>eseguita con successo</h3>";
 		echo "<br>";
@@ -173,8 +185,6 @@ if ($_SESSION['user']['contabilita'] > "1")
 		echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\">";
 		echo "<tr>";
 		echo "<td>";
-
-		echo "<td width=\"85%\" align=\"center\" valign=\"top\">\n";
 		echo "<h3>Esportazione saldi schede clienti fornitori</h3>";
 		echo "<p><font type=\"arial\" size=\"2\">La Esportazione in formato CSV per la comunicazione annuale allo studio contabile<br>
     Dei saldi delle schede contabili.</p>\n";

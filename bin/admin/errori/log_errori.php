@@ -19,7 +19,17 @@ require $_percorso . "librerie/lib_html.php";
 $conn = permessi_sessione("verifica_PDO", $_percorso);
 
 //carichiamo la base delle pagine:
-base_html_stampa("chiudi", $_parametri);
+base_html_stampa("", $_parametri);
+
+echo "BODY {
+
+            position: relative;
+	    font-size: ".$PRINT_FONT_SIZE."pt;
+	    width: 100%;
+	    }\n";
+
+
+echo "</style></head><body>\n";
 
 $_parametri['intestazione'] = "2";
 intestazione_html($_cosa, $_percorso, $_parametri);
@@ -36,7 +46,7 @@ if ($_SESSION['user']['setting'] > "3")
 
     echo "<table width=\"100%\">\n";
     echo "<tr>\n";
-    echo "<td align=\"left\" width=\"80%\" valign=\"top\">\n";
+    echo "<td align=\"left\" width=\"100%\" valign=\"top\">\n";
     echo "<br><br><br> Visualizzazione log... $_file<br><br>";
 
     echo "<form action=\"log_errori.php?files=$_file\" method=\"post\">\n";

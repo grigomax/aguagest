@@ -1207,8 +1207,8 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"icon home\"><a href=\"$sito/bin/index.php\">Inizio</a></li>\n";
     echo "<li class=\"icon utente\"><a href=\"$sito/bin/user/user.php?azione=std\">Gestione utente</a></li>\n";
     echo "<li class=\"icon privacy\"><a href=\"$sito/bin/user/user.php?azione=pwd\">Gestione Password</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/user/todo.php?azione=nuova\">Nuova Cosa da Fare</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/user/lista_todo.php\">Lista Cose da fare</a></li>\n";
+    echo "<li class=\"icon todo\"><a href=\"$sito/bin/user/todo.php?azione=nuova\">Nuova Cosa da Fare</a></li>\n";
+    echo "<li class=\"icon todolist\"><a href=\"$sito/bin/user/lista_todo.php\">Lista Cose da fare</a></li>\n";
 
     echo "<li class=\"icon help\"><a href=\"#\">Aiuto</a><span class=\"dropRight\"></span>\n";
     echo "<ul class=\"menu\">\n";
@@ -1455,9 +1455,9 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"#\">Categorie Articoli</a><span class=\"dropRight\"></span>\n";
     echo "<ul class=\"menu\">\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/categorie/mod-gruppo.php?tipo=catmer\">Gruppi Merceologici</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/categorie/stampa_gruppo.php?tipo=catmer\">Stampa Gruppi</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/categorie/stampa_gruppo.php?tipo=catmer\" target=\"_blanck\">Stampa Gruppi</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/categorie/mod-gruppo.php?tipo=tipart\">Tipologie Articolo</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/categorie/stampa_gruppo.php?tipo=tipart\">Stampa Tipologie</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/categorie/stampa_gruppo.php?tipo=tipart\" target=\"_blanck\">Stampa Tipologie</a></li>\n";
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -1811,8 +1811,6 @@ function base_html_stampa($_cosa, $_parametri)
     global $_percorso;
     
     require $_percorso . "../setting/vars_aspetto.php";
-    
-    
     
     echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
     echo "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";

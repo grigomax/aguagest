@@ -182,14 +182,8 @@ if ($_SESSION['user']['vendite'] > "1")
                 if ($_tdoc_end != "ddtacq")
                 {
                     $_codice = "vuoto";
-                    if($_suffix_start != $SUFFIX_DDT)
-                    {
-                        $_descrizione = "NS. $_tdoc_start n. $_ndoc_start / $_suffix_start del $_datait";
-                    }
-                    else
-                    {
-                       $_descrizione = "NS. $_tdoc_start n. $_ndoc_start del $_datait"; 
-                    }
+                    
+                    $_descrizione = "NS. $_tdoc_start n. $_ndoc_start / $_suffix_start del $_datait";
                     
                     //echo "$_descrizione<br>\n";
                     //qui scriviamo la riga nel database..

@@ -99,7 +99,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "<span class=\"testo_blu\"><h3>Visualizzazione ARTICOLO</h3></span>";
 
 #echo "<h2 class=\"demoHeaders\">Tabs</h2>\n";
-    echo "<div id=\"tabs\">\n";
+    echo "<div id=\"tabs\" style=\"z-index: 1;\">\n";
     echo "<ul>\n";
     echo "<li><a href=\"#tabs-1\">Generale</a></li>\n";
     echo "<li><a href=\"#tabs-2\">Acquisti</a></li>\n";
@@ -432,7 +432,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
             $dati)
     {
         @$_nettovend = $dati['valorevend'] / $dati['qtascarico'];
-        printf("<tr><td align=\"left\">$dati[tdoc]</td><td align=\"left\">%s</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=$dati[tdoc]&anno=$dati[anno]&ndoc=$dati[ndoc]\">%s</a></td><td align=\"left\">%s</td><td>%s</td><td>%s</td><td>%s</td></tr>", $dati['datareg'], $dati['ndoc'], $dati['ragsoc'], $dati['qtascarico'], $dati['valorevend'], number_format(($_nettovend), 2));
+        echo "<tr><td align=\"left\">$dati[tdoc]</td><td align=\"left\">$dati[datareg]</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=$dati[tdoc]&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$dati[ndoc]\">$dati[ndoc]/$dati[suffix]</a></td><td align=\"left\">$dati[ragsoc]</td><td>$dati[qtascarico]</td><td>$dati[valorevend]</td><td>".number_format(($_nettovend), 2)."</td></tr>\n";
     }
 
     echo "</tr></table>"; // chiusura tabelle interna

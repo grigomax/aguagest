@@ -51,6 +51,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
 	$_parametri['anno'] = $_anno;
         $_parametri['contabilita'] = "SI";
+        $_parametri['azione'] = "modifica";
 	//selezioniamo le distinte..
 	$result = tabella_effetti("elenco_distinta", $_percorso, $_annoeff, $_numeff, $_parametri);
 

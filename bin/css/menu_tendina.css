@@ -11,13 +11,13 @@ and open the template in the editor.
 span.dropBottom,
 span.dropRight {
     display: block;
-    box-shadow: inset 3px 0px 0px #000099;
+    box-shadow: inset 2px 0px 0px #000099;
     position: absolute;
     left: 0px;
     width: 100%;
     height: 100%;
     top: 0px;
-    
+    z-index: 999;
 }
 
 span.dropLeft {
@@ -28,7 +28,7 @@ span.dropLeft {
     width: 100%;
     height: 100%;
     top: 0px;
-    
+    z-index: 999;
 }
 
 
@@ -37,12 +37,13 @@ span.dropBottom {
     position: absolute;
     width: 100%;
     bottom: 0px;
-    
+    z-index: 999;
 }
 
 nav.menu {
     display: table;
     visibility: visible;
+    z-index: 999;
 
 }
 
@@ -50,7 +51,7 @@ ul.menu {
     margin: 0;
     padding: 0;
     list-style: none;
-    
+    z-index: 999;
 }
 
 ul.menu ul {
@@ -58,11 +59,13 @@ ul.menu ul {
     position: absolute;
     top: 100%;
     visibility: hidden;
+    z-index: 999;
 }
 
 ul.menu ul ul {
     top: 0%;
     left: 100%;
+    z-index: 999;
     
 }
 
@@ -71,6 +74,7 @@ ul.menu ul li:hover > ul {
     left: 100%;
     opacity: 1;
     visibility: visible;
+    z-index: 999;
 
 }
 
@@ -78,13 +82,13 @@ ul.menu li:hover > ul {
     opacity: 1;
     top: 100%;
     visibility: visible;
-    
+    z-index: 999;
 }
 
 ul.menu ul li {
     float: none;
     background-color: ivory;
-    
+    z-index: 999;
 }
 
 ul.menu li {
@@ -93,6 +97,7 @@ ul.menu li {
     cursor: pointer;
     float: left;
     position: relative;
+    z-index: 999;
 }
 
 ul.menu a {
@@ -103,17 +108,20 @@ ul.menu a {
     width: 7em;
     text-align: center;
     font-size: 0.9em;
+    z-index: 999;
 }
 
 ul.menu li:hover {
     background-color: #999999;
     color: #FFFFFF;
+    z-index: 999;
 }
 
 ul.menu li a:hover {
     background-color: #5C75AA;
     text-decoration: none;
     color: #FFFFFF;
+    z-index: 999;
 }
 
 ul.menu li li a {
@@ -122,6 +130,7 @@ ul.menu li li a {
     padding: 4px 10px;
     font-size: 0.9em;
     width: 12em;
+    z-index: 999;
 
 }
 
@@ -135,3 +144,5 @@ ul.menu li li.articoli a{background: url(../images/menu/icona_articoli.png) no-r
 ul.menu li li.home a{background: url(../images/pulsante_home.png) no-repeat 4px 4px}
 ul.menu li li.exit a{background: url(../images/icona_exit.png) no-repeat 4px 4px}
 ul.menu li li.help a{background: url(../images/pulsante_aiuto.png) no-repeat 4px 4px}
+ul.menu li li.todo a{background: url(../images/editors_section.png) no-repeat 4px 4px}
+ul.menu li li.todolist a{background: url(../images/empty.png) no-repeat 4px 4px}

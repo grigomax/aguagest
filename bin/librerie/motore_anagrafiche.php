@@ -2711,9 +2711,15 @@ function tabella_effetti($_cosa, $_percorso, $_annoeff, $_numeff, $_parametri)
     elseif ($_cosa == "elenco_distinta")
     {
         // Stringa contenente la query di ricerca... 
-        $query = "select annoeff, ndistinta, datadist, bancadist, banca, status from effetti INNER JOIN banche ON effetti.bancadist = banche.codice where contabilita != '$_parametri[contabilita]' AND datadist LIKE '$_parametri[anno]%' GROUP BY ndistinta order by ndistinta desc ";
-
-        #echo $query;
+        if($_parametri['azione'] == "modifica")
+        {
+            $query = "select annoeff, ndistinta, datadist, bancadist, banca, status from effetti INNER JOIN banche ON effetti.bancadist = banche.codice where contabilita != '$_parametri[contabilita]' AND datadist LIKE '$_parametri[anno]%' GROUP BY ndistinta order by ndistinta desc ";
+        }
+        else
+        {
+            $query = "select annoeff, ndistinta, datadist, bancadist, banca, status from effetti INNER JOIN banche ON effetti.bancadist = banche.codice where datadist LIKE '$_parametri[anno]%' GROUP BY ndistinta order by ndistinta desc ";
+        }
+        
         // Esegue la query...
         $result = $conn->query($query);
         if ($conn->errorCode() != "00000")

@@ -110,10 +110,6 @@ if ($_SESSION['user']['vendite'] > "1")
             echo "<input type=radio name=tipodoc value=\"NOTA CREDITO\" >Nota Credito";
             echo "<input type=radio name=tipodoc value=\"NOTA DEBITO\" >Nota Debito";
         }
-        elseif ($_tdoc == "ddt_diretto")
-        {
-            echo "<input type=radio name=tipodoc value=\"ddt_diretto\" checked>ddt diretto fornitore";
-        }
         else
         {
             echo "<input type=radio name=tipodoc value=ddt checked> D.D.T. - Bolla &nbsp;";
@@ -125,7 +121,6 @@ if ($_SESSION['user']['vendite'] > "1")
             echo "<input type=radio name=tipodoc value=\"FATTURA\" >Fattura";
             echo "<input type=radio name=tipodoc value=\"NOTA CREDITO\" >Nota Credito";
             echo "<input type=radio name=tipodoc value=\"NOTA DEBITO\" >Nota Debito";
-            echo "<input type=radio name=tipodoc value=\"ddt_diretto\" >ddt diretto fornitore";
         }
         echo "</td></tr>\n";
         echo "<tr><td align=center><br>";

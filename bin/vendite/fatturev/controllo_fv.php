@@ -38,7 +38,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
     $_anno = date('Y');
 
-    $query = sprintf("select * from fv_testacalce INNER JOIN clienti ON fv_testacalce.utente = clienti.codice where anno=\"%s\" order by ndoc", $_anno);
+    $query = sprintf("select * from fv_testacalce INNER JOIN clienti ON fv_testacalce.utente = clienti.codice where anno=\"%s\" order by suffix, ndoc", $_anno);
 
     $result = $conn->query($query);
 
@@ -53,7 +53,7 @@ if ($_SESSION['user']['vendite'] > "2")
     }
 
     // Tutto procede a meraviglia...
-    echo "<table align=\"center\">";
+    echo "<table align=\"center\" width=\"95%\">";
     echo "<tr>";
 
     echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Data</span></td>";
@@ -70,7 +70,7 @@ if ($_SESSION['user']['vendite'] > "2")
             echo "<tr>";
             echo "<td colspan=6>Manca un numero prima di questo</td></tr><tr>";
             printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datareg']);
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndoc']);
+            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s / $dati[suffix]</b></span></td>", $dati['ndoc']);
             printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
             printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['totdoc']);
             printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['status']);

@@ -223,7 +223,7 @@ if ($_SESSION['user']['vendite'] > "2")
             $_messaggio = "Ok.. Effetto Eliminato con successo\n";
 
             //ripristiniamo anche il documento che l'ha generato..
-            $query = "UPDATE fv_testacalce SET status='ripristina' WHERE tdocevaso='effetto' AND evasonum=\"$_numeff\" AND evasoanno=\"$_annoeff\"";
+            $query = "UPDATE fv_testacalce SET status='ripristina' WHERE tdocevaso='effetto' AND evasonum='$_numeff' AND evasoanno='$_annoeff'";
 
             $result = $conn->exec($query);
 
@@ -352,7 +352,7 @@ if ($_SESSION['user']['vendite'] > "2")
         printf("<td class=\"colonna\" colspan=\"2\" align=\"left\"><input type=\"text\" size=\"4\" maxlenght=\"4\" name=\"annodoc\" value=\"%s\"></td></tr>", $_annodoc);
         echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Num. Doc. &nbsp;</b></span></td>\n";
         echo "<td class=\"colonna\" align=\"left\"><input type=\"text\" size=\"6\" maxlenght=\"6\" name=\"numdoc\" value=\"$_numdoc\"> / \n";
-        echo "<input type=\"text\" size=\"2\" maxlenght=\"1\" name=\"suffixdoc\" value=\"$_suffixdoc\"</td>\n";
+        echo "<span class=\"testo_blu\">Suff. <input type=\"text\" size=\"2\" maxlenght=\"1\" name=\"suffixdoc\" value=\"$_suffixdoc\"</td>\n";
         echo "<td align=\"left\"><span class=\"testo_blu\"><b>data Doc. :&nbsp;</b></span></td>\n";
         printf("<td class=\"colonna\" align=\"left\"><input type=\"text\" size=\"10\" maxlenght=\"10\" class=\"data\" name=\"datadoc\" value=\"%s\"></td>", $_datadoc);
         echo "<td align=\"left\"><span class=\"testo_blu\"><b>Imp. Doc. :&nbsp;</b></span></td>\n";

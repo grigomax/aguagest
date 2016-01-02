@@ -76,7 +76,7 @@ if ($_SESSION['user']['magazzino'] > "2")
     $_anno = $_POST['anno'];
 
 
-    $query = sprintf("select * from articoli where articolo=\"%s\"", $_articolo);
+    $query = "select * from articoli where articolo='$_articolo'";
 
 // Esegue la query...
     $result = $conn->query($query);
@@ -170,7 +170,7 @@ if ($_SESSION['user']['magazzino'] > "2")
         $_valin = $dati2['valoreacq'];
 
 
-        printf("<td style=\"vertical-align: top;\"><input type=\"text\" size=\"10\" name=\"giacin\" value=\"%s\" onChange=\"giac(this.form)\" ><br></td> ", $_giacin);
+        printf("<td style=\"vertical-align: top;\"><input type=\"text\" size=\"10\" name=\"giacin\" value=\"%s\" autofocus onChange=\"giac(this.form)\" ><br></td> ", $_giacin);
 
         if ($_valin OR $_giacin != "")
         {

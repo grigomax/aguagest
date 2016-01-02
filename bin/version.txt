@@ -11,6 +11,8 @@ massimo@mcetechnik.it
 -   2   Inizio cambio Browser per l'utilizzo del programma.. 
 -       Passaggio a crome e chromium per la comodità dell'integrazione con l'inoltro
 -       in linea dei pdf
+-   3   Sistemato il bug sul menu' tendina che non si sovrapponeva alle schermate
+-       articolo..
 
 -2  VENDITE
 -   1   Sistemato Bug sul corpo dei documenti, quando si agganciava un articolo

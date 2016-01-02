@@ -64,10 +64,10 @@ function corpo_dis($_pg, $pagina, $rpp, $result, $datie, $_nr, $_somma, $_corpo)
 
 			print <<< corpo
 
-<table style="text-align: left;" border="0" cellpadding="0" cellspacing="0"><tbody>
+<table style="text-align: left;" border="0" cellpadding="0" cellspacing="0" width=\"100%\"><tbody>
 <tr>
 <td valign="top" aling="center"><font face="arial" size="1" valign="top"><i>N. effetto</i></font><br><font face="$fontdocsta" style="$fontdocsize">&nbsp;<b>{$dati3['numeff']} / {$dati3['annoeff']}</b></font></td>
-<td valign="top" colspan="3"><font face="arial" size="1" valign="top"><i> Riferimenti</i></font><br><font face="$fontdocsta" style="$fontdocsize">&nbsp;{$dati3['tipodoc']} N. {$dati3['numdoc']} / {$dati3['annodoc']} DEL {$dati3['datadoc']}</font></td>
+<td valign="top" colspan="3"><font face="arial" size="1" valign="top"><i> Riferimenti</i></font><br><font face="$fontdocsta" style="$fontdocsize">&nbsp;{$dati3['tipodoc']} N. {$dati3['numdoc']} / $dati3[suffixdoc] / {$dati3['annodoc']} DEL {$dati3['datadoc']}</font></td>
 <td valign="top" align="center"><font face="arial" size="1" valign="top"><i><b>Scadenza</i></font><br><font face="$fontdocsta" style="$fontdocsize">&nbsp;{$dati3['scadeff']}</font></b></td>
 <td valign="top" align="center"><font face="arial" size="1" valign="top"><i><b>Importo</i></font><br><font face="$fontdocsta" style="$fontdocsize">&nbsp;{$dati3['impeff']}</font></b></td>
 </tr>

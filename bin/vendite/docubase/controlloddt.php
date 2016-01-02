@@ -38,7 +38,7 @@ if ($_SESSION['user']['vendite'] > "1")
 // Stringa contenente la query di ricerca...
     $_anno = date('Y');
 
-    $query = sprintf("select * from bv_bolle INNER JOIN clienti ON bv_bolle.utente = clienti.codice where anno=\"%s\" order by ndoc", $_anno);
+    $query = sprintf("select * from bv_bolle INNER JOIN clienti ON bv_bolle.utente = clienti.codice where anno=\"%s\" order by suffix, ndoc", $_anno);
 
     $result = $conn->query($query);
 
@@ -54,7 +54,7 @@ if ($_SESSION['user']['vendite'] > "1")
     }
 
 // Tutto procede a meraviglia...
-    echo "<table align=\"center\">";
+    echo "<table align=\"center\" width=\"90%\">";
     echo "<tr>";
 
     echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Data</span></td>";
@@ -73,7 +73,7 @@ if ($_SESSION['user']['vendite'] > "1")
             echo "<td colspan=7>Manca un numero prima di questo</td></tr><tr>";
             //printf("<form action=\"visualizzadoc.php?tdoc=ddt&anno=%s\" method=\"POST\">", $dati['anno']);
             printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datareg']);
-            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndoc']);
+            printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s / $dati[suffix]</b></span></td>", $dati['ndoc']);
             printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
             printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['totdoc']);
             printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['status']);

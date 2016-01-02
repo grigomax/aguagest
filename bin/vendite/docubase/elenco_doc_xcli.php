@@ -65,15 +65,15 @@ if ($_SESSION['user']['vendite'] > "1")
 
 	if ($_tdoc == "fornitore")
 	{
-		$query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN fornitori ON $_dbdoc[testacalce].utente = fornitori.codice where status != 'evaso' order by ragsoc, anno, ndoc");
+		$query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN fornitori ON $_dbdoc[testacalce].utente = fornitori.codice where status != 'evaso' order by ragsoc, anno, suffix, ndoc");
 	}
 	elseif($_tdoc == "preventivo")
 	{
-		$query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where status != 'evaso' AND data_scad >= '$_oggi' order by ragsoc, anno, ndoc");
+		$query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where status != 'evaso' AND data_scad >= '$_oggi' order by ragsoc, anno, suffix, ndoc");
 	}
 	else
 	{
-		$query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where status != 'evaso' AND status != 'saldato' order by ragsoc, anno, ndoc");
+		$query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where status != 'evaso' AND status != 'saldato' order by ragsoc, anno, suffix, ndoc");
 	}
 
 

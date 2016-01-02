@@ -175,7 +175,7 @@ if ($_SESSION['user']['vendite'] > "1")
         
         print <<<html
         <br>&nbsp;
-        <table border="0" align="center" cellspacing="0" cellpadding="0">
+        <table width="100%" border="0" align="center" cellspacing="0" cellpadding="0">
         <tr>
     <td width="50%" bgcolor="#FFFFFF" valign="top" align="left">
     <i><b>Spettabile</b></i>&nbsp;{$dati['utente']}<br>
@@ -189,7 +189,7 @@ if ($_SESSION['user']['vendite'] > "1")
     </td>
     <td width="50%"bgcolor="#ffFFFF" valign="top" align="left">
     <b><i>{$dati['tipodoc']}</i></b><br>
-    Num. {$dati['numdoc']} / {$dati['annodoc']} del {$dati['datadoc']}<br>
+    Num. {$dati['numdoc']}-{$dati['suffixdoc']} / {$dati['annodoc']} del {$dati['datadoc']}<br>
 	<b>Banca </b><br>
 	{$dati['bancapp']}<br>
     ABI {$dati['abi']}  CAB {$dati['cab']}  CIN {$dati['cin']}  C/C {$dati['cc']}<br>

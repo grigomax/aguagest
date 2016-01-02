@@ -46,17 +46,19 @@ if ($_SESSION['user']['vendite'] > "1")
 //prendiamoci i il database..
     $_archivio = archivio_tdoc($_tdoc);
 
-    if ($_POST['anno'] == "")
+    if (($_POST['anno'] == "") AND ($_POST['suffix'] == ""))
     {
         $_anno = date('Y');
+        $_suffix = $SUFFIX_DDT;
     }
     else
     {
         $_anno = $_POST['anno'];
+        $_suffix = strtoupper($_POST['suffix']);
     }
     
     echo "<form action=\"doc_modint.php?tdoc=$_tdoc\" method=\"POST\">\n";
-    echo "Cambia anno => <input type=\"number\" size=\"6\" maxlength=\"4\" name=\"anno\" value=\"$_anno\"><input type=\"submit\" name=\"cambia\">\n";
+    echo "Cambia anno => <input type=\"number\" size=\"6\" name=\"anno\" value=\"$_anno\"> o suffisso <input type=\"text\" size=\"3\" maxlength=\"1\" name=\"suffix\" value=\"$_suffix\"><input type=\"submit\" name=\"cambia\">\n";
 
     echo "</form>\n";
 

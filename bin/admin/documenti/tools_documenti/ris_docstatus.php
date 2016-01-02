@@ -42,6 +42,7 @@ if ($_SESSION['user']['setting'] > "2")
     $_ndoc = $_POST['ndoc'];
     $_status = $_POST['status'];
     $_tdoc = $_GET['tdoc'];
+    $_suffix = strtoupper($_POST['suffix']);
 
     //selezioniamo il database con il documento corretto
     //selezioniamo il database documenti..
@@ -54,7 +55,7 @@ if ($_SESSION['user']['setting'] > "2")
     // Stringa contenente la query di ricerca..
     // aggiorno l'intestazione nelle testa calce
 
-    $query = sprintf("update $_dbdoc[testacalce] set status=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_status, $_anno, $_ndoc);
+    $query = sprintf("update $_dbdoc[testacalce] set status=\"%s\" where anno=\"%s\" and suffix='$_suffix' and ndoc=\"%s\"", $_status, $_anno, $_ndoc);
 
     $result = $conn->exec($query);
 

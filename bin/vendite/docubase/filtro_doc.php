@@ -99,23 +99,23 @@ if ($_SESSION['user']['vendite'] > "1")
 	
 		if ($_start == "fornitore")
 		{
-			$query = sprintf("select * from %s INNER JOIN fornitori ON %s.utente = %s.codice where utente=\"%s\" and (status='stampato' OR status='parziale') order by anno, ndoc", $_archivio_start['testacalce'], $_archivio_start['testacalce'], "fornitori", $_codutente);
+			$query = sprintf("select *, $_archivio_start[testacalce].ts AS ultima_mod from %s INNER JOIN fornitori ON %s.utente = %s.codice where utente=\"%s\" and (status='stampato' OR status='parziale') order by anno, suffix, ndoc", $_archivio_start['testacalce'], $_archivio_start['testacalce'], "fornitori", $_codutente);
 		}
 		elseif (($_start == "ddt") AND ($_end == "FATTURA"))
 		{
-			$query = "select * from bv_bolle INNER JOIN clienti ON bv_bolle.utente = clienti.codice where utente='$_codutente' AND causale = 'VENDITA' AND status = 'stampato' order by anno, ragsoc, ndoc";
+			$query = "select *, $_archivio_start[testacalce].ts AS ultima_mod from bv_bolle INNER JOIN clienti ON bv_bolle.utente = clienti.codice where utente='$_codutente' AND causale = 'VENDITA' AND status = 'stampato' order by anno, suffix, ragsoc, ndoc";
 		}
 		elseif (($_start == "ddt_diretto") AND ($_end == "FATTURA"))
 		{
-			$query = "select * from bvfor_testacalce INNER JOIN clienti ON bvfor_testacalce.utente = clienti.codice where utente='$_codutente' AND causale = 'VENDITA' AND status = 'stampato' order by anno, ragsoc, ndoc";
+			$query = "select *, $_archivio_start[testacalce].ts AS ultima_mod from bvfor_testacalce INNER JOIN clienti ON bvfor_testacalce.utente = clienti.codice where utente='$_codutente' AND causale = 'VENDITA' AND status = 'stampato' order by anno, ragsoc, ndoc";
 		}
 		elseif($_start == "preventivo")
 		{
-			$query = sprintf("select * from %s INNER JOIN clienti ON %s.utente = %s.codice where data_scad >= '$_oggi' AND utente=\"%s\" and (status='stampato' OR status='parziale') order by anno, ndoc", $_archivio_start['testacalce'], $_archivio_start['testacalce'], "clienti", $_codutente);
+			$query = sprintf("select *, $_archivio_start[testacalce].ts AS ultima_mod from %s INNER JOIN clienti ON %s.utente = %s.codice where data_scad >= '$_oggi' AND utente=\"%s\" and (status='stampato' OR status='parziale') order by anno, suffix, ndoc", $_archivio_start['testacalce'], $_archivio_start['testacalce'], "clienti", $_codutente);
 		}
 		else
 		{
-			$query = sprintf("select * from %s INNER JOIN clienti ON %s.utente = %s.codice where utente=\"%s\" and (status='stampato' OR status='parziale') order by anno, ndoc", $_archivio_start['testacalce'], $_archivio_start['testacalce'], "clienti", $_codutente);
+			$query = sprintf("select *, $_archivio_start[testacalce].ts AS ultima_mod from %s INNER JOIN clienti ON %s.utente = %s.codice where utente=\"%s\" and (status='stampato' OR status='parziale') order by anno, suffix, ndoc", $_archivio_start['testacalce'], $_archivio_start['testacalce'], "clienti", $_codutente);
 		}
 
 		#echo $query;
@@ -152,7 +152,7 @@ if ($_SESSION['user']['vendite'] > "1")
 			echo "<td width=\"40\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Totale</span></td>";
 		}
 
-                echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Ultima Mod.</span></td>";
+                echo "<td width=\"105\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Ultima Mod.</span></td>";
 
 		echo "</tr>";
 
@@ -188,7 +188,8 @@ if ($_SESSION['user']['vendite'] > "1")
 				echo "<td align=\"center\"><input type=\"radio\" name=\"tipologia".$dati_start[anno].$dati_start[suffix].$dati_start[ndoc]."\" value=\"totale\" checked></td>\n";
 			}
 
-                        echo "<td align=\"center\"><span class=\"testo_blu\">$dati_start[ts]</span></td>\n";
+                        
+                        echo "<td align=\"center\"><span class=\"testo_blu\">".$dati_start['ultima_mod']."</span></td>\n";
 
 			echo "</tr>";
                         

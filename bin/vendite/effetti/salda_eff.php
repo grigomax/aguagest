@@ -41,7 +41,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
 // elenca le fatture presenti in archivio non evase FATTURE VENDITA
 // elenco documenti fatture vendita
-    echo "<span class=\"testo_blu\"><center><br><b>Salda effetti presentati</b></center><br>";
+    echo "<span class=\"testo_blu\"><center><br><b>Salda effetti presentati</b></center><br></span>";
 
 
     $result = tabella_effetti("elenco_presentati", $_percorso, $_annoeff, $_numeff, $_parametri);
@@ -50,7 +50,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
 
     // Tutto procede a meraviglia...
-    echo "<table align=\"center\">";
+    echo "<table align=\"center\" width=\"95%\">";
     echo "<tr>";
     echo "<td width=\"30\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">N. Eff</span></td>";
     echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Data Fatt.</span></td>";
@@ -73,27 +73,27 @@ if ($_SESSION['user']['vendite'] > "1")
         }
         echo "<tr>";
 
-        printf("<td width=\"30\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['numeff']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datadoc']);
-        printf("<td width=\"60\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['numdoc']);
-        printf("<td width=\"60\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['bancadist']);
-        printf("<td width=\"60\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndistinta']);
-        printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
-        printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['scadeff']);
-        printf("<td width=\"30\" align=\"center\"><input type=\"checkbox\" name=\"check[]\" value=\"%s%s\" valore=\"%s\"></td>\n", $dati['annoeff'], $dati['numeff'], $dati['impeff']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['numeff']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datadoc']);
+        printf("<td align=\"center\"><span class=\"testo_blu\"><b>%s/$dati[suffixdoc]</b></span></td>", $dati['numdoc']);
+        printf("<td align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['bancadist']);
+        printf("<td align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndistinta']);
+        printf("<td align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['scadeff']);
+        printf("<td align=\"center\"><input type=\"checkbox\" name=\"check[]\" value=\"%s%s\" valore=\"%s\"></td>\n", $dati['annoeff'], $dati['numeff'], $dati['impeff']);
 
         echo "</tr>";
         echo "<tr>";
-        echo "<td width=\"30\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"60\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"60\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"60\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"400\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"70\" height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
         echo "</tr>";
         $_mese_rif2 = $_mese_rif;
     }

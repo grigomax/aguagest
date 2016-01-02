@@ -557,7 +557,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
             //leggiamo il corpo del documento
 
 
-            $query = "SELECT * from $_archivio[dettaglio] where anno='$_anno' suffix='$_suffix' and ndoc='$_ndoc' ORDER BY rigo";
+            $query = "SELECT * from $_archivio[dettaglio] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' ORDER BY rigo";
 
             $result = $conn->query($query);
 
@@ -591,7 +591,23 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
                             //vedimo quanto lunga è
                             $stringa = explode(' ', $datistart['descrizione']);
                             $_ndoc_start = $stringa['3'];
-                            $_anno_start = substr($stringa['5'], -4, 4);
+                            $_suffix_start = $stringa['5'];
+                            $_anno_start = substr($stringa['7'], -4, 4);
+                            
+                            //qui facciamo una retro compatibilità
+                            // nel caso in cui non trovi il suffisso in quanto il documento è vecchio lo impostiamo come Aù
+                            
+                            if($_anno_start == "")
+                            {
+                                $_ndoc_start = $stringa['3'];
+                                $_anno_start = substr($stringa['5'], -4, 4);
+                                $_suffix_start = "A";
+                            }
+                            
+                          //  echo "<br>documento $_ndoc_start";
+                           // echo "<br>suffisso $_suffix_start";
+                            //echo "<br>data $_anno_start";
+                            
                         }
                     }
                     else
@@ -600,12 +616,12 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
                         if ($_rigostart == "0")
                         {
                             //leggiamo e poi scriviamo..
-                            $query = "SELECT * from co_dettaglio WHERE anno='$_anno_start' and ndoc='$_ndoc_start' AND articolo='$datistart[articolo]' ORDER BY rigo LIMIT 1";
+                            $query = "SELECT * from co_dettaglio WHERE anno='$_anno_start' and suffix='$_suffix_start' AND ndoc='$_ndoc_start' AND articolo='$datistart[articolo]' ORDER BY rigo LIMIT 1";
                         }
                         else
                         {
                             //leggiamo e poi scriviamo..
-                            $query = "SELECT * from co_dettaglio WHERE anno='$_anno_start' and ndoc='$_ndoc_start' AND articolo='$datistart[articolo]' AND rigo > '$rigo' ORDER BY rigo LIMIT 1";
+                            $query = "SELECT * from co_dettaglio WHERE anno='$_anno_start' and suffix='$_suffix_start' and ndoc='$_ndoc_start' AND articolo='$datistart[articolo]' AND rigo > '$rigo' ORDER BY rigo LIMIT 1";
                         }
 
                         $result2 = $conn->query($query);
@@ -630,7 +646,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
 
                         //adesso dobbiamo andare a cerca il corpo della conferma e ripristinare le quantità:
 
-                        $query = "UPDATE co_dettaglio SET qtaevasa = qtaevasa - $datistart[quantita], qtaestratta=$datistart[quantita], qtasaldo=qtasaldo+$datistart[quantita], totriga=totriga+$datistart[totriga], totrigaprovv=totrigaprovv+$datistart[totrigaprovv], rsaldo='NO' where anno='$_anno_start' and ndoc='$_ndoc_start' AND articolo='$datistart[articolo]' AND rigo = '$rigo'";
+                        $query = "UPDATE co_dettaglio SET qtaevasa = qtaevasa - $datistart[quantita], qtaestratta=$datistart[quantita], qtasaldo=qtasaldo+$datistart[quantita], totriga=totriga+$datistart[totriga], totrigaprovv=totrigaprovv+$datistart[totrigaprovv], rsaldo='NO' where anno='$_anno_start' and suffix='$_suffix_start' and ndoc='$_ndoc_start' AND articolo='$datistart[articolo]' AND rigo = '$rigo'";
 
                         $conn->query($query);
 
@@ -656,7 +672,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
         // Stringa contenente la query di ricerca...
         // elimino il documento dalla tabella bolle
 
-        $query = sprintf("DELETE from %s where anno=\"%s\" and ndoc=\"%s\" ", $_archivio['testacalce'], $_anno, $_ndoc);
+        $query = "DELETE from $_archivio[testacalce] where anno='$_anno' and suffix='$_suffix' and ndoc='$_ndoc'";
 
         $result = $conn->exec($query);
 
@@ -676,10 +692,9 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
         }
 
 
-
         // Stringa contenente la query di ricerca...
         // elimino il documento dal corpo tabella bolle
-        $query = sprintf("DELETE from %s where anno=\"%s\" and ndoc=\"%s\" ", $_archivio['dettaglio'], $_anno, $_ndoc);
+        $query = "DELETE from $_archivio[dettaglio] where anno='$_anno' and suffix='$_suffix' and ndoc='$_ndoc'";
         // Esegue la query...
         $result = $conn->exec($query);
 
@@ -702,7 +717,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
         if ($_tdoc == "conferma")
         {
             // ripristino i documenti che hanno generato il ddt
-            $query = sprintf("UPDATE pv_testacalce SET status='ripristinato' WHERE tdocevaso=\"%s\" AND evasoanno=\"%s\" AND evasonum=\"%s\"", $_tdoc, $_anno, $_ndoc);
+            $query = "UPDATE pv_testacalce SET status='ripristinato' WHERE tdocevaso='$_tdoc' AND evasoanno='$_anno' AND evasosuffix='$_suffix' AND evasonum='$_ndoc'";
 
             $result = $conn->exec($query);
 
@@ -726,7 +741,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
         {
 
             // ripristino i documenti che hanno generato il ddt
-            $query = sprintf("UPDATE co_testacalce SET status='ripristinato' WHERE tdocevaso=\"%s\" AND evasoanno=\"%s\" AND evasonum=\"%s\" ", $_tdoc, $_anno, $_ndoc);
+            $query = "UPDATE co_testacalce SET status='ripristinato' WHERE tdocevaso='$_tdoc' AND evasoanno='$_anno' AND evasosuffix='$_suffix' AND evasonum='$_ndoc'";
 
             $result = $conn->exec($query);
 
@@ -746,7 +761,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
             }
 
             // ripristino i documenti che hanno generato il ddt
-            $query = sprintf("UPDATE pv_testacalce SET status='ripristinato' WHERE tdocevaso=\"%s\" AND evasoanno=\"%s\" AND evasonum=\"%s\"", $_tdoc, $_anno, $_ndoc);
+            $query = "UPDATE pv_testacalce SET status='ripristinato' WHERE tdocevaso='$_tdoc' AND evasoanno='$_anno' AND evasosuffix='$_suffix' AND evasonum='$_ndoc'";
 
             $result = $conn->exec($query);
 
@@ -772,7 +787,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
 
             if ($_tdoc == "FATTURA")
             {//ripristino il documenti di trasporto
-                $query = sprintf("update bv_bolle set status='ripristina' where evasoanno=\"%s\" and evasonum=\"%s\" ", $_anno, $_ndoc);
+                $query = "update bv_bolle set status='ripristina' WHERE tdocevaso='$_tdoc' AND evasoanno='$_anno' AND evasosuffix='$_suffix' AND evasonum='$_ndoc'";
                 // Esegue la query...
                 $result = $conn->exec($query);
                 echo $query;
@@ -792,7 +807,8 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
                     $_errori['errori'] = "OK";
                 }
 
-                $query = sprintf("update bvfor_testacalce set status='ripristina' where evasoanno=\"%s\" and evasonum=\"%s\" ", $_anno, $_ndoc);
+                /*
+                $query = "update bvfor_testacalce set status='ripristina' WHERE tdocevaso='$_tdoc' AND evasoanno='$_anno' AND evasosuffix='$_suffix' AND evasonum='$_ndoc'";
                 // Esegue la query...
                 $result = $conn->exec($query);
 
@@ -810,12 +826,14 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
                 {
                     $_errori['errori'] = "OK";
                 }
+                 * 
+                 */
             }
 
             // ripristino i documenti che hanno generato la fattura
             if ($_tdoc == $nomedoc)
             {
-                $query = sprintf("update co_testacalce set status='ripristina' where tdocevaso=\"%s\" and evasoanno=\"%s\" and evasonum=\"%s\" ", $_tdoc, $_anno, $_ndoc);
+                $query = "update co_testacalce set status='ripristina' WHERE tdocevaso='$_tdoc' AND evasoanno='$_anno' AND evasosuffix='$_suffix' AND evasonum='$_ndoc'";
                 #echo $query;
 
                 $result = $conn->exec($query);
@@ -837,7 +855,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
             }
 
             // Elimino le provvigioni sull'agente
-            $query = sprintf("delete from provvigioni where anno=\"%s\" and ndoc=\"%s\"", $_anno, $_ndoc);
+            $query = "delete from provvigioni WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
 
             $result = $conn->exec($query);
 
@@ -862,7 +880,7 @@ function elimina_documento($_risultato, $_tdoc, $_anno, $_suffix, $_ndoc, $_arch
         {
 
             // Elimino i muovimenti sul magazzino
-            $query = sprintf("delete from magazzino where tdoc=\"%s\" and anno=\"%s\" and ndoc=\"%s\"", $_tdoc, $_anno, $_ndoc);
+            $query = "delete from magazzino WHERE tdoc='$_tdoc' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
 
             $result = $conn->exec($query);
 

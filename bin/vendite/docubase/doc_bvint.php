@@ -47,12 +47,13 @@ if ($_SESSION['user']['vendite'] > "1")
     $_ndoc = $_POST['ndoc'];
     $_newcli = $_POST['newcli'];
     $_tdoc = $_GET['tdoc'];
+    $_suffix = strtoupper($_POST['suffix']);
     
     $_archivio = archivio_tdoc($_tdoc);
     
     // Stringa contenente la query di ricerca..
     // aggiorno l'intestazione nelle testa calce
-    $query = sprintf("update $_archivio[testacalce] set utente=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
+    $query = sprintf("update $_archivio[testacalce] set utente=\"%s\" where anno=\"%s\" AND suffix='$_suffix' and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
 
     $result = $conn->exec($query);
 
@@ -68,7 +69,7 @@ if ($_SESSION['user']['vendite'] > "1")
     }
 
     // aggiorno il corpo documento
-    $query = sprintf("update $_archivio[dettaglio] set utente=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
+    $query = sprintf("update $_archivio[dettaglio] set utente=\"%s\" where anno=\"%s\" AND suffix='$_suffix' and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
 
     $result = $conn->exec($query);
 
@@ -86,7 +87,7 @@ if ($_SESSION['user']['vendite'] > "1")
     if ($_tdoc == "ddt")
     {
         // aggiorno l'il magazzino 
-        $query = sprintf("update magazzino set utente=\"%s\" where anno=\"%s\" and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
+        $query = sprintf("update magazzino set utente=\"%s\" where anno=\"%s\" AND suffix='$_suffix' and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
 
         $result = $conn->exec($query);
 

@@ -38,13 +38,15 @@ if ($_SESSION['user']['setting'] > "2")
     $_anno = $_GET['anno'];
 
 
-    if ($_POST['anno'] == "")
+ if (($_POST['anno'] == "") AND ($_POST['suffix'] == ""))
     {
         $_anno = date('Y');
+        $_suffix = $SUFFIX_DDT;
     }
     else
     {
         $_anno = $_POST['anno'];
+        $_suffix = strtoupper($_POST['suffix']);
     }
 //selezioniamo il database documenti..
     $_dbdoc = archivio_tdoc($_tdoc);
@@ -57,7 +59,7 @@ if ($_SESSION['user']['setting'] > "2")
     echo "<span class=\"intestazione\"><b>Scegliere il $_tdoc da Cambiare</b><br></span><br>Programma che permette di cambiare Status al documento<br>\n";
 
     echo "<form action=\"doc_modstatus.php?tdoc=$_tdoc\" method=\"POST\">\n";
-    echo "Cambia anno => <input type=\"number\" size=\"6\" maxlength=\"4\" name=\"anno\" value=\"$_anno\"><input type=\"submit\" name=\"cambia\">\n";
+    echo "Cambia anno => <input type=\"number\" size=\"6\" name=\"anno\" value=\"$_anno\"> o suffisso <input type=\"text\" size=\"3\" maxlength=\"1\" name=\"suffix\" value=\"$_suffix\"><input type=\"submit\" name=\"cambia\">\n";
 
     echo "</form>\n";
 
@@ -70,7 +72,7 @@ if ($_SESSION['user']['setting'] > "2")
     echo "<option value=\"\"></option>";
 
     // Stringa contenente la query di ricerca... solo dei fornitori
-    $query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where anno='$_anno' order by ndoc desc, anno");
+    $query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where anno='$_anno' AND suffix='$_suffix' order by ndoc desc, anno");
     #$query = sprintf("select ndoc, datareg, ragsoc, status, utente, codice from bv_bolle INNER JOIN clienti ON bv_bolle.utente = clienti.codice where anno=\"%s\" order by ndoc desc", $_anno);
 
     $result = $conn->query($query);

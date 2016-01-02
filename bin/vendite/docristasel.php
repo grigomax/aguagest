@@ -49,7 +49,7 @@ if ($_SESSION['user']['vendite'] > "1")
     else
     {
         $_anno = $_POST['anno'];
-        $_suffix = $_POST['suffix'];
+        $_suffix = strtoupper($_POST['suffix']);
     }
 
     echo "<table width=\"80%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";

@@ -9,13 +9,13 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso ."../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME); 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
+require $_percorso . "librerie/motore_anagrafiche.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 
 
@@ -46,29 +46,9 @@ if ($_SESSION['user']['vendite'] > "1")
 	printf( "<br><br><form action=\"filtro_fv.php\" method=\"POST\">" );
 	printf ("<tr><td align=center>Selezionare Anno <input type=\"number\" size=\"5\" name=\"anno\" value=\"%s\"</td></tr>",$_anno);
 	echo "<tr><td align=center><br>";
-	echo "<select name=\"cliente\">\n";
-	echo "<option value=\"\"></option>";
-
-	// Stringa contenente la query di ricerca... solo dei fornitori
-	$query = sprintf( "select codice, ragsoc from clienti order by ragsoc" );
-
-	// Esegue la query...
-	if( $res = mysql_query( $query, $conn ) )
-	{
-		// La query ?stata eseguita con successo...
-		// MA ANCORA NON SAPPIAMO SE L'UTENTE ESISTA O MENO...
-		if( mysql_num_rows( $res ) )
-		{
-			// Tutto procede a meraviglia...
-			echo "<span class=\"testo_blu\">";
-			while ($dati = mysql_fetch_array($res))
-			{
-				printf( "<option value=\"%s\">%s</option>\n", $dati[ 'codice' ], $dati[ 'ragsoc' ] );
-			}
-		}
-	}
-	echo "</select>\n";
-	echo "</td></tr>\n";
+        
+        tabella_clienti("elenca_select", "cliente", $_parametri);
+        
 
 	echo "</table><center><br><input type=\"reset\" value=\"Cancella\">&nbsp;<input type=\"submit\" value=\"Avanti\">\n";
 	echo "</form>\n</td>\n";

@@ -311,7 +311,7 @@ if ($_SESSION['user']['vendite'] > "1")
 //    echo $_datapag . "\n";
 //    Prima di inserire l'effetto controlliamo che non esista già'
         //leggiamo l'effeto desiderato per vedere se è stato modificato
-        $dati_eff = tabella_effetti("checki_singolo", $_percorso, $_annoeff, $_numeff, $_parametri);
+        $dati_eff = tabella_effetti("check_singolo", $_percorso, $_annoeff, $_numeff, $_parametri);
 
         if ($dati_eff > 0)
         {
@@ -320,10 +320,10 @@ if ($_SESSION['user']['vendite'] > "1")
         else
         {
             //altrimenti lo inseriamo..
-            $query = sprintf("INSERT INTO effetti (tipoeff,	annoeff, numeff, dataeff, scadeff, impeff, tipodoc, annodoc, numdoc, datadoc, totdoc, codcli,
+            $query = sprintf("INSERT INTO effetti (tipoeff, annoeff, numeff, dataeff, scadeff, impeff, tipodoc, annodoc, suffixdoc, numdoc, datadoc, totdoc, codcli,
             modpag, bancapp, abi, cab, cin, cc, status, datapag, contabilita) VALUES
             (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",
-            \"%s\",\"%s\", 'NO')", $_tipoeff, $_annoeff, $_numeff, $_dataeff, $_scadeff, $_impeff, $_tipodoc, $_annodoc, $_numdoc, $_datadoc, $_totdoc, $_codutente, $dati['codpag'], $dati['banca'], $dati['abi'], $dati['cab'], $dati['cin'], $dati['cc'], $_status, $_datapag);
+            \"%s\",\"%s\", \"%s\", 'NO')", $_tipoeff, $_annoeff, $_numeff, $_dataeff, $_scadeff, $_impeff, $_tipodoc, $_annodoc, $_suffixdoc, $_numdoc, $_datadoc, $_totdoc, $_codutente, $dati['codpag'], $dati['banca'], $dati['abi'], $dati['cab'], $dati['cin'], $dati['cc'], $_status, $_datapag);
 
             $result = $conn->query($query);
             if ($conn->errorCode() != "00000")
@@ -510,13 +510,13 @@ if ($_SESSION['user']['vendite'] > "1")
 
         if ($_status == "riemesso")
         {
-            $query = "UPDATE effetti SET tipoeff=\"$_tipoeff\", scadeff=\"$_scadeff\", impeff=\"$_impeff\", tipodoc=\"$_tipodoc\", annodoc=\"$_annodoc\",
+            $query = "UPDATE effetti SET tipoeff=\"$_tipoeff\", scadeff=\"$_scadeff\", impeff=\"$_impeff\", tipodoc=\"$_tipodoc\", annodoc=\"$_annodoc\", suffixdoc=\"$_suffixdoc\",
                  numdoc=\"$_numdoc\", datadoc=\"$_datadoc\", totdoc=\"$_totdoc\", status=\"$_status\", datapag=\"$_datapag\", spese=\"$_spese_insoluto\" , ndistinta='', bancadist='', datadist='', presenta='NO', contabilita='NO'
 			WHERE annoeff=\"$_annoeff\" and numeff=\"$_numeff\"";
         }
         else
         {
-            $query = "UPDATE effetti SET tipoeff=\"$_tipoeff\", scadeff=\"$_scadeff\", impeff=\"$_impeff\", tipodoc=\"$_tipodoc\", annodoc=\"$_annodoc\",
+            $query = "UPDATE effetti SET tipoeff=\"$_tipoeff\", scadeff=\"$_scadeff\", impeff=\"$_impeff\", tipodoc=\"$_tipodoc\", annodoc=\"$_annodoc\", suffixdoc=\"$_suffixdoc\", 
                  numdoc=\"$_numdoc\", datadoc=\"$_datadoc\", totdoc=\"$_totdoc\", status=\"$_status\", datapag=\"$_datapag\", spese=\"$_spese_insoluto\" WHERE annoeff=\"$_annoeff\" and numeff=\"$_numeff\"";
         }
 
@@ -546,9 +546,9 @@ if ($_SESSION['user']['vendite'] > "1")
     echo "<center>\n";
     echo "<h2>Gestione Effetti</h2>\n";
     echo "<h3>$_messaggio</h3>\n";
-    if (($CONTABILITA == "SI") AND ( $_azione != "Annulla"))
+    if (($_POST['primanota'] == "SI") AND ($CONTABILITA == "SI") AND ( $_azione != "Annulla"))
     {
-        echo "<h3>Operazione inserita in contabilit&agrave; con il numero $_nreg</h3>";
+        echo "<h3>Operazione eseguita in contabilit&agrave; con il numero $_nreg</h3>";
     }
 
     echo "</center>\n";

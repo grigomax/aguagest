@@ -154,7 +154,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
         //inizio inserimento riga 50
 
-        $_commento = sprintf(" 50%s%s Nr. %s del %s%s%s%s\n", str_pad($_rigo, 7, '0', STR_PAD_LEFT), str_pad($datir['tipodoc'], 39, ' ', STR_PAD_RIGHT), str_pad($datir['numdoc'], 6, ' ', STR_PAD_RIGHT), str_pad($datir['datadoc'], 25, ' ', STR_PAD_RIGHT), str_pad($_filler, 10, ' ', STR_PAD_LEFT), str_pad($piva, 16, ' ', STR_PAD_RIGHT), str_pad($_filler, 4, ' ', STR_PAD_LEFT));
+        $_commento = sprintf(" 50%s%s Nr. %s/%s del %s%s%s%s\n", str_pad($_rigo, 7, '0', STR_PAD_LEFT), str_pad($datir['tipodoc'], 37, ' ', STR_PAD_RIGHT), str_pad($datir['numdoc'], 6, ' ', STR_PAD_RIGHT), str_pad($datir['suffixdoc'], 1, ' ', STR_PAD_RIGHT),str_pad($datir['datadoc'], 25, ' ', STR_PAD_RIGHT), str_pad($_filler, 10, ' ', STR_PAD_LEFT), str_pad($piva, 16, ' ', STR_PAD_RIGHT), str_pad($_filler, 4, ' ', STR_PAD_LEFT));
         fwrite($fp, $_commento);
         if (!$fp)
             die("Errore.. Riga non inserita ?");
