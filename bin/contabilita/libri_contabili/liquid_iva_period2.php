@@ -71,7 +71,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 		//------------------
 		//dobbiamo passare dall dall'iva acquisti al conto erario'
 		//Prima di iniziare leggiamo il numero di registrazione che tocca..
-		$_nreg = tabella_primanota("ultimo", $id, $_anno_reg, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_anno_reg, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 		//impostiamo le scritture..
 
@@ -287,7 +287,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 				//------------------
 				//dobbiamo passare dall dall'iva acquisti al conto erario'
 				//Prima di iniziare leggiamo il numero di registrazione che tocca..
-				$_nreg = tabella_primanota("ultimo", $id, $_POST['anno'], $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+				$_nreg = tabella_primanota("ultimo", $id, $_POST['anno'], $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 				//impostiamo le scritture..
 				$_mese = $_datanuova[$_POST[periodo]];
@@ -331,7 +331,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 				//dobbiamo passare dall dall'iva Vendite al conto erario'
 				//Prima di iniziare leggiamo il numero di registrazione che tocca..
-				$_nreg = tabella_primanota("ultimo", $id, $_POST['anno'], $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+				$_nreg = tabella_primanota("ultimo", $id, $_POST['anno'], $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 				//impostiamo le scritture..
 				$_mese = $_datanuova[$_POST[periodo]];

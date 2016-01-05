@@ -16,10 +16,12 @@ $_SESSION['keepalive'] ++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 require "../../../setting/par_conta.inc.php";
 require "../../librerie/motore_primanota.php";
+require "../../librerie/motore_anagrafiche.php";
+
 //carichiamo la base delle pagine:
 base_html("", $_percorso);
 java_script($_cosa, $_percorso);
@@ -55,11 +57,11 @@ if ($_SESSION['user']['contabilita'] > "2")
 			$_anno = $_POST['anno'];
 		}
 		//leggiamo la registrazione;
-		$dati = tabella_primanota("leggi_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$dati = tabella_primanota("leggi_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 		//impostiamo i nuovi parametri per unirci con il programma vecchio..
 		$_SESSION['datareg'] = $dati['data_reg'];
-		$_SESSION['datagior'] = $dati['data_cont'];
+		$_SESSION['datacont'] = $dati['data_cont'];
 		$_SESSION['testo'] = $dati['descrizione'];
 		$_SESSION['causale'] = $dati['causale'];
 		$_SESSION['anno'] = $_anno;
@@ -71,7 +73,7 @@ if ($_SESSION['user']['contabilita'] > "2")
 		$_SESSION['parametri']['segno'] = $dati['segno'];
 		$_submit = "Salda";
 		$_data_reg = $_SESSION['datareg'];
-		$_data_gior = $_SESSION['datagior'];
+		$_data_cont = $_SESSION['datacont'];
 		$_testo = $_SESSION['testo'];
 		$_spesometro = $dati['sp_metro'];
 		$_note = $dati['note'];
@@ -81,7 +83,7 @@ if ($_SESSION['user']['contabilita'] > "2")
 		
 //Recupero le sessioni così da mostrarle..
 		$_data_reg = $_SESSION['datareg'];
-		$_data_gior = $_SESSION['datagior'];
+		$_data_cont = $_SESSION['datacont'];
 		$_testo = $_SESSION['testo'];
 		$_causale = $_SESSION['causale'];
 		$_anno = $_SESSION['anno'];
@@ -95,7 +97,7 @@ if ($_SESSION['user']['contabilita'] > "2")
 		$_submit = "Aggiorna";
 //    giriamo le date cosi da farle apparire giuste..
 		$_data_reg = cambio_data("it", $_data_reg);
-		$_data_gior = cambio_data("it", $_data_gior);
+		$_data_cont = cambio_data("it", $_data_cont);
 		$_finestra = $_causale;
 		$_parametri = "Modifica";
 	}
@@ -123,7 +125,7 @@ if ($_SESSION['user']['contabilita'] > "2")
 
 	echo "<table width=\"90%\" border=\"0\">\n";
 
-	echo "<td colspan=\"3\">Data registrazione $_data_reg</td><td colspan=\"3\">Data Contabile $_data_gior</td></tr>\n";
+	echo "<td colspan=\"3\">Data registrazione $_data_reg</td><td colspan=\"3\">Data Contabile $_data_cont</td></tr>\n";
 	echo "<form action=\"result_nota.php\" method=\"POST\"><tr><td colspan=\"6\"><br>Descrizione Movimento   <b>$_testo</b></td></tr>\n";
 	echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
 

@@ -379,7 +379,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			//vediamo se la banca ha muovimenti nella prima nota..
 			$_parametri = "";
 			$_parametri['conto'] = $MASTRO_BANCHE . $_codice;
-			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso, $_percorso);
+			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso, $_percorso);
 
 			if ($result['result'] == TRUE)
 			{
@@ -392,7 +392,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			//vediamo se la banca ha muovimenti nella prima nota..
 			$_parametri = "";
 			$_parametri['conto'] = $CONTO_EFFETTI_SBF . $_codice;
-			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso, $_percorso);
+			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso, $_percorso);
 
 			if ($result['result'] == TRUE)
 			{
@@ -405,7 +405,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			//vediamo se la banca ha muovimenti nella prima nota..
 			$_parametri = "";
 			$_parametri['conto'] = $CONTO_EFFETTI_INCASSO . $_codice;
-			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso, $_percorso);
+			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso, $_percorso);
 
 			if ($result['result'] == TRUE)
 			{
@@ -418,7 +418,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			//vediamo se la banca ha muovimenti nella prima nota..
 			$_parametri = "";
 			$_parametri['conto'] = $CONTO_EFFETTI_INSOLUTI . $_codice;
-			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso, $_percorso);
+			$result = tabella_primanota("check", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso, $_percorso);
 
 			if ($result['result'] == TRUE)
 			{

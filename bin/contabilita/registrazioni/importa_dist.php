@@ -38,10 +38,10 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 	echo "<table align=\"center\" width=\"80%\" border=\"0\">";
 	echo "<tr><td align=\"center\" valign=\"center\">";
-	echo "<span class=\"testo_blu\"><center><h3><b>Registrazione Distinte Bancarie in contabilit&agrave;</h3></b>";
+	echo "<span class=\"testo_blu\"><center><h3><b>Registrazione Distinte Bancarie in contabilit&agrave;</h3></b></span>";
 	echo "</td>";
 	echo "<tr><td align=\"center\" valign=\"center\">";
-	echo "<span class=\"testo_blu\"><center><h3>Seleziona i documenti, una volta importati non sar&agrave; pi&ugrave; possibile modificarli nel reparto vendite</h3>";
+	echo "<span class=\"testo_blu\"><center><h3>Seleziona i documenti, una volta importati non sar&agrave; pi&ugrave; possibile modificarli nel reparto vendite</h3></span>";
 	echo "</td></tr>\n";
 	echo "</table>";
 // Stringa contenente la query di ricerca...
@@ -76,23 +76,23 @@ if ($_SESSION['user']['contabilita'] > "1")
 	{
 
 		echo "<tr>";
-		echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-		echo "<td width=\"30\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-		echo "<td width=\"400\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-		echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-		echo "<td width=\"40\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-		echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
+		echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+		echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+		echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+		echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+		echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+		echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
 
 		echo "</tr>";
 		//azzero le variabili
 		//      $_valoretot = 0;
 		echo "<tr>";
-		printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datadist']);
-		printf("<td width=\"30\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndistinta']);
-		printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['banca']);
-		printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);
-		printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['tipo_pres']);
-		printf("<td width=\"30\" align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s\"></td>\n", $dati['annoeff'], $dati['ndistinta']);
+		printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datadist']);
+		printf("<td align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['ndistinta']);
+		printf("<td align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['banca']);
+		printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);
+		printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['tipo_pres']);
+		printf("<td align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s\"></td>\n", substr($dati['datadist'], "0", "4"), $dati['ndistinta']);
 		echo "</tr>";
 	}
 

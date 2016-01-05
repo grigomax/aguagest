@@ -82,7 +82,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 	$_data = date('d-m-Y');
 
 	echo "<tr><td align=\"center\">Data Registrazione  <input type=\"radio\" name=\"datareg\" value=\"$_data\" checked>$_data</td>\n";
-	echo "<td align=\"\" >Data Contabile  <input type=\"text\" name=\"datagior\" class=\"data\" value=\"$_data\" size=\"10\" maxlength=\"10\" required></td></tr>\n";
+	echo "<td align=\"center\" >Data Contabile  <input type=\"text\" name=\"datacont\" class=\"data\" value=\"$_data\" size=\"10\" maxlength=\"10\" required></td></tr>\n";
 
 	if ($_azione == "ST")
 	{
@@ -103,12 +103,15 @@ if ($_SESSION['user']['contabilita'] > "1")
 		echo "<select name=\"segno\">\n";
 		echo "<option value=\"P\">P - Fattura Acquisto</option>\n";
 		echo "<option value=\"N\">N - Nota Credito</option>\n";
-		echo "</select></td>\n";
+		echo "</select>\n";
+                echo " - Suffisso\n";
+                suffisso("select", "suffix_proto", $_parametri);
+                echo "</td>\n";
 
-		echo "<td align=\"left\" colspan=\"1\"><br>Seleziona il fornitore<br>&nbsp;";
+		echo "<td align=\"center\" colspan=\"1\"><br>Seleziona il fornitore<br>&nbsp;";
 		
                 tabella_fornitori("elenca_select", "utente", $_parametri);
-                echo "<tr><td>&nbsp;</td><td align=\"left\">Oppure partita iva <input type=\"text\" name=\"piva\" size=\"14\" maxlength=\"11\"></td></tr>\n";
+                echo "<tr><td>&nbsp;</td><td align=\"center\">Oppure partita iva <input type=\"text\" name=\"piva\" size=\"14\" maxlength=\"11\"></td></tr>\n";
 
 		echo "<tr><td colspan=\"2\" align=\"center\"><hr></td></tr>\n";
 		echo "<tr><td align=\"center\"><br>Importo Documento comprensivo di iva</td><td align=\"center\"><br>Aliquota Iva di riferimento</td></tr>\n";

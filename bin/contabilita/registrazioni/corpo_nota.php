@@ -16,7 +16,7 @@ $_SESSION['keepalive'] ++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 require "../../../setting/par_conta.inc.php";
 require "../../librerie/motore_primanota.php";
@@ -28,15 +28,8 @@ base_html("chiudi", $_percorso);
 testata_html($_cosa, $_percorso);
 
 
-
-
-
 if ($_SESSION['user']['contabilita'] > "1")
 {
-
-
-
-
     $id = session_id();
 //funzione 
 
@@ -58,13 +51,14 @@ if ($_SESSION['user']['contabilita'] > "1")
     $_azione = $_POST['azione'];
     $_cosa = substr($_POST['utente'], '0', '2');
     $_utente = substr($_POST['utente'], '2', '10');
+    
 
 //sistemiamo i posto..
 //ripristinaimo solo le sessioni
     if ($_POST['azione'] != "Nuova")
     {
         $_data_reg = $_SESSION['datareg'];
-        $_data_gior = $_SESSION['datagior'];
+        $_data_cont = $_SESSION['datacont'];
         $_anno = $_SESSION['anno'];
         $_causale = $_SESSION['causale'];
 
@@ -84,11 +78,11 @@ if ($_SESSION['user']['contabilita'] > "1")
 //prendiamo ci i post
         //echo $_POST['causale'];
         //verifichiamo un po di parametri...
-        if (($_POST['datareg'] == "") OR ( $_POST['datagior'] == "") OR ( $_POST['causale'] == "0"))
+        if (($_POST['datareg'] == "") OR ( $_POST['datacont'] == "") OR ( $_POST['causale'] == "0"))
         {
             echo "<h2 align=\"center\">Attenzione uno dei campi obbligatori non &egrave; stato inserito</h2>\n";
             echo "<h3 align=\"center\">Data Registrazione = $_POST[datareg]</h3>\n";
-            echo "<h3 align=\"center\">Data Contabile = $_POST[datagior]</h3>\n";
+            echo "<h3 align=\"center\">Data Contabile = $_POST[datacont]</h3>\n";
             echo "<h3 align=\"center\">Causale = $_POST[causale]</h3>\n";
             echo "<h3 align=\"center\">Tornare indietro e verificare</h3>\n";
             exit;
@@ -109,7 +103,7 @@ if ($_SESSION['user']['contabilita'] > "1")
             }
 
             //controlliamo la data contabile
-            $_checkdate = verifica_data($cosa, $_POST['datagior']);
+            $_checkdate = verifica_data($cosa, $_POST['datacont']);
             if ($_checkdate['errore'] == "error")
             {
                 echo "<h3 align=\"center\">Errore nella data contabile</h3>\n";
@@ -121,11 +115,12 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 
             $_data_reg = $_POST['datareg'];
-            $_data_gior = $_POST['datagior'];
+            $_data_cont = $_POST['datacont'];
             $_causale = $_POST['causale'];
             $_SESSION['datareg'] = $_data_reg;
-            $_SESSION['datagior'] = $_data_gior;
+            $_SESSION['datacont'] = $_data_cont;
             $_SESSION['causale'] = $_causale;
+            $_SESSION['suffix_proto'] = $_POST['suffix_proto'];
 
             //recuperiamo l'anno e passiamo ad una sessione
             $_anno = cambio_data("anno_it", $_data_reg);
@@ -148,7 +143,7 @@ if ($_SESSION['user']['contabilita'] > "1")
             }
             elseif ($_causale == "FA")
             {
-                if (($_POST['totdoc'] == "") OR (($_POST['utente'] == "") AND ($_POST['piva'] == "")) OR ( $_POST['segno'] == "") OR ( $_POST['iva'] == ""))
+                if (($_POST['totdoc'] == "") OR ( ($_POST['utente'] == "") AND ( $_POST['piva'] == "")) OR ( $_POST['segno'] == "") OR ( $_POST['iva'] == ""))
                 {
                     echo "<h2>Attenzione uno dei campi obbligatori non &egrave; stato inserito</h2>\n";
                     echo "<h3 align=\"center\">Tornare indietro e verificare</h3>\n";
@@ -157,14 +152,14 @@ if ($_SESSION['user']['contabilita'] > "1")
                 else
                 {
                     //recuperiamo i post aggiutivi
-                    
-                    if($_POST['utente'] == "")
+
+                    if ($_POST['utente'] == "")
                     {
-                        $_SESSION['utente'] = tabella_fornitori("singolo_piva", $_POST['piva'], "");
+                        $_SESSION['utente'] = tabella_fornitori("singola_piva", $_POST['piva'], "");
                     }
                     else
                     {
-                        $_SESSION['utente'] = tabella_fornitori("singolo", $_POST['utente'], "");
+                        $_SESSION['utente'] = tabella_fornitori("singola", $_POST['utente'], "");
                     }
                     $_totdoc = $_POST['totdoc'];
                     if ($_POST['segno'] == "N")
@@ -183,8 +178,6 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_SESSION['totdoc'] = $_totdoc;
 
                     //Selezioniamo il fornitore e lo passiamo alla variabile
-                    
-
                     //impostiamo la sessione con i parametri dell'operazione
                     $_SESSION['parametri']['segno'] = $_POST['segno'];
                     $_SESSION['parametri']['iva'] = $_POST['iva'];
@@ -207,20 +200,22 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_finestra = "Nuova";
                     $_parametri['campo1'] = "nproto";
                     $_parametri['campo2'] = "anno_proto";
+                    $_parametri['campo3'] = "suffix_proto";
                     //splitiamo il numero del documento per prenderci anche l'anno del protocollo
                     //sappiano che l'anno è dic 4 cifre'
 
                     $_parametri['anno_proto'] = substr($_POST['ndoc'], 0, 4);
-                    $_parametri['campo1_data'] = substr($_POST['ndoc'], 4, 10);
+                    $_parametri['suffix_proto'] = substr($_POST['ndoc'], 4, 1);
+                    $_parametri['campo1_data'] = substr($_POST['ndoc'], 5, 11);
                     $_parametri['conto'] = $_utente;
 
                     //selezioniamo la registrazione ela passiamo ad una sessione..
-                    $_SESSION['registrazione'] = tabella_primanota("leggi_PA", $id, $_anno, $_nreg, "PA", $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_SESSION['registrazione'] = tabella_primanota("leggi_PA", $id, $_anno, $_nreg, "PA", $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
                     //elimino il mastro e prendo il fornitore
                     $_fornitore = substr($_utente, '2', '10');
                     //Selezioniamo il fornitore e lo passiamo alla variabile
-                    $_SESSION['utente'] = tabella_fornitori("singolo", $_fornitore, "");
+                    $_SESSION['utente'] = tabella_fornitori("singola", $_fornitore, "");
                     $_parametri = "PA";
 
                     $_testo = "Pagamento fatt. forn. n. " . $_SESSION['registrazione']['ndoc'] . " - " . $_SESSION['utente']['ragsoc'];
@@ -243,20 +238,22 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_finestra = "Nuova";
                     $_parametri['campo1'] = "ndoc";
                     $_parametri['campo2'] = "anno_doc";
+                    $_parametri['campo3'] = "suffix_doc";
                     $_parametri['anno_doc'] = substr($_POST['ndoc'], 0, 4);
-                    $_parametri['campo1_data'] = substr($_POST['ndoc'], 4, 10);
+                    $_parametri['suffix_doc'] = substr($_POST['ndoc'], 4, 1);
+                    $_parametri['campo1_data'] = substr($_POST['ndoc'], 5, 11);
                     $_parametri['conto'] = $MASTRO_CLI . $_utente;
 
                     //selezioniamo la registrazione ela passiamo ad una sessione..
-                    $_SESSION['registrazione'] = tabella_primanota("leggi_PA", $id, $_anno, $_nreg, "IN", $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_SESSION['registrazione'] = tabella_primanota("leggi_PA", $id, $_anno, $_nreg, "IN", $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
                     //elimino il mastro e prendo il fornitore
                     //$_fornitore = substr($_utente, '2', '10');
                     //Selezioniamo il fornitore e lo passiamo alla variabile
-                    $_SESSION['utente'] = tabella_clienti("singolo", $_utente, "");
+                    $_SESSION['utente'] = tabella_clienti("singola", $_utente, "");
                     $_parametri = "IN";
 
-                    $_testo = "Incasso Fatt. n. " . $_SESSION['registrazione']['ndoc'] . " - " . $_SESSION['utente']['ragsoc'];
+                    $_testo = "Incasso Fatt. n. " . $_SESSION['registrazione']['ndoc'] . "/" . $_SESSION['registrazione']['suffix_doc'] . "- " . $_SESSION['utente']['ragsoc'];
                     $_SESSION['testo'] = $_testo;
                 }
             }
@@ -270,18 +267,18 @@ if ($_SESSION['user']['contabilita'] > "1")
     elseif ($_azione == "Inserisci")
     {
         //echo $_POST['tipo_cf'];
-        if(($_POST['codconto'] == "0") OR ($_POST['tipo_cf'] == ""))
+        if (($_POST['codconto'] == "0") OR ( $_POST['tipo_cf'] == ""))
         {
             echo "<h3 align=\"center\">impossibile proseguire in quanto il codice conto non è stato selezionato</h3>\n";
             exit;
         }
-        
-        if(($_POST['dare'] == "0.00") AND ($_POST['avere'] == "0.00"))
+
+        if (($_POST['dare'] == "0.00") AND ( $_POST['avere'] == "0.00"))
         {
             echo "<h3 align=\"center\">Impossibile proseguire in quanto il valore dare o avere risulta uguale a 0</h3>\n";
             exit;
         }
-        
+
         $_segno = $_SESSION['parametri']['segno'];
         $_iva = $_SESSION['parametri']['iva'];
         carrello_primanota("Inserisci", $_anno, "", $_POST['tipo_cf'], $_POST['codconto'], $_POST['dare'], $_POST['avere'], $_segno, $_POST['iva']);
@@ -292,13 +289,12 @@ if ($_SESSION['user']['contabilita'] > "1")
         #java_script("");
         $_tipo_cf = $_POST['tipo_cf'];
         $_finestra = "nuovariga";
-        
     }
     elseif ($_azione == "Modifica")
     {
         $_anno = $_POST['anno'];
         $_nreg = $_POST['nreg'];
-        $_result = tabella_primanota("basket", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+        $_result = tabella_primanota("basket", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
         if ($_result['errori']['errore'] == "errore")
         {
@@ -312,11 +308,11 @@ if ($_SESSION['user']['contabilita'] > "1")
             //impostiamo le sessioni
 
             $_data_reg = $dati['data_reg'];
-            $_data_gior = $dati['data_cont'];
+            $_data_cont = $dati['data_cont'];
             $_causale = $dati['causale'];
             $_testo = $_result['errori']['testo'];
             $_SESSION['datareg'] = $_data_reg;
-            $_SESSION['datagior'] = $_data_gior;
+            $_SESSION['datacont'] = $_data_cont;
             $_SESSION['causale'] = $_causale;
             $_SESSION['anno'] = $_anno;
             $_SESSION['nreg'] = $_nreg;
@@ -337,7 +333,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                 {
                     $_conto = substr($dati['conto'], 2);
 
-                    $_SESSION['utente'] = tabella_fornitori("singolo", $_conto, "");
+                    $_SESSION['utente'] = tabella_fornitori("singola", $_conto, "");
                 }
             }
 
@@ -352,14 +348,14 @@ if ($_SESSION['user']['contabilita'] > "1")
                 {
                     $_conto = substr($dati['conto'], 2);
 
-                    $_SESSION['utente'] = tabella_clienti("singolo", $_conto, "");
+                    $_SESSION['utente'] = tabella_clienti("singola", $_conto, "");
                 }
             }
         }
 
         //    giriamo le date cosi da farle apparire giuste..
         $_data_reg = cambio_data("it", $_data_reg);
-        $_data_gior = cambio_data("it", $_data_gior);
+        $_data_cont = cambio_data("it", $_data_cont);
 
 
         $_finestra = "elenco";
@@ -378,7 +374,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         echo "<h2>Registrazione di prima nota</h2>\n";
 
 
-        $_result = tabella_primanota("elimina_reg", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+        $_result = tabella_primanota("elimina_reg", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
         if ($_result != "true")
         {
@@ -410,13 +406,13 @@ if ($_SESSION['user']['contabilita'] > "1")
     }
     elseif ($_azione == "Aggiorna")
     {
-        
-        if(($_POST['dare'] == "0.00") AND ($_POST['avere'] == "0.00"))
+
+        if (($_POST['dare'] == "0.00") AND ( $_POST['avere'] == "0.00"))
         {
             echo "<h3 align=\"center\">Impossibile proseguire in quanto il valore dare o avere risulta uguale a 0</h3>\n";
             exit;
         }
-        
+
         $_segno = $_SESSION['parametri']['segno'];
 
         carrello_primanota("Aggiorna", $_anno, $_POST['rigo'], "", "", $_POST['dare'], $_POST['avere'], $_segno, $_POST['iva']);
@@ -429,7 +425,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         annulla_doc($id);
 
         echo "<body>\n";
-                //carichiamo il menu a tendina..
+        //carichiamo il menu a tendina..
         menu_tendina($_cosa, $_percorso);
         echo "<center>\n";
         echo "<h2>Registrazione di prima nota</h2>\n";
@@ -479,7 +475,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
     echo "<table width=\"90%\" border=\"0\">\n";
     echo "<tr>\n";
-    echo "<td colspan=\"4\">Data registrazione $_data_reg</td><td colspan=\"3\">Data Contabile $_data_gior</td></tr>\n";
+    echo "<td colspan=\"4\">Data registrazione $_data_reg</td><td colspan=\"3\">Data Contabile $_data_cont</td></tr>\n";
     echo "<form action=\"corpo_nota.php\" method=\"POST\"><tr><td colspan=\"7\">Descrizione Movimento  <input type=\"text\" size=\"82\" maxlength=\"100\" name=\"testo\" value=\"$_testo\" onchange=\"session_aggiorna_testo('testo', this.value)\"> <input type=\"submit\" name=\"azione\" value=\"nuovariga\"></td></tr>\n";
     echo "</form>";
     echo "<tr><td colspan=\"7\"><hr></td></tr>\n";

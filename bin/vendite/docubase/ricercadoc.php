@@ -63,7 +63,7 @@ if ($_SESSION['user']['vendite'] > "1")
     printf("<td class=\"colonna\" width=\"200\" align=\"center\"><input type=\"text\" name=\"descrizione\" value=\"%s\" size=\"60\" maxlength=\"40\"></td></tr>\n", $_descrizione);
 
     echo "<tr><td width=\"200\" align=\"right\"><span class=\"testo_blu\">Codice a Barre => &nbsp;</span></td>\n";
-    echo "<td class=\"colonna\" width=\"200\" align=\"left\"><input type=\"text\" placeholder=\"anno+numero\" name=\"barcode\" size=\"20\" maxlength=\"20\"></td></tr>\n";
+    echo "<td class=\"colonna\" width=\"200\" align=\"left\"><input type=\"text\" placeholder=\"anno+suffix+numero\" name=\"barcode\" size=\"20\" maxlength=\"20\"></td></tr>\n";
 
 // PULSANTI E CHIUSURA FORM -----------------------------------------------------------------------------------------
     echo "<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" value=\"Cerca !\">\n";

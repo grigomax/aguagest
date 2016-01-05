@@ -121,6 +121,7 @@ if ($_SESSION['user']['scadenziario'] > "1")
     $_parametri['ndoc'] = $_POST['ndoc'];
     $_parametri['data_doc'] = cambio_data("us", $_POST['data_doc']);
     $_parametri['anno_proto'] = $_POST['anno_proto'];
+    $_parametri['suffix_proto'] = $_POST['suffix_proto'];
     $_parametri['nproto'] = $_POST['nproto'];
     $_parametri['codpag'] = $_POST['codpag'];
     $_parametri['banca'] = $_POST['banca'];
@@ -153,7 +154,7 @@ if ($_SESSION['user']['scadenziario'] > "1")
             $_anno = $_POST['anno'];
 
             //Prima di iniziare leggiamo il numero di registrazione che tocca..
-            $_nreg = tabella_primanota("ultimo_numero", $id, $_annopag, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+            $_nreg = tabella_primanota("ultimo_numero", $id, $_annopag, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
             if (($_parametri['status'] == "saldato") AND ( $_scadenza['status'] != "saldato"))
             {
@@ -275,13 +276,14 @@ if ($_SESSION['user']['scadenziario'] > "1")
     }
     else
     {
-        $_scritta = "<h5>Annullamneto operazione come richiesto</h5>\n";
+        $_scritta = "<h5>Annullameto operazione come richiesto</h5>\n";
     }
 
 //leggiamo gli errori..
 // Esegue la query...
     if ($_risultato != "OK")
     {
+        echo $_scritta;
         echo $_risultato['errori']['descrizione'];
     }
     else

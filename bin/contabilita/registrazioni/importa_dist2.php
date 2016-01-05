@@ -16,7 +16,7 @@ $_SESSION['keepalive'] ++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 require "../../librerie/motore_primanota.php";
 require "../../../setting/par_conta.inc.php";
 require "../../librerie/motore_anagrafiche.php";
@@ -53,6 +53,8 @@ if ($_SESSION['user']['contabilita'] > "1")
     {
         $_anno = substr($_annondoc, "0", "4");
         $_ndistinta = substr($_annondoc, "4", "10");
+        
+        //echo $_anno;
 
 
 //leggiamo le fatture e ma mano che le leggiamo le passiamo in contabilità..
@@ -60,12 +62,20 @@ if ($_SESSION['user']['contabilita'] > "1")
         //leggo il database delle fatture..
         $query = "SELECT * FROM effetti INNER JOIN clienti ON effetti.codcli=clienti.codice where presenta= 'SI' AND datadist like '$_anno-%-%' AND ndistinta='$_ndistinta' order by numeff";
 
-        //ora esequiamo la query..
-        $res = mysql_query($query, $conn) or mysql_error();
+        $result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
 
         //ci prendiamo i dati..
 
-        while ($dati = mysql_fetch_array($res))
+        foreach ($result AS $dati)
         {
 
 
@@ -73,12 +83,13 @@ if ($_SESSION['user']['contabilita'] > "1")
             // se il documento è esistente verifichiamo che sia ancora aperto.. ovvero sbilanciato..
             //
         // verifichiamo praticamente che per poter scrivere nella conabilità il documento sia aperto.. oppure lo apriamo..
-            $_return = tabella_primanota("verifica_FV", $id, $dati['annodoc'], $dati['numdoc'], "IN", $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+            $_return = tabella_primanota("verifica_FV", $id, $dati['annodoc'], $dati['numdoc'], "IN", $_testo, $_data_reg, $_data_cont, $dati['suffixdoc'], $_percorso);
 
             if ($_return['risposta'] == "esiste")
             {
                 $_parametri['utente'] = $dati['codcli'];
-                $_return2 = tabella_primanota("verifica_doc_aperto", $id, $dati['annodoc'], $dati['numdoc'], $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                $_parametri['suffix_doc'] = $dati['suffixdoc'];
+                $_return2 = tabella_primanota("verifica_doc_aperto", $id, $dati['annodoc'], $dati['numdoc'], $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
                 if ($_return2['risposta'] == "vero")
                 {
@@ -86,10 +97,14 @@ if ($_SESSION['user']['contabilita'] > "1")
                     echo "La fattura nr $dati[numdoc]...... OK<br>\n";
                 }
             }
+            else
+            {
+                $_return2['risposta'] = "";
+            }
 
             //echo $_return2['risposta'];
 
-            if (($_return2['risposta'] != "") AND ($_return2['risposta'] == "falso"))
+            if (($_return2['risposta'] != "") AND ( $_return2['risposta'] == "falso"))
             {
                 echo "<h3><font color=\"RED\">La fattura nr $dati[numdoc] presente in contabilit&agrave; risulta chiusa..</font></h3>\n";
                 echo "<h3>Errore non bloccante, Effetto nr. $dati[numeff] e anno $_anno </h3>\n";
@@ -106,15 +121,16 @@ if ($_SESSION['user']['contabilita'] > "1")
                 //ora che abbiamo i dati effettuiamo le scritture in contabilità..
                 //ci prendiamo il numero..
 
-                $_nreg = tabella_primanota("ultimo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                $_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
                 //ottimo ora inseriamo l'intero importo della registrazione in dare al cliente a meno che non sia una nota credito mche va al contrario
                 //prepariamo i dati standard..
-                $_data_gior = $dati['datadist'];
-                $_data_reg = $dati['datadist'];
+                $_data_cont = $dati['dataeff'];
+                $_data_reg = date('Y-m-d');
                 $_causale = "IN";
                 $_parametri['ndoc'] = $dati['numdoc'];
                 $_parametri['anno_doc'] = $dati['annodoc'];
                 $_parametri['data_doc'] = $dati['datadoc'];
+                $_parametri['suffix_doc'] = $dati['suffixdoc'];
                 $_parametri['codpag'] = $dati['modpag'];
 
                 $_parametri['segno'] = "P";
@@ -130,9 +146,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                 $_parametri['avere'] = $dati['impeff'];
 
 
-                $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                if ($_result['errori']['errore'] == "errore")
+                if ($_result['result'] == "NO")
                 {
                     echo "<h2>errore nr 1 durante l'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                     exit;
@@ -148,16 +164,16 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                 $_parametri['conto'] = $CONTO_EFFETTI_SBF . $dati['bancadist'];
                 //richiediamo la descrizione di questo conto...
-                $_desc_conto = piano_conti($CONTO_EFFETTI_SBF . $dati['bancadist'], "singolo", $_percorso);
+                $_desc_conto = piano_conti($CONTO_EFFETTI_SBF . $dati['bancadist'], "singola");
                 $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                 //controllo se è una nota credito
                 $_parametri['dare'] = $dati['impeff'];
 
 
                 //inseriamo i dati
-                $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                if ($_result['errori']['errore'] == "errore")
+                if ($_result['result'] == "NO")
                 {
                     echo "<h2>Errore nr. 2 durante l'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                     exit;
@@ -178,11 +194,20 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                 $query = "UPDATE effetti set contabilita = 'SI' WHERE annoeff='$dati[annoeff]' AND numeff='$dati[numeff]' LIMIT 1";
 
-                mysql_query($query, $conn) or mysql_error();
+                $result = $conn->exec($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
 
                 //Ora azzero le variabili usate..
                 $_parametri = "";
-                $_data_gior = "";
+                $_data_cont = "";
                 $_data_reg = "";
                 $_causale = "";
                 $_testo = "";

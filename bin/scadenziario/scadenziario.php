@@ -103,15 +103,15 @@ if ($_SESSION['user']['scadenziario'] > "1")
                 }
             }
             echo "<tr>";
-            echo "<td width=\"50\" align=\"center\"><span class=\"testo_blu\">$dati[nscad]</span></td>\n";
-            echo "<td width=\"50\" align=\"center\"><span class=\"testo_blu\">$dati[scadenza]</span></td>\n";
+            echo "<td align=\"center\"><span class=\"testo_blu\">$dati[nscad]</span></td>\n";
+            echo "<td align=\"center\"><span class=\"testo_blu\">$dati[scadenza]</span></td>\n";
             echo "<td align=\"left\"><span class=\"testo_blu\"><a href=\"scadenza.php?azione=visualizza&anno=$dati[anno]&nscad=$dati[nscad]\">$dati[descrizione]</a></span></td>";
-            echo "<td width=\"90\" align=\"right\"><span class=\"testo_blu\">$dati[status]</span></td>\n";
-            echo "<td width=\"90\" align=\"right\"><span class=\"testo_blu\"><b>$dati[impeff]</b></span></td>\n";
-            echo "<td width=\"30\" align=\"center\"><span class=\"testo_blu\">$dati[banca]</span></td>\n";
-            echo "<td width=\"50\" align=\"center\"><span class=\"testo_blu\">$dati[utente]</span></td>\n";
-            echo "<td width=\"50\" align=\"center\"><span class=\"testo_blu\">$dati[nproto]</span></td>\n";
-            printf("<td width=\"50\" align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s\"></td>\n", $dati['anno'], $dati['nscad']);
+            echo "<td align=\"right\"><span class=\"testo_blu\">$dati[status]</span></td>\n";
+            echo "<td align=\"right\"><span class=\"testo_blu\"><b>$dati[impeff]</b></span></td>\n";
+            echo "<td align=\"center\"><span class=\"testo_blu\">$dati[banca]</span></td>\n";
+            echo "<td align=\"center\"><span class=\"testo_blu\">$dati[utente]</span></td>\n";
+            echo "<td align=\"center\"><span class=\"testo_blu\">$dati[nproto]/$dati[suffix_proto]</span></td>\n";
+            printf("<td align=\"center\"><input type=checkbox name=\"numero[]\" value=\"%s%s\"></td>\n", $dati['anno'], $dati['nscad']);
             $_prima = "";
 
             if($dati['status'] != "saldato")
@@ -122,15 +122,15 @@ if ($_SESSION['user']['scadenziario'] > "1")
             
             echo "</tr>";
             echo "<tr>";
-            echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
-            echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
             echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
-            echo "<td width=\"90\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
-            echo "<td width=\"90\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
-            echo "<td width=\"30\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
-            echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
-            echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
-            echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>\n";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
+            echo "<td align=\"center\" class=\"logo\"></td>\n";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
+            echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>\n";
             echo "</tr>";
 
             $_mese_rif2 = $_mese_rif;

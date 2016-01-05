@@ -16,11 +16,12 @@ $_SESSION['keepalive'] ++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 
 require "../librerie/motore_primanota.php";
 require "../../setting/par_conta.inc.php";
+require "../librerie/motore_anagrafiche.php";
 require "../librerie/stampe_pdf.php";
 //qui parte l'avventura del sig. buonaventura...
 
@@ -45,10 +46,10 @@ if ($_SESSION['user']['contabilita'] > "1")
 //completiamo il codice conto..
     if ($_tipo_cf == "C")
     {
-        $query = "SELECT codice, ragsoc FROM clienti WHERE codice = '$_codconto'";
-        $res = mysql_query($query, $conn);
-        $dati = mysql_fetch_array($res);
+        $dati = tabella_clienti("singola", $_codconto, $_parametri);
+
         $_descrizione = $dati['ragsoc'];
+        $_tipo_cf = "C";
 
         //vuol dire che sono clienti
         $_conto = sprintf("%s%s", $MASTRO_CLI, $_codconto);
@@ -56,18 +57,19 @@ if ($_SESSION['user']['contabilita'] > "1")
     elseif ($_tipo_cf == "F")
     {
         //vuol dire che sono clienti
-        $query = "SELECT codice, ragsoc FROM fornitori WHERE codice = '$_codconto'";
-        $res = mysql_query($query, $conn);
-        $dati = mysql_fetch_array($res);
+        $dati = tabella_fornitori("singola", $_codconto, $_parametri);
+
         $_descrizione = $dati['ragsoc'];
         $_conto = sprintf("%s%s", $MASTRO_FOR, $_codconto);
+        $_tipo_cf = "F";
     }
     else
     {
-        $query = "SELECT codconto, descrizione FROM piano_conti WHERE codconto = '$_codconto'";
-        $res = mysql_query($query, $conn);
-        $dati = mysql_fetch_array($res);
+        $_codconto = $_POST['diretto'];
+        $dati = tabella_piano_conti("singola", $_codconto, $_parametri);
+
         $_descrizione = $dati['descrizione'];
+        $_tipo_cf = $dati['tipo_cf'];
         $_conto = $_codconto;
     }
 
@@ -81,8 +83,18 @@ if ($_SESSION['user']['contabilita'] > "1")
     //echo $_anno;
     //provo a prendermi il saldo precedente
     $query = "SELECT *, SUM(dare), SUM(avere), date_format(data_reg, '%d-%m-%Y') data_reg, date_format(data_cont, '%d-%m-%Y') data_cont, data_cont AS data from prima_nota where conto = '$_conto ' AND data_cont >= '$_anno-01-01' AND data_cont < '$_start' ORDER BY data ASC, nreg ";
-    $res = mysql_query($query, $conn);
-    $saldo = mysql_fetch_array($res);
+
+    $result = $conn->query($query);
+    if ($conn->errorCode() != "00000")
+    {
+        $_errore = $conn->errorInfo();
+        echo $_errore['2'];
+        //aggiungiamo la gestione scitta dell'errore..
+        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        scrittura_errori($_cosa, $_percorso, $_errori);
+    }
+    $saldo = $result->fetch(PDO::FETCH_ASSOC);
 
     $_saldo = $saldo['SUM(dare)'] - $saldo['SUM(avere)'];
 
@@ -90,16 +102,23 @@ if ($_SESSION['user']['contabilita'] > "1")
 
     $query = "SELECT *, date_format(data_reg, '%d-%m-%Y') data_reg, date_format(data_cont, '%d-%m-%Y') data_cont, data_cont AS data from prima_nota where conto = '$_conto ' AND data_cont >= '$_start' AND data_cont <= '$_end' ORDER BY data ASC, nreg ";
 //cerco il numero di righe
-    if ($res2 = mysql_query($query, $conn) or mysql_error())
-    {
-//cerco il numero di righe
-        $righe = mysql_num_rows($res2);
 
-        //inserisco il numero di righe per pagina
-        $_pagine = $righe / $rpp;
-        //arrotondo per eccesso
-        $pagina = ceil($_pagine);
+    $result = $conn->query($query);
+    if ($conn->errorCode() != "00000")
+    {
+        $_errore = $conn->errorInfo();
+        echo $_errore['2'];
+        //aggiungiamo la gestione scitta dell'errore..
+        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        scrittura_errori($_cosa, $_percorso, $_errori);
     }
+    $righe = $result->rowCount();
+
+    //inserisco il numero di righe per pagina
+    $_pagine = $righe / $rpp;
+    //arrotondo per eccesso
+    $pagina = ceil($_pagine);
 
     if ($_tipo == "pdf")
     {
@@ -143,7 +162,6 @@ if ($_SESSION['user']['contabilita'] > "1")
 //carichiamo il menu a tendina..
 #menu_tendina($_cosa, $_percorso);
 
-
         for ($_pg = 1; $_pg <= $pagina; $_pg++)
         {
 
@@ -182,13 +200,13 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             for ($_nr = 1; $_nr <= $rpp; $_nr++)
             {
-                $dati = mysql_fetch_array($res2);
+                $dati = $result->fetch(PDO::FETCH_ASSOC);
 
                 if (($dati['dare'] == "") AND ( $dati['avere'] == ""))
                 {
                     echo "<tr>";
                     echo "<td width=\"30\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td width=\"50\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td width=\"70\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
                     echo "<td width=\"30\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
                     echo "<td width=\"380\" align=\"CENTER\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
                     echo "<td width=\"60\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
@@ -199,10 +217,10 @@ if ($_SESSION['user']['contabilita'] > "1")
                 else
                 {
                     echo "<tr>";
-                    printf("<td width=\"30\" align=\"center\" class=\"tabella_elenco\"><b>%s</b></span></td>\n", $dati['nreg']);
-                    printf("<td width=\"50\" align=\"center\" class=\"tabella_elenco\">%s</span></td>\n", $dati['data_cont']);
-                    printf("<td width=\"30\" align=\"center\" class=\"tabella_elenco\"><b>%s</b></span></td>\n", $dati['nproto']);
-                    printf("<td width=\"380\" align=\"left\" class=\"tabella_elenco\">%s</span></td>\n", $dati['descrizione']);
+                    printf("<td align=\"center\" class=\"tabella_elenco\"><b>%s</b></span></td>\n", $dati['nreg']);
+                    printf("<td align=\"center\" class=\"tabella_elenco\">%s</span></td>\n", $dati['data_cont']);
+                    printf("<td align=\"center\" class=\"tabella_elenco\"><b>%s/$dati[suffix_proto]</b></span></td>\n", $dati['nproto']);
+                    printf("<td align=\"left\" class=\"tabella_elenco\">%s</span></td>\n", $dati['descrizione']);
 
                     if ($dati['dare'] == "0.00")
                     {
@@ -213,8 +231,8 @@ if ($_SESSION['user']['contabilita'] > "1")
                         $dati['avere'] = "&nbsp;";
                     }
 
-                    printf("<td width=\"60\" align=\"right\" class=\"tabella_elenco\">%s</span></td>\n", $dati['dare']);
-                    printf("<td width=\"60\" align=\"right\"class=\"tabella_elenco\" >%s</span></td>\n", $dati['avere']);
+                    printf("<td align=\"right\" class=\"tabella_elenco\">%s</span></td>\n", $dati['dare']);
+                    printf("<td align=\"right\"class=\"tabella_elenco\" >%s</span></td>\n", $dati['avere']);
 
                     $_dare = $_dare + $dati['dare'];
                     $_avere = $_avere + $dati['avere'];
@@ -229,7 +247,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                         $_scritta_p = "A";
                     }
 
-                    echo "<td width=\"70\" align=\"right\"class=\"tabella_elenco\">" . number_format($_saldo, '2') . " $_scritta_p</span></td>\n";
+                    echo "<td align=\"right\"class=\"tabella_elenco\">" . number_format($_saldo, '2') . " $_scritta_p</span></td>\n";
 
                     echo "</tr></form>";
                 }

@@ -79,14 +79,14 @@ if ($_SESSION['user']['vendite'] > "1")
             }
         }
         echo "<tr>";
-        printf("<td width=\"30\" align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['tipoeff']);
-        printf("<td width=\"80\" align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['documento']);
-        printf("<td width=\"80\" align=\"center\" class=\"tabella_elenco\"><b>%s</b></span></td>", $dati['numdoc']);
-        printf("<td width=\"400\" align=\"left\" class=\"tabella_elenco\">%s</span></td>", $dati['ragsoc']);
-        printf("<td width=\"50\" align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['impeff']);
-        printf("<td width=\"80\" align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['scadenza']);
-        printf("<td width=\"80\" align=\"center\" class=\"tabella_elenco\"><b>%s</b></span></td>", $dati['numeff']);
-        printf("<td width=\"80\" align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['status']);
+        printf("<td align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['tipoeff']);
+        printf("<td align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['documento']);
+        printf("<td align=\"center\" class=\"tabella_elenco\"><b>%s/$dati[suffixdoc]</b></span></td>", $dati['numdoc']);
+        printf("<td align=\"left\" class=\"tabella_elenco\">%s</span></td>", $dati['ragsoc']);
+        printf("<td align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['impeff']);
+        printf("<td align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['scadenza']);
+        printf("<td align=\"center\" class=\"tabella_elenco\"><b>%s</b></span></td>", $dati['numeff']);
+        printf("<td align=\"center\" class=\"tabella_elenco\">%s</span></td>", $dati['status']);
         $_prima = "";
 
         $_somma = $_somma + $dati['impeff'];
@@ -95,14 +95,14 @@ if ($_SESSION['user']['vendite'] > "1")
 
         echo "</tr>";
         echo "<tr>";
-        echo "<td width=\"30\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"400\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
         echo "</tr>";
         $_mese_rif2 = $_mese_rif;
     }

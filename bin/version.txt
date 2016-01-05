@@ -33,6 +33,12 @@ massimo@mcetechnik.it
 -   1   Nuovo programma stampe etichette, così ora è possibile stampare tutte le
 -       le destinazioni inserite.. !
 
+-6  CONTABILITA
+-   1   Tutto il nuovo reparto aggiornato con l'inserimento di un protocollo anche 
+-       anche nelle fatture arrivate, passaggio quasi completato alle librerie nuove
+-       ora il programma sembra più veloce.
+
+
 --------------------------------------------------------------------------------
 -VERSIONE 1.2.3 Rc 3 del 23/11/2015
 -1 ADMIN

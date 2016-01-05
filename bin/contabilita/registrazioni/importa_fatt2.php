@@ -16,7 +16,7 @@ $_SESSION['keepalive'] ++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 require "../../librerie/motore_anagrafiche.php";
 require "../../librerie/motore_primanota.php";
 require "../../../setting/par_conta.inc.php";
@@ -50,20 +50,29 @@ if ($_SESSION['user']['contabilita'] > "1")
     foreach ($_check as $_annondoc)
     {
 
+        //dobbiamo dividere i vari campi in quanto abbiamo anche l'anno..
         $_anno = substr($_annondoc, "0", "4");
-        $_ndoc = substr($_annondoc, "4", "10");
+        $_suffix = substr($_annondoc, "4", "1");
+        $_ndoc = substr($_annondoc, "5", "11");
+        
 
 //leggiamo le fatture e ma mano che le leggiamo le passiamo in contabilità..
         //Poi leggiamo anche tutte le varie aggiute come trasporto ecc..
         //leggo il database delle fatture..
-        $query = "SELECT * FROM fv_testacalce INNER JOIN clienti ON fv_testacalce.utente=clienti.codice where anno='$_anno' AND ndoc='$_ndoc' LIMIT 1";
+        $query = "SELECT * FROM fv_testacalce INNER JOIN clienti ON fv_testacalce.utente=clienti.codice where anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' LIMIT 1";
 
-        //ora esequiamo la query..
-        $res = mysql_query($query, $conn) or mysql_error();
+        $result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
 
-        //ci prendiamo i dati..
-
-        $dati = mysql_fetch_array($res);
+        $dati = $result->fetch(PDO::FETCH_ASSOC);
 
         //sistemiamo la questione iva.. 
         //verifichiamo la data del documento.. e aggiorniamo l'iva
@@ -79,7 +88,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 
         //prima di tutto verifichiamo che la registrazione non esisti già, altrimenti avvisiamo e saltiamo..
-        $_return = tabella_primanota("verifica_FV", $id, $_anno, $_ndoc, "FV", $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+        $_return = tabella_primanota("verifica_FV", $id, $_anno, $_ndoc, "FV", $_testo, $_data_reg, $_data_cont, $_suffix, $_percorso);
 
         if ($_return == "true")
         {
@@ -93,7 +102,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             if ($dati['cod_conto'] == "")
             {
-                echo "<h3>Errore non bloccante, Documento nr. $_ndoc e anno $_anno </h3>\n";
+                echo "<h3>Errore non bloccante, Documento nr. $_ndoc/$_suffix e anno $_anno </h3>\n";
                 echo "<h3>Il cliente risulta senza codice del piano dei conti..</h3>\n";
                 echo "<h3>Il documento verr&agrave; saltato</h3>\n";
             }
@@ -103,14 +112,15 @@ if ($_SESSION['user']['contabilita'] > "1")
                 //ora che abbiamo i dati effettuiamo le scritture in contabilità..
                 //ci prendiamo il numero..
 
-                $_nreg = tabella_primanota("ultimo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                $_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
                 //ottimo ora inseriamo l'intero importo della registrazione in dare al cliente a meno che non sia una nota credito mche va al contrario
                 //
             //prepariamo i dati standard..
-                $_data_gior = $dati['datareg'];
+                $_data_cont = $dati['datareg'];
                 $_data_reg = $dati['datareg'];
                 $_causale = "FV";
                 $_parametri['ndoc'] = $dati['ndoc'];
+                $_parametri['suffix_doc'] = $dati['suffix'];
                 $_parametri['anno_doc'] = $dati['anno'];
                 $_parametri['data_doc'] = $dati['datareg'];
                 $_parametri['codpag'] = $dati['modpag'];
@@ -129,7 +139,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                     // vuo dire che il cliente ha una forma di esenzione..
                     // vediamo qual'è
                     //prendiamo l'arrey dell'iva
-                    $dati_iva = tabella_aliquota("singolo", $dati['iva'], $_percorso);
+                    $dati_iva = tabella_aliquota("singola", $dati['iva'], $_percorso);
 
                     //verifichiamo se è esente livello 2
 
@@ -158,14 +168,14 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['segno'] = "N";
                     //giriamo la data..
                     $_data_testo = cambio_data("it", $dati['datareg']);
-                    $_testo = "Emessa nota credito " . $dati['ndoc'] . " / " . $dati['anno'] . " del " . $_data_testo;
+                    $_testo = "Emessa nota credito " . $dati['ndoc'] . "-" . $dati['suffix'] . " / " . $dati['anno'] . " del " . $_data_testo;
                 }
                 else
                 {
                     $_parametri['segno'] = "P";
                     //giriamo la data..
                     $_data_testo = cambio_data("it", $dati['datareg']);
-                    $_testo = "Emessa Fattura " . $dati['ndoc'] . " / " . $dati['anno'] . " del " . $_data_testo;
+                    $_testo = "Emessa Fattura " . $dati['ndoc'] . "-" . $dati['suffix'] . " / " . $dati['anno'] . " del " . $_data_testo;
                     //inseriamo i dati..
                     //inseriamo tutto l'importo della fattura in dare..
                 }
@@ -184,9 +194,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['dare'] = $dati['totdoc'];
                 }
 
-                $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                if ($_result['errori']['errore'] == "errore")
+                if ($_result['result'] == "NO")
                 {
                     echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                     exit;
@@ -218,7 +228,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $CONTO_SCONTI_FINALI;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($CONTO_SCONTI_FINALI, "singolo");
+                    $_desc_conto = piano_conti($CONTO_SCONTI_FINALI, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     //controllo se è una nota credito
                     if ($_parametri['segno'] == "N")
@@ -238,9 +248,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $_ivaspese;
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -261,7 +271,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $REC_TRASPORTO;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($REC_TRASPORTO, "singolo");
+                    $_desc_conto = piano_conti($REC_TRASPORTO, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     //controllo se è una nota credito
                     if ($_parametri['segno'] == "N")
@@ -281,9 +291,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $_ivaspese;
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -304,7 +314,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $REC_SPESE_VARIE;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($REC_SPESE_VARIE, "singolo");
+                    $_desc_conto = piano_conti($REC_SPESE_VARIE, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     if ($_parametri['segno'] == "N")
                     {
@@ -324,9 +334,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $_ivaspese;
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -347,7 +357,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $REC_IMBALLI;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($REC_IMBALLI, "singolo");
+                    $_desc_conto = piano_conti($REC_IMBALLI, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     if ($_parametri['segno'] == "N")
                     {
@@ -366,9 +376,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $_ivaspese;
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("iserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -389,7 +399,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $REC_SPESE_BANCARIE;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($REC_SPESE_BANCARIE, "singolo");
+                    $_desc_conto = piano_conti($REC_SPESE_BANCARIE, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     if ($_parametri['segno'] == "N")
                     {
@@ -408,9 +418,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $_ivaspese;
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -449,7 +459,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                     //ora inseriamo i conti per l'avere il netto merce con la contropartita segnalata sul conto del cliente
                     $_parametri['conto'] = $dati['cod_conto'];
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($dati['cod_conto'], "singolo");
+                    $_desc_conto = piano_conti($dati['cod_conto'], "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
 
                     //dobbiamo verificicare sempre se l'iva è associaa al cliente e se ci sono spese..
@@ -471,9 +481,9 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -506,7 +516,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $CONTO_IVA_VENDITE;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singolo");
+                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     //controllo se è una nota credito
                     if ($_parametri['segno'] == "N")
@@ -520,9 +530,9 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -542,7 +552,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                     //ora inseriamo i conti per l'avere il netto merce con la contropartita segnalata sul conto del cliente
                     $_parametri['conto'] = $dati['cod_conto'];
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($dati['cod_conto'], "singolo");
+                    $_desc_conto = piano_conti($dati['cod_conto'], "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
 
                     //dobbiamo verificicare sempre se l'iva è associaa al cliente e se ci sono spese..
@@ -563,9 +573,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_2'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -587,7 +597,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $CONTO_IVA_VENDITE;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singolo");
+                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     //controllo se è una nota credito
                     if ($_parametri['segno'] == "N")
@@ -602,9 +612,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_2'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -624,7 +634,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                     //ora inseriamo i conti per l'avere il netto merce con la contropartita segnalata sul conto del cliente
                     $_parametri['conto'] = $dati['cod_conto'];
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($dati['cod_conto'], "singolo");
+                    $_desc_conto = piano_conti($dati['cod_conto'], "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
 
                     //dobbiamo verificicare sempre se l'iva è associaa al cliente e se ci sono spese..
@@ -645,9 +655,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_3'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -669,7 +679,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $CONTO_IVA_VENDITE;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singolo");
+                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     //controllo se è una nota credito
                     if ($_parametri['segno'] == "N")
@@ -684,9 +694,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_3'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -706,7 +716,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                     //ora inseriamo i conti per l'avere il netto merce con la contropartita segnalata sul conto del cliente
                     $_parametri['conto'] = $dati['cod_conto'];
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($dati['cod_conto'], "singolo");
+                    $_desc_conto = piano_conti($dati['cod_conto'], "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     //dobbiamo verificicare sempre se l'iva è associaa al cliente e se ci sono spese..
                     if ($dati['cod_iva_4'] == $_ivaspese)
@@ -727,9 +737,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_4'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -751,7 +761,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $CONTO_IVA_VENDITE;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singolo");
+                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
 
 
@@ -768,9 +778,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_4'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -790,7 +800,7 @@ if ($_SESSION['user']['contabilita'] > "1")
                     //ora inseriamo i conti per l'avere il netto merce con la contropartita segnalata sul conto del cliente
                     $_parametri['conto'] = $dati['cod_conto'];
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($dati['cod_conto'], "singolo");
+                    $_desc_conto = piano_conti($dati['cod_conto'], "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
 
                     //dobbiamo verificicare sempre se l'iva è associaa al cliente e se ci sono spese..
@@ -812,9 +822,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_5'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -836,7 +846,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                     $_parametri['conto'] = $CONTO_IVA_VENDITE;
                     //richiediamo la descrizione di questo conto...
-                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singolo");
+                    $_desc_conto = piano_conti($CONTO_IVA_VENDITE, "singola");
                     $_parametri['desc_conto'] = $_desc_conto['descrizione'];
                     //controllo se è una nota credito
                     if ($_parametri['segno'] == "N")
@@ -851,9 +861,9 @@ if ($_SESSION['user']['contabilita'] > "1")
                     $_parametri['iva'] = $dati['cod_iva_5'];
 
                     //inseriamo i dati
-                    $_result = tabella_primanota("Inserisci_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-                    if ($_result['errori']['errore'] == "errore")
+                    if ($_result['result'] == "NO")
                     {
                         echo "<h2>errore nell'inserimento della registrazione nr. $_nreg e documento nr. $_ndoc</h2>\n";
                         exit;
@@ -865,13 +875,23 @@ if ($_SESSION['user']['contabilita'] > "1")
                 //visto che è tutto ok..
                 //setto la fatura vendita a portata in contabilità..
 
-                $query = "UPDATE fv_testacalce set status='saldato', contabilita = 'SI' WHERE anno='$_anno' AND ndoc='$_ndoc' LIMIT 1";
+                $query = "UPDATE fv_testacalce set status='saldato', contabilita = 'SI' WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' LIMIT 1";
 
-                mysql_query($query, $conn) or mysql_error();
+                $result = $conn->exec($query);
+		if ($conn->errorCode() != "00000")
+		{
+			$_errore = $conn->errorInfo();
+			echo $_errore['2'];
+			//aggiungiamo la gestione scitta dell'errore..
+			$_errori['descrizione'] = "Errore $_azione Query = $query - $_errore[2]";
+			$_errori['files'] = "motore_anagrafiche.php";
+			scrittura_errori($_cosa, $_percorso, $_errori);
+			$dati = "errore";
+		}
 
                 //Ora azzero le variabili usate..
                 $_parametri = "";
-                $_data_gior = "";
+                $_data_cont = "";
                 $_data_reg = "";
                 $_causale = "";
                 $_testo = "";

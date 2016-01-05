@@ -48,10 +48,20 @@ if ($_SESSION['user']['vendite'] > "1")
 
 // Impostiamo l'anno di utilizzo
 //$_annoeff = cambio_data("anno_it", $_POST['data']);
-    $_datapag = cambio_data("us", $_POST['data']);
+    //verichiamo la data..
+
+    $_checkdate = verifica_data($cosa, $_POST['data']);
+    if ($_checkdate['errore'] == "error")
+    {
+        echo "$_checkdate[descrizione] - data pagamento $_POST[data]";
+
+        exit;
+    }
+    $_checkdate = "";
 
     $_anno = date('Y'); //prendiamo l'anno in corso
 
+    $_datapag = cambio_data("us", $_POST['data']);
     $_numero = $_POST['check'];
 
 // echo $_ndoc;
@@ -65,15 +75,15 @@ if ($_SESSION['user']['vendite'] > "1")
 
         if ($CONTABILITA == "SI")
         {
-            
+
             //leggiamo l'effetto da lavorare..
-            
-            $dati_eff = tabella_effetti("singola", $_percorso, $_annoeff, $_numeff, $_parametri);
-            
-            
+
+            $dati_eff = tabella_effetti("singola", $_percorso, $_annoeff, $_numeff, "data_us");
+
+
             // direi prenotiamo un numero di contabilità
 
-            $_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+            $_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
             //eseguiamo la registrazione tra la banca sbf ed il conto
             //il dare va alla banca c/c ed in avere il conto sbf
@@ -90,6 +100,7 @@ if ($_SESSION['user']['vendite'] > "1")
             $_parametri['segno'] = "P";
             $_parametri['ndoc'] = $dati_eff['numdoc'];
             $_parametri['anno_doc'] = $dati_eff['annodoc'];
+            $_parametri['suffix_doc'] = $dati_eff['suffixdoc'];
             $_parametri['data_doc'] = $dati_eff['datadoc'];
             $_parametri['codpag'] = $dati_eff['modpag'];
             $_parametri['conto'] = "$MASTRO_BANCHE$dati_eff[bancadist]";
@@ -131,13 +142,12 @@ if ($_SESSION['user']['vendite'] > "1")
         else
         {
             echo "<br>Ok.. Effetto n. $_numeff Saldato con successo \n";
-            
-            if($CONTABILITA == "SI")
+
+            if ($CONTABILITA == "SI")
             {
                 echo "registrazione nr $_nreg\n";
             }
         }
-        
     } //chiudo foreach
 // INIZIO PARTE VISIVA DELLA GENERAZIONE..
 

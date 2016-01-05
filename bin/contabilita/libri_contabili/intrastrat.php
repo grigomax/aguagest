@@ -36,7 +36,6 @@ if ($_SESSION['user']['contabilita'] > "1")
 
     echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\">";
     echo "<tr>";
-    echo "<td>";
 
     echo "<td width=\"85%\" align=\"center\" valign=\"top\">\n";
     echo "<h3>Stampa Intrastrat - Comunitario</h3>";

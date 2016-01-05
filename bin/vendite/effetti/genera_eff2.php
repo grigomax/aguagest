@@ -56,8 +56,7 @@ if ($_SESSION['user']['vendite'] > "1")
 // echo $_ndoc;
 // ok per ogni articolo mi prendo tutti i dati dell'articolo
 // echo $_codice;
-    foreach ($_numero as
-            $_annondoc)
+    foreach ($_numero as $_annondoc)
     {
 // echo $_value;
 // mi conviene riscriverlo..
@@ -99,9 +98,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
 // 	Ora per ogni rata genero una riga di effetto.. quindi foreach
 
-        for ($_r = 1;
-                $_r <= $_rate;
-                $_r++)
+        for ($_r = 1; $_r <= $_rate; $_r++)
         {
 
 // 		prendiamo ci la data dell'effetto che tocca
@@ -191,7 +188,7 @@ if ($_SESSION['user']['vendite'] > "1")
                     //ci preleviamo l'anno
                     //$_anno = cambio_data("anno_us", $_eff['datadist']);
                     //Prima di iniziare leggiamo il numero di registrazione che tocca..
-                    $_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                    $_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
                     //ci prendiamo il cliente..
                     $_utente = tabella_clienti("singola", $_eff['codcli'], "");

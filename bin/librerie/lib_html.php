@@ -13,22 +13,28 @@
 /*ISTRUZIONI  VELOCI PER IL COLLEGAMENTO AL DATABASE PDO
  * 
  * $query;
- * $result = $conn->query($query);
- * if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
+$result = $conn->query($query);
+if ($conn->errorCode() != "00000")
+{
+    $_errore = $conn->errorInfo();
+    echo $_errore['2'];
+    //aggiungiamo la gestione scitta dell'errore..
+    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+}
  * Poi qui o la multipla con un forearc
- * foreach ($result as $return)
+foreach ($result as $return)
  * 
  * oppure la singola con 
- * $dati = $result->fetch(PDO::FETCH_ASSOC);
- *  
+$dati = $result->fetch(PDO::FETCH_ASSOC);
+
+
+//cerca numero righe
+ * if ($result->num_rows > 0)
+        
+
+
  */
 
 //define("gestione_errori", "gestione_errori");
@@ -1571,7 +1577,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/elenco_eff.php\">Elenco Disponibili</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/stampa_scad.php\">Scadenziario</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/importa_fv.php\">Salda Fatture singole</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/salda_eff.php\">Salda Distinte</a></li>\n";
+    
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -1583,6 +1589,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/distinte/modifica_dist.php\">Cerca - Modifica</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/distinte/ristampa_dist.php\">Ristampa - invia</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/distinte/esporta_dist.php\">Esporta in C.B.I.</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/salda_eff.php\">Salda Distinte</a></li>\n";
 
 
     echo "</ul>\n";
@@ -2834,6 +2841,11 @@ function verifica_data($cosa, $data)
                     }
                 }
             }
+        }
+        else
+        {
+            $_return['descrizione'] = "<h3 align=\"center\">Attenzione la data inserita &egrave; Uguale a 0</h3>\n";
+            $_return['errore'] = "error";
         }
     }
 

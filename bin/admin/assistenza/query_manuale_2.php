@@ -38,68 +38,62 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<h2 align=\"center\"> Inserisci query manuale da inviare al database</h2>\n";
     echo "<center>\n";
     echo $_POST['query'];
-    
+
     $query = "$_POST[query]";
-    
-    if($_POST['azione'] == "exec")
+
+    if ($_POST['azione'] == "exec")
     {
-        $result = $conn->exec($query); 
+        $result = $conn->exec($query);
     }
     else
     {
-       $result = $conn->query($query); 
+        $result = $conn->query($query);
     }
-    
 
-        if ($conn->errorCode() != "00000")
+
+    if ($conn->errorCode() != "00000")
+    {
+        $_errore = $conn->errorInfo();
+        echo $_errore['2'];
+        //aggiungiamo la gestione scitta dell'errore..
+        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        scrittura_errori($_cosa, $_percorso, $_errori);
+    }
+    else
+    {
+        echo "<br>Connessione eseguita\n";
+        if ($result->num_rows > 0)
         {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-        else
-        {
-            echo "<br>Connessione eseguita\n";
-            echo "<br> Numero righe  ". $result->rowCount()."\n";
-            
-            if(stristr($_POST['query'], "SELECT") != FALSE)
+            echo "<br> Numero righe  " . $result->rowCount() . "\n";
+
+            if (stristr($_POST['query'], "SELECT") != FALSE)
             {
                 echo "<br>vediamo i risultati";
-                
+
                 echo "<table width=\"95%\" border=\"1\" align=\"center\">\n";
                 foreach ($result AS $dati)
                 {
                     echo "<tr>\n";
-                   $for = count($dati);
-                   for ($index = 0; $index <= $for; $index++)
-                   {
-                       echo "<td>\n";
-                       echo $dati[$index];
-                       echo "</td>\n";
-                       
-                   }                   
-                   
-                   echo "</tr>\n";
+                    $for = count($dati);
+                    for ($index = 0; $index <= $for; $index++)
+                    {
+                        echo "<td>\n";
+                        echo $dati[$index];
+                        echo "</td>\n";
+                    }
+
+                    echo "</tr>\n";
                 }
-                
+
                 echo "</table>\n";
-                
-                
             }
-            
-            
-            
-            
         }
-    
-        
-        
-        
-        
-        
+        else
+        {
+            echo "<br> 0 righe modificate. nessun riscontro";
+        }
+    }
 }
 else
 {

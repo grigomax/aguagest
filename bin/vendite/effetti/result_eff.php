@@ -94,7 +94,7 @@ if ($_SESSION['user']['vendite'] > "1")
         }
         $_checkdate = "";
 
-        if (($_azione == "insoluto") OR ( $_azione == "parziale") OR ( $_azione == "saldato") OR ( $_azione == "richiamato") OR ( $_azione == "riemesso"))
+        if (($_status == "insoluto") OR ( $_status == "parziale") OR ( $_status == "saldato") OR ( $_status == "richiamato") OR ( $_status == "riemesso"))
         {
             $_checkdate = verifica_data($cosa, $_POST['datapag']);
             if (($_checkdate['errore'] == "error") OR ( $_POST['datapag'] == '00-00-0000'))
@@ -145,7 +145,7 @@ if ($_SESSION['user']['vendite'] > "1")
             $_anno = cambio_data("anno_us", $dati_eff['datadist']);
 
             //Prima di iniziare leggiamo il numero di registrazione che tocca..
-            $_nreg = tabella_primanota("ultimo_numero", $id, $_annopag, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+            $_nreg = tabella_primanota("ultimo_numero", $id, $_annopag, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 
             if (($_status == "insoluto") AND ( $_tipoeff == "3") AND ( $dati_eff['status'] != "insoluto") OR ( $_status == "richiamato"))
@@ -171,7 +171,7 @@ if ($_SESSION['user']['vendite'] > "1")
                     //registriamo anche incontabilità quallo che è successo..
                     // se fa l0insoluto in base alla banca presentato la riapriamo ..
 
-                    $_testo = "Add. Insoluto Fatt. $dati_eff[numdoc] scad. $_scadeff - $dati[ragsoc]";
+                    $_testo = "Add. Insoluto Fatt. $dati_eff[numdoc]/$dati_eff[suffixdoc] scad. $_scadeff - $dati[ragsoc]";
                 }
                 else
                 {
@@ -190,7 +190,7 @@ if ($_SESSION['user']['vendite'] > "1")
                     //registriamo anche incontabilità quallo che è successo..
                     // se fa l0insoluto in base alla banca presentato la riapriamo ..
 
-                    $_testo = "Add. Rich. Eff. $dati_eff[numdoc] scad. $_scadeff - $dati[ragsoc]";
+                    $_testo = "Add. Rich. Eff. $dati_eff[numdoc]/$dati_eff[suffixdoc] scad. $_scadeff - $dati[ragsoc]";
                 }
 
                 $_parametri['segno'] = "P";
@@ -234,6 +234,20 @@ if ($_SESSION['user']['vendite'] > "1")
             
             if (($_status == "saldato") AND ( $_tipoeff == "3") AND ( $dati_eff['presenta'] == "SI"))
             {
+                
+                //verifichiamo la data pagamento..
+            
+                $_checkdate = verifica_data($cosa, $_POST['datapag']);
+                if ($_checkdate['errore'] == "error")
+                {
+                    echo "$_checkdate[descrizione] - data pagamento $_POST[datapag]";
+
+                    exit;
+                }
+                $_checkdate = "";
+                
+                
+                
                 //eseguiamo la registrazione tra la banca sbf ed il conto
                 //il dare va alla banca c/c ed in avere il conto sbf
                 //come causale ST, come titolo registrazione Accredito SBF + nome banca
@@ -257,7 +271,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_parametri['dare'] = $dati_eff['impeff'];
 
                 //riapriamo il cliente in dare..
-                $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, "ST", $_testo, date('Y-m-d'), $_datapag, $_parametri, $_percorso);
+                $_result = tabella_primanota("inserisci_singola", $id, $_annopag, $_nreg, "ST", $_testo, date('Y-m-d'), $_datapag, $_parametri, $_percorso);
 
                 $_piano = tabella_piano_conti("singola", $CONTO_EFFETTI_SBF . $dati_eff['bancadist'], $_parametri);
 
@@ -268,7 +282,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_parametri['desc_conto'] = $_piano['descrizione'];
                 $_parametri['avere'] = $dati_eff['impeff'];
 
-                $_result = tabella_primanota("inserisci_singola", $id, $_anno, $_nreg, "ST", $_testo, date('Y-m-d'), $_datapag, $_parametri, $_percorso);
+                $_result = tabella_primanota("inserisci_singola", $id, $_annopag, $_nreg, "ST", $_testo, date('Y-m-d'), $_datapag, $_parametri, $_percorso);
         }
             
             
@@ -331,7 +345,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_errore = $conn->errorInfo();
                 echo $_errore['2'];
                 //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
+                $_errori['descrizione'] = "Errore Query $_azione= $query - $_errore[2]";
                 $_errori['files'] = "result_eff.php";
                 scrittura_errori($_cosa, $_percorso, $_errori);
 
@@ -353,6 +367,20 @@ if ($_SESSION['user']['vendite'] > "1")
 
         if (($CONTABILITA == "SI") AND ( $_primanota == "SI"))
         {
+            
+            //verifichiamo la data pagamento..
+            
+            $_checkdate = verifica_data($cosa, $_POST['datapag']);
+            if ($_checkdate['errore'] == "error")
+            {
+                echo "$_checkdate[descrizione] - data pagamento $_POST[datapag]";
+
+                exit;
+            }
+            $_checkdate = "";
+            
+            
+            
             //leggiamo l'effeto desiderato per vedere se è stato modificato
             $dati_eff = tabella_effetti("leggi_singolo", $_percorso, $_annoeff, $_numeff, $_parametri);
 
@@ -361,14 +389,16 @@ if ($_SESSION['user']['vendite'] > "1")
             $_anno = $_annoeff;
 
             //Prima di iniziare leggiamo il numero di registrazione che tocca..
-            $_nreg = tabella_primanota("ultimo_numero", $id, $_annopag, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+            $_nreg = tabella_primanota("ultimo_numero", $id, $_annopag, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
             if (($_status == "saldato") AND ( $dati_eff['status'] != "saldato"))
             {
+                
+                
                 //registriamo anche incontabilità quallo che è successo..
                 // se fa l0insoluto in base alla banca presentato la riapriamo ..
 
-                $_testo = "Incasso Fatt. $dati_eff[numdoc] del $_POST[annodoc] - $dati[ragsoc]";
+                $_testo = "Incasso Fatt. $dati_eff[numdoc]/$dati_eff[suffixdoc] del $_POST[annodoc] - $dati[ragsoc]";
 
                 //verifichiamo subito se ci sono spese...
 
@@ -383,6 +413,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
                 $_parametri['segno'] = "P";
                 $_parametri['ndoc'] = $dati_eff['numdoc'];
+                $_parametri['suffix_doc'] = $dati_eff['suffixdoc'];
                 $_parametri['anno_doc'] = $dati_eff['annodoc'];
                 $_parametri['data_doc'] = $dati_eff['datadoc'];
                 $_parametri['codpag'] = $dati_eff['modpag'];

@@ -29,19 +29,16 @@ base_html_stampa("chiudi", $_parametri);
 
 if ($_SESSION['user']['contabilita'] > "1")
 {
-
+    
 
 //recuperiamo i post..
     $_data_start_sql = cambio_data("us", $_POST['data_start']);
     $_data_end_sql = cambio_data("us", $_POST['data_end']);
+    $_parametri['tabella'] = "Stampa Intrastrat dal $_POST[data_start] AL $_POST[data_end]";
 
-    echo "<table class=\"classic\" align=\"left\" width=\"95\">";
-    echo "<tr><td colspan=\"10\">\n";
-    echo "<h2 align=\"center\">Stampa Intrastrat dal $_POST[data_start] AL $_POST[data_end]</h2>\n";
+    intestazione_html($_cosa, $_percorso, $_parametri);
 
-    echo "<hr>\n";
 
-    echo "</td></tr>\n";
 
 #PER PRIMA MI DEVO prendere i codici iva inerenti;
 
@@ -59,12 +56,13 @@ if ($_SESSION['user']['contabilita'] > "1")
         scrittura_errori($_cosa, $_percorso, $_errori);
     }
 
+    echo "<table class=\"classic\" align=\"left\" width=\"100%\">";
     if ($result->rowCount() > 0)
     {
 
         echo "<tr>";
         echo "<td width=\"30\" align=\"center\" class=\"tabella\">Cod. Iva</td>";
-        echo "<td width=\"80\" align=\"center\" class=\"tabella\">Data Fatt.</span></td>";
+        echo "<td width=\"120\" align=\"center\" class=\"tabella\">Data Fatt.</span></td>";
         echo "<td width=\"80\" align=\"center\" class=\"tabella\">Fattura</span></td>";
         echo "<td width=\"60\" align=\"center\" class=\"tabella\">N.Proto</span></td>";
         echo "<td width=\"60\" align=\"center\" class=\"tabella\">Causale</span></td>";
@@ -115,27 +113,27 @@ if ($_SESSION['user']['contabilita'] > "1")
                     {
                     
                         echo "<tr>";
-                        printf("<td width=\"30\" align=\"center\">%s</span></td>", $dati3['iva']);
-                        printf("<td width=\"80\" align=\"center\">%s</span></td>", $dati3['data_doc']);
-                        printf("<td width=\"80\" align=\"center\"><b>%s</b></span></td>", $dati3['ndoc']);
-                        printf("<td width=\"60\" align=\"center\"><b>%s</b></span></td>", $dati3['nproto']);
-                        printf("<td width=\"60\" align=\"center\"><b>%s</b></span></td>", $dati3['causale']);
-                        printf("<td width=\"450\" align=\"left\">%s</span></td>", $dati3['desc_conto']);
-                        printf("<td width=\"50\" align=\"left\">%s</span></td>", $dati3['piva']);
-                        printf("<td width=\"80\" align=\"right\">%s</span></td>", $dati3['dare']);
-                        printf("<td width=\"80\" align=\"right\">%s</span></td>", $dati3['avere']);
+                        printf("<td align=\"center\">%s</span></td>", $dati3['iva']);
+                        printf("<td align=\"center\">%s</span></td>", $dati3['data_doc']);
+                        echo "<td align=\"center\"><b>$dati3[ndoc]/$dati3[suffix_doc]</b></span></td>\n";
+                        echo "<td align=\"center\"><b>$dati3[nproto]/$dati3[suffix_proto]</b></span></td>\n";
+                        printf("<td align=\"center\"><b>%s</b></span></td>", $dati3['causale']);
+                        printf("<td align=\"left\">%s</span></td>", $dati3['desc_conto']);
+                        printf("<td align=\"left\">%s</span></td>", $dati3['piva']);
+                        printf("<td align=\"right\">%s</span></td>", $dati3['dare']);
+                        printf("<td align=\"right\">%s</span></td>", $dati3['avere']);
 
                         echo "</tr>";
                         echo "<tr>";
-                        echo "<td width=\"30\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"60\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"60\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"450\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"50\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
-                        echo "<td width=\"80\" height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
+                        echo "<td height=\"1\" align=\"center\"></td>";
                         echo "</tr>";
                         $vista[$dati_2['nreg']] = "SI";
                         

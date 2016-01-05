@@ -112,7 +112,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -172,7 +172,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -256,7 +256,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-	$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+	$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -337,7 +337,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -421,7 +421,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -506,7 +506,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -592,7 +592,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -675,7 +675,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...
@@ -732,7 +732,7 @@ if ($_SESSION['user']['setting'] > "3")
 	while ($dati = mysql_fetch_array($result))
 	{
 	    //ora per ognuna di esse richiamo la registrazione completa...
-	    $result_reg = tabella_primanota("leggi", $id, $_annonuovo, $dati['nreg'], $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+	    $result_reg = tabella_primanota("leggi", $id, $_annonuovo, $dati['nreg'], $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 	    while ($dati_reg = mysql_fetch_array($result_reg))
 	    {
@@ -777,7 +777,7 @@ if ($_SESSION['user']['setting'] > "3")
 //qui inseriamo i dati in contabilità..
 //prendiamoci il numero che tocca in contabilita
 
-		    $_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		    $_nreg = tabella_primanota("ultimo", $id, $_annonuovo, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 //ora prepariamo i dati da inserire..
 //scrivi...

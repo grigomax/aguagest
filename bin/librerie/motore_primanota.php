@@ -11,6 +11,9 @@
 //funzione di ricerca causali..
 function causali($_causale, $_azione)
 {
+    global $conn;
+    global $_percorso;
+    
 	//funzione che mi permette di ricercare tutte le causali contabili..
 
 	global $conn;
@@ -25,11 +28,20 @@ function causali($_causale, $_azione)
 		$query = "select * from causali_contabili order by causale";
 	}
 
-	// Esegue la query...
-	$res = mysql_query($query, $conn);
+	$result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            
+        }
 
-	$dati = mysql_fetch_array($res);
-
+        $dati = $result->fetch(PDO::FETCH_ASSOC);
+        
 	return $dati;
 }
 
@@ -48,6 +60,26 @@ function piano_conti($_codconto, $_azione)
 		$res = mysql_query($query, $conn);
 
 		$dati = mysql_fetch_array($res);
+	}
+        elseif ($_azione == "singola")
+	{
+		// Stringa contenente la query di ricerca...
+		$query = "select * from piano_conti where livello >= '2' and codconto = $_codconto order by codconto";
+		$result = $conn->query($query);
+		if ($conn->errorCode() != "00000")
+		{
+			$_errore = $conn->errorInfo();
+			echo $_errore['2'];
+			//aggiungiamo la gestione scitta dell'errore..
+			$_errori['descrizione'] = "Errore $_azione Query = $query - $_errore[2]";
+			$_errori['files'] = "motore_anagrafiche.php";
+			scrittura_errori($_cosa, $_percorso, $_errori);
+			$dati = "errore";
+		}
+		else
+		{
+			foreach ($result AS $dati);
+		}
 	}
 	elseif ($_azione == "descsingola")
 	{
@@ -460,6 +492,8 @@ function carrello_primanota($_cosa, $_anno, $_rigo, $_tipo_cf, $_codconto, $_dar
 {
 	global $conn;
 	global $id;
+        global $_percorso;
+        global $dec;
 	$_causale = $_SESSION['causale'];
 	require "../../../setting/par_conta.inc.php";
 
@@ -468,8 +502,18 @@ function carrello_primanota($_cosa, $_anno, $_rigo, $_tipo_cf, $_codconto, $_dar
 	{
 		// Stringa contenente la query di ricerca...
 		$query = sprintf("UPDATE prima_nota_basket SET iva=\"%s\", dare=\"%s\", avere=\"%s\" where sessionid=\"%s\" and rigo=\"%s\" limit 1", $_iva, $_dare, $_avere, $id, $_rigo);
-		// Esegue la query...
-		$res = mysql_query($query, $conn);
+		
+                $result = $conn->exec($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+                
 	}
 	elseif ($_cosa == "Inserisci")
 	{
@@ -477,29 +521,22 @@ function carrello_primanota($_cosa, $_anno, $_rigo, $_tipo_cf, $_codconto, $_dar
 		//completiamo il codice conto..
 		if ($_tipo_cf == "C")
 		{
-			$query = "SELECT codice, ragsoc FROM clienti WHERE codice = '$_codconto'";
-			$res = mysql_query($query, $conn);
-			$dati = mysql_fetch_array($res);
-			$_descrizione = $dati['ragsoc'];
-
-			//vuol dire che sono clienti
-			$_conto = sprintf("%s%s", $MASTRO_CLI, $_codconto);
+                    $dati = tabella_clienti("singola",$_codconto, $_parametri);
+                    $_descrizione = addslashes($dati['ragsoc']);
+                    //vuol dire che sono clienti
+                    $_conto = sprintf("%s%s", $MASTRO_CLI, $_codconto);
 		}
 		elseif ($_tipo_cf == "F")
 		{
-			//vuol dire che sono clienti
-			$query = "SELECT codice, ragsoc FROM fornitori WHERE codice = '$_codconto'";
-			$res = mysql_query($query, $conn);
-			$dati = mysql_fetch_array($res);
-			$_descrizione = $dati['ragsoc'];
+                    $dati = tabella_fornitori("singola", $_codconto, $_parametri);
+			$_descrizione = addslashes($dati['ragsoc']);
 			$_conto = sprintf("%s%s", $MASTRO_FOR, $_codconto);
 		}
 		else
 		{
-			$query = "SELECT codconto, descrizione FROM piano_conti WHERE codconto = '$_codconto'";
-			$res = mysql_query($query, $conn);
-			$dati = mysql_fetch_array($res);
-			$_descrizione = $dati['descrizione'];
+                        $dati = tabella_piano_conti("singola", $_codconto, $_parametri);
+                        
+			$_descrizione = addslashes($dati['descrizione']);
 			$_conto = $_codconto;
 		}
 
@@ -507,46 +544,100 @@ function carrello_primanota($_cosa, $_anno, $_rigo, $_tipo_cf, $_codconto, $_dar
 		{
 			$_parametri = $_SESSION['parametri'];
 			//se la causale è fa bisogna inserire tutti i dati nel carrello..
-			$query = "INSERT prima_nota_basket (sessionid, anno, nreg, data_reg, data_cont, causale, descrizione, ndoc, anno_doc, data_doc, conto, dare, avere, tipopag, nproto, anno_proto, liquid_iva, segno, iva) VALUES ('$id', '$_anno', '$_parametri[nreg]', '$_parametri[data_reg]', '$_parametri[data_cont]', '$_causale', '$_descrizione', '$_parametri[ndoc]', '$_parametri[anno_doc]', '$_parametri[data_doc]', '$_conto', '$_dare', '$_avere', '$_parametri[tipopag]', '$_parametri[nproto]', '$_parametri[anno_proto]', '$_parametri[liquid_iva]', '$_segno', '$_iva')";
+			$query = "INSERT prima_nota_basket (sessionid, anno, nreg, data_reg, data_cont, causale, descrizione, ndoc, anno_doc, suffix_doc, data_doc, conto, dare, avere, tipopag, nproto, anno_proto, suffix_proto, liquid_iva, segno, iva) VALUES ('$id', '$_anno', '$_parametri[nreg]', '$_parametri[data_reg]', '$_parametri[data_cont]', '$_causale', '$_descrizione', '$_parametri[ndoc]', '$_parametri[anno_doc]', '$_parametri[suffix_doc]' ,'$_parametri[data_doc]', '$_conto', '$_dare', '$_avere', '$_parametri[tipopag]', '$_parametri[nproto]', '$_parametri[anno_proto]', '$_parametri[suffix_proto]', '$_parametri[liquid_iva]', '$_segno', '$_iva')";
 			// Esegue la query...
-			$res = mysql_query($query, $conn);
+			$result = $conn->exec($query);
+                        if ($conn->errorCode() != "00000")
+                        {
+                            $_errore = $conn->errorInfo();
+                            echo $_errore['2'];
+                            //aggiungiamo la gestione scitta dell'errore..
+                            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                            scrittura_errori($_cosa, $_percorso, $_errori);
+                        }
 		}
 		else
 		{
 			// Stringa contenente la query di ricerca...
 			$query = "INSERT prima_nota_basket (sessionid, anno, data_reg, data_cont, descrizione, causale, conto, dare, avere, iva) VALUES ('$id', '$_anno', '$_data_reg', '$_data_cont','$_descrizione', '$_causale', '$_conto', '$_dare', '$_avere', '$_iva')";
-			// Esegue la query...
-			$res = mysql_query($query, $conn);
+			$result = $conn->exec($query);
+                        if ($conn->errorCode() != "00000")
+                        {
+                            $_errore = $conn->errorInfo();
+                            echo $_errore['2'];
+                            //aggiungiamo la gestione scitta dell'errore..
+                            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                            scrittura_errori($_cosa, $_percorso, $_errori);
+                        }
 		}
 	}
 	elseif ($_cosa == "elimina")
 	{
 		$query = "DELETE FROM prima_nota_basket where sessionid='$id' and rigo='$_rigo'";
-		$res = mysql_query($query, $conn);
+		$result = $conn->exec($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
 	}
 	elseif ($_cosa == "leggi")
 	{
 		//leggiamo la riga richiesta
 		$query = "SELECT * FROM prima_nota_basket where sessionid='$id' AND rigo='$_rigo' ORDER BY anno, rigo";
-		$res = mysql_query($query, $conn);
-		$dati = mysql_fetch_array($res);
-		return $dati;
+                $result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+                $return = $result->fetch(PDO::FETCH_ASSOC);
+
 	}
 	elseif ($_cosa == "svuota")
 	{
 		$query = "DELETE FROM prima_nota_basket where sessionid='$id'";
 
-		mysql_query($query, $conn);
+		$result = $conn->exec($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
 	}
 	else
 	{
 		// Stringa contenente la query di ricerca...
 		$query = "SELECT * FROM prima_nota_basket where sessionid='$id' ORDER BY anno, rigo";
-		// Esegue la query...
-		$res = mysql_query($query, $conn);
-
-		return $res;
+		$result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+                $return = $result;
 	}
+        
+        return $return;
+        
 }
 
 /**
@@ -564,11 +655,13 @@ function carrello_primanota($_cosa, $_anno, $_rigo, $_tipo_cf, $_codconto, $_dar
  * @param string $_cosa la funzione mi restituisce vero o falso alla domanda se un determinato conto è muovimentato all'interno nel piano dei conti
  * * @return boolean
  */
-function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso)
+function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso)
 {
 	global $conn;
 	global $id;
         global $MASTRO_EFFETTI;
+        global $_percorso;
+        global $dec;
 
 
 	//* funzione che mi permette di inserire, cacellare chiedere le cose alla tabella prima nota.
@@ -598,15 +691,25 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
                     scrittura_errori($_cosa, $_percorso, $_errori);
 		}
 
-		foreach ($result AS $dati);
+		$dati = $result->fetch(PDO::FETCH_ASSOC);
 		return $dati['nreg']+1;
 	}
 	elseif ($_cosa == "ultimo_proto")
 	{
 		//funzione che mi restituisce l'ultimo numero inserito..
-		$query = sprintf("SELECT nproto FROM prima_nota where causale='FA' and anno_proto=\"%s\" ORDER BY nproto DESC LIMIT 1", $_anno);
-		$res = mysql_query($query, $conn);
-		$dati = mysql_fetch_array($res);
+		$query = "SELECT nproto FROM prima_nota where causale='FA' and anno_proto='$_anno' AND suffix_proto='$_parametri' ORDER BY nproto DESC LIMIT 1";
+		$result = $conn->query($query);
+		if ($conn->errorCode() != "00000")
+		{
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+		}
+                $dati = $result->fetch(PDO::FETCH_ASSOC);
+                
 		$_ultimo = $dati['nproto'];
 		$_tocca = $_ultimo + 1;
 		return $_tocca;
@@ -649,9 +752,19 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 	{
 		//Veirifichiamo se un numero è occupto
 		//funzione che mi restituisce l'ultimo numero inserito..
-		$query = sprintf("SELECT nreg FROM prima_nota where anno=\"%s\" and nreg=\"%s\" ORDER BY nreg DESC LIMIT 1", $_anno, $_nreg);
-		$res = mysql_query($query, $conn);
-		if (mysql_num_rows($res) > 0)
+		$query = "SELECT nreg FROM prima_nota where anno='$_anno' and nreg='$_nreg' ORDER BY nreg DESC LIMIT 1";
+		$result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+                
+		if (($result->rowCount()) > 0)
 		{
 			$_return = true;
 		}
@@ -665,9 +778,21 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 	{
 		//Veirifichiamo se un numero è occupto
 		//funzione che mi controlla se la registrazione esiste già
-		$query = sprintf("SELECT ndoc FROM prima_nota where causale=\"%s\" AND anno=\"%s\" AND ndoc=\"%s\" ORDER BY ndoc DESC LIMIT 1", $_causale, $_anno, $_nreg);
-		$res = mysql_query($query, $conn);
-		if (mysql_num_rows($res) > 0)
+		$query = "SELECT ndoc FROM prima_nota where causale='$_causale' AND anno_doc='$_anno' AND suffix_doc='$_parametri' AND ndoc='$_nreg' ORDER BY ndoc DESC LIMIT 1";
+		
+                $result = $conn->query($query);
+		if ($conn->errorCode() != "00000")
+		{
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+		}
+                
+                
+		if(($result->rowCount()) > 0)
 		{
 			$_return['risposta'] = "esiste";
 		}
@@ -686,11 +811,22 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 		// questa funzione mi permette di vedere se un documento è ancora aperto..
 
 		$_utente = $MASTRO_CLI . $_parametri['utente'];
-		$sql = "SELECT *,(SUM(avere) - SUM(dare)) AS diff FROM prima_nota where conto = '$_utente' AND ndoc = '$_nreg' AND anno='$_anno' GROUP BY ndoc";
-		$res = mysql_query($sql, $conn);
-		$dati = mysql_fetch_array($res);
-
-		if ($dati['diff'] != "0.00")
+		$query= "SELECT *,(SUM(avere) - SUM(dare)) AS diff FROM prima_nota where conto = '$_utente' AND ndoc = '$_nreg' AND anno_doc='$_anno' AND suffix_doc='$_parametri[suffix_doc]' GROUP BY ndoc";
+		
+                $result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+                
+                $dati = $result->fetch(PDO::FETCH_ASSOC);
+                
+                if ($dati['diff'] != "0.00")
 		{
 			$_return['risposta'] = "vero";
 		}
@@ -706,13 +842,23 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 	}
 	elseif ($_cosa == "verifica_nproto")
 	{
-		$_nproto = $_parametri['nproto'];
-		$_anno_proto = $_parametri['anno_proto'];
 		//Veirifichiamo se un numero è occupto
 		//funzione che mi restituisce l'ultimo numero inserito..
-		$query = sprintf("SELECT nproto FROM prima_nota where causale='FA' and anno_proto=\"%s\" and nproto=\"%s\" ORDER BY nreg DESC LIMIT 1", $_anno_proto, $_nproto);
-		$res = mysql_query($query, $conn);
-		if (mysql_num_rows($res) > 0)
+		$query = "SELECT nproto FROM prima_nota where causale='FA' and anno_proto='$_parametri[anno_proto]' and suffix_proto='$_parametri[suffix_proto]' and nproto='$_parametri[nproto]' ORDER BY nreg DESC LIMIT 1";
+
+                //echo $query;
+                $result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+                                
+                if ($result->num_rows > 0)
 		{
 			$_return = true;
 		}
@@ -726,37 +872,70 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 	{
 		//leggiamo la riga richiesta
 		$query = "SELECT *, date_format(data_reg, '%d%-%m-%Y') AS data_reg, date_format(data_cont, '%d-%m-%Y') AS data_cont FROM prima_nota where anno='$_anno' AND nreg='$_nreg' ORDER BY anno, rigo";
-		$res = mysql_query($query, $conn);
-		$dati = mysql_fetch_array($res);
-		return $dati;
-	}
+                $result = $conn->query($query);
+
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                    $_return = $_errori;
+                }
+		
+                $return = $result->fetch(PDO::FETCH_ASSOC);
+		
+                return $return;
+	
+        }
 	elseif ($_cosa == "leggi_PA")
 	{
 		//leggiamo la riga richiesta
 		if ($_causale == "PA")
 		{
-			$query = "SELECT *,(SUM(avere) - SUM(dare))AS diff,  date_format(data_reg, '%d-%m-%Y') AS data_reg, date_format(data_cont, '%d-%m-%Y') AS data_cont FROM prima_nota where conto='$_parametri[conto]' AND $_parametri[campo1]='$_parametri[campo1_data]' AND $_parametri[campo2] ='$_parametri[anno_proto]' ORDER BY anno_proto, rigo";
+			$query = "SELECT *,(SUM(avere) - SUM(dare))AS diff,  date_format(data_reg, '%d-%m-%Y') AS data_reg, date_format(data_cont, '%d-%m-%Y') AS data_cont FROM prima_nota where conto='$_parametri[conto]' AND $_parametri[campo1]='$_parametri[campo1_data]' AND $_parametri[campo2] ='$_parametri[anno_proto]' AND $_parametri[campo3] = '$_parametri[suffix_proto]' ORDER BY anno_proto, suffix_proto, rigo";
 		}
 		else
 		{
-			$query = "SELECT *,(SUM(dare) - SUM(avere))AS diff,  date_format(data_reg, '%d-%m-%Y') AS data_reg, date_format(data_cont, '%d-%m-%Y') AS data_cont FROM prima_nota where conto='$_parametri[conto]' AND $_parametri[campo1]='$_parametri[campo1_data]' AND $_parametri[campo2] ='$_parametri[anno_doc]' ORDER BY anno, rigo";
+			$query = "SELECT *,(SUM(dare) - SUM(avere))AS diff,  date_format(data_reg, '%d-%m-%Y') AS data_reg, date_format(data_cont, '%d-%m-%Y') AS data_cont FROM prima_nota where conto='$_parametri[conto]' AND $_parametri[campo1]='$_parametri[campo1_data]' AND $_parametri[campo2] ='$_parametri[anno_doc]' AND $_parametri[campo3] = '$_parametri[suffix_doc]' ORDER BY anno, suffix_doc, rigo";
 		}
 
-		$res = mysql_query($query, $conn);
+		$result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
 
-		$dati = mysql_fetch_array($res);
-		return $dati;
+                }
+                
+                $dati = $result->fetch(PDO::FETCH_ASSOC);
+		
+                return $dati;
 	}
 	elseif ($_cosa == "salda")
 	{
 		//funzione che mi aggiorna solo il segno dell'operazione
 
 		$query = sprintf("UPDATE prima_nota SET segno=\"%s\", sp_metro=\"%s\" where anno=\"%s\" AND nreg=\"%s\"", $_parametri['segno'], $_parametri['spesometro'], $_anno, $_nreg);
-		// Esegue la query...
-		if (mysql_query($query, $conn) != 1)
-		{
-			$_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query aggiornamento prima_nota <br>\n\"$query\"\n";
-			$_return['errori']['errore'] = "errore";
+		
+                $result = $conn->exec($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+
+                    $_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query aggiornamento prima_nota <br>\n\"$query\"\n";
+                    $_return['errori']['errore'] = "errore";
 		}
 
 		return $_return;
@@ -768,7 +947,7 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 		//funzione che mi inserisce il documento dal basket alla prima nota..
 		//leggiamo se è ancora valido l'ultimo documento..'
 		//verifichiamo che il numero scelto non si occupato
-		$_result = tabella_primanota("verifica_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_result = tabella_primanota("verifica_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 		if ($_result == "true")
 		{
@@ -779,7 +958,7 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 		if ($_causale == "FA")
 		{
 			//verifichiamo che il numero scelto non si occupato
-			$_result = tabella_primanota("verifica_nproto", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+			$_result = tabella_primanota("verifica_nproto", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 			if ($_result == "true")
 			{
@@ -794,20 +973,25 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 
 		//ottimo ora con un ciclo di while mettiamo tutto dentro..
 
-		while ($dati = mysql_fetch_array($res))
+		foreach ($res AS $dati)
 		{
 			// Stringa contenente la query di ricerca...
 			$query = sprintf("INSERT prima_nota (anno, nreg, data_reg, data_cont, segno, iva, descrizione, causale, conto, desc_conto, dare, avere,
-                ndoc, anno_doc, data_doc, tipopag, nproto, anno_proto, sp_metro, note, status)
+                ndoc, anno_doc, data_doc, tipopag, nproto, anno_proto, suffix_proto, sp_metro, note, status)
                 VALUES
-                (\"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")", $_anno, $_nreg, $_data_reg, $_data_gior, $_parametri['segno'], $dati['iva'], $_testo, $_causale, $dati['conto'], $dati['descrizione'], $dati['dare'], $dati['avere'], $_parametri['ndoc'], $_parametri['anno_doc'], $_parametri['data_doc'], $_parametri['codpag'], $_nproto, $_parametri['anno_proto'], $_parametri['spesometro'], $_parametri['note'], "Inserito");
+                (\"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\",\"%s\")", $_anno, $_nreg, $_data_reg, $_data_cont, $_parametri['segno'], $dati['iva'], addslashes($_testo), $_causale, $dati['conto'], addslashes($dati['descrizione']), $dati['dare'], $dati['avere'], $_parametri['ndoc'], $_parametri['anno_doc'], $_parametri['data_doc'], $_parametri['codpag'], $_nproto, $_parametri['anno_proto'], $_parametri['suffix_proto'], $_parametri['spesometro'], addslashes($_parametri['note']), "Inserito");
 
-			// Esegue la query...
-			if (mysql_query($query, $conn) != 1)
-			{
-				$_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query inserimento query tabella prima_nota Inserisci:<br>\n\"$query\"\n";
-				$_return['errori']['errore'] = "errore";
-			}
+		$result = $conn->exec($query);
+                    if ($conn->errorCode() != "00000")
+                    {
+                        $_errore = $conn->errorInfo();
+                        echo $_errore['2'];
+                        //aggiungiamo la gestione scitta dell'errore..
+                        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                        scrittura_errori($_cosa, $_percorso, $_errori);
+                        $_return['errori']['errore'] = "errore";
+                    }
 		}
 
 		//ora che abbiamo inserito il tutto nella prima nota.. provvedimo ad inserire eventuale scadenza
@@ -838,10 +1022,11 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 				$_parametri['descrizione'] = $_testo;
 				$_parametri['impeff'] = $_impeff['valore'][$_v];
 				$_parametri['nproto'] = $_nproto;
+                                $_parametri['suffix_proto'] = $_SESSION['suffix_proto'];
                                 $_parametri['status'] = "in attesa";
                                 $_parametri['anno'] = $_anno;
 
-				tabella_scadenziario("Inserisci", $_percorso, $_parametri);
+				tabella_scadenziario("inserisci", $_percorso, $_parametri);
 			}
 		}
 
@@ -860,7 +1045,7 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 		//leggiamo il basket e di pari passo inseriamo il tutto..
 		//Eliminiamo la registrazione precedente...
 		$_parametri['cosa'] = $_cosa;
-		$_return = tabella_primanota("elimina_reg", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$_return = tabella_primanota("elimina_reg", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
 		if ($_return != "true")
 		{
@@ -874,22 +1059,27 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 
 			//ottimo ora con un ciclo di while mattiamo tutto dentro..
 
-			while ($dati = mysql_fetch_array($res))
+			foreach ($res AS $dati)
 			{
 				// Stringa contenente la query di ricerca...
-				//   $query = sprintf("INSERT prima_nota (anno, nreg, data_reg, data_cont, descrizione, causale, conto, desc_conto, dare, avere, status) VALUES (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")", $_anno, $_nreg, $_data_reg, $_data_gior, $_testo, $_causale, $dati['conto'], $dati['descrizione'], $dati['dare'], $dati['avere'], "Inserito");
+				//   $query = sprintf("INSERT prima_nota (anno, nreg, data_reg, data_cont, descrizione, causale, conto, desc_conto, dare, avere, status) VALUES (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")", $_anno, $_nreg, $_data_reg, $_data_cont, $_testo, $_causale, $dati['conto'], $dati['descrizione'], $dati['dare'], $dati['avere'], "Inserito");
 				// Stringa contenente la query di ricerca...
-				$query = sprintf("INSERT prima_nota (anno, nreg, data_reg, data_cont, segno, iva,  descrizione, causale, conto, desc_conto, dare, avere,
-                ndoc, anno_doc, data_doc, tipopag, nproto, anno_proto, sp_metro, note, status)
-                VALUES
-                (\"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")", $_anno, $_nreg, $_data_reg, $_data_gior, $dati['segno'], $dati['iva'], $_testo, $_causale, $dati['conto'], $dati['descrizione'], $dati['dare'], $dati['avere'], $dati['ndoc'], $dati['anno_doc'], $dati['data_doc'], $_parametri['codpag'], $dati['nproto'], $dati['anno_proto'], $_parametri['spesometro'], $_parametri['note'], "Inserito");
+                            
+                                $query = "INSERT prima_nota (anno, nreg, data_reg, data_cont, segno, iva,  descrizione, causale, conto, desc_conto, dare, avere, ndoc, anno_doc, suffix_doc, data_doc, tipopag, nproto, anno_proto, suffix_proto, sp_metro, note, status)
+                                VALUES ('$_anno', '$_nreg', '$_data_reg', '$_data_cont', '$dati[segno]', '$dati[iva]', '$_testo', '$_causale', '$dati[conto]', '$dati[descrizione]', '$dati[dare]', '$dati[avere]', '$dati[ndoc]', '$dati[anno_doc]', '$dati[suffix_doc]' ,'$dati[data_doc]', '$_parametri[codpag]', '$dati[nproto]', '$dati[anno_proto]', '$dati[suffix_proto]' ,'$_parametri[spesometro]', '$_parametri[note]', 'Inserito')";
 
-				// Esegue la query...
-				if (mysql_query($query, $conn) != 1)
-				{
-					$_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query inserimento query tabella prima_nota Inserisci:<br>\n\"$query\"\n";
-					$_return['errori']['errore'] = "errore";
-				}
+				$result = $conn->exec($query);
+
+                                if ($conn->errorCode() != "00000")
+                                {
+                                    $_errore = $conn->errorInfo();
+                                    echo $_errore['2'];
+                                    //aggiungiamo la gestione scitta dell'errore..
+                                    $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+                                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                                    scrittura_errori($_cosa, $_percorso, $_errori);
+                                    $_return = $_errori;
+                                }
 			}
 
 			//ora che abbiamo inserito il tutto nella prima nota.. provvedimo ad inserire eventuale scadenza
@@ -899,14 +1089,17 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 			{
 				//eliminiamo le scadenze vecchie prima di inserire le nuove..
 				//
-                //prepariamo i dati da passere allla variabile $_paramenti
-				$_parametri['campo1'] = "nproto";
-				$_parametri['data_campo1'] = $_SESSION['parametri']['nproto'];
-				$_parametri['campo2'] = "anno_proto";
-				$_parametri['data_campo2'] = $_SESSION['parametri']['anno_proto'];
+                    //prepariamo i dati da passere allla variabile $_paramenti
+                                $_parametri['nproto'] = $_SESSION['parametri']['nproto'];
+                                $_parametri['anno_proto'] = $_SESSION['parametri']['anno_proto'];
+                                $_parametri['suffix_proto'] = $_SESSION['parametri']['suffix_proto'];
 
-				tabella_scadenziario("elimina_scad", $_percorso, $_parametri);
-
+				$_ris = tabella_scadenziario("elimina_proto", $_percorso, $_parametri);
+                                    
+                                if($_ris != "OK")
+                                {
+                                    echo "Errore Eliminazione scadenza\n";
+                                }
 
 				//verifichiamo le scadenze date dal tipo di pagamento ed provvediamo ad inserirle nello scadenziario.
 				//calcoliamo le date..
@@ -933,13 +1126,19 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 					$_parametri['impeff'] = $_impeff['valore'][$_v];
 					$_parametri['nproto'] = $_SESSION['parametri']['nproto'];
 					$_parametri['anno_proto'] = $_SESSION['parametri']['anno_proto'];
+                                        $_parametri['suffix_proto'] = $_SESSION['parametri']['suffix_proto'];
 					$_parametri['ndoc'] = $_SESSION['parametri']['ndoc'];
 					$_parametri['anno_doc'] = $_SESSION['parametri']['anno_doc'];
 					$_parametri['data_doc'] = $_SESSION['parametri']['data_doc'];
                                         $_parametri['status'] = "in attesa";
                                         $_parametri['anno'] = $_anno;
 
-					tabella_scadenziario("Inserisci", $_percorso, $_parametri);
+					$ris = tabella_scadenziario("inserisci", $_percorso, $_parametri);
+                                        
+                                        if($ris != "OK")
+                                        {
+                                            echo "Errore Inserimento scadenziario";
+                                        }
 				}
 			}
 
@@ -947,6 +1146,9 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 
 			//Passiamo il numero della registrazione
 			$_return['nreg'] = $_nreg;
+                        $_return['nproto'] = $_parametri['nproto'];
+                        $_return['suffix_proto'] = $_parametri['suffix_proto'];
+                        $_return['anno_proto'] = $_parametri['anno_proto'];
 			return $_return;
 		}
 	}
@@ -954,11 +1156,11 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 	{
 		//funzione che mi permette di inserire la registrazione nel carrello della prima nota.
 		//leggiamo la registrazione
-		$res = tabella_primanota("elenco", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$res = tabella_primanota("elenco", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 		//ora passiamo ad inserire tutto nell basket..
 		//ora con un ciclo di while passiamo dentro tutto
 
-		while ($dati = mysql_fetch_array($res))
+		foreach ($res AS $dati)
 		{
 			if ($_return['spesometro'] == "")
 			{
@@ -968,14 +1170,20 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 			$_return['errori']['testo'] = $dati['descrizione'];
 			// Stringa contenente la query di ricerca...
 
-			$query = sprintf("INSERT prima_nota_basket (sessionid, anno, nreg, data_reg, data_cont, descrizione, causale, conto, dare, avere, ndoc, anno_doc, data_doc, segno, iva, tipopag, nproto, anno_proto, note)
-		VALUES (\"%s\", \"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\")", $id, $dati['anno'], $dati['nreg'], $dati['data_reg'], $dati['data_cont'], $dati['desc_conto'], $dati['causale'], $dati['conto'], $dati['dare'], $dati['avere'], $dati['ndoc'], $dati['anno_doc'], $dati['data_doc'], $dati['segno'], $dati['iva'], $dati['tipopag'], $dati['nproto'], $dati['anno_proto'], $dati['note']);
+			$query = sprintf("INSERT prima_nota_basket (sessionid, anno, nreg, data_reg, data_cont, descrizione, causale, conto, dare, avere, ndoc, anno_doc, suffix_doc, data_doc, segno, iva, tipopag, nproto, anno_proto, suffix_proto, note)
+		VALUES (\"%s\", \"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $id, $dati['anno'], $dati['nreg'], $dati['data_reg'], $dati['data_cont'], $dati['desc_conto'], $dati['causale'], $dati['conto'], $dati['dare'], $dati['avere'], $dati['ndoc'], $dati['anno_doc'], $dati['suffix_doc'], $dati['data_doc'], $dati['segno'], $dati['iva'], $dati['tipopag'], $dati['nproto'], $dati['anno_proto'], $dati['suffix_proto'], $dati['note']);
 
-			// Esegue la query...
-			if (mysql_query($query, $conn) != 1)
-			{
-				$_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query inserimento query tabella nota_basket<br>\n\"$query\"\n";
-				$_return['errori']['errore'] = "errore";
+                        $result = $conn->exec($query);
+                        if ($conn->errorCode() != "00000")
+                        {
+                            $_errore = $conn->errorInfo();
+                            echo $_errore['2'];
+                            //aggiungiamo la gestione scitta dell'errore..
+                            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                            scrittura_errori($_cosa, $_percorso, $_errori);
+                            $_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query inserimento query tabella nota_basket<br>\n\"$query\"\n";
+                            $_return['errori']['errore'] = "errore";
 			}
 		}
 
@@ -986,7 +1194,7 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 
 		//Prima di eliminare la registrzione la leggiammo.
 		//
-        $dati = tabella_primanota("leggi_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+                $dati = tabella_primanota("leggi_singolo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 		//VERIFICHIAMO CHE NON SIA UNA FA PERCHE BISOGNA CANCELLARE ANCHE LA SCADENZA..
 		//CANCELLIAMO PRIMA LA SCEDENZA POI LA REGISTRAZIONE..
 		//leggiamo la registrazione..
@@ -995,12 +1203,16 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 		if ($dati['causale'] == "FA")
 		{
 			//ora eliminiamo la scadenza...
-			$_parametri['campo1'] = "anno_proto";
-			$_parametri['campo2'] = "nproto";
-			$_parametri['data_campo1'] = $dati['anno_proto'];
-			$_parametri['data_campo2'] = $dati['nproto'];
+			$_parametri['anno_proto'] = $dati['anno_proto'];
+			$_parametri['nproto'] = $dati['nproto'];
+                        $_parametri['suffix_proto'] = $dati['suffix_proto'];
 
-			tabella_scadenziario("elimina_scad", $_percorso, $_parametri);
+			$ris = tabella_scadenziario("elimina_proto", $_percorso, $_parametri);
+                        
+                        if($ris != "OK")
+                        {
+                            echo "<h3 align=\"center\"> <font color=\"RED\">Errore Eliminazione Scadenziario</font></h3>\n";
+                        }
 		}
 
 		if ($_parametri['cosa'] != "Aggiorna")
@@ -1010,9 +1222,24 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 			{
 
 				// se è una fattura vendita sblocco la fattura..  solo a livello contbile ma non a livello vendite
-				$query = "UPDATE fv_testacalce SET status='evaso', contabilita = 'NO' where anno='$dati[anno_doc]' AND ndoc='$dati[ndoc]' ";
+				$query = "UPDATE fv_testacalce SET status='evaso', contabilita = 'NO' where anno='$dati[anno_doc]' AND suffix='$dati[suffix_doc]' AND ndoc='$dati[ndoc]' ";
 				// Esegue la query...
-				$res = mysql_query($query, $conn);
+				$result = $conn->exec($query);
+
+                                if ($conn->errorCode() != "00000")
+                                {
+                                    $_errore = $conn->errorInfo();
+                                    echo $_errore['2'];
+                                    //aggiungiamo la gestione scitta dell'errore..
+                                    $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+                                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                                    scrittura_errori($_cosa, $_percorso, $_errori);
+                                    $_return = $_errori;
+                                }
+                                else
+                                {
+                                    echo "<h3 align=\"center\"> <font color=\"GREEN\">Ripristino Fattura OK</font></h3>\n";
+                                }
 			}
                         
                         $desc_conto = substr($dati['descrizione'], 0, 8);
@@ -1029,24 +1256,52 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
                         if (($dati['causale'] == "IN") AND ($desc_conto == "Em. eff."))
 			{
 				// se è una fattura vendita sblocco la fattura..  solo a livello contbile ma non a livello vendite
-				$query = "UPDATE effetti SET status='presentato', contabilita = 'NO' where annodoc='$dati[anno_doc]' AND numdoc='$dati[ndoc]' AND impeff=$valore limit 1";
+				$query = "UPDATE effetti SET status='presentato', contabilita = 'NO' where annodoc='$dati[anno_doc]' AND suffixdoc='$dati[suffix_doc]' AND numdoc='$dati[ndoc]' AND impeff=$valore limit 1";
 				
                                 //echo $query;
                                 
-				$res = mysql_query($query, $conn);
-                                
+				$result = $conn->exec($query);
+
+                                if ($conn->errorCode() != "00000")
+                                {
+                                    $_errore = $conn->errorInfo();
+                                    echo $_errore['2'];
+                                    //aggiungiamo la gestione scitta dell'errore..
+                                    $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+                                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                                    scrittura_errori($_cosa, $_percorso, $_errori);
+                                    $_return = $_errori;
+                                }
+                                else
+                                {
+                                    echo "<h3 align=\"center\"> <font color=\"GREEN\">Ripristino Effetto OK</font></h3>\n";
+                                }
 			}
+                        
                         
                         if (($dati['causale'] == "IN") AND ($desc_conto != "Em. eff."))
 			{
 
 				// se è una fattura vendita sblocco la fattura..  solo a livello contbile ma non a livello vendite
-				$query = "UPDATE effetti SET status='in attesa', contabilita = 'NO' where annodoc='$dati[anno_doc]' AND numdoc='$dati[ndoc]' AND impeff=$valore limit 1";
+				$query = "UPDATE effetti SET status='in attesa', contabilita = 'NO' where annodoc='$dati[anno_doc]' AND suffixdoc='$dati[suffix_doc]' AND numdoc='$dati[ndoc]' AND impeff=$valore limit 1";
 				// Esegue la query...
-				$res = mysql_query($query, $conn);
+				$result = $conn->exec($query);
+
+                                if ($conn->errorCode() != "00000")
+                                {
+                                    $_errore = $conn->errorInfo();
+                                    echo $_errore['2'];
+                                    //aggiungiamo la gestione scitta dell'errore..
+                                    $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+                                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                                    scrittura_errori($_cosa, $_percorso, $_errori);
+                                    $_return = $_errori;
+                                }
+                                else
+                                {
+                                    echo "<h3 align=\"center\"> <font color=\"GREEN\">Ripristino Effetto OK</font></h3>\n";
+                                }
 			}
-                        
-                        
                         
                         
                         
@@ -1054,14 +1309,18 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 
 		// Stringa contenente la query di ricerca...
 		$query = "DELETE FROM prima_nota WHERE anno='$_anno' AND nreg='$_nreg'";
-		// Esegue la query...
-		$res = mysql_query($query, $conn);
-		//verifichiamo che vada tutto ok.. !
-		if (mysql_query($query, $conn) != 1)
-		{
-			$_return['errori']['descrizione'] = "Si &egrave; verificato un errore durante la cancellazione della registrazione<br>\n\"$query\"\n";
-			$_return['errori']['errore'] = "errore";
-		}
+		$result = $conn->exec($query);
+
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                    $_return = $_errori;
+                }
 		else
 		{
 			$_return = "true";
@@ -1080,7 +1339,7 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 
 		$query = sprintf("INSERT prima_nota (anno, nreg, data_reg, data_cont, descrizione, segno,  causale, conto, desc_conto, iva, dare, avere, ndoc, anno_doc, data_doc, tipopag, nproto, anno_proto, note, status)
                 VALUES
-                (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $_anno, $_nreg, $_data_reg, $_data_gior, $_testo, $_parametri['segno'], $_causale, $_parametri['conto'], $_parametri['desc_conto'], $_parametri['iva'], $_parametri['dare'], $_parametri['avere'], $_parametri['ndoc'], $_parametri['anno_doc'], $_parametri['data_doc'], $_parametri['codpag'], $_nproto, $_parametri['anno_proto'], $_parametri['note'], "Inserito");
+                (\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $_anno, $_nreg, $_data_reg, $_data_cont, $_testo, $_parametri['segno'], $_causale, $_parametri['conto'], $_parametri['desc_conto'], $_parametri['iva'], $_parametri['dare'], $_parametri['avere'], $_parametri['ndoc'], $_parametri['anno_doc'], $_parametri['data_doc'], $_parametri['codpag'], $_nproto, $_parametri['anno_proto'], $_parametri['note'], "Inserito");
 
 		//echo "<br>$query\n";
 		// Esegue la query...
@@ -1109,8 +1368,8 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 			$_parametri['status'] == "Inserito";
 		}
 
-		$query = "INSERT prima_nota (anno, nreg, data_reg, data_cont, descrizione, segno,  causale, conto, desc_conto, iva, dare, avere, ndoc, suffix_doc, anno_doc, data_doc, tipopag, nproto, anno_proto, note, status)
-                VALUES ( '$_anno', '$_nreg', '$_data_reg', '$_data_gior', '$_testo', '$_parametri[segno]', '$_causale', '$_parametri[conto]', '$_parametri[desc_conto]', '$_parametri[iva]', '$_parametri[dare]', '$_parametri[avere]', '$_parametri[ndoc]', '$_parametri[suffix_doc]', '$_parametri[anno_doc]', '$_parametri[data_doc]', '$_parametri[codpag]', '$_parametri[nproto]', '$_parametri[anno_proto]', '$_parametri[note]', 'Inserito')";
+		$query = "INSERT prima_nota (anno, nreg, data_reg, data_cont, descrizione, segno,  causale, conto, desc_conto, iva, dare, avere, ndoc, suffix_doc, anno_doc, data_doc, tipopag, nproto, anno_proto, suffix_proto, note, status)
+                VALUES ( '$_anno', '$_nreg', '$_data_reg', '$_data_cont', '$_testo', '$_parametri[segno]', '$_causale', '$_parametri[conto]', '$_parametri[desc_conto]', '$_parametri[iva]', '$_parametri[dare]', '$_parametri[avere]', '$_parametri[ndoc]', '$_parametri[suffix_doc]', '$_parametri[anno_doc]', '$_parametri[data_doc]', '$_parametri[codpag]', '$_parametri[nproto]', '$_parametri[anno_proto]', '$_parametri[suffix_proto]' ,'$_parametri[note]', 'Inserito')";
 
 		$result = $conn->query($query);
 		if ($conn->errorCode() != "00000")
@@ -1118,32 +1377,39 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 			$_errore = $conn->errorInfo();
 			echo $_errore['2'];
 			//aggiungiamo la gestione scitta dell'errore..
-			$_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
+			$_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
 			$_errori['files'] = "motore_primanota.php";
 			scrittura_errori($_cosa, $_percorso, $_errori);
-			$_return = $_errori['descrizione'];
-                        $_errori['result'] = "NO";
+			$_return['errori'] = $_errori['descrizione'];
+                        $_return['result'] = "NO";
 		}
 		else
 		{
 			//inserimento corretto..
-			$_return = "$_nreg positiva";
+			$_return['result'] = "$_nreg positiva";
 			
 		}
-
-
 		return $_return;
 			
-		
 	}
 	else
 	{
 		// Stringa contenente la query di ricerca...
 		$query = "SELECT * FROM prima_nota WHERE anno='$_anno' AND nreg='$_nreg' ORDER BY anno, rigo";
-		// Esegue la query...
-		$res = mysql_query($query, $conn);
+		$result = $conn->query($query);
 
-		return $res;
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                    $_return = $_errori;
+                }
+
+		return $result;
 	}
 }
 
@@ -1151,6 +1417,10 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
 function schermate_primanota($_finestra, $_parametri)
 {
 	global $id;
+        global $_percorso;
+        global $dec;
+        global $conn;
+        
 	require "../../../setting/par_conta.inc.php";
 	require "../../../setting/vars.php";
 	//in base al tipo di richiesta compongo la schermata..
@@ -1168,7 +1438,7 @@ function schermate_primanota($_finestra, $_parametri)
 			$_anno = $_SESSION['anno'];
 
 			//cambiamo ilcodice iva con l'aliquota..'
-			$aliquota = tabella_aliquota("singolo", $_SESSION['parametri']['iva'], $_percorso);
+			$aliquota = tabella_aliquota("singola", $_SESSION['parametri']['iva'], $_percorso);
 
 			//vediamo se è indetraibile;
 			$_iva = $aliquota['aliquota'];
@@ -1304,7 +1574,7 @@ function schermate_primanota($_finestra, $_parametri)
 		echo "<form action=\"corpo_nota.php\" id=\"myform\" method=\"POST\">\n";
 		echo "<tr><td>C. Iva</td><td colspan=\"2\">Tipo conto</td><td>Conto</td><td>Val. Dare</td><td>Val. Avere</td><td>Azione</td></tr>\n";
 
-		$_result = tabella_aliquota("elenco_codice", $_codiva, $_percorso);
+		$_result = tabella_aliquota("elenca_codice", $_codiva, $_percorso);
 
 		echo "<tr><td><select name=\"iva\">\n";
                 if($_SESSION['causale'] == "FA")
@@ -1317,7 +1587,8 @@ function schermate_primanota($_finestra, $_parametri)
                 }
 		
 
-		while ($_cod_iva = mysql_fetch_array($_result))
+		
+                foreach ($_result AS $_cod_iva)
 		{
 			echo "<option value=\"$_cod_iva[codice]\">$_cod_iva[codice]</option>\n";
 		}
@@ -1363,20 +1634,11 @@ function schermate_primanota($_finestra, $_parametri)
 		echo "<tr><td class=\"tabella\">Rigo</td><td class=\"tabella\">IVA</td><td class=\"tabella\">Conto PDC</td><td align=\"left\" class=\"tabella\">Descrizione</td><td class=\"tabella\">Val. Dare</td><td class=\"tabella\">Val. Avere</td><td class=\"tabella\">Azione</td></tr>\n";
 		echo "<tr><td class=\"tabella_elenco\"><input type=\"radio\" name=\"rigo\" value=\"$dati[rigo]\" checked>$dati[rigo]</td>\n";
 
-		echo "<td class=\"tabella_elenco\"><select name=\"iva\">\n";
-		echo "<option value=\"$dati[iva]\">$dati[iva]</option>\n";
+		echo "<td class=\"tabella_elenco\">\n";
+                
+                tabella_aliquota("elenca_select_numeri", $dati[iva], "iva");
 
-		echo "<option value=\"\"></option>\n";
-		$_result = tabella_aliquota("elenco_codice", $_codiva, $_percorso);
-		while ($_cod_iva = mysql_fetch_array($_result))
-		{
-			echo "<option value=\"$_cod_iva[codice]\">$_cod_iva[codice]</option>\n";
-		}
-
-
-		echo "</select></td>\n";
-
-
+                echo "</td>\n";
 		echo "<td class=\"tabella_elenco\">$dati[conto]</td>\n";
 		echo "<td width=\"40%\" align=\"left\" class=\"tabella_elenco\">$dati[descrizione]\n";
 		echo "<td class=\"tabella_elenco\" align=\"right\"><input type=\"text\" name=\"dare\" value=\"$dati[dare]\" size=\"11\" maxlenght=\"10\"></td>\n";
@@ -1390,7 +1652,7 @@ function schermate_primanota($_finestra, $_parametri)
 		echo "<tr><td class=\"tabella\">Rigo</td><td class=\"tabella\">Iva</td><td class=\"tabella\">Codice PDC</td><td class=\"tabella\" width=\"50%\">Descrizione</td><td class=\"tabella\" align=\"center\">Dare</td><td align=\"center\" class=\"tabella\">Avere</td><td align=\"center\" class=\"tabella\">Azione</td></tr>\n";
 		$dati_carr = carrello_primanota("elenco", $_anno, $_rigo, $_tipo_cf, $_codconto, $_dare, $_avere, $_segno, $_iva);
 
-		while ($dati = mysql_fetch_array($dati_carr))
+                foreach ($dati_carr AS $dati)
 		{
 			if ($dati['dare'] == "0.00")
 			{
@@ -1421,30 +1683,34 @@ function schermate_primanota($_finestra, $_parametri)
 
 function schermate_calcenota($_finestra, $_parametri)
 {
+    global $conn;
+    global $_percorso;
+    
 	require "../../../setting/par_conta.inc.php";
 	require_once "../../librerie/motore_anagrafiche.php";
 	//*** funzione che mi compone la finestra della calce del deocumento prima nota ecc.
 	if ($_finestra == "FA")
 	{
 		$_data_reg = $_SESSION['datareg'];
-		$_data_gior = $_SESSION['datagior'];
+		$_data_cont = $_SESSION['datacont'];
 		$_testo = $_SESSION['testo'];
 		$_causale = $_SESSION['causale'];
 		$_anno = $_SESSION['anno'];
 		$_submit = $_SESSION['submit'];
 		$_nreg = $_SESSION['nreg'];
 		$_utente = $_SESSION['utente'];
+                $_suffix_proto = $_SESSION['suffix_proto'];
 
 		//vediamo se stiamo inserendo oppure aggiornando
 		if ($_parametri != "Modifica")
 		{
 			//vuol dire che è standard..
-			$_nreg = tabella_primanota("ultimo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
-			$_nproto = tabella_primanota("ultimo_proto", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+			$_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
+			$_nproto = tabella_primanota("ultimo_proto", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_suffix_proto, $_percorso);
 			echo "<tr><td colspan=\"3\"><br>Numero Registrazione = <input type=\"number\" name=\"nreg\" value=\"$_nreg\" size=\"7\" maxlenght=\"6\"></td>\n";
 			echo "<td colspan=\"3\"><br>Anno  Registrazione = <input type=\"number\" name=\"anno\" value=\"$_anno\" size=\"7\" maxlenght=\"4\"></td></tr>\n";
 			echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
-			echo "<tr><td colspan=\"3\"><br>Numero protocollo = <input type=\"number\" name=\"nproto\" value=\"$_nproto\" size=\"7\" maxlenght=\"6\"></td>\n";
+			echo "<tr><td colspan=\"3\"><br>Numero protocollo = <input type=\"number\" name=\"nproto\" value=\"$_nproto\" size=\"7\" maxlenght=\"6\"> Suffiso <input type=\"radio\" name=\"suffix_proto\" value=\"$_suffix_proto\" checked>$_suffix_proto</td>\n";
 			echo "<td colspan=\"3\"><br>Anno  Protocollo = <input type=\"number\" name=\"anno_proto\" value=\"$_anno\" size=\"7\" maxlenght=\"4\"></td></tr>\n";
 			echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
 			echo "<tr><td colspan=\"2\"><br>Numero Fattura Fornitore = <input type=\"text\" name=\"ndoc\" size=\"7\" maxlenght=\"6\"></td>\n";
@@ -1458,7 +1724,7 @@ function schermate_calcenota($_finestra, $_parametri)
 			echo "<tr><td colspan=\"3\"><br>Numero Registrazione = <input type=\"radio\" name=\"nreg\" value=\"$_nreg\" checked>$_nreg</td>\n";
 			echo "<td colspan=\"3\"><br>Anno  Registrazione = <input type=\"radio\" name=\"anno\" value=\"$_anno\" checked>$_anno</td></tr>\n";
 			echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
-			echo "<tr><td colspan=\"3\"><br>Numero protocollo = " . $_SESSION[parametri][nproto] . "</td>\n";
+			echo "<tr><td colspan=\"3\"><br>Numero protocollo = " . $_SESSION[parametri][nproto] . "/" . $_SESSION[parametri][suffix_proto] . "</td>\n";
 			echo "<td colspan=\"3\"><br>Anno  Protocollo = " . $_SESSION[parametri][anno_proto] . "</td></tr>\n";
 			echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
 			echo "<tr><td colspan=\"2\"><br>Numero Fattura Fornitore = " . $_SESSION[parametri][ndoc] . "</td>\n";
@@ -1471,26 +1737,21 @@ function schermate_calcenota($_finestra, $_parametri)
 		//elenchiamo le scadenze...
 
 		echo "<tr><td colspan=\"3\">Verifica Pagamento <br>\n";
-		echo "<select name=\"codpag\">\n";
-		$dati = tabella_pagamenti("singolo", $_codpag,'');
-		printf("<option value=\"%s\">%s</option>\n", $dati['codice'], $dati['descrizione']);
-		$res = tabella_pagamenti("elenco", $_codpag,'');
-		while ($dati = mysql_fetch_array($res))
-		{
-			printf("<option value=\"%s\">%s</option>\n", $dati['codice'], $dati['descrizione']);
-		}
-
-		echo "</select>\n";
+                
+                tabella_pagamenti("elenca_select_2", $_codpag, "codpag");
+        
 		echo "</td>";
 
 		echo "<td colspan=\"3\">Verifica Banca <br>\n";
 		echo "<select name=\"banca\">\n";
-		$dati = tabella_banche("singolo_abi", "", $_utente['abi'], $_utente['cab'], $_parametri);
+		$dati = tabella_banche("singola_abi", "", $_utente['abi'], $_utente['cab'], $_parametri);
 		printf("<option value=\"%s\">%s</option>\n", $dati['codice'], $dati['banca']);
-		//inserisco una riga vuota..
+		
+
+                //inserisco una riga vuota..
 		echo "<option value=\"\"></option>\n";
-		$res = tabella_banche("elenco", "", "", "", "");
-		while ($dati = mysql_fetch_array($res))
+		$res = tabella_banche("elenca", "", "", "", "");
+		foreach ($res AS $dati)
 		{
 			printf("<option value=\"%s\">%s</option>\n", $dati['codice'], $dati['banca']);
 		}
@@ -1502,7 +1763,7 @@ function schermate_calcenota($_finestra, $_parametri)
 	else
 	{
 		$_data_reg = $_SESSION['datareg'];
-		$_data_gior = $_SESSION['datagior'];
+		$_data_cont = $_SESSION['datacont'];
 		$_testo = $_SESSION['testo'];
 		$_causale = $_SESSION['causale'];
 		$_anno = $_SESSION['anno'];
@@ -1514,7 +1775,7 @@ function schermate_calcenota($_finestra, $_parametri)
 		if ($_parametri != "Modifica")
 		{
 			//vuol dire che è standard..
-			$_tocca = tabella_primanota("ultimo", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+			$_tocca = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 		}
 
 
@@ -1559,9 +1820,9 @@ function schermate_visualizza_reg($_causale, $_anno, $_nreg, $_parametri)
             <td align=\"left\" width=\"50%\" class=\"tabella\">Descrizione</td>
             <td align=\"center\" class=\"tabella\">Dare</td>
             <td align=\"center\" class=\"tabella\">Avere</td></tr>\n";
-		$dati_carr = tabella_primanota("elenco", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_paramentri, $_percorso);
+		$dati_carr = tabella_primanota("elenco", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-		while ($dati = mysql_fetch_array($dati_carr))
+		foreach ($dati_carr AS $dati)
 		{
 			if ($dati['dare'] == "0.00")
 			{
@@ -1595,9 +1856,9 @@ function schermate_visualizza_reg($_causale, $_anno, $_nreg, $_parametri)
             <td colspan=\"2\" align=\"center\" class=\"tabella\">Cod. Pagamento</td>
             </tr>\n";
 		echo "<tr><td align=\"center\" class=\"tabella_elenco\">$_parametri[segno]</td>
-            <td class=\"tabella_elenco\" align=\"center\">$_parametri[nproto]</td>
+            <td class=\"tabella_elenco\" align=\"center\">$_parametri[nproto] / $_parametri[suffix_proto]</td>
             <td class=\"tabella_elenco\" align=\"center\">$_parametri[anno_proto]</td>
-            <td align=\"left\" width=\"50%\" class=\"tabella_elenco\">$_parametri[ndoc] / $_parametri[anno_doc] del $_parametri[data_doc]</td>
+            <td align=\"left\" width=\"50%\" class=\"tabella_elenco\">$_parametri[ndoc]-$_parametri[suffix_doc] / $_parametri[anno_doc] del $_parametri[data_doc]</td>
             <td align=\"center\" class=\"tabella_elenco\">$_parametri[tipopag]</td>
             <td align=\"center\" class=\"tabella_elenco\"></td></tr>\n";
 		//elenchiamo il carrello..
@@ -1607,9 +1868,9 @@ function schermate_visualizza_reg($_causale, $_anno, $_nreg, $_parametri)
             <td width=\"50%\" class=\"tabella\">Descrizione</td>
             <td align=\"center\" class=\"tabella\">Dare</td>
             <td align=\"center\" class=\"tabella\">Avere</td></tr>\n";
-		$dati_carr = tabella_primanota("elenco", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+		$dati_carr = tabella_primanota("elenco", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
-		while ($dati = mysql_fetch_array($dati_carr))
+		foreach ($dati_carr AS $dati)
 		{
 			if ($dati['dare'] == "0.00")
 			{
@@ -1666,11 +1927,22 @@ function annulla_doc($id)
 {
 	//la funzione mi annulla il documento in coso..
 	global $conn;
+        global $_percorso;
+        
 	//annulllimo il carrello
 
 	$query = "DELETE FROM prima_nota_basket where sessionid='$id'";
 
-	mysql_query($query, $conn);
+	$result = $conn->exec($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
 
 	elimina_sessioni();
 }
@@ -1682,7 +1954,7 @@ function elimina_sessioni()
 	//Ora elimino tutte le sessioni in corso..
 	unset($_SESSION['testo']);
 	unset($_SESSION['datareg']);
-	unset($_SESSION['datagior']);
+	unset($_SESSION['datacont']);
 	unset($_SESSION['causale']);
 	unset($_SESSION['anno']);
 	unset($_SESSION['submit']);
@@ -1691,19 +1963,32 @@ function elimina_sessioni()
 	unset($_SESSION['totdoc']);
 	unset($_SESSION['parametri']);
 	unset($_SESSION['registrazione']);
+        unset($_SESSION['suffix_proto']);
 }
 
 function Showcodconto()
 {
 	global $conn;
+        global $_percorso;
 
 	if ($_POST['tipo_cf'] == "C")
 	{
-		$sql = "SELECT codice, substring(ragsoc,1,40) AS ragsoc FROM clienti ORDER BY ragsoc";
-		$res = mysql_query($sql, $conn);
+		$query = "SELECT codice, substring(ragsoc,1,40) AS ragsoc FROM clienti WHERE es_selezione != 'SI' ORDER BY ragsoc";
+                
+                $result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+
 		$_codconto .= '<option value="0">Scegli...</option>';
 
-		while ($row = mysql_fetch_array($res))
+		foreach ($result AS $row)
 		{
 			$_codconto .= printf("<option value=\"%s\">%s</option>", $row['codice'], $row['ragsoc']);
 			//$_codconto .= '<option value="' . $row['codice'] . '">' . $row['ragsoc'] . '</option>';
@@ -1711,44 +1996,86 @@ function Showcodconto()
 	}
 	elseif ($_POST['tipo_cf'] == "F")
 	{
-		$sql = "SELECT codice, substring(ragsoc,1,40) AS ragsoc FROM fornitori ORDER BY ragsoc";
-		$res = mysql_query($sql, $conn);
+		$query = "SELECT codice, substring(ragsoc,1,40) AS ragsoc FROM fornitori WHERE es_selezione != 'SI'  ORDER BY ragsoc";
+		$result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+
 		$_codconto .= '<option value="0">Scegli...</option>';
 
-		while ($row = mysql_fetch_array($res))
+		foreach ($result AS $row)
 		{
 			$_codconto .= '<option value="' . $row['codice'] . '">' . $row['ragsoc'] . '</option>';
 		}
 	}
 	elseif ($_POST['tipo_cf'] == "A")
 		{
-		$sql = "SELECT codconto, substring(descrizione,1,40) AS descrizione FROM piano_conti WHERE livello >= '2' AND tipo_cf='$_POST[tipo_cf]' order by descrizione";
-		$res = mysql_query($sql, $conn);
+		$query = "SELECT codconto, substring(descrizione,1,40) AS descrizione FROM piano_conti WHERE livello >= '2' AND tipo_cf='$_POST[tipo_cf]' order by descrizione";
+		$result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+
 		$_codconto .= '<option value="0">Scegli...</option>';
 
-		while ($row = mysql_fetch_array($res))
-		{
-			$_codconto .= '<option value="' . $row['codconto'] . '">' . $row['descrizione'] . '-' . $row['codconto'] . '</option>';
-		}
-	}
+                    foreach ($result AS $row)
+                    {
+                            $_codconto .= '<option value="' . $row['codconto'] . '">' . $row['descrizione'] . '-' . $row['codconto'] . '</option>';
+                    }
+                }
 		elseif ($_POST['tipo_cf'] == "B")
 		{
-		$sql = "SELECT codconto, substring(descrizione,1,40) AS descrizione FROM piano_conti WHERE livello >= '2' AND tipo_cf='$_POST[tipo_cf]' order by descrizione";
-		$res = mysql_query($sql, $conn);
+		$query = "SELECT codconto, substring(descrizione,1,40) AS descrizione FROM piano_conti WHERE livello >= '2' AND tipo_cf='$_POST[tipo_cf]' order by descrizione";
+                
+                $result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+
 		$_codconto .= '<option value="0">Scegli...</option>';
 
-		while ($row = mysql_fetch_array($res))
+		foreach ($result AS $row)
 		{
 			$_codconto .= '<option value="' . $row['codconto'] . '">' . $row['descrizione'] . '-' . $row['codconto'] . '</option>';
 		}
 	}
 	else
 	{
-		$sql = "SELECT codconto, substring(descrizione,1,40) AS descrizione FROM piano_conti WHERE livello >= '2' order by codconto";
-		$res = mysql_query($sql, $conn);
+		$query = "SELECT codconto, substring(descrizione,1,40) AS descrizione FROM piano_conti WHERE livello >= '2' order by codconto";
+		
+                $result = $conn->query($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                }
+
 		$_codconto .= '<option value="0">Scegli...</option>';
 
-		while ($row = mysql_fetch_array($res))
+		foreach ($result AS $row)
 		{
 			$_codconto .= '<option value="' . $row['codconto'] . '">' . $row['codconto'] . '-' . $row['descrizione'] . '</option>';
 		}
@@ -1847,7 +2174,7 @@ function Showndoc()
 	elseif ($_cosa == "IN")
 	{
 		$_utente = $MASTRO_CLI . $_utente;
-		$query = "SELECT *, (SUM(avere) - SUM(dare)) AS diff , date_format(data_doc, '%d-%m-%Y') as dataita FROM prima_nota where conto = '$_utente' GROUP BY ndoc ORDER BY ndoc";
+		$query = "SELECT *, (SUM(avere) - SUM(dare)) AS diff , date_format(data_doc, '%d-%m-%Y') as dataita FROM prima_nota where conto = '$_utente' GROUP BY ndoc, suffix_doc ORDER BY ndoc";
 		$result = $conn->query($query);
 
                 if ($conn->errorCode() != "00000")
@@ -1866,14 +2193,14 @@ function Showndoc()
 		{
 			if ($row['diff'] != "0.00")
 			{
-				$_ndoc = printf("<option value=\"%s%s\">Fattura vendita nr. %s del  %s Importo = %s </option>", $row['anno_doc'], $row['ndoc'], $row['ndoc'], $row['dataita'], $row['diff']);
+				$_ndoc = printf("<option value=\"%s%s%s\">Fattura vendita nr. %s/%s del  %s Importo = %s </option>", $row['anno_doc'], $row['suffix_doc'], $row['ndoc'], $row['ndoc'],$row['suffix_doc'], $row['dataita'], $row['diff']);
 			}
 		}
 	}
 	elseif ($_cosa == "PA")
 	{
 		#$sql = "SELECT * , (SUM( dare ) - SUM( avere ) ) AS diff FROM prima_nota WHERE conto = '$_utente' GROUP BY nproto ORDER BY nproto";
-		$query = "SELECT * , (SUM( dare ) - SUM( avere ) ) AS diff, date_format(data_doc, '%d-%m-%Y') as dataita FROM prima_nota WHERE (causale='FA' OR causale='PA') AND conto = '$_utente' GROUP BY anno_proto, nproto ORDER BY anno_proto, nproto";
+		$query = "SELECT * , (SUM( dare ) - SUM( avere ) ) AS diff, date_format(data_doc, '%d-%m-%Y') as dataita FROM prima_nota WHERE (causale='FA' OR causale='PA') AND conto = '$_utente' GROUP BY anno_proto, suffix_proto, nproto ORDER BY anno_proto, suffix_proto, nproto";
 		$result = $conn->query($query);
 
                 if ($conn->errorCode() != "00000")
@@ -1892,7 +2219,7 @@ function Showndoc()
 		{
 			if ($row['diff'] != "0.00")
 			{
-				$_ndoc = printf("<option value=\"%s%s\">Fattura acquisto nr. %s del  %s protocollo nr. %s anno %s Valore %s</option>", $row['anno_proto'], $row['nproto'], $row['ndoc'], $row['dataita'], $row['nproto'], $row['anno_proto'], $row['diff']);
+				$_ndoc = printf("<option value=\"%s%s%s\">Fattura acquisto nr. %s del  %s protocollo nr. %s/%s anno %s Valore %s</option>", $row['anno_proto'], $row['suffix_proto'], $row['nproto'], $row['ndoc'], $row['dataita'], $row['nproto'], $row['suffix_proto'], $row['anno_proto'], $row['diff']);
 			}
 		}
 	}

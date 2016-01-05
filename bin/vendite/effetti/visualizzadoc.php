@@ -79,7 +79,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
         <tr>
             <td width="50%" bgcolor="#FFFFFF" valign="top" align="left">
-                <i>Spett.le</i>&nbsp;<?php echo $dati['utente']; ?><br>
+                <i>Spett.le</i>&nbsp;<?php echo $dati2['codice']; ?><br>
                 <?php echo $dati2['ragsoc']; ?><br>
                 <?php echo $dati2['indirizzo']; ?><br>
                 <?php echo $dati2['cap']; ?>&nbsp; <?php echo $dati2['citta']; ?>&nbsp;(<?php echo $dati2['prov']; ?>)<br>
@@ -145,6 +145,11 @@ if ($_SESSION['user']['vendite'] > "1")
             $_SESSION['numeff'] = $dati['numeff'];
             $_SESSION['annoeff'] = $dati['annoeff'];
             $_SESSION['cliente'] = $dati['utente'];
+            
+            if ($dati[contabilita] == "SI")
+            {
+               echo "Già contabilizzato.. $dati[contabilita]\n";
+            }
 
             printf("<center><br><input type=\"submit\" name=\"azione\" value=\"Salda\"></center>");
             echo "<br>";

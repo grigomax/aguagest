@@ -415,7 +415,7 @@ function tabella_aliquota($_cosa, $_codiva, $_parametri)
     elseif ($_cosa == "elenca_select_2")
     {
 
-        $query = sprintf("select codice, descrizione from aliquota where codice=\"%s\"", $_codiva);
+        $query = "select codice, descrizione from aliquota where codice='$_codiva'";
 
         $result = $conn->query($query);
 
@@ -1209,6 +1209,7 @@ function tabella_banche($_cosa, $_codice, $_abi, $_cab, $_parametri)
 {
     global $conn;
     global $_percorso;
+    global $dec;
 
     if ($_cosa == "singolo")
     {
@@ -1290,7 +1291,7 @@ function tabella_banche($_cosa, $_codice, $_abi, $_cab, $_parametri)
         }
         else
         {
-            $dati = $result;
+            $dati = $result->fetch(PDO::FETCH_ASSOC);
         }
         
     }
@@ -2562,7 +2563,16 @@ function tabella_effetti($_cosa, $_percorso, $_annoeff, $_numeff, $_parametri)
     elseif ($_cosa == "singola")
     {
 //mi restituisce l'arre singolo
-        $query = "SELECT *, date_format(dataeff, '%d-%m-%Y') as dataeff, date_format(scadeff, '%d-%m-%Y') AS scadeff, date_format(datapag, '%d-%m-%Y') AS datapag, date_format(datadoc, '%d-%m-%Y') AS datadoc, date_format(datadist, '%d-%m-%Y') AS datadist FROM effetti WHERE numeff='$_numeff' and annoeff='$_annoeff'";
+        
+        if($_parametri == "data_us")
+        {
+            $query = "SELECT * FROM effetti WHERE numeff='$_numeff' and annoeff='$_annoeff'";
+        }
+        else
+        {
+            $query = "SELECT *, date_format(dataeff, '%d-%m-%Y') as dataeff, date_format(scadeff, '%d-%m-%Y') AS scadeff, date_format(datapag, '%d-%m-%Y') AS datapag, date_format(datadoc, '%d-%m-%Y') AS datadoc, date_format(datadist, '%d-%m-%Y') AS datadist FROM effetti WHERE numeff='$_numeff' and annoeff='$_annoeff'";
+        }
+        
 
 
         $result = $conn->query($query);
@@ -3045,26 +3055,29 @@ function tabella_fornitori($_cosa, $_utente, $_parametri)
             $return = mysql_fetch_array($res);
         }
     }
-    elseif ($_cosa == "singolo_piva")//restituisce array con la riga del fornitore..
+    elseif ($_cosa == "singola_piva")//restituisce array con la riga del fornitore..
     {
 
         $query = "select * from fornitori where piva='$_utente' limit 1";
 
-        $res = mysql_query($query, $conn);
-
-        if (mysql_num_rows($res) < 1)
+        $result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
         {
-            //errore connessione..
-            //provo a scrivere l'errore nel log..
-            $_errori['descrizione'] = "errore query $query";
-            $_errori['files'] = "motore_anagrafiche.php";
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
             scrittura_errori($_cosa, $_percorso, $_errori);
-
+        }
+        
+        if ($result->num_rows < 1)
+        {
             $dati['errori'] = "Nessun Frornitore trovato";
         }
         else
         {
-            $return = mysql_fetch_array($res);
+            $return = $result->fetch(PDO::FETCH_ASSOC);
         }
     }
     elseif ($_cosa == "elenco_select")
@@ -4060,7 +4073,7 @@ function tabella_pagamenti($_cosa, $_codpag, $_parametri)
         }
 
         echo "</select>\n";
-        echo "</td></tr>\n";
+        //echo "</td></tr>\n";
     }
     elseif($_cosa == "elenca_risultato")
     {
@@ -4336,10 +4349,10 @@ function tabella_scadenziario($_cosa, $_percorso, $_parametri)
     {
 //funzione che mi inserisci i dati nello scadenziario..
 
-        $query = "INSERT INTO scadenziario (anno, `data_scad`, `descrizione`, `importo`, `utente`, `anno_doc`, `ndoc`, `data_doc`, `anno_proto`,
+        $query = "INSERT INTO scadenziario (anno, `data_scad`, `descrizione`, `importo`, `utente`, `anno_doc`, `ndoc`, `data_doc`, `anno_proto`, suffix_proto, 
             `nproto`, `codpag`, `banca`, `impeff`, status, data_pag, note) VALUES
             ('$_parametri[anno]', '$_parametri[data_scad]', '$_parametri[descrizione]', '$_parametri[importo]', '$_parametri[utente]', '$_parametri[anno_doc]',
-            '$_parametri[ndoc]', '$_parametri[data_doc]', '$_parametri[anno_proto]', '$_parametri[nproto]', '$_parametri[codpag]', '$_parametri[banca]', '$_parametri[impeff]', '$_parametri[status]', '$_parametri[data_pag]', '$_parametri[note]')";
+            '$_parametri[ndoc]', '$_parametri[data_doc]', '$_parametri[anno_proto]', '$_parametri[suffix_proto]', '$_parametri[nproto]', '$_parametri[codpag]', '$_parametri[banca]', '$_parametri[impeff]', '$_parametri[status]', '$_parametri[data_pag]', '$_parametri[note]')";
 
         $result = $conn->exec($query);
 
@@ -4352,6 +4365,7 @@ function tabella_scadenziario($_cosa, $_percorso, $_parametri)
             $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
             scrittura_errori($_cosa, $_percorso, $_errori);
             $_return = $_errori;
+            $_return = "NO";
         }
         else
         {
@@ -4363,7 +4377,7 @@ function tabella_scadenziario($_cosa, $_percorso, $_parametri)
 //funzione che mi inserisci i dati nello scadenziario..
 
         $query = "UPDATE scadenziario set data_scad='$_parametri[data_scad]', descrizione='$_parametri[descrizione]', importo='$_parametri[importo]', utente='$_parametri[utente]',
-                anno_doc='$_parametri[anno_doc]', ndoc='$_parametri[ndoc]', data_doc='$_parametri[data_doc]', anno_proto='$_parametri[anno_proto]', nproto='$_parametri[nproto]',
+                anno_doc='$_parametri[anno_doc]', ndoc='$_parametri[ndoc]', data_doc='$_parametri[data_doc]', anno_proto='$_parametri[anno_proto]', suffix_proto='$_parametri[suffix_proto]', nproto='$_parametri[nproto]',
                 codpag='$_parametri[codpag]', banca='$_parametri[banca]', impeff='$_parametri[impeff]', status='$_parametri[status]', data_pag='$_parametri[data_pag]', note='$_parametri[note]' where anno='$_parametri[anno]' AND nscad='$_parametri[nscad]' limit 1";
 
 // Esegue la query...
@@ -4378,7 +4392,7 @@ function tabella_scadenziario($_cosa, $_percorso, $_parametri)
 //funzione che mi inserisci i dati nello scadenziario..
 
         $query = "UPDATE scadenziario set data_scad='$_parametri[data_scad]', descrizione='$_parametri[descrizione]', importo='$_parametri[importo]', utente='$_parametri[utente]',
-                anno_doc='$_parametri[anno_doc]', ndoc='$_parametri[ndoc]', data_doc='$_parametri[data_doc]', anno_proto='$_parametri[anno_proto]', nproto='$_parametri[nproto]',
+                anno_doc='$_parametri[anno_doc]', ndoc='$_parametri[ndoc]', data_doc='$_parametri[data_doc]', anno_proto='$_parametri[anno_proto]', suffix_proto='$_parametri[suffix_proto]', nproto='$_parametri[nproto]',
                 codpag='$_parametri[codpag]', banca='$_parametri[banca]', impeff='$_parametri[impeff]', status='$_parametri[status]', data_pag='$_parametri[data_pag]', note='$_parametri[note]' where anno='$_parametri[anno]' AND nscad='$_parametri[nscad]' limit 1";
 
         $result = $conn->exec($query);
@@ -4398,14 +4412,28 @@ function tabella_scadenziario($_cosa, $_percorso, $_parametri)
             $_return = "OK";
         }
     }
-    elseif ($_cosa == "elimina_scad")
+    elseif ($_cosa == "elimina_proto")
     {
-//questa funzione mi elimina le scadenze selezionate..
-//qui mettiamo l'elenco
-        $query = "DELETE FROM scadenziario WHERE $_parametri[campo1] = '$_parametri[data_campo1]' AND $_parametri[campo2] = '$_parametri[data_campo2]'";
 
-//eseguiamo la query
-        $_return = mysql_query($query, $conn) or mysql_error();
+        $query = "DELETE FROM scadenziario WHERE nproto='$_parametri[nproto]' AND suffix_proto='$_parametri[suffix_proto]' AND anno_proto='$_parametri[anno_proto]'";
+        $result = $conn->exec($query);
+
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            $_return = "NO";
+        }
+        else
+        {
+            $_return = "OK";
+        }
+        
+        
     }
     elseif ($_cosa == "elimina")
     {
@@ -4627,6 +4655,25 @@ function tabella_scadenziario($_cosa, $_percorso, $_parametri)
         {
             $_return = "OK";
         }
+    }
+    elseif($_cosa == "elenca_proto")
+    {
+        $query = "SELECT * FROM scadenziario WHERE nproto='$_parametri[nproto]' AND suffix_proto='$_parametri[suffix_proto]' AND anno_proto='$_parametri[anno_proto]' ORDER BY data_scad";
+        $result = $conn->query($query);
+
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            $_return = $_errori;
+        }
+        
+        $_return = $result;
+        
     }
     else
     {

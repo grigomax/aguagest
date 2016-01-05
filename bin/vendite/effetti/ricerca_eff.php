@@ -57,10 +57,10 @@ if ($_SESSION['user']['vendite'] > "1")
     echo "</td></tr>\n";
 
     echo "<tr><td width=\"200\" align=\"right\"><span class=\"testo_blu\">Descrizione:&nbsp;</span></td>\n";
-    printf("<td width=\"200\" align=\"center\"><input type=\"text\" autofocus name=\"descrizione\" value=\"%s\" size=\"60\" maxlength=\"40\"></td></tr>\n", $_descrizione);
+    printf("<td width=\"200\" align=\"center\"><input type=\"text\" autofocus name=\"descrizione\" value=\"%s\" size=\"60\" maxlength=\"40\"></td></tr></span>\n", $_descrizione);
 
     echo "<tr><td width=\"200\" align=\"right\"><span class=\"testo_blu\">Numero effetto => &nbsp;</span></td>\n";
-    echo "<td width=\"200\" align=\"left\"><input type=\"text\" name=\"numeff\" size=\"16\" maxlength=\"15\"> <span class=\"testo_blu\"><input type=\"checkbox\" name=\"sospesi\" value=\"SI\"> Cerca solo sospesi</td></tr>\n";
+    echo "<td width=\"200\" align=\"left\"><input type=\"text\" name=\"numeff\" size=\"16\" maxlength=\"15\"> <input type=\"checkbox\" name=\"sospesi\" value=\"SI\"> Cerca solo sospesi</td></tr>\n";
 
 
     echo "<tr><td align=\"center\" colspan=\"2\"><input align=\"center\" type=\"submit\" value=\"Cerca !\"></td></tr>\n";

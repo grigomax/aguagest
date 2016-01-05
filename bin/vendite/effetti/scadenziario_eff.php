@@ -92,15 +92,15 @@ if ($_SESSION['user']['vendite'] > "1")
         }
         echo "<tr>";
         printf("<form action=\"visualizzadoc.php?anno=$dati[annoeff]\" method=\"POST\">");
-        printf("<td width=\"30\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['tipoeff']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['documento']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['numdoc']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['modpag']);
-        printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
-        printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['scadenza']);
-        printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['status']);
-        printf("<td width=\"70\" height=\"1\" align=\"center\" class=\"testo_blu\"><input type=\"submit\" name=\"ndoc\" value=\"%s\"></td>", $dati['numeff']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['tipoeff']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['documento']);
+        printf("<td align=\"center\"><span class=\"testo_blu\"><b>%s/$dati[suffixdoc]</b></span></td>", $dati['numdoc']);
+        printf("<td align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $dati['modpag']);
+        printf("<td align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['impeff']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['scadenza']);
+        printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['status']);
+        printf("<td height=\"1\" align=\"center\" class=\"testo_blu\"><input type=\"submit\" name=\"ndoc\" value=\"%s\"></td>", $dati['numeff']);
         $_prima = "";
 
         $_somma = $_somma + $dati['impeff'];
@@ -110,15 +110,15 @@ if ($_SESSION['user']['vendite'] > "1")
 
         echo "</form></tr>";
         echo "<tr>";
-        echo "<td width=\"30\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"400\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"80\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-        echo "<td width=\"70\" height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
         echo "</tr>";
         $_mese_rif2 = $_mese_rif;
     }

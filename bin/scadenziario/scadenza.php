@@ -96,6 +96,7 @@ if ($_SESSION['user']['scadenziario'] > "2")
     echo "<tr><td>Numero Documento</td><td align=\"left\"><input type=\"text\" name=\"ndoc\" value=\"$_scadenza[ndoc]\" size=\"15\" maxlength=\"20\"></td></tr>\n";
     echo "<tr><td>Data Documento</td><td align=\"left\"><input type=\"text\" class=\"data\" name=\"data_doc\" value=\"" . cambio_data("it", $_scadenza[data_doc]) . "\" size=\"11\" maxlength=\"10\"> gg-mm-aaaa</td></tr>\n";
     echo "<tr><td>Anno Protocollo</td><td align=\"left\"><input type=\"text\" name=\"anno_proto\" value=\"$_scadenza[anno_proto]\" size=\"5\" maxlength=\"4\"> aaaa</td></tr>\n";
+    echo "<tr><td>Suffisso Protocollo</td><td align=\"left\"><input type=\"text\" name=\"suffix_proto\" value=\"$_scadenza[suffix_proto]\" size=\"1\" maxlength=\"1\"> A => Z</td></tr>\n";
     echo "<tr><td>Numero Protocollo</td><td align=\"left\"><input type=\"text\" name=\"nproto\" value=\"$_scadenza[nproto]\" size=\"10\" maxlength=\"10\">  In caso di pagamento delega inserire il numero del conto del piano dei conti</td></tr>\n";
     echo "<tr><td>Pagamento</td><td align=\"left\">\n";
 

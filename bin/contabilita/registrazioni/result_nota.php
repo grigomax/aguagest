@@ -16,7 +16,7 @@ $_SESSION['keepalive'] ++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 require "../../../setting/par_conta.inc.php";
 require "../../librerie/motore_primanota.php";
 require "../../librerie/motore_anagrafiche.php";
@@ -30,11 +30,8 @@ testata_html($_cosa, $_percorso);
 //carichiamo il menu a tendina..
 menu_tendina($_cosa, $_percorso);
 
-
-
 if ($_SESSION['user']['contabilita'] > "1")
 {
-
 
     $id = session_id();
 
@@ -57,7 +54,7 @@ if ($_SESSION['user']['contabilita'] > "1")
     echo "<h2>Registrazione di prima nota</h2>\n";
 
 //passo la variabile del post note alla funzione di controllo del testo pervia del problema della parole accentate ecc..
-    $_note = mysql_real_escape_string($_POST['note']);
+    $_note = addslashes($_POST['note']);
 
 
     if ($_azione == "Inserisci")
@@ -65,8 +62,8 @@ if ($_SESSION['user']['contabilita'] > "1")
         //ci prendiamo anche tutte le sessioni
         //Recupero le sessioni così da mostrarle..
         $_data_reg = $_SESSION['datareg'];
-        $_data_gior = $_SESSION['datagior'];
-        $_testo = $_SESSION['testo'];
+        $_data_cont = $_SESSION['datacont'];
+        $_testo = addslashes($_SESSION['testo']);
         $_causale = $_SESSION['causale'];
         $_parametri['note'] = $_note;
 
@@ -93,15 +90,18 @@ if ($_SESSION['user']['contabilita'] > "1")
             $_parametri['codpag'] = $_SESSION['registrazione']['tipopag'];
             $_parametri['nproto'] = $_SESSION['registrazione']['nproto'];
             $_parametri['anno_proto'] = $_SESSION['registrazione']['anno_proto'];
+            $_parametri['suffix_proto'] = $_SESSION['registrazione']['suffix_proto'];
             $_parametri['ndoc'] = $_SESSION['registrazione']['ndoc'];
             $_parametri['anno_doc'] = $_SESSION['registrazione']['anno_doc'];
             $_parametri['data_doc'] = $_SESSION['registrazione']['data_doc'];
+            $_parametri['suffix_doc'] = $_SESSION['registrazione']['suffix_doc'];
             $_parametri['segno'] = "P";
         }
         else
         {
             $_parametri['codpag'] = $_POST['codpag'];
             $_parametri['nproto'] = $_POST['nproto'];
+            $_parametri['suffix_proto'] = $_POST['suffix_proto'];
             $_parametri['anno_proto'] = $_POST['anno_proto'];
             $_parametri['ndoc'] = $_POST['ndoc'];
             $_parametri['anno_doc'] = $_POST['anno_doc'];
@@ -117,11 +117,11 @@ if ($_SESSION['user']['contabilita'] > "1")
         //cambiamo la data prima dell'inserimento..'
 
         $_data_reg = cambio_data("us", $_data_reg);
-        $_data_gior = cambio_data("us", $_data_gior);
+        $_data_cont = cambio_data("us", $_data_cont);
 
 
         //passiamo tutto alla funzione di inserimento dati in prima nota..
-        $_return = tabella_primanota("Inserisci", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+        $_return = tabella_primanota("Inserisci", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
 
         //verifico se ci sono stati erroi nell'inserimento del documento
         if ($_return['errori']['errore'] != "")
@@ -133,26 +133,23 @@ if ($_SESSION['user']['contabilita'] > "1")
         {
             echo "<h2 align=\"center\">Registrazione aggiornata con successo..</h2>";
             echo "<h3 align=\"center\">Nr. Registrazione <b>$_return[nreg]</b></h3>";
-            echo "<h3 align=\"center\">Nr. protocollo <b>$_return[nproto]</b></h3>";
+            echo "<h3 align=\"center\">Nr. protocollo <b>$_return[nproto]/$_parametri[suffix_proto]</b></h3>";
 
             if ($_causale == "FA")
             {
 
                 echo "<center>Elenco scadenze\n";
 
-                $_parametri['campo1'] = "nproto";
-                $_parametri['campo2'] = "anno_proto";
-                $_parametri['data_campo1'] = $_return['nproto'];
-                $_parametri['data_campo2'] = $_parametri['anno_proto'];
+                $_parametri['nproto'] = $_return['nproto'];
 
-                $res = tabella_scadenziario("elenco", $_percorso, $_parametri);
+                $res = tabella_scadenziario("elenca_proto", $_percorso, $_parametri);
 
                 echo "<table align=\"center\" border=\"1\" width=\"60%\">\n";
                 echo "<tr><td colspan=\"3\">Vai direttamente alla scadenza </td></tr>\n";
                 echo "<tr>\n";
                 echo "<td>N. Scad</td><td>Data Scadenza</td><td>Importo</td></tr>\n";
 
-                while ($dati = mysql_fetch_array($res))
+                foreach ($res AS $dati)
                 {
                     echo "<td><a href=\"../../scadenziario/scadenza.php?azione=visualizza&anno=$dati[anno]&nscad=$dati[nscad]\">$dati[nscad]<td>$dati[data_scad]</td><td>$dati[impeff]</td></tr>\n";
                 }
@@ -175,7 +172,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         //ci prendiamo anche tutte le sessioni
         //Recupero le sessioni così da mostrarle..
         $_data_reg = $_SESSION['datareg'];
-        $_data_gior = $_SESSION['datagior'];
+        $_data_cont = $_SESSION['datacont'];
         $_testo = $_SESSION['testo'];
         $_causale = $_SESSION['causale'];
         $_anno = $_SESSION['anno'];
@@ -187,7 +184,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
         //cambiamo la data prima dell'inserimento..'
         //passiamo tutto alla funzione di inserimento dati in prima nota..
-        $_return = tabella_primanota("salda", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+        $_return = tabella_primanota("salda", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
         //verifico se ci sono stati erroi nell'inserimento del documento
 
         if ($_return['errori']['errore'] != "")
@@ -212,7 +209,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         //ci prendiamo anche tutte le sessioni
         //Recupero le sessioni così da mostrarle..
         $_data_reg = $_SESSION['datareg'];
-        $_data_gior = $_SESSION['datagior'];
+        $_data_cont = $_SESSION['datacont'];
         $_testo = $_SESSION['testo'];
         $_causale = $_SESSION['causale'];
         $_anno = $_SESSION['anno'];
@@ -231,7 +228,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         }
         //cambiamo la data prima dell'inserimento..'
         //passiamo tutto alla funzione di inserimento dati in prima nota..
-        $_return = tabella_primanota("Aggiorna", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_gior, $_parametri, $_percorso);
+        $_return = tabella_primanota("Aggiorna", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
         //verifico se ci sono stati erroi nell'inserimento del documento
 
         if ($_return['errori']['errore'] != "")
@@ -246,20 +243,21 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             if ($_causale == "FA")
             {
+                echo "<h3 align=\"center\">N.protocollo $_return[nproto] / $_return[suffix_proto]</h3>";
                 echo "<center>Elenco scadenze\n";
 
-                $_parametri['campo1'] = "nproto";
-                $_parametri['campo2'] = "anno_proto";
-                $_parametri['data_campo1'] = $_SESSION['parametri']['nproto'];
-                $_parametri['data_campo2'] = $_SESSION['parametri']['anno_proto'];
-                $res = tabella_scadenziario("elenco", $_percorso, $_parametri);
+                $_parametri['nproto'] = $_return['nproto'];
+                $_parametri['suffix_proto'] = $_return['suffix_proto'];
+                $_parametri['anno_proto'] = $_return['anno_proto'];
+
+                $res = tabella_scadenziario("elenca_proto", $_percorso, $_parametri);
 
                 echo "<table align=\"center\" border=\"1\" width=\"60%\">\n";
                 echo "<tr><td colspan=\"3\">Vai direttamente alla scadenza </td></tr>\n";
                 echo "<tr>\n";
                 echo "<td>N. Scad</td><td>Data Scadenza</td><td>Importo</td></tr>\n";
 
-                while ($dati = mysql_fetch_array($res))
+                foreach ($res AS $dati)
                 {
                     echo "<td><a href=\"../../scadenziario/scadenza.php?azione=visualizza&anno=$dati[anno]&nscad=$dati[nscad]\">$dati[nscad]<td>$dati[data_scad]</td><td>$dati[impeff]</td></tr>\n";
                 }

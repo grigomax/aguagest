@@ -183,8 +183,8 @@ if ($_SESSION['user']['vendite'] > "2")
         echo "<td align=\"left\" colspan=\"1\"><span class=\"testo_blu\"><b>Data pagamento / Insoluto&nbsp;</b></span></td>\n";
         printf("<td class=\"colonna\" colspan=\"1\" align=\"left\"><input type=\"text\" class=\"data\" size=\"10\" maxlenght=\"10\" name=\"datapag\" value=\"%s\"></td>", $_datapag);
         echo "<td align=\"left\" colspan=\"1\"><span class=\"testo_blu\"><b>Eventuali spese&nbsp;</b></span></td>\n";
-        printf("<td class=\"colonna\" colspan=\"1\" align=\"left\"><input type=\"text\" size=\"10\" maxlenght=\"10\" name=\"spese_insoluto\" value=\"%s\"></td></tr>", $_spese_insoluto);
-        echo "<tr><td colspan=\"6\" align=\"right\"><span class=\"testo_blu\"><font color=\"red\">Registrare prima nota ? <input type=\"checkbox\" name=\"primanota\" value=\"SI\">\n";
+        printf("<td class=\"colonna\" colspan=\"1\" align=\"left\"><input type=\"text\" size=\"10\" maxlenght=\"10\" name=\"spese_insoluto\" value=\"%s\"></span></td></tr>", $_spese_insoluto);
+        echo "<tr><td colspan=\"6\" align=\"right\"><span class=\"testo_blu\"><font color=\"red\">Registrare prima nota ? </span><input type=\"checkbox\" name=\"primanota\" value=\"SI\">\n";
         echo "</td></tr>\n";
 
         $_submit = "Salda";
