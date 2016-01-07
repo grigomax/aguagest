@@ -215,9 +215,12 @@ function intestazione_doc_pdf($datidoc, $LINGUA)
  * una per le conferme ordieni preventivi ecc.
  */
 
-function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamento, $LINGUA)
+function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamento, $LINGUA, $_parametri)
 {//inizio funzioni testata documenti
-    GLOBAL $pdf;
+    global $pdf;
+    global $_percorso;
+    global $_azione;
+    
     global $MARGINE_SINISTRO;
     global $MARGINE_SUPERIORE;
     //per prima cosa passiamo l'inclusione dei files vars.php
@@ -225,6 +228,28 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
     // includiamo il file delle lingue
     include "../librerie/$LINGUA";
 
+    
+    //qui mettiamo l'immagine per poterla inviare il documento
+    if ($_azione == "Inoltra")
+    {
+        $_y = $pdf->GetY();
+        $_x = $pdf->GetX();
+        //invia files
+        //
+    //$pdf->Link(5, 5, 100, 10, "stampe_pdf.php&azione=invia");
+        $pdf->SetFont('Arial', '', "15");
+        $pdf->SetXY(100, 10);
+        //$pdf->Cell(50, 4, "stampa_avviso.php&azione=invia", 0, 0, 'L');
+        //$pdf->Write(5, "Invia Per E-mail", "stampa_avviso.php?ndoc=$_parametri[ndoc]&anno=$_anno&azione=Inoltra");
+        $pdf->Image($_percorso."images/xfmail.png", 185, 8, 20, 20,'png', $_parametri['link']);
+       // Image(string file [, float x [, float y [, float w [, float h [, string type [, mixed link]]]]]])
+        
+        //rilasciamo il puntatore corretto..
+        $pdf->SetXY($_x, $_y);
+    }
+    
+    
+    
 
     if ($datidoc[ST_TIPOTESTATA] == "1")
     {// tipo di testata semplice per ddt o fatture immediate con la visualizzazione sulla destra della destinazione diversa
@@ -530,7 +555,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 9);
 	$pdf->Cell(89, 6, $dati['vettore'], '0', 'O', 'C');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'B', 12);
-	$pdf->Cell(32, 10, $_datait, '1', 0, 'C');
+	$pdf->Cell(35, 10, $_datait, '1', 0, 'C');
 	$_yv = $_y + 6;
 	$pdf->SetXY(80, $_yv);
 	$pdf->Cell(89, 6, $dativ['indirizzo'], '0', 'O', 'L');
@@ -553,15 +578,15 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 
 	$pdf->SetXY($MARGINE_SINISTRO, $_y);
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 9);
-	$pdf->Cell(153, 10, $dati2['contatto'], '1', 0, 'L');
+	$pdf->Cell(151, 10, $dati2['contatto'], '1', 0, 'L');
         
         $_GET['saved'] = "yes";
         $_GET['codetype'] = "Code39";
         $_GET['size'] = "40";
         $_GET['text'] = $dati[anno].$dati[suffix].$dati[ndoc];
-        include "../tools/barcode_2/barcode.php";
+        include_once "../tools/barcode_2/barcode.php";
         
-        $pdf->Image("../../spool/barcode.png", '163','107', 40, 7, png);
+        $pdf->Image("../../spool/barcode_".$_SESSION['user']['user'].".png", '160','107', 40, 8, png);
         $pdf->Cell(43, 10,'', '1', 1, 'L');
         
         //<img src=$_percorso/tools/barcode/barcode.php?barcode=$dati[anno]$dati[suffix]$dati[ndoc]&width=250&height=40&text=0>

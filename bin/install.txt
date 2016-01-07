@@ -1,7 +1,0 @@
-Agua Gest by
-Grigolin Massimo
-aguagest.sourceforge.net
-
-Per installare il programma..
-Aprire un browser ed puntare su install.php
-

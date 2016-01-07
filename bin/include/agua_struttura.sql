@@ -182,6 +182,7 @@ DROP TABLE IF EXISTS bv_bolle;
 
 CREATE TABLE `bv_bolle` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `datareg` date NOT NULL DEFAULT '0000-00-00',
   `utente` varchar(6) NOT NULL DEFAULT '',
@@ -210,22 +211,24 @@ CREATE TABLE `bv_bolle` (
   `tdocevaso` varchar(30) DEFAULT NULL,
   `evasonum` varchar(6) DEFAULT '',
   `evasoanno` varchar(4) DEFAULT '',
+  `evasosuffix` char(1) DEFAULT 'A',
   `causale` varchar(20) DEFAULT NULL,
   `invio` char(2) DEFAULT NULL,
   `id_collo` varchar(20) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`anno`,`ndoc`)
+  PRIMARY KEY (`anno`,`suffix`,`ndoc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS bv_dettaglio;
 
 CREATE TABLE `bv_dettaglio` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `rigo` decimal(4,1) NOT NULL DEFAULT '0.0',
   `utente` varchar(6) DEFAULT NULL,
   `articolo` varchar(15) DEFAULT NULL,
-  `descrizione` varchar(80) DEFAULT NULL,
+  `descrizione` text,
   `unita` char(3) DEFAULT NULL,
   `quantita` float(16,2) DEFAULT '0.00',
   `listino` float(16,2) DEFAULT '0.00',
@@ -402,11 +405,12 @@ DROP TABLE IF EXISTS co_dettaglio;
 
 CREATE TABLE `co_dettaglio` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `rigo` decimal(4,1) NOT NULL DEFAULT '0.0',
   `utente` varchar(6) DEFAULT NULL,
   `articolo` varchar(15) DEFAULT NULL,
-  `descrizione` varchar(80) DEFAULT NULL,
+  `descrizione` text,
   `unita` char(3) DEFAULT NULL,
   `quantita` float(16,2) DEFAULT '0.00',
   `qtaevasa` float(16,2) DEFAULT '0.00',
@@ -430,6 +434,7 @@ DROP TABLE IF EXISTS co_testacalce;
 
 CREATE TABLE `co_testacalce` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `datareg` date NOT NULL DEFAULT '0000-00-00',
   `utente` varchar(6) NOT NULL DEFAULT '',
@@ -458,10 +463,33 @@ CREATE TABLE `co_testacalce` (
   `tdocevaso` varchar(30) DEFAULT NULL,
   `evasonum` varchar(6) DEFAULT '',
   `evasoanno` varchar(4) DEFAULT '',
+  `evasosuffix` char(1) DEFAULT 'A',
   `rev` int(3) NOT NULL DEFAULT '1',
   `invio` char(2) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`anno`,`ndoc`)
+  PRIMARY KEY (`anno`,`suffix`,`ndoc`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS destinazioni;
+
+CREATE TABLE `destinazioni` (
+  `utente` varchar(6) NOT NULL DEFAULT '',
+  `codice` int(2) NOT NULL DEFAULT '1',
+  `datareg` date NOT NULL DEFAULT '0000-00-00',
+  `dragsoc` varchar(40) DEFAULT NULL,
+  `dragsoc2` varchar(60) DEFAULT NULL,
+  `dindirizzo` varchar(30) DEFAULT NULL,
+  `dcap` varchar(5) DEFAULT NULL,
+  `dcitta` varchar(30) DEFAULT NULL,
+  `dprov` char(2) DEFAULT NULL,
+  `dcodnazione` varchar(30) DEFAULT NULL,
+  `telefonodest` varchar(20) DEFAULT NULL,
+  `faxdest` varchar(20) DEFAULT '',
+  `demail` varchar(60) DEFAULT NULL,
+  `dcontatto` varchar(60) DEFAULT NULL,
+  `predefinito` tinyint(1) NOT NULL DEFAULT '0',
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`utente`,`codice`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS doc_basket;
@@ -470,11 +498,12 @@ CREATE TABLE `doc_basket` (
   `sessionid` varchar(32) NOT NULL DEFAULT '',
   `rigo` double(4,1) NOT NULL AUTO_INCREMENT,
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `utente` varchar(6) DEFAULT NULL,
   `articolo` varchar(15) NOT NULL DEFAULT '0',
   `artfor` varchar(20) DEFAULT NULL,
-  `descrizione` varchar(80) DEFAULT NULL,
+  `descrizione` text,
   `unita` char(3) DEFAULT NULL,
   `quantita` float(16,2) DEFAULT '0.00',
   `qtaevasa` float(16,2) DEFAULT NULL,
@@ -493,7 +522,7 @@ CREATE TABLE `doc_basket` (
   `consegna` char(10) DEFAULT NULL,
   `agg` char(2) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`sessionid`,`rigo`,`anno`,`ndoc`)
+  PRIMARY KEY (`sessionid`,`rigo`,`anno`,`suffix`,`ndoc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS effetti;
@@ -507,6 +536,7 @@ CREATE TABLE `effetti` (
   `impeff` float(16,2) NOT NULL DEFAULT '0.00',
   `tipodoc` varchar(30) DEFAULT NULL,
   `annodoc` varchar(4) DEFAULT NULL,
+  `suffixdoc` char(1) DEFAULT 'A',
   `numdoc` float DEFAULT NULL,
   `datadoc` date DEFAULT NULL,
   `totdoc` float(16,2) DEFAULT NULL,
@@ -528,6 +558,7 @@ CREATE TABLE `effetti` (
   `spese` float(16,2) DEFAULT '0.00',
   `conta_anno` year(4) NOT NULL,
   `conta_nreg` float NOT NULL,
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`tipoeff`,`annoeff`,`numeff`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -596,11 +627,12 @@ DROP TABLE IF EXISTS fv_dettaglio;
 CREATE TABLE `fv_dettaglio` (
   `tdoc` varchar(30) DEFAULT '',
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `rigo` decimal(4,1) NOT NULL DEFAULT '0.0',
   `utente` varchar(6) DEFAULT NULL,
   `articolo` varchar(15) DEFAULT NULL,
-  `descrizione` varchar(80) DEFAULT NULL,
+  `descrizione` text,
   `unita` char(3) DEFAULT NULL,
   `quantita` float(16,2) DEFAULT '0.00',
   `listino` float(16,2) DEFAULT '0.00',
@@ -622,6 +654,7 @@ DROP TABLE IF EXISTS fv_testacalce;
 CREATE TABLE `fv_testacalce` (
   `tdoc` varchar(30) NOT NULL DEFAULT '',
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `datareg` date NOT NULL DEFAULT '0000-00-00',
   `utente` varchar(6) NOT NULL DEFAULT '',
@@ -683,7 +716,7 @@ CREATE TABLE `fv_testacalce` (
   `id_collo` varchar(20) DEFAULT NULL,
   `sp_bolli` float(10,2) DEFAULT '0.00',
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`tdoc`,`anno`,`ndoc`)
+  PRIMARY KEY (`tdoc`,`anno`,`suffix`,`ndoc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS imballi;
@@ -729,6 +762,7 @@ DROP TABLE IF EXISTS magastorico;
 CREATE TABLE `magastorico` (
   `tdoc` varchar(30) DEFAULT '',
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) DEFAULT 'A',
   `ndoc` float DEFAULT NULL,
   `datareg` date DEFAULT '0000-00-00',
   `tut` varchar(6) NOT NULL DEFAULT '',
@@ -750,6 +784,7 @@ DROP TABLE IF EXISTS magazzino;
 CREATE TABLE `magazzino` (
   `tdoc` varchar(30) DEFAULT '',
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) DEFAULT 'A',
   `ndoc` float DEFAULT NULL,
   `datareg` date DEFAULT '0000-00-00',
   `tut` varchar(6) NOT NULL DEFAULT '',
@@ -771,11 +806,12 @@ DROP TABLE IF EXISTS oc_dettaglio;
 
 CREATE TABLE `oc_dettaglio` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `rigo` decimal(4,1) NOT NULL DEFAULT '0.0',
   `utente` varchar(6) DEFAULT NULL,
   `articolo` varchar(15) DEFAULT NULL,
-  `descrizione` varchar(80) DEFAULT NULL,
+  `descrizione` text,
   `unita` char(3) DEFAULT NULL,
   `quantita` float(16,2) DEFAULT '0.00',
   `qtaevasa` float(16,2) DEFAULT '0.00',
@@ -799,6 +835,7 @@ DROP TABLE IF EXISTS oc_testacalce;
 
 CREATE TABLE `oc_testacalce` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `datareg` date NOT NULL DEFAULT '0000-00-00',
   `utente` varchar(6) NOT NULL DEFAULT '',
@@ -827,22 +864,24 @@ CREATE TABLE `oc_testacalce` (
   `tdocevaso` varchar(30) DEFAULT NULL,
   `evasonum` varchar(6) DEFAULT '',
   `evasoanno` varchar(4) DEFAULT '',
+  `evasosuffix` char(1) DEFAULT 'A',
   `rev` int(3) DEFAULT '1',
   `invio` char(2) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`anno`,`ndoc`)
+  PRIMARY KEY (`anno`,`suffix`,`ndoc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS of_dettaglio;
 
 CREATE TABLE `of_dettaglio` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `rigo` decimal(4,1) NOT NULL DEFAULT '0.0',
   `utente` varchar(6) DEFAULT NULL,
   `articolo` varchar(15) DEFAULT NULL,
   `artfor` varchar(20) DEFAULT NULL,
-  `descrizione` varchar(80) DEFAULT NULL,
+  `descrizione` text,
   `unita` char(3) DEFAULT NULL,
   `quantita` float(16,2) DEFAULT '0.00',
   `qtaevasa` float(16,2) DEFAULT '0.00',
@@ -863,6 +902,7 @@ DROP TABLE IF EXISTS of_testacalce;
 
 CREATE TABLE `of_testacalce` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `datareg` date NOT NULL DEFAULT '0000-00-00',
   `utente` varchar(6) NOT NULL DEFAULT '',
@@ -890,9 +930,10 @@ CREATE TABLE `of_testacalce` (
   `tdocevaso` varchar(30) DEFAULT NULL,
   `evasonum` varchar(6) DEFAULT NULL,
   `evasoanno` varchar(4) DEFAULT NULL,
+  `evasosuffix` char(1) DEFAULT 'A',
   `invio` char(2) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`anno`,`ndoc`)
+  PRIMARY KEY (`anno`,`suffix`,`ndoc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS pagamenti;
@@ -944,9 +985,10 @@ CREATE TABLE `prima_nota` (
   `data_cont` date DEFAULT NULL COMMENT 'data contabile',
   `segno` char(1) DEFAULT NULL COMMENT 'segno operazione ',
   `causale` char(3) DEFAULT NULL COMMENT 'causale contabile',
-  `descrizione` varchar(100) DEFAULT NULL COMMENT 'descrizione operazione',
+  `descrizione` varchar(50) DEFAULT NULL COMMENT 'descrizione operazione',
   `ndoc` varchar(20) DEFAULT NULL,
   `anno_doc` int(4) DEFAULT NULL COMMENT 'anno documeno',
+  `suffix_doc` char(1) DEFAULT 'A',
   `data_doc` date DEFAULT NULL COMMENT 'data documento',
   `conto` char(8) NOT NULL COMMENT 'conto del piano dei conti',
   `desc_conto` varchar(100) DEFAULT NULL COMMENT 'descrizione conto',
@@ -956,6 +998,7 @@ CREATE TABLE `prima_nota` (
   `tipopag` char(4) DEFAULT NULL COMMENT 'tipo pagamento',
   `nproto` float DEFAULT NULL COMMENT 'numero protocollo',
   `anno_proto` int(4) DEFAULT NULL COMMENT 'anno protocollo',
+  `suffix_proto` char(1) DEFAULT 'A',
   `liquid_iva` char(2) DEFAULT 'NO',
   `status` varchar(20) DEFAULT NULL,
   `giornale` int(5) DEFAULT NULL,
@@ -979,6 +1022,7 @@ CREATE TABLE `prima_nota_basket` (
   `descrizione` varchar(100) DEFAULT NULL COMMENT 'descrizione operazione',
   `ndoc` varchar(20) DEFAULT NULL,
   `anno_doc` int(4) DEFAULT NULL COMMENT 'anno documeno',
+  `suffix_doc` char(1) DEFAULT 'A',
   `data_doc` date DEFAULT NULL COMMENT 'data documento',
   `conto` char(8) NOT NULL COMMENT 'conto del piano dei conti',
   `iva` char(3) DEFAULT NULL COMMENT 'iva associata',
@@ -987,6 +1031,7 @@ CREATE TABLE `prima_nota_basket` (
   `tipopag` char(4) DEFAULT NULL COMMENT 'tipo pagamento',
   `nproto` float DEFAULT NULL COMMENT 'numero protocollo',
   `anno_proto` int(4) DEFAULT NULL COMMENT 'anno protocollo',
+  `suffix_proto` char(1) DEFAULT 'A',
   `liquid_iva` char(2) DEFAULT NULL COMMENT 'se si liquidazione iva',
   `note` text,
   PRIMARY KEY (`sessionid`,`anno`,`nreg`,`rigo`)
@@ -1008,6 +1053,7 @@ CREATE TABLE `provvigioni` (
   `codage` varchar(6) NOT NULL DEFAULT '',
   `ndoc` int(6) NOT NULL DEFAULT '0',
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) DEFAULT 'A',
   `tdoc` varchar(30) NOT NULL DEFAULT '',
   `datareg` date DEFAULT '0000-00-00',
   `utente` varchar(6) NOT NULL DEFAULT '',
@@ -1024,11 +1070,12 @@ DROP TABLE IF EXISTS pv_dettaglio;
 
 CREATE TABLE `pv_dettaglio` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `rigo` decimal(4,1) NOT NULL DEFAULT '0.0',
   `utente` varchar(6) DEFAULT NULL,
   `articolo` varchar(15) DEFAULT NULL,
-  `descrizione` varchar(80) DEFAULT NULL,
+  `descrizione` text,
   `unita` char(3) DEFAULT NULL,
   `quantita` float(16,2) DEFAULT '0.00',
   `qtaevasa` float(16,2) DEFAULT NULL,
@@ -1052,6 +1099,7 @@ DROP TABLE IF EXISTS pv_testacalce;
 
 CREATE TABLE `pv_testacalce` (
   `anno` varchar(4) NOT NULL DEFAULT '',
+  `suffix` char(1) NOT NULL DEFAULT 'A',
   `ndoc` float NOT NULL DEFAULT '0',
   `datareg` date NOT NULL DEFAULT '0000-00-00',
   `utente` varchar(6) NOT NULL DEFAULT '',
@@ -1080,11 +1128,12 @@ CREATE TABLE `pv_testacalce` (
   `tdocevaso` varchar(30) DEFAULT NULL,
   `evasonum` varchar(6) DEFAULT '',
   `evasoanno` varchar(4) DEFAULT '',
+  `evasosuffix` char(1) DEFAULT 'A',
   `rev` int(3) DEFAULT '1',
   `invio` char(2) DEFAULT NULL,
   `data_scad` date DEFAULT '0000-00-00',
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`anno`,`ndoc`)
+  PRIMARY KEY (`anno`,`suffix`,`ndoc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS scadenziario;
@@ -1100,6 +1149,7 @@ CREATE TABLE `scadenziario` (
   `ndoc` varchar(20) DEFAULT NULL,
   `data_doc` date DEFAULT NULL,
   `anno_proto` int(4) DEFAULT NULL,
+  `suffix_proto` char(1) DEFAULT 'A',
   `nproto` float DEFAULT NULL,
   `codpag` char(4) DEFAULT NULL,
   `banca` char(2) DEFAULT NULL,
@@ -1267,6 +1317,10 @@ CREATE TABLE `utenti` (
   `blocco` char(2) NOT NULL DEFAULT 'NO',
   `nvolte` int(1) NOT NULL DEFAULT '0',
   `datareg` date NOT NULL DEFAULT '0000-00-00',
+  `USER_SCREEN_COLOR_BACKGROUND` char(10) DEFAULT NULL,
+  `USER_SCREEN_WIDTH` char(4) DEFAULT '100',
+  `USER_SCREEN_FONT_TYPE` char(50) DEFAULT NULL,
+  `USER_SCREEN_FONT_SIZE` char(5) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;

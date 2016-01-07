@@ -126,7 +126,7 @@
         
         if($_GET['saved'] == "yes")
         {
-            $_path = "../../spool/barcode.png";
+            $_path = "../../spool/barcode_".$_SESSION['user']['user'].".png";
             imagepng($image,$_path);
             //imagedestroy($image, $_path); 
         }

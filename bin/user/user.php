@@ -31,9 +31,9 @@ $_user = $_SESSION['user']['user'];
 $_azione = $_GET['azione'];
 // prendiamoci il codice articolo da modificare
 
-echo "<table width=\"80%\"><tr><td>";
-printf("<form action=\"mod-user.php?azione=$_GET[azione]\" method=\"POST\">\n");
-echo "<table width=\"80%\" border=\"0\" align=center>\n";
+echo "<form action=\"mod-user.php?azione=$_GET[azione]\" method=\"POST\">\n";
+
+echo "<table width=\"60%\" border=\"0\" align=center>\n";
 
 if($_azione == "pwd")
 {
@@ -53,24 +53,28 @@ if($_azione == "pwd")
 else
 {
     
-    echo "<tr><td colspan=2 align=\"center\"><h2><span class=\"testo_blu\"><b>Modifica Estetica programma</b><br></font></span></h2></td>\n";
+    echo "<tr><td colspan=\"3\" align=\"center\"><h2><span class=\"testo_blu\"><b>Modifica Estetica programma</b><br></font></span></h2></td>\n";
 
     $dati = tabella_utenti("singolo", $_id, $_user, $_password, $_blocca, $_parametri);
 
     $USER_SCREEN_FONT_SIZE = $dati['USER_SCREEN_FONT_SIZE'] * 10;
     
-    echo "<tr><td colspan=\"2\" rowspan=\"1\" style=\"width: 350px;\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\">Campo Body (corpo)</span></td>
+    echo "<tr><td colspan=\"3\" rowspan=\"1\" style=\"width: 350px;\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\">Campo Body (corpo)<br>&nbsp;</span></td>
          </tr>\n";
 
+    echo "<tr><td><b>Descrizione</b></td><td align=\"center\"><b> Attuale </b></td><td align=\"center\"><b>Modifica Valori</b></td></tr>\n";
     echo "<tr>\n";
     echo "<td>Larghezza</td>\n";
-    echo "<td><input type=\"range\" min=\"70\" max=\"100\" name=\"USER_SCREEN_WIDTH\" value=\"$dati[USER_SCREEN_WIDTH]\"> Min. 70 max 100%</td>\n";
+    echo "<td align=\"center\">$dati[USER_SCREEN_WIDTH] %</td>\n";
+    echo "<td align=\"center\"><input type=\"range\" min=\"70\" max=\"100\" name=\"USER_SCREEN_WIDTH\" value=\"$dati[USER_SCREEN_WIDTH]\"> Min. 70 max 100%</td>\n";
     echo "</tr><tr>\n";
     echo "<td>Grandezza Carattere Base</td>\n";
-    echo "<td><input type=\"range\" min=\"5\" max=\"15\" name=\"USER_SCREEN_FONT_SIZE\" value=\"$USER_SCREEN_FONT_SIZE\"> Min. 0.5 max 1.5 em</td></td>\n";
+    echo "<td align=\"center\">$dati[USER_SCREEN_FONT_SIZE] em</td>\n";
+    echo "<td align=\"center\"><input type=\"range\" min=\"5\" max=\"15\" name=\"USER_SCREEN_FONT_SIZE\" value=\"$USER_SCREEN_FONT_SIZE\"> Min. 0.5 max 1.5 em</td></td>\n";
     echo "</tr><tr>\n";
     echo "<td>Carattere Base Applicazione</td>\n";
-    echo "<td><select name=\"USER_SCREEN_FONT_TYPE\">\n";
+    echo "<td align=\"center\">$dati[USER_SCREEN_FONT_TYPE]</td>\n";
+    echo "<td align=\"center\"><select name=\"USER_SCREEN_FONT_TYPE\">\n";
     echo "<option value=\"$dati[USER_SCREEN_FONT_TYPE]\">$dati[USER_SCREEN_FONT_TYPE]</option>\n";
     echo "<option value=\"Arial\">Arial</option>\n";
     echo "<option value=\"serif\">Serif</option>\n";
@@ -80,18 +84,17 @@ else
     echo "<option value=\"courier\">Courier spazi larghi</option>\n";
     echo "</select></td>\n";
     echo "</tr><tr>\n";
-    echo "<td>Colore Sfondo</td>\n";
-    echo "<td><input type=\"color\" name=\"USER_SCREEN_COLOR_BACKGROUND\" value=\"$dati[USER_SCREEN_COLOR_BACKGROUND]\"> Classico #d6e4f9</td>\n";
+    echo "<td>Colore Sfondo <br> <b>Valore classico #d6e4f9</b></td>\n";
+    echo "<td align=\"center\">$dati[USER_SCREEN_COLOR_BACKGROUND]</td>\n";
+    echo "<td align=\"center\"><br><input type=\"color\" name=\"USER_SCREEN_COLOR_BACKGROUND\" value=\"$dati[USER_SCREEN_COLOR_BACKGROUND]\"> <br> Premi e cambia</td>\n";
     echo "</tr>\n";
     
     
-    echo "<tr><td>&nbsp;</td><td align=RIGHT><input type=\"submit\" name=\"azione\" value=\"Modifica\"></td></tr>";
+    echo "<tr><td colspan=\"3\" align=\"center\"><br><input type=\"submit\" name=\"azione\" value=\"Modifica\"></td></tr>";
     
 }
 
 echo "</form>\n</td>\n";
 echo "</td>\n</tr>\n";
 echo "</table>";
-// ************************************************************************************** -->
-echo "</td></tr></table>\n";
 ?>

@@ -689,6 +689,9 @@ function tabella_primanota($_cosa, $id, $_anno, $_nreg, $_causale, $_testo, $_da
                     $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
                     $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
                     scrittura_errori($_cosa, $_percorso, $_errori);
+                    $return['descrizione'] = $_errori['descrizione'];
+                    $return['query'] = $query;
+                    $return['result'] = "NO";
 		}
 
 		$dati = $result->fetch(PDO::FETCH_ASSOC);

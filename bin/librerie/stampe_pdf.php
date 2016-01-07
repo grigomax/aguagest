@@ -11,7 +11,7 @@
 //includiamo i file per la generazione dei pdf
 //includo file per generazione pdf
 define('FPDF_FONTPATH', $_percorso . 'tools/fpdf/font/');
-require_once($_percorso .'tools/fpdf/fpdf.php');
+require_once($_percorso . 'tools/fpdf/fpdf.php');
 
 /**
  * La prima funzione mi crea un file pdf con dimensioni, titolo grandezz ecc..
@@ -32,7 +32,6 @@ function crea_file_pdf($_cosa, $_orientamento, $_titolo)
     $pdf->SetAuthor($azienda, true);
     $pdf->SetCreator('Agua Gest - FPDF');
     $pdf->SetSubject($_nomelist);
-    
 }
 
 function crea_pagina_pdf()
@@ -59,18 +58,34 @@ function crea_intestazione_ditta_pdf($_cosa, $_title, $_anno, $_pg, $pagina, $_p
     global $email1;
     global $email2;
     global $email3;
+    global $_azione;
+    global $_percorso;
+
+
+    if ($_azione == "Invia")
+    {
+        //invia files
+        //
+    //$pdf->Link(5, 5, 100, 10, "stampe_pdf.php&azione=invia");
+        $pdf->SetFont('Arial', '', "15");
+        $pdf->SetXY(100, 10);
+        //$pdf->Cell(50, 4, "stampa_avviso.php&azione=invia", 0, 0, 'L');
+        //$pdf->Write(5, "Invia Per E-mail", "stampa_avviso.php?ndoc=$_parametri[ndoc]&anno=$_anno&azione=Inoltra");
+        $pdf->Image($_percorso."images/xfmail.png", 185, 8, 20, 20,'png', $_parametri['link']);
+       // Image(string file [, float x [, float y [, float w [, float h [, string type [, mixed link]]]]]])
+    }
 
     if ($_cosa == "conlogo")
     {
         // inserisco l'immagine con l'intestazione
         $pdf->Image("../../../setting/loghiazienda/$_parametri[intesta_immagine]", 10, 8, 193);
         // righe inserimento intestazione listino
-        
-        $pdf->SetXY(10,40);
+
+        $pdf->SetXY(10, 40);
     }
     elseif ($_cosa == "nologo")
     {
-         //provo a lasciare il puntatore
+        //provo a lasciare il puntatore
         $pdf->SetXY(10, 40);
     }
     elseif ($_cosa == "libricontabili")
@@ -151,21 +166,21 @@ function crea_intestazione_ditta_pdf($_cosa, $_title, $_anno, $_pg, $pagina, $_p
         $pdf->Cell(40, 4, "Tel. " . $telefono, 0, 0, 'L');
         $pdf->Cell(40, 4, "Tel. / Fax " . $fax, 0, 1, 'L');
         $pdf->SetX(10);
-        
-        if($_parametri['email'] == "3")
+
+        if ($_parametri['email'] == "3")
         {
             $pdf->Cell(50, 4, "E-mail  " . $email3, 0, 1, 'L');
         }
-        elseif($_parametri['email'] == "2")
+        elseif ($_parametri['email'] == "2")
         {
             $pdf->Cell(50, 4, "E-mail  " . $email2, 0, 1, 'L');
         }
         else
         {
-            $pdf->Cell(50, 4,"E-mail  " . $email1, 0, 1, 'L');
+            $pdf->Cell(50, 4, "E-mail  " . $email1, 0, 1, 'L');
         }
         //provo a lasciare il puntatore
-        $pdf->SetXY(10,40);
+        $pdf->SetXY(10, 40);
     }
 }
 
@@ -235,43 +250,41 @@ function intesta_pagina($_cosa, $_titolo, $_parametri)
         //provo a lasciare il puntatore
         $pdf->SetXY(10, 45);
     }
-    
+
     if ($_cosa == "effetti_tabella")
     {
-        
+
         $pdf->Line(10, 50, 198, 50);
-        $pdf->SetXY(10,55);
+        $pdf->SetXY(10, 55);
         $pdf->SetFont('Arial', 'BI', 10);
         $pdf->Cell(90, 5, 'Spettabile', 0, 0, 'L', 0);
         $pdf->Cell(90, 5, $dati['tipodoc'], 0, 1, 'L', 0);
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(90, 5, $_parametri['ragsoc'], 0, 0, 'L', 0);
-        $pdf->Cell(90, 5, "Num. ".$dati['numdoc'] ."/". $dati['annodoc'] ." del ". $dati['datadoc'], 0, 1, 'L', 0);
+        $pdf->Cell(90, 5, "Num. " . $dati['numdoc'] . "/" . $dati['annodoc'] . " del " . $dati['datadoc'], 0, 1, 'L', 0);
         $pdf->Cell(90, 5, $_parametri['indirizzo'], 0, 0, 'L', 0);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(90, 5, "Banca", 0, 1, 'L', 0);
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(90, 5, "$_parametri[cap] $_parametri[citta] ($_parametri[prov])" , 0, 0, 'L', 0);
+        $pdf->Cell(90, 5, "$_parametri[cap] $_parametri[citta] ($_parametri[prov])", 0, 0, 'L', 0);
         $pdf->Cell(90, 5, $dati['bancapp'], 0, 1, 'L', 0);
-        $pdf->Cell(90, 5, "P.I. $_parametri[piva]" , 0, 0, 'L', 0);
+        $pdf->Cell(90, 5, "P.I. $_parametri[piva]", 0, 0, 'L', 0);
         $pdf->Cell(90, 5, "ABI $dati[abi]  CAB $dati[cab]  CIN $dati[cin]  C/C $dati[cc]", 0, 1, 'L', 0);
-        $pdf->Cell(90, 5, "Tel. $_parametri[telefono]" , 0, 0, 'L', 0);
+        $pdf->Cell(90, 5, "Tel. $_parametri[telefono]", 0, 0, 'L', 0);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(90, 5, "Pagamento", 0, 1, 'L', 0);
         $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(90, 5, "Fax $_parametri[fax]" , 0, 0, 'L', 0);
+        $pdf->Cell(90, 5, "Fax $_parametri[fax]", 0, 0, 'L', 0);
         $pdf->Cell(90, 5, "$dati[pagamento]", 0, 1, 'L', 0);
-        $pdf->Cell(90, 5, "Email $_parametri[email3]" , 0, 0, 'L', 0);
+        $pdf->Cell(90, 5, "Email $_parametri[email3]", 0, 0, 'L', 0);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(90, 5, "Totale Documento $dati[totdoc]", 0, 1, 'L', 0);
         $pdf->SetFont('Arial', '', 10);
-                
-
     }
-    
-    if($_cosa == "indirizzo_cli")
+
+    if ($_cosa == "indirizzo_cli")
     {
-        $pdf->SetXY(100,55);
+        $pdf->SetXY(100, 55);
         $pdf->SetFont('Arial', 'BI', 10);
         $pdf->Cell(90, 5, 'Spettabile', 0, 1, 'L', 0);
         $pdf->SetFont('Arial', '', 10);
@@ -280,15 +293,14 @@ function intesta_pagina($_cosa, $_titolo, $_parametri)
         $pdf->SetX(100);
         $pdf->Cell(90, 5, $_parametri['indirizzo'], 0, 1, 'L', 0);
         $pdf->SetX(100);
-        $pdf->Cell(90, 5, "$_parametri[cap] $_parametri[citta] ($_parametri[prov])" , 0, 1, 'L', 0);
+        $pdf->Cell(90, 5, "$_parametri[cap] $_parametri[citta] ($_parametri[prov])", 0, 1, 'L', 0);
         $pdf->SetX(100);
-        $pdf->Cell(90, 5, "Fax $_parametri[fax]" , 0, 1, 'L', 0);
+        $pdf->Cell(90, 5, "Fax $_parametri[fax]", 0, 1, 'L', 0);
         $pdf->SetX(100);
-        $pdf->Cell(90, 5, "Email $_parametri[email1]" , 0, 1, 'L', 0);
+        $pdf->Cell(90, 5, "Email $_parametri[email1]", 0, 1, 'L', 0);
         $pdf->SetX(100);
         $pdf->SetFont('Arial', '', 10);
     }
-    
 }
 
 function corpo_pagina($_cosa, $dati, $_parametri)
@@ -301,167 +313,162 @@ function corpo_pagina($_cosa, $dati, $_parametri)
     global $cap;
     global $prov;
     global $fax;
-    
-    if($_cosa == "scheda_articolo")
+
+    if ($_cosa == "scheda_articolo")
     {
-        $pdf->SetFillColor(204,204,200);
+        $pdf->SetFillColor(204, 204, 200);
         $pdf->SetXY(10, 115);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(20, 5, 'Codice', 1, 0, 'L', 1);
         $pdf->Cell(133, 5, 'Descrizione', 1, 0, 'L', 1);
         $pdf->Cell(15, 5, 'U.M.', 1, 0, 'C', 1);
         $pdf->Cell(25, 5, 'Listino', 1, 1, 'C', 1);
-        
+
         $y = $pdf->GetY();
         $x = $pdf->GetX();
-        $pdf->SetFillColor(225,225,225);
+        $pdf->SetFillColor(225, 225, 225);
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(20, 5, $dati['articolo'], 1, 0, 'L', 1);
         $pdf->MultiCell(133, 5, $dati['descrizione'], 1, 'L', 1);
         $_finecell = $pdf->GetY();
-        $pdf->SetXY($x+153, $y);
-               
+        $pdf->SetXY($x + 153, $y);
+
         $pdf->Cell(15, 5, $dati['unita'], 1, 0, 'C', 1);
         if ($dati['listino'] == "0.00")
         {
             $dati['listino'] = "a richiesta";
         }
         $pdf->Cell(25, 5, $dati['listino'], 1, 1, 'C', 1);
-        
+
         //lasciamo il puntatore corretto..
         $pdf->SetXY(10, $_finecell);
-        
     }
-    
-    if($_cosa == "articolo_correlato")
+
+    if ($_cosa == "articolo_correlato")
     {
         //qui inseriamo eventuali codici correlati
         $y = $pdf->GetY();
         $x = $pdf->GetX();
         $pdf->SetXY($x, $y);
-        
+
         $pdf->SetFont('Arial', '', 9);
         $pdf->Cell(20, 5, $dati['articolo'], 1, 0, 'L', 0);
         $pdf->MultiCell(133, 5, $dati['descrizione'], 1, 'L', 0);
         $_finecell = $pdf->GetY();
-        $pdf->SetXY($x+153, $y);
-               
+        $pdf->SetXY($x + 153, $y);
+
         $pdf->Cell(15, 5, $dati['unita'], 1, 0, 'C', 0);
         if ($dati['listino'] == "0.00")
         {
             $dati['listino'] = "a richiesta";
         }
         $pdf->Cell(25, 5, $dati['listino'], 1, 1, 'C', 0);
-        
+
         //lasciamo il puntatore corretto..
         $pdf->SetXY(10, $_finecell);
-        
     }
-    
-    if($_cosa == "effetti_tabella")
+
+    if ($_cosa == "effetti_tabella")
     {
-        
+
         $pdf->SetXY(10, 100);
         $pdf->SetFont('Arial', 'I', 6);
         $pdf->Cell(110, 5, 'Tipo Pagamento', 0, 0, 'L', 0);
         $pdf->Cell(40, 5, 'Data Registrazione', 0, 0, 'C', 0);
         $pdf->Cell(40, 5, 'Numero Cedolino', 0, 0, 'C', 0);
-        
+
         $pdf->SetXY(10, 100);
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(110, 11, $_parametri['paga'], 1, 0, 'L', 0);
         $pdf->Cell(40, 11, $dati['datareg'], 1, 0, 'C', 0);
         $pdf->Cell(40, 11, "$dati[numeff]/$dati[annoeff]", 1, 1, 'C', 0);
-        
+
         $pdf->SetXY(10, 111);
         $pdf->SetFont('Arial', 'I', 6);
         $pdf->Cell(40, 5, 'Scadenza Pagamento', 0, 0, 'L', 0);
         $pdf->Cell(70, 5, 'Importo Scadenza / Ev. Spese', 0, 0, 'C', 0);
         $pdf->Cell(40, 5, 'Importo da Pagare', 0, 0, 'C', 0);
         $pdf->Cell(40, 5, 'Status', 0, 1, 'C', 0);
-        
+
         $totale = $dati['impeff'] + $dati['spese'];
         $pdf->SetXY(10, 111);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(40, 11, $dati['scadeff'], 1, 0, 'L', 0);
-        $pdf->Cell(70, 11, $dati['impeff']. "+". $dati['spese'], 1, 0, 'C', 0);
+        $pdf->Cell(70, 11, $dati['impeff'] . "+" . $dati['spese'], 1, 0, 'C', 0);
         $pdf->Cell(40, 11, $totale, 1, 0, 'C', 0);
         $pdf->Cell(40, 11, $dati['status'], 1, 1, 'C', 0);
         $pdf->SetFont('Arial', '', 10);
     }
-    
 
-    if($_cosa == "calce_effetti")
+
+    if ($_cosa == "calce_effetti")
     {
 
         $pdf->SetXY(60, 260);
         $pdf->SetFont('Arial', '', 12);
         $pdf->MultiCell(100, 8, "In attesa di un vostro riscontro Porgiamo distinti saluti $azienda", 0, 'L', 0);
     }
-    
-    if($_cosa == "calce_scheda")
-    {   
+
+    if ($_cosa == "calce_scheda")
+    {
         $y = $pdf->GetY();
         $x = $pdf->GetX();
         $pdf->SetXY($x, $y);
-        $pdf->Line(10, $y+5, 198, $y+5);
-        $pdf->SetXY(10, $y+8);
+        $pdf->Line(10, $y + 5, 198, $y + 5);
+        $pdf->SetXY(10, $y + 8);
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->Cell(20, 5, 'Dettagli Articolo', 0, 1, 'L');
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(20, 5, 'Peso Articolo  '.$dati['pesoart'], 0, 1, 'L');
-        
+        $pdf->Cell(20, 5, 'Peso Articolo  ' . $dati['pesoart'], 0, 1, 'L');
+
         $pdf->SetFont('Arial', '', 8);
         $pdf->MultiCell(193, 5, strip_tags($dati['descsito']), 0, 'L', 0);
-        
     }
-    
-    
-    if($_cosa == "privacy")
+
+
+    if ($_cosa == "privacy")
     {
-        
+
         $pdf->SetXY(10, 100);
         $pdf->SetFont('Arial', '', 10);
         $pdf->MultiCell(180, 5, $_parametri['messaggio_1'], 0, 'L', 0);
-        
-        
+
+
         $pdf->MultiCell(180, 5, 'Pertanto, agli effetti del decreto, Le comunichiamo che', 0, 'L', 0);
         $pdf->MultiCell(180, 5, '* - i dati da voi forniti alla nostra societ&agrave; verranno trattati per la gestione amministrativa,
                                 e per la gestione degli incarichi da voi affidatoci.', 0, 'L', 0);
-        
+
         $pdf->MultiCell(180, 5, '* - Il trattamento sar&agrave; eseguito attraverso l\'utilizzo di strumenti prevalentemente informatici e solo in parte manuali.', 0, 'L', 0);
-        
+
         $pdf->MultiCell(180, 5, '* - Il conferimento  di tali dati &egrave; obbligatorio e l\'eventuale rifiuto potrebbe
                                         comportare la mancanza di esecuzione dell\'incarico professionale affidatoci.', 0, 'L', 0);
-                
+
         $pdf->MultiCell(180, 5, '* - I dati saranno trasmessi agli uffici ed organi di competenza, da noi incaricati per
                         assolvere tutti gli incar* - Alla diffusione dei dati personali per le finalit&agrave; e negli ambiti indicati.ichi da voi affidatoci, sempre nel rispetto degli obblighi di legge.', 0, 'L', 0);
-        
+
         $pdf->MultiCell(180, 5, "* - Il responsabile del trattamento è la seguente  $azienda, con sede in $indirizzo $cap - $citta ($prov).", 0, 'L', 0);
-        
+
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->MultiCell(180, 5, "$azienda", 0, 'R', 0);
         $pdf->SetFont('Arial', '', 10);
-        
-        $pdf->SetXY(10,200);
+
+        $pdf->SetXY(10, 200);
         $pdf->MultiCell(180, 5, "Il sottoscritto__________________________________________________
                 Titolare/legale	rappresentante della Ditta", 0, 'L', 0);
-        
-        $pdf->SetXY(10,215);
+
+        $pdf->SetXY(10, 215);
         $pdf->MultiCell(180, 5, "Acquisite le informazioni fornite dal responsabile del trattamento presta il suo consenso:", 0, 'L', 0);
-        
+
         $pdf->MultiCell(180, 5, "* - Al trattamento dei dati personali ai fini indicati nella presente informativa;", 0, 'L', 0);
         $pdf->MultiCell(180, 5, "* - Alla comunicazione dei dati personali per le finalit&agrave; ed soggetti indicati;", 0, 'L', 0);
         $pdf->MultiCell(180, 5, "* - Alla diffusione dei dati personali per le finalit&agrave; e negli ambiti indicati.", 0, 'L', 0);
-        
-        $pdf->SetXY(10,250);
+
+        $pdf->SetXY(10, 250);
         $pdf->MultiCell(180, 5, "Li _____________________________", 0, 'L', 0);
         $pdf->MultiCell(180, 5, "Timbro e firma", 0, 'R', 0);
         $pdf->MultiCell(180, 5, "Siprega di restituirla firmata anche per fax allo $fax; ", 0, 'L', 0);
     }
-    
 }
-
 
 function corpo_tabella($_cosa, $res2, $rpp, $_return)
 {
@@ -676,7 +683,7 @@ function chiudi_files($_title, $_percorso, $_modalita)
     //generazione del files..
     $_pdf = "$_title.pdf";
     $pdf->Output("$_percorso/spool/$_pdf", $_modalita);
-    
+
     return $_pdf;
 }
 

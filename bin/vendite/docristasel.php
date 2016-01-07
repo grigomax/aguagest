@@ -64,13 +64,13 @@ if ($_SESSION['user']['vendite'] > "1")
     echo "</form>\n";
 
 // conferma d'ordine...
-    printf("<br><br><form action=\"stampa_doc.php\" target=\"sotto\" method=\"GET\">");
+    echo "<br><br><form action=\"stampa_doc.php\" target=\"_blank\" method=\"GET\">\n";
 
     echo "<td align=\"center\"><a href=\"docristasel.php\">Aggiorna ==><img src=\"../images/reload.png\"></img></a></td></tr>";
 
     echo "<tr><td align=\"center\" colspan=\"2\"><input type=\"radio\" name=\"anno\" value=\"$_anno\" checked >Anno $_anno<input type=\"radio\" name=\"tdoc\" value=\"$_tdoc\" checked >$_tdoc / suffisso<input type=\"radio\" name=\"suffix\" value=\"$_suffix\" checked >$_suffix</td></tr>";
 
-    echo "<tr><td align=center colspan=\"2\"><br>";
+    echo "<tr><td align=center colspan=\"2\"><br>Il numero documento Finale<br>";
     echo "<select name=\"ndoc\">\n";
     echo "<option value=\"\"></option>";
 
@@ -86,12 +86,8 @@ if ($_SESSION['user']['vendite'] > "1")
 
     echo "</select>\n";
     echo "</td></tr>\n";
-    echo "<tr><td colspan=\"2\" align=\"center\"><br>Per stampare o inviare o salvare documento/i <input type=\"checkbox\" name=\"multi\" value=\"SI\"></td></tr>\n";
-    echo "<tr><td colspan=\"2\" align=\"center\"><br>Per salvare il documento pdf in locale barra qui<input type=\"checkbox\" name=\"salva\" value=\"SI\"></td></tr>\n";
 
-
-
-    echo "<tr><td align=center colspan=\"2\"><br>";
+    echo "<tr><td align=center colspan=\"2\"><br>Seleziona il numero del documento di partenza<br>";
     echo "<select name=\"docfine\">\n";
     echo "<option value=\"\"></option>";
 

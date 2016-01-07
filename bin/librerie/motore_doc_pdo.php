@@ -2180,13 +2180,13 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
 
         if ($_cosa == "vuota")
         {
-            echo "<td align=left colspan=\"6\"><input type=\"text\" autofocus name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_LC]\"></td>\n";
+            echo "<td align=left colspan=\"6\"><input type=\"text\" autofocus name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }
         else
         {
-            echo "<td align=left colspan=\"6\"><input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_LC]\"></td>\n";
+            echo "<td align=left colspan=\"6\"><input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" autofocus name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }
@@ -2343,13 +2343,13 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
         echo "<tr>";
         if ($_cosa == "vuota")
         {
-            echo "<td align=left colspan=\"4\"><input type=\"text\" autofocus name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_LC]\"></td>\n";
+            echo "<td align=left colspan=\"4\"><input type=\"text\" autofocus name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }
         else
         {
-            echo "<td align=left colspan=\"4\"><input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_LC]\"></td>\n";
+            echo "<td align=left colspan=\"4\"><input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" autofocus name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }

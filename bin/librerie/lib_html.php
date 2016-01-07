@@ -22,6 +22,9 @@ if ($conn->errorCode() != "00000")
     $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
     $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
     scrittura_errori($_cosa, $_percorso, $_errori);
+    $return['descrizione'] = $_errori['descrizione'];
+    $return['query'] = $query;
+    $return['result'] = "NO";
 }
  * Poi qui o la multipla con un forearc
 foreach ($result as $return)
@@ -218,6 +221,10 @@ function primo_ingresso($_user, $_password, $_parametri)
     return $_return;
 }
 
+
+
+
+
 function verifica_installazione($user, $password)
 {
     global $_percorso;
@@ -316,10 +323,10 @@ function verifica_installazione($user, $password)
             echo "<!DOCTYPE html>\n";
             echo "<html lang=\"it\">\n";
             echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-            echo "<LINK REL=\"shortcut icon\" HREF=\"" . $_percorso . "images/favicon.ico\">\n";
-            echo "<title>$title</title>\n";
-            echo "<link rel=\"stylesheet\" href=\"" . $_percorso . "css/globale.css\" type=\"text/css\">\n";
-            echo "<h1 align=\"center\"><font color=\"yellow\">Agua Gest </font><font color=\"red\"><br>Attenzione</font></h2>";
+            echo "<LINK REL=\"shortcut icon\" HREF=\"images/favicon.ico\">\n";
+            echo "<title>Agua Gest - UPDATE</title>\n";
+            echo "<BODY background=\"images/aguaback.jpg\">\n";
+            echo "<h1 align=\"center\"><font color=\"yellow\">Agua Gest </font><font color=\"red\"> Attenzione</font></h2>";
             echo "<h2 align=\"center\">La Versione installata &egrave; diversa da quella in uso</h2>";
             echo "<h3 align=\"center\">Versione Agua in uso = $dati[aguagest] versione Agua installata $AGUAGEST</h3>\n";
             echo "<h3 align=\"center\">Versione Archivi in uso = $dati[aguabase] versione Archivi installati $AGUABASE</h3>\n";
@@ -642,6 +649,34 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
 
     return $_return;
 }
+
+
+function gestione_result($_cosa, $_result, $_parametri)
+{
+    global $_percorso;
+    global $_conn;
+    
+    //funzione che mi permette di far apparire a video eventuali errori di result.
+    
+    if($_cosa == "silent")
+    {
+        
+    }
+    else
+    {
+        if ($_result['result'] == "NO")
+        {
+                echo "<h2 align=\"center\">Errore query</h2>\n";
+                echo "<br>$_result[descrizione]\n";
+                echo "<br>$_query\n";
+                echo "<br>procedura bloccata\n";
+                exit;
+        }
+    }
+     
+    
+}
+
 
 /*
  * Funzione pag. base..

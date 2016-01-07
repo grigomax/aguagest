@@ -503,13 +503,31 @@ function tabella_aliquota($_cosa, $_codiva, $_parametri)
 
         echo "</select>\n";
     }
+    elseif($_cosa == "elenca")
+    {
+//mi restituisce l'elenco
+        $query = "select * from aliquota order by descrizione";
+        $result = $conn->query($query);
+
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
+        
+        $dati = $result;
+    }
     else
     {
 //mi restituisce l'elenco
         $query = "select * from aliquota order by descrizione";
 
-// Esegue la query...
-        $dati = mysql_query($query, $conn);
+    // Esegue la query...
+            $dati = mysql_query($query, $conn);
     }
     
     return $dati;
@@ -3302,12 +3320,22 @@ function tabella_liquid_iva_periodica($_cosa, $_anno, $_periodo, $_parametri)
             VALUES ('$_anno', '$_periodo', '$_parametri[iva_acq]', '$_parametri[iva_vend]', '$_parametri[diff_periodo]', '$_parametri[cred_residuo]', '$_parametri[val_liquid]', '$_parametri[versato]',
             '$_parametri[banca]', '$_parametri[data_vers]', '$_parametri[n_reg]', '$_parametri[cod_tributo]')";
 
-// Esegue la query...
-        if (mysql_query($query, $conn) != 1)
+        $result = $conn->exec($query);
+        if ($conn->errorCode() != "00000")
         {
-            $_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query inserimento query Inserisci:<br> $query <br>" . mysql_error();
-            $_return['errori']['errore'] = "errore";
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            $return['descrizione'] = $_errori['descrizione'];
+            $return['query'] = $query;
+            $return['result'] = "NO";
         }
+        
+        
+        
     }
     elseif ($_cosa == "elenco_aperte")
     {
@@ -3326,33 +3354,52 @@ function tabella_liquid_iva_periodica($_cosa, $_anno, $_periodo, $_parametri)
             scrittura_errori($_cosa, $_percorso, $_errori);
         }
 
-        $_return = $result;
+        $return = $result;
     }
-    elseif ($_cosa == "singolo")
+    elseif ($_cosa == "singola")
     {
         $query = "SELECT * FROM liquid_iva_periodica where anno='$_anno' AND periodo = '$_periodo'";
 
-        $result = mysql_query($query, $conn);
+        $result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            $return['result'] = "NO";
+        }
 
-        $_return = mysql_fetch_array($result);
+        $return = $result->fetch(PDO::FETCH_ASSOC);
+        
+        
     }
     elseif ($_cosa == "aggiornamento_liquid")
     {
-        $query = "UPDATE liquid_iva_periodica set versato='SI', banca='$_parametri[banca]', data_vers='$_parametri[data_vers]',
-        n_reg='$_parametri[n_reg]' WHERE anno='$_anno' AND periodo='$_periodo' limit 1";
+        $query = "UPDATE liquid_iva_periodica set versato='SI', banca='$_parametri[banca]', data_vers='$_parametri[data_vers]', n_reg='$_parametri[n_reg]' WHERE anno='$_anno' AND periodo='$_periodo' limit 1";
 
-// Esegue la query...
-        if (mysql_query($query, $conn) != 1)
+        $result = $conn->exec($query);
+        if ($conn->errorCode() != "00000")
         {
-            $_return['errori']['descrizione'] = "Si &egrave; verificato un errore nella query inserimento query Aggiorna:<br> $query <br>" . mysql_error();
-            $_return['errori']['errore'] = "errore";
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            $return['descrizione'] = $_errori['descrizione'];
+            $return['query'] = $query;
+            $return['result'] = "NO";
         }
+
     }
     elseif ($_cosa == "elenco_anno")
     {
         //elenco
         $query = "SELECT *, DATE_FORMAT(data_vers, '%d-%m-%Y') AS versamento FROM liquid_iva_periodica where anno='$_anno' ORDER BY anno, periodo";
-        $_return = mysql_query($query, $conn);
+        $return = mysql_query($query, $conn);
     }
     elseif ($_cosa == "elenca_anno")
     {
@@ -3370,29 +3417,29 @@ function tabella_liquid_iva_periodica($_cosa, $_anno, $_periodo, $_parametri)
             $dati = "errore";
         }
         
-        $_return = $result;
+        $return = $result;
         
     }
-    elseif ($_cosa == "anni_presenti")
+    elseif($_cosa == "anni_presenti")
     {
         $query = "SELECT * FROM liquid_iva_periodica GROUP BY anno ORDER BY anno, periodo";
 
-        $_return = mysql_query($query, $conn);
+        $return = mysql_query($query, $conn);
     }
     elseif ($_cosa == "elenco_inner_banca")
     {
         $query = "SELECT * FROM liquid_iva_periodica INNER JOIN banche ON liquid_iva_periodica.banca=banche.codice ORDER BY anno, periodo";
 
-        $_return = mysql_query($query, $conn);
+        $return = mysql_query($query, $conn);
     }
     else
     {
         $query = "SELECT * FROM liquid_iva_periodica where ORDER BY anno, periodo";
-        $_return = mysql_query($query, $conn);
+        $return = mysql_query($query, $conn);
     }
 
 
-    return $_return;
+    return $return;
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------

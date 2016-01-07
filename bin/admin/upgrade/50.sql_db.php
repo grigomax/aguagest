@@ -20,7 +20,7 @@ $conn = connessione_mysql("PDO");
 
 echo "<h4>Inizio aggiornamento archivi versione 50</h4>\n";
 
-$_versione = "49";
+$_versione = "50";
 $_punto = "0";
 
 
@@ -205,8 +205,37 @@ else
     $fine = 0;
     exit;
 }
-//fine fattura
 
+$query = "ALTER TABLE fv_dettaglio CHANGE descrizione descrizione TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Aggiornamento archivi. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Aggiornamento archivi $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+
+
+//fine fattura
 //modifica ddt
 
 $query = "ALTER TABLE bv_bolle ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A' AFTER anno";
@@ -315,8 +344,36 @@ else
     $fine = 0;
     exit;
 }
-//fine bolle..
 
+
+$query = "ALTER TABLE bv_dettaglio CHANGE descrizione descrizione TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Aggiornamento archivi. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Aggiornamento archivi $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+//fine bolle..
 //inizio conferme ordine..
 $query = "ALTER TABLE co_testacalce ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A' AFTER anno";
 
@@ -424,8 +481,35 @@ else
     $fine = 0;
     exit;
 }
-//fine conferme
 
+$query = "ALTER TABLE co_dettaglio CHANGE descrizione descrizione TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Aggiornamento archivi. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Aggiornamento archivi $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+//fine conferme
 //inizio ordine clienti..
 $query = "ALTER TABLE oc_testacalce ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A' AFTER anno";
 
@@ -533,8 +617,36 @@ else
     $fine = 0;
     exit;
 }
-//fine conferme ordine 
 
+
+$query = "ALTER TABLE oc_dettaglio CHANGE descrizione descrizione TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Aggiornamento archivi. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Aggiornamento archivi $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+//fine conferme ordine 
 //inizio ordini fornitore
 $query = "ALTER TABLE of_testacalce ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A' AFTER anno";
 
@@ -642,8 +754,36 @@ else
     $fine = 0;
     exit;
 }
-// fine ordini fornitore
 
+
+$query = "ALTER TABLE of_dettaglio CHANGE descrizione descrizione TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Aggiornamento archivi. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Aggiornamento archivi $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+// fine ordini fornitore
 // inizio preventivi..
 $query = "ALTER TABLE pv_testacalce ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A' AFTER anno";
 
@@ -751,8 +891,35 @@ else
     $fine = 0;
     exit;
 }
-// fine preventivi..
 
+$query = "ALTER TABLE pv_dettaglio CHANGE descrizione descrizione TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Aggiornamento archivi. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Aggiornamento archivi $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+// fine preventivi..
 //inizio doc_basket
 
 $query = "ALTER TABLE doc_basket ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER anno";
@@ -806,8 +973,33 @@ else
     exit;
 }
 
-//fine bascket
+$query = "ALTER TABLE doc_basket CHANGE descrizione descrizione TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
 
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Aggiornamento archivi. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Aggiornamento archivi $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+//fine bascket
 //inizio tabella effetti
 $query = "ALTER TABLE effetti ADD suffixdoc CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER annodoc";
 
@@ -837,7 +1029,6 @@ else
 
 
 //fine tabella effetti
-
 //inizio tabella magastorico
 $query = "ALTER TABLE magastorico ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER anno";
 
@@ -867,7 +1058,6 @@ else
 
 
 //fine tabella magastorico
-
 //inizio tabella magazzino
 
 $query = "ALTER TABLE magazzino ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER anno";
@@ -897,7 +1087,6 @@ else
 }
 
 //fine tabella magazzino
-
 //inizio tabella provvigioni
 $query = "ALTER TABLE provvigioni ADD suffix CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER anno";
 
@@ -925,7 +1114,6 @@ else
     exit;
 }
 //fine tabella provvigioni
-
 //inizio tabella prima nota
 $query = "ALTER TABLE prima_nota ADD suffix_doc CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER anno_doc";
 
@@ -979,7 +1167,6 @@ else
     exit;
 }
 //fine tabella prima_nota
-
 //inizio tabella prima nota baskket
 $query = "ALTER TABLE prima_nota_basket ADD suffix_doc CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER anno_doc";
 
@@ -1033,7 +1220,6 @@ else
     exit;
 }
 // fine prima nota basket
-
 //inizio tabella scadenziario..
 $query = "ALTER TABLE scadenziario ADD suffix_proto CHAR( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'A' AFTER anno_proto";
 
@@ -1064,10 +1250,6 @@ else
 
 
 //fine tabella scadenziario
-
-
-
-
 //fine aggiornamenti............................................
 //    Verifico che non ci siano stati errori
 if ($fine != "1")

@@ -140,7 +140,8 @@ if ($_SESSION['user']['vendite'] > "1")
             printf("<center><br><input type=\"submit\" name=\"azione\" value=\"Elimina\" onclick=\"if(!confirm('Confermi ELIMINAZIONE Effetto ?')) return false;\" >   <input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>");
             echo "<br>";
         }
-        elseif ($_status == "presentato")
+        
+        if ($_status == "presentato")
         {
             $_SESSION['numeff'] = $dati['numeff'];
             $_SESSION['annoeff'] = $dati['annoeff'];
@@ -159,8 +160,8 @@ if ($_SESSION['user']['vendite'] > "1")
             echo "<table border=\"0\" align=\"center\" width=\"50%\">";
             echo "<center><br><input type=\"submit\" name=\"azione\" value=\"Modifica\"></center>\n";
             echo "<tr><td align=\"center\"><a href=\"stampa_avviso.php?ndoc=$_ndoc&anno=$_anno\" target=no ><img src=\"../../images/printer.png\"></br>Stampa Avviso </a></td>";
-            echo "<td align=\"center\"><a href=\"stampa_avviso.php?ndoc=$_ndoc&anno=$_anno&azione=PDF\" target=no >\n";
-            echo "<a href=\"stampa_avviso.php?ndoc=$_ndoc&anno=$_anno&azione=PDF\" target=no ><img src=\"../../images/email.png\" width=\"60\"></br>Invia avviso e-mail</a></td></tr></table>";
+            echo "<td align=\"center\"><a href=\"stampa_avviso.php?ndoc=$_ndoc&anno=$_anno&azione=Invia\" target=no >\n";
+            echo "<a href=\"stampa_avviso.php?ndoc=$_ndoc&anno=$_anno&azione=Invia\" target=no ><img src=\"../../images/email.png\" width=\"60\"></br>Invia avviso e-mail</a></td></tr></table>";
         }
         else
         {

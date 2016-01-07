@@ -1,4 +1,5 @@
 <?php
+
 /* Programma Agua gest
  * Programma nato e gestito da grigolin massimo
  * prodotto sotto licenza GPL
@@ -8,13 +9,14 @@
 
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
-require $_percorso ."../setting/vars.php";
-session_start(); $_SESSION['keepalive']++;
+require $_percorso . "../setting/vars.php";
+session_start();
+$_SESSION['keepalive'] ++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 require "../../../setting/par_conta.inc.php";
 require "../../librerie/motore_primanota.php";
@@ -26,16 +28,6 @@ define('FPDF_FONTPATH', '../../tools/fpdf/font/');
 require('../../tools/fpdf/fpdf.php');
 
 require "libri_contabili_pdf.php";
-
-//carichiamo la base delle pagine:
-base_html_stampa("chiudi", $_parametri);
-
-//carichiamo la testata del programma.
-#testata_html($_cosa, $_percorso);
-//carichiamo il menu a tendina..
-#menu_tendina($_cosa, $_percorso);
-
-
 
 if ($_SESSION['user']['contabilita'] > "1")
 {
@@ -49,28 +41,43 @@ if ($_SESSION['user']['contabilita'] > "1")
     $_anno_reg = cambio_data("anno_it", $_GET['datareg']);
 
 
-
-
-
 //due domande o ona.. ?
 //megio due..
 //acquisti
     $query = "select *, (SUM(dare) - SUM(avere)) AS acquisti from prima_nota where liquid_iva != 'SI' AND conto='$CONTO_IVA_ACQUISTI' and data_cont like '$_periodo%'";
 
 //eseguiamo la query
+    $result = $conn->query($query);
+    if ($conn->errorCode() != "00000")
+    {
+        $_errore = $conn->errorInfo();
+        echo $_errore['2'];
+        //aggiungiamo la gestione scitta dell'errore..
+        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        scrittura_errori($_cosa, $_percorso, $_errori);
+    }
 
-    $result = mysql_query($query, $conn) or mysql_error();
-
-    $dati_acq = mysql_fetch_array($result);
+    $dati_acq = $result->fetch(PDO::FETCH_ASSOC);
+   
 
 //vendite
     $query = "select *, (SUM(avere) - SUM(dare)) AS vendite from prima_nota where liquid_iva != 'SI' AND conto='$CONTO_IVA_VENDITE' and data_cont like '$_periodo%'";
 //echo "<br> $query";
 //eseguiamo la query
 
-    $result = mysql_query($query, $conn) or mysql_error();
-
-    $dati_ven = mysql_fetch_array($result);
+    $result = $conn->query($query);
+    if ($conn->errorCode() != "00000")
+    {
+        $_errore = $conn->errorInfo();
+        echo $_errore['2'];
+        //aggiungiamo la gestione scitta dell'errore..
+        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        scrittura_errori($_cosa, $_percorso, $_errori);
+    }
+    $dati_ven = $result->fetch(PDO::FETCH_ASSOC);
+   
 
 //selezioniamo i mesi..
     if ($_GET['periodo'] == "01")
@@ -84,12 +91,23 @@ if ($_SESSION['user']['contabilita'] > "1")
         $query = "SELECT * FROM liquid_iva_periodica where periodo = '$_GET[periodo]' -1 and anno = '$_GET[anno]' limit 1";
     }
 
-    $result = mysql_query($query, $conn) or mysql_error();
+    $result = $conn->query($query);
+    if ($conn->errorCode() != "00000")
+    {
+        $_errore = $conn->errorInfo();
+        echo $_errore['2'];
+        //aggiungiamo la gestione scitta dell'errore..
+        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        scrittura_errori($_cosa, $_percorso, $_errori);
+    }
 
-    $dati_liquid = mysql_fetch_array($result);
+    $dati_liquid = $result->fetch(PDO::FETCH_ASSOC);
 
     if ($_azione == "conto")
     {
+        //carichiamo la base delle pagine:
+        base_html_stampa("chiudi", $_parametri);
         //inizio parte visiva...
         echo "<CENTER>";
 
@@ -119,9 +137,19 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             $query = "SELECT * FROM liquid_iva_periodica where periodo = '13' and anno = '$_POST[anno]' AND versato = 'SI' limit 1";
 
-            $acc = mysql_query($query, $conn);
+            $result = $conn->query($query);
+            if ($conn->errorCode() != "00000")
+            {
+                $_errore = $conn->errorInfo();
+                echo $_errore['2'];
+                //aggiungiamo la gestione scitta dell'errore..
+                $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                scrittura_errori($_cosa, $_percorso, $_errori);
+            }
 
-            $dati_acc = mysql_fetch_array($acc);
+            $dati_acc = $result->fetch(PDO::FETCH_ASSOC);
+
             echo "Acconto iva versato =  $dati_acc[val_liquid]<br>\n";
         }
         #		$_differenza = ($dati_ven['vendite'] - $dati_acq['acquisti'] - abs($dati_liquid['cred_residuo']));
@@ -144,9 +172,19 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             $query = "SELECT * FROM liquid_iva_periodica where periodo = '13' and anno = '$_GET[anno]' AND versato = 'SI' limit 1";
 
-            $acc = mysql_query($query, $conn);
+            $result = $conn->query($query);
+            if ($conn->errorCode() != "00000")
+            {
+                $_errore = $conn->errorInfo();
+                echo $_errore['2'];
+                //aggiungiamo la gestione scitta dell'errore..
+                $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                scrittura_errori($_cosa, $_percorso, $_errori);
+            }
 
-            $dati_acc = mysql_fetch_array($acc);
+            $dati_acc = $result->fetch(PDO::FETCH_ASSOC);
+            
             echo "<br><br>Acconto iva versato =  $dati_acc[val_liquid]<br>\n";
             $_differenza = $_differenza - $dati_acc['val_liquid'];
             if ($_differenza < "0.00")
@@ -154,14 +192,12 @@ if ($_SESSION['user']['contabilita'] > "1")
                 $_differenza = "0.00";
             }
             echo "<b>Iva da versare entro il 16 $_datanuova[$_per_vc] = $_differenza</b></br>\n";
-
-            
         }
     }
     else // camnhio funzione..
     {
-        echo "<center>\n";
-        echo "<h3> Preparazione file... periodo di $_periodo </h3>\n";
+        //echo "<center>\n";
+        //echo "<h3> Preparazione file... periodo di $_periodo </h3>\n";
 
         $_title = "Liquidazione_iva_periodo_$_periodo";
 
@@ -173,13 +209,22 @@ if ($_SESSION['user']['contabilita'] > "1")
         //selezioniamo dal database i muovimeni inerenti..
         $query = "select *, date_format(data_cont,'%d-%m-%Y') AS data_cont_2 from prima_nota where causale = 'FA' AND data_cont like '$_periodo%' order by nproto, rigo";
 
-        $result = mysql_query($query, $conn) or mysql_error();
+        $result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
 
         //$acquisti = mysql_fetch_array($result);
 
         intesta_colonna("inizio_acquisti");
 
-        while ($dati = mysql_fetch_array($result))
+        foreach ($result AS $dati)
         {
             $_y = $pdf->GetY();
 
@@ -230,13 +275,22 @@ if ($_SESSION['user']['contabilita'] > "1")
         //selezioniamo dal database i muovimeni inerenti..
         $query = "select *, date_format(data_cont,'%d-%m-%Y') AS data_cont_2 from prima_nota where causale = 'FV' AND data_cont like '$_periodo%' order by data_doc, CAST( ndoc AS SIGNED ) ASC";
 
-        $result = mysql_query($query, $conn) or mysql_error();
+        $result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
 
         //$acquisti = mysql_fetch_array($result);
 
         intesta_colonna("inizio_vendite");
 
-        while ($dati = mysql_fetch_array($result))
+        foreach ($result AS $dati)
         {
             $_y = $pdf->GetY();
 
@@ -282,10 +336,10 @@ if ($_SESSION['user']['contabilita'] > "1")
 
         //generazione del files..
         $_pdf = "$_title.pdf";
-        $pdf->Output("../../../spool/$_pdf", 'F');
+        $pdf->Output("../../../spool/$_pdf", 'I');
 
-        echo "<br>\n";
-        echo "<h4 align=\"center\"><a href=\"../../../spool/$_pdf\">Clicca qui per prelevare il file in pdf con il libro IVA</a></h4>";
+        //echo "<br>\n";
+        //echo "<h4 align=\"center\"><a href=\"../../../spool/$_pdf\">Clicca qui per prelevare il file in pdf con il libro IVA</a></h4>";
     }
 }
 else

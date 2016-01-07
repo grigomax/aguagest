@@ -9,13 +9,15 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso ."../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME); 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
 require_once $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+if($conn == "")
+{
+    $conn = permessi_sessione("verifica", $_percorso);
+}
 
 function new_pdf($_cosa, $_title)
 {
@@ -207,11 +209,11 @@ function elenco_liquid($_cosa, $dati, $_chiudi)
                 $castiva['totfatt'] = $castiva['totfatt'] - $dati['dare'];
                 $_fattura = -$dati['dare'];
             }
-            $pdf->Cell(9, 5, $dati['nproto'], 0, 0, 'R');
+            $pdf->Cell(9, 5, $dati['nproto'].'/'.$dati['suffix_proto'] , 0, 0, 'R');
         }
 
         $pdf->Cell(19, 5, $dati['data_cont_2'], 0, 0, 'C');
-        $pdf->Cell(25, 5, $dati['ndoc'], 0, 0, 'L');
+        $pdf->Cell(25, 5, $dati['ndoc'].'/'.$dati['suffix_doc'], 0, 0, 'L');
         $pdf->Cell(11, 5, $dati['conto'], 0, 0, 'C');
         $pdf->Cell(80, 5, $dati['desc_conto'], 0, 0, 'L');
         $pdf->Cell(20, 5, $_fattura, 0, 0, 'R');
@@ -278,12 +280,12 @@ function elenco_liquid($_cosa, $dati, $_chiudi)
                 }
                 $_imponibile = -$dati['avere'];
             }
-            $pdf->Cell(9, 5, $dati['nproto'], 0, 0, 'R');
+            $pdf->Cell(9, 5, $dati['nproto'].'/'.$dati['suffix_proto'], 0, 0, 'R');
         }
 
 
         $pdf->Cell(19, 5, $dati['data_cont_2'], 0, 0, 'C');
-        $pdf->Cell(25, 5, $dati['ndoc'], 0, 0, 'L');
+        $pdf->Cell(25, 5, $dati['ndoc'].'/'.$dati['suffix_doc'], 0, 0, 'L');
         $pdf->Cell(11, 5, $dati['conto'], 0, 0, 'C');
         $pdf->Cell(80, 5, $dati['desc_conto'], 0, 0, 'L');
         $pdf->Cell(20, 5, '', 0, 0, 'R');
@@ -303,7 +305,7 @@ function chiusura($_cosa, $dare, $avere, $_anno)
     {
 
 //leggiamo le aliquote dall'archivio..
-        $iva_res = tabella_aliquota("elenco", $_codiva, $_percorso);
+        $iva_res = tabella_aliquota("elenca", $_codiva, $_percorso);
 
 //qui inseriamo tutte le informazioni relative alla colonna
         $pdf->SetFont('Arial', '', 10);
@@ -320,8 +322,8 @@ function chiusura($_cosa, $dare, $avere, $_anno)
         $pdf->Cell(20, 5, 'Imposta', 1, 1, 'R');
 //con un ciclo di while creiamo una tabellina..
 
-        $iva_res = tabella_aliquota("elenco", $_codiva, $_percorso);
-        while ($iva = mysql_fetch_array($iva_res))
+        $iva_res = tabella_aliquota("elenca", $_codiva, $_percorso);
+        foreach ($iva_res AS $iva)
         {
             if ($castiva[$iva[codice]][imponibile] != 0.00)
             {
@@ -430,8 +432,8 @@ function liquidazione($_datanuova, $_anno, $_periodo, $dati_acq, $dati_ven, $dat
     $pdf->Cell(10, 5, '', 1, 0, 'R');
     $pdf->Cell(20, 5, $castiva[''][imponibile], 1, 0, 'R');
     $pdf->Cell(20, 5, '', 1, 1, 'R');
-    $iva_res = tabella_aliquota("elenco", $_codiva, $_percorso);
-    while ($iva = mysql_fetch_array($iva_res))
+    $iva_res = tabella_aliquota("elenca", $_codiva, $_percorso);
+    foreach ($iva_res AS $iva)
     {
         if ($castiva[$iva[codice]][imponibile] != 0.00)
         {
@@ -473,8 +475,8 @@ function liquidazione($_datanuova, $_anno, $_periodo, $dati_acq, $dati_ven, $dat
     $pdf->Cell(20, 5, 'Imposta', 1, 1, 'R');
 //con un ciclo di while creiamo una tabellina..
 
-    $iva_res = tabella_aliquota("elenco", $_codiva, $_percorso);
-    while ($iva = mysql_fetch_array($iva_res))
+    $iva_res = tabella_aliquota("elenca", $_codiva, $_percorso);
+    foreach ($iva_res AS $iva)
     {
         if ($_iva_acquisti[$iva[codice]][imponibile] != 0.00)
         {
@@ -548,9 +550,18 @@ function liquidazione($_datanuova, $_anno, $_periodo, $dati_acq, $dati_ven, $dat
 
         $query = "SELECT * FROM liquid_iva_periodica where periodo = '13' and anno = '$_anno' AND versato = 'SI' limit 1";
 
-        $acc = mysql_query($query, $conn);
-
-        $dati_acc = mysql_fetch_array($acc);
+        $result = $conn->query($query);
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+        }
+        $dati_acc = $result->fetch(PDO::FETCH_ASSOC);
+        
         
         if($dati_acc['val_liquid'] == null)
         {

@@ -4,7 +4,7 @@ http://aguagest.sourceforge.net/
 massimo@mcetechnik.it
 
 
--VERSIONE 1.2.3 Rc 4 del 
+-VERSIONE 1.2.3 Rc 4 del 07/01/2016
 -1 ADMIN
 -   1   Fatto un piccolo programmino per poter lanciare delle query sql direttamente
 -       nella sezione admin / gestione archivi
@@ -13,6 +13,10 @@ massimo@mcetechnik.it
 -       in linea dei pdf
 -   3   Sistemato il bug sul menu' tendina che non si sovrapponeva alle schermate
 -       articolo..
+-   4   Nel corpo dei documenti impostato il campo descrizione da varchar 80 a text
+-       facendo così, nel prossimo futuro possiamo inserire quanti caratteri vogliamo
+-   5   Passaggio per il reparto vendita al nuovo sistema di stampa..
+
 
 -2  VENDITE
 -   1   Sistemato Bug sul corpo dei documenti, quando si agganciava un articolo
