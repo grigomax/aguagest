@@ -75,13 +75,15 @@ if ($_SESSION['user']['vendite'] > "2")
     //settiamo il numero che tocca
     $progressivo++;
     
-    if ($_POST['anno'] == "")
+    if (($_POST['anno'] == "") AND ($_POST['suffix'] == ""))
     {
         $_anno = date('Y');
+        $_suffix = $SUFFIX_DDT;
     }
     else
     {
         $_anno = $_POST['anno'];
+        $_suffix = strtoupper($_POST['suffix']);
     }
 
     echo "<table width=\"80%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";
@@ -90,8 +92,8 @@ if ($_SESSION['user']['vendite'] > "2")
     echo "<span class=\"intestazione\"><b>Scegliere $_tdoc da Esportare</b><br></span><br></td></tr>\n";
 
 
-    echo "<form action=\"fattura_PA.php?tdoc=$_tdoc\" method=\"POST\">\n";
-    echo "Cambia anno => <input type=\"number\" size=\"6\" maxlength=\"4\" name=\"anno\" value=\"$_anno\"><input type=\"submit\" name=\"cambia\"></td></tr>\n";
+     echo "<form action=\"fattura_PA.php?tdoc=$_tdoc\" method=\"POST\">\n";
+    echo "Cambia anno => <input type=\"number\" size=\"6\" name=\"anno\" value=\"$_anno\"> o suffisso <input type=\"text\" size=\"3\" maxlength=\"1\" name=\"suffix\" value=\"$_suffix\"><input type=\"submit\" name=\"cambia\">\n";
 
     echo "</form>\n";
 
@@ -109,7 +111,7 @@ if ($_SESSION['user']['vendite'] > "2")
     echo "<span class=\"testo_blu\">";
     foreach ($result AS $dati)
     {
-        printf("<option value=\"%s\">%s - %s - %s - %s %s</option>\n", $dati['ndoc'], $dati['ndoc'], $dati['datareg'], $dati['ragsoc'], $dati['status'], $dati['invio']);
+        printf("<option value=\"%s%s%s\">%s - %s - %s - %s %s</option>\n", $dati['anno'], $dati['suffix'], $dati['ndoc'], $dati['ndoc'], $dati['datareg'], $dati['ragsoc'], $dati['status'], $dati['invio']);
     }
 
     echo "</select>\n";

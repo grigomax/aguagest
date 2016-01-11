@@ -6,7 +6,7 @@ $_percorso = "../../";
 require_once $_percorso . "librerie/lib_html.php";
 
 //connettiamoci al database
-$conn = connessione_mysql("PDO");
+$conn = connessione_mysql("PDO", $query, $_parametri);
 
 
 /* AGGIORNAMENTO TABELLE DATABASE AL 20/01/2015

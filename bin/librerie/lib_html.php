@@ -124,7 +124,7 @@ function primo_ingresso($_user, $_password, $_parametri)
 
     //connettiamoci al database.
 
-    $conn = connessione_mysql('PDO');
+    $conn = connessione_mysql('PDO', $query, $_parametri);
 
 
     //facciamo il check
@@ -272,7 +272,7 @@ function verifica_installazione($user, $password)
     {
 
         // Ora mi connetto al database per prelevare le versioni del programma..
-        $conn = connessione_mysql('PDO');
+        $conn = connessione_mysql('PDO', $query, $_parametri);
 
         $query = ("SELECT * FROM version WHERE id='1' ");
 
@@ -419,11 +419,11 @@ function permessi_sessione($_cosa, $_percorso)
             if ($_cosa == "verifica_PDO")
             {
                 //ci connettiamo al database in modalità ad oggetti
-                $conn = connessione_mysql("PDO");
+                $conn = connessione_mysql("PDO", $query, $_parametri);
             }
             else
             {
-                $conn = connessione_mysql($_cosa);
+                $conn = connessione_mysql($_cosa, $query, $_parametri);
             }
             return $conn;
         }
@@ -459,7 +459,7 @@ function permessi_sessione($_cosa, $_percorso)
  * @global type $db_nomedb
  * @return type $conn Variabile per la connessione..
  */
-function connessione_mysql($_cosa)
+function connessione_mysql($_cosa, $query, $_parametri)
 {
 
     global $db_server;
@@ -496,6 +496,7 @@ function connessione_mysql($_cosa)
     elseif ($_cosa == "mysqli")
     {
         
+        
     }
     else
     {
@@ -521,6 +522,49 @@ function connessione_mysql($_cosa)
 
     return $conn;
 }
+
+function domanda_db($_cosa, $query, $_parametri)
+{
+    global $conn;
+    global $_percorso;
+    
+    //qui passiamo le queri per la domanda.. così da poter avere sempre un risultato corretto 
+        
+    
+    if($_cosa == "exec")
+    {
+        $result = $conn->exec($query);
+    }
+    else
+    {
+        $result = $conn->query($query);
+    }
+        
+        if ($conn->errorCode() != "00000")
+        {
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            $return['descrizione'] = $_errori['descrizione'];
+            $return['query'] = $query;
+            $return['result'] = "NO";
+        }
+        
+       /* if($result->rowCount() != 0 )
+        {
+            $result = "NO";
+            echo "<center><h4><font color=\"green\">Errore Nessuna riga trovata</font></h4>\n";
+        }
+    */
+    
+    return $result;
+}
+
+
+
 
 /**
  * Funzione che scrive gli errori si output su un file dentro include..
@@ -693,6 +737,9 @@ function base_html($_cosa, $_percorso)
     echo "<!DOCTYPE html>\n";
     echo "<html lang=\"it\">\n";
     echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
+    echo "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\n";
+    echo "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n";
+    echo "<meta http-equiv=\"Expires\" content=\"0\" />\n";
 
     echo "<LINK REL=\"shortcut icon\" HREF=\"" . $_percorso . "images/favicon.ico\">\n";
     echo "<title>$title</title>\n";
@@ -1536,7 +1583,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/importa_doc.php?start=preventivo&end=ddt\">Imp. Preventivo</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/importa_doc.php?start=conferma&end=ddt\">Imp. Conferma</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/doc_modint.php?tdoc=ddt\">Cambia Intestatario</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/controlloddt.php\">Controllo numeri</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/controllo_numeri.php?tdoc=ddt\">Controllo numeri</a></li>\n";
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -1554,6 +1601,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/doc_modint.php?tdoc=conferma\">Cambia Intestatario</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/stampa_inevaso.php?tdoc=conferma&anno=2011%22\" target=\"_blank\">Stampa inevaso</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/confermed/prepara_ordini.php\">Prepara Ordini</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/controllo_numeri.php?tdoc=conferma\">Controllo numeri</a></li>\n";
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -1567,6 +1615,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/elencodoc.php?tdoc=preventivo\">Elenco inseriti</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/elenco_doc_xcli.php?tdoc=preventivo\">Elenco per cliente</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/doc_modint.php?tdoc=preventivo\">Cambia Intestatario</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/controllo_numeri.php?tdoc=preventivo\">Controllo numeri</a></li>\n";
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -1598,7 +1647,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/importa_doc.php?start=ddt_diretto&end=FATTURA\">Imp. DDT. diretto</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/fatturev/fatturato/ricercadoc.php\">Fatturato</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/fatturev/fattura_PA.php\">Esporta P.A.</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/fatturev/controllo_fv.php\">Controllo numeri</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/controllo_numeri.php?tdoc=FATTURA\">Controllo numeri</a></li>\n";
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -1854,9 +1903,13 @@ function base_html_stampa($_cosa, $_parametri)
     
     require $_percorso . "../setting/vars_aspetto.php";
     
-    echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
-    echo "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";
-    echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
+    echo "<!DOCTYPE html>\n";
+    echo "<html lang=\"it\">\n";
+    echo "<head>\n";
+    echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
+    echo "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\n";
+    echo "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n";
+    echo "<meta http-equiv=\"Expires\" content=\"0\" />\n";
     echo "<title>$title</title>\n";
     echo "<link rel=\"stylesheet\" href=\"" . $_percorso . "css/globalest.css\" type=\"text/css\">\n";
     //fissiamo i margini del parametro body qui dopo aver caricaro il foglio di stile, in in modo da poter
@@ -2395,23 +2448,30 @@ function intestazione_html($_cosa, $_percorso, $_parametri)
     }
     else
     {
-        echo "<table border=\"0\" height=\"135px\" align=\"left\" width=\"$PRINT_WIDTH\">
-	        <tr>
-						
-	            <td width=\"50%\" valign=\"top\" align=\"left\">
-				$azienda<br>
-				$sitointernet <br>
-	                Telefono : $telefono Fax : $fax <br>
-	                e-mail : $email1
-	            </td>
-	            <td width=\"50%\" valign=\"top\" align=\"right\">
-	                Data $_parametri[data]<br>
-	                Stampa $_parametri[stampa] : $_parametri[anno]<br>
-	                <b>Pagina $_parametri[pg] di $_parametri[pagina]</b>
-										
-	            </td>
-								
-	        </tr></table>\n";
+        echo "<table border=\"0\" height=\"135px\" align=\"left\" width=\"$PRINT_WIDTH\">\n";
+        echo "<tr>\n";
+        echo "<td width=\"50%\" valign=\"top\" align=\"left\">\n";
+        echo "$azienda<br>$sitointernet <br>Telefono : $telefono Fax : $fax <br>\n";
+
+        if($_parametri['email'] == "3")
+        {
+            echo "e-mail : $email3\n";
+        }
+        elseif($_parametri['email'] == "2")
+        {
+            echo "e-mail : $email2\n";
+        }
+        else
+        {
+            echo "e-mail : $email1\n";
+        }
+        echo  "</td>\n";
+        echo "<td width=\"50%\" valign=\"top\" align=\"right\">\n";
+        echo "Data $_parametri[data]<br>\n";
+        echo "Stampa $_parametri[stampa] : $_parametri[anno]<br>\n";
+        echo "<b>Pagina $_parametri[pg] di $_parametri[pagina]</b>\n";
+        echo "</td>\n";
+        echo "</tr></table>\n";
     }
     
     echo "<table border=\"0\" align=\"left\" width=\"$PRINT_WIDTH\">
@@ -3423,17 +3483,6 @@ function impegni_articolo($_cosa, $_articolo, $_anno)
     global $_percorso;
 
 
-    //verifico se la connessione è un oggetto..
-    //
-	if (gettype($conn) != "object")
-    {
-        $conn = null;
-        require_once $_percorso . "librerie/lib_html.php";
-
-        //connettiamoci al database
-        $conn = connessione_mysql("PDO");
-    }
-
     #echo gettype($conn);
     #echo is_object($conn);
     // inizio calcolo giacenza
@@ -3450,16 +3499,15 @@ function impegni_articolo($_cosa, $_articolo, $_anno)
         $_errori['files'] = "stampa_pianoc.php";
         scrittura_errori($_cosa, $_percorso, $_errori);
     }
-    foreach ($result AS $dati)
-        $_qtacarico = $dati['qtacarico'];
+    $dati = $result->fetch(PDO::FETCH_ASSOC);
+    $_qtacarico = $dati['qtacarico'];
     $_qtascarico = $dati['qtascarico'];
 
     //primo array con la giacenza
     $_impegni['giacenza'] = ($_qtacarico - $_qtascarico);
 
-
     //seconda query..
-    $query = sprintf("select sum(qtasaldo) AS quantita from co_dettaglio INNER JOIN co_testacalce ON co_dettaglio.ndoc=co_testacalce.ndoc AND co_dettaglio.anno=co_testacalce.anno where articolo=\"%s\" AND   status != 'evaso' ", $_articolo);
+    $query = sprintf("select sum(qtasaldo) AS quantita from co_dettaglio INNER JOIN co_testacalce ON co_dettaglio.ndoc=co_testacalce.ndoc AND co_dettaglio.anno=co_testacalce.anno where articolo=\"%s\" AND rsaldo != 'SI' AND status != 'evaso' ", $_articolo);
 #echo $query;
     $result = $conn->query($query);
     if ($conn->errorCode() != "00000")
@@ -3472,9 +3520,9 @@ function impegni_articolo($_cosa, $_articolo, $_anno)
         scrittura_errori($_cosa, $_percorso, $_errori);
     }
     $dati = "";
-    foreach ($result AS $dati)
+    $dati = $result->fetch(PDO::FETCH_ASSOC);
     //secondo arrray con l'impegnato
-        $_impegni['impegnato'] = $dati['quantita'];
+    $_impegni['impegnato'] = $dati['quantita'];
 
 
     $query = sprintf("select sum(qtasaldo) AS quantita from of_dettaglio INNER JOIN of_testacalce ON of_dettaglio.ndoc=of_testacalce.ndoc AND of_dettaglio.anno=of_testacalce.anno where articolo=\"%s\" AND rsaldo != 'SI' and status != 'evaso' ", $_articolo);
@@ -3490,10 +3538,9 @@ function impegni_articolo($_cosa, $_articolo, $_anno)
         scrittura_errori($_cosa, $_percorso, $_errori);
     }
     $dati = "";
-    foreach ($result AS $dati)
-
+    $dati = $result->fetch(PDO::FETCH_ASSOC);
     //terzo arrray con l'impegnato
-        $_impegni['ordinato'] = $dati['quantita'];
+    $_impegni['ordinato'] = $dati['quantita'];
 
     //ritorno un array completo con le tre variabili
 

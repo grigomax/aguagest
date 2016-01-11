@@ -296,9 +296,9 @@ if ($_SESSION['user']['setting'] > "3")
 
 //ora che abbiamo la somma del corpo, verifichiamo che sia uguale a 100% altrimenti blocchiamo e facciamo tornare indietro
 
-    if (($_spazio != "100") AND ( $_eti != SI))
+    if (($_spazio >= "200") AND ( $_eti != SI))
     {
-        echo "<h3>Somma corpo documenti = $_spazio % </h3>\n";
+        echo "<h3>Somma corpo documenti = $_spazio mm </h3>\n";
         echo "<h2> Errore la somma delle percentuali del corpo &egrave; diversa da 100%</h2>\n";
         echo "<h3>Si prega di tornare indetro e Verificare. </h3>\n";
 

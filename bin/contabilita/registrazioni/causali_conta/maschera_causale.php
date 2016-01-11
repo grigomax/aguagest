@@ -101,7 +101,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 		$conn = null;
 				
 		//connettiamoci al database
-		$conn = connessione_mysql("mysql");
+		$conn = connessione_mysql("mysql", $query, $_parametri);
 	}
 	for ($index = 1; $index <= "10"; $index++)
 	{

@@ -52,6 +52,7 @@ if ($_SESSION['user']['vendite'] > "1")
         $_suffix = strtoupper($_POST['suffix']);
     }
 
+    //echo substr("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], 0,(strpos("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], '?')));
     echo "<table width=\"80%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";
     echo "<tr>\n";
     echo "<td width=\"85%\" align=\"center\" valign=\"top\" colspan=\"2\">\n";

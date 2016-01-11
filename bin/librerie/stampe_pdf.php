@@ -565,7 +565,7 @@ function corpo_tabella($_cosa, $res2, $rpp, $_return)
 
         for ($_nr = 1; $_nr <= $rpp; $_nr++)
         {
-            $dati = mysql_fetch_array($res2);
+            $dati = $res2->fetch(PDO::FETCH_ASSOC);
 
             if (($dati['dare'] == "") AND ( $dati['avere'] == ""))
             {

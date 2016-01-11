@@ -9,7 +9,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso ."../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME); 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";

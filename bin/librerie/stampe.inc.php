@@ -36,7 +36,7 @@ function layout_doc($_cosa, $_tdoc, $conn)
             scrittura_errori($_cosa, $_percorso, $_errori);
         }
         
-        foreach ($result AS $datidoc);
+        $datidoc = $result->fetch(PDO::FETCH_ASSOC);
     }
     else
     {

@@ -146,8 +146,8 @@ if ($_SESSION['user']['contabilita'] > "1")
     echo "<a href=\"result_scheda_stampa.php?start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\">    <img src=\"../images/printer.png\" weigth=\"35\" height=\"35\" border=\"0\"></a></img><br>\n";
     echo "<a href=\"result_scheda_stampa.php?start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\">Stampa</a>";
     echo "</td><td align=\"center\">\n";
-    echo "<a href=\"result_scheda_stampa.php?tipo=pdf&start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" ><img src=\"../images/pdf.png\" weigth=\"35\" height=\"35\" border=\"0\"></a></img><br>\n";
-    echo "<a href=\"result_scheda_stampa.php?tipo=pdf&start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" >PDF</a></center></span>";
+    echo "<a href=\"result_scheda_stampa.php?tipo=pdf&start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\"><img src=\"../images/pdf.png\" weigth=\"35\" height=\"35\" border=\"0\"></a></img><br>\n";
+    echo "<a href=\"result_scheda_stampa.php?tipo=pdf&start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\">PDF</a></center></span>";
     echo "</td></tr></table>\n";
 
 
@@ -257,7 +257,7 @@ if ($_SESSION['user']['contabilita'] > "1")
     {
         $_scritta = "Avere";
     }
-    printf("<tr><td colspan=\"7\" align=\"right\" sclass=\"tabella_elenco\">Totale Saldo = %s %s</span></td></tr>", number_format($_saldo, '2'), $_scritta);
+    printf("<tr><td colspan=\"7\" align=\"right\" sclass=\"tabella_elenco\">Totale Saldo = %s %s</span><br>&nbsp;<br>&nbsp;<br>&nbsp;</td></tr>", number_format($_saldo, '2'), $_scritta);
 
 
 

@@ -53,8 +53,9 @@ if ($_SESSION['user']['vendite'] > "1")
     
     // Stringa contenente la query di ricerca..
     // aggiorno l'intestazione nelle testa calce
-    $query = sprintf("update $_archivio[testacalce] set utente=\"%s\" where anno=\"%s\" AND suffix='$_suffix' and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
+    $query = "UPDATE $_archivio[testacalce] set utente='$_newcli' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
 
+    //echo $query;
     $result = $conn->exec($query);
 
     if ($conn->errorCode() != "00000")
@@ -69,8 +70,9 @@ if ($_SESSION['user']['vendite'] > "1")
     }
 
     // aggiorno il corpo documento
-    $query = sprintf("update $_archivio[dettaglio] set utente=\"%s\" where anno=\"%s\" AND suffix='$_suffix' and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
+    $query = "UPDATE $_archivio[dettaglio] set utente='$_newcli' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
 
+    //echo $query;
     $result = $conn->exec($query);
 
     if ($conn->errorCode() != "00000")
@@ -87,7 +89,7 @@ if ($_SESSION['user']['vendite'] > "1")
     if ($_tdoc == "ddt")
     {
         // aggiorno l'il magazzino 
-        $query = sprintf("update magazzino set utente=\"%s\" where anno=\"%s\" AND suffix='$_suffix' and ndoc=\"%s\"", $_newcli, $_anno, $_ndoc);
+        $query = "update magazzino set utente='$_newcli' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
 
         $result = $conn->exec($query);
 
@@ -110,7 +112,7 @@ if ($_SESSION['user']['vendite'] > "1")
     echo "<tr><td align center><b> Documento aggiornato perfettamente </b><br>
 	per procedere alla stampa ritornare all'indice e selezionare ristampa d.d.t.<br>
 	Ricordandosi di aggiornare la pagina con ALT+F5</td></tr>\n";
-    echo "<tr><td align=center><a href=\"../stampa_doc.php?tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc&prezzi=si&dataora=si\" target=\"_blank\">Clikka qui per andare direttamente</a></td></tr>";
+    echo "<tr><td align=center><a href=\"../stampa_doc.php?tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc&suffix=$_suffix&prezzi=si&dataora=si\" target=\"_blank\">Clikka qui per andare direttamente</a></td></tr>";
 
 
     echo "</body></html>";

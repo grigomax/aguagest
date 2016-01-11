@@ -221,14 +221,14 @@ if ($_SESSION['user']['vendite'] > "2")
             $_POST['unita'] = $_articolo['unita'];
             $_POST['listino'] = $_listino;
 
-            if(($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ("")))
+            if (($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ( "")))
             {
                 $_POST['sca'] = $_sca;
                 $_POST['scb'] = $_scb;
                 $_POST['scc'] = $_scc;
             }
-            
-            
+
+
 
             //e poi lo inseriamo
             $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['aggancia'], $_POST);
@@ -243,7 +243,7 @@ if ($_SESSION['user']['vendite'] > "2")
                 $_messaggio = "Riga inserita correttamente";
             }
         }
-        
+
         //aggancia_2
         //verifichiamo che non si siano aggregate 
         if ($_POST['aggancia_2'] != "")
@@ -288,7 +288,7 @@ if ($_SESSION['user']['vendite'] > "2")
             $_POST['unita'] = $_articolo['unita'];
             $_POST['listino'] = $_listino;
 
-            if(($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ("")))
+            if (($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ( "")))
             {
                 $_POST['sca'] = $_sca;
                 $_POST['scb'] = $_scb;
@@ -308,7 +308,7 @@ if ($_SESSION['user']['vendite'] > "2")
                 $_messaggio = "Riga inserita correttamente";
             }
         }
-        
+
         //verifichiamo che non si siano aggregate 
         if ($_POST['aggancia_3'] != "")
         {
@@ -351,7 +351,7 @@ if ($_SESSION['user']['vendite'] > "2")
             $_POST['descrizione'] = $_descrizione;
             $_POST['unita'] = $_articolo['unita'];
             $_POST['listino'] = $_listino;
-            if(($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ("")))
+            if (($_POST['sca'] OR $_POST['scb'] OR $_POST['scc']) == (("0") OR ( "")))
             {
                 $_POST['sca'] = $_sca;
                 $_POST['scb'] = $_scb;
@@ -371,14 +371,6 @@ if ($_SESSION['user']['vendite'] > "2")
                 $_messaggio = "Riga inserita correttamente";
             }
         }
-        
-        
-        
-        
-        
-        
-        
-        
     }
 
 

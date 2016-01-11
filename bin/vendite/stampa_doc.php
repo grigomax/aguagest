@@ -36,6 +36,9 @@ $pdf-> null;
 // Programma per la stampa e la preparazione del decumento alla stampa
 if ($_SESSION['user']['vendite'] > "1")
 {
+    
+    
+    
     $_tdoc = $_GET['tdoc'];
     $_ndoc = $_GET['ndoc'];
     $_anno = $_GET['anno'];
@@ -45,6 +48,13 @@ if ($_SESSION['user']['vendite'] > "1")
     $_ricevuta = $_GET['ricevuta'];
     $_suffix = $_GET['suffix'];
 
+    //$pagina = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+    //echo $pagina. "<br>";
+    
+    //echo strpos($pagina, '?');
+    
+    $link = substr("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], 0,(strpos("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], '?')));
+    
 //selezioniamo il file di lingua
 
     if ($_lingua == "EN")
@@ -297,11 +307,11 @@ if ($_SESSION['user']['vendite'] > "1")
             $pdf->SetCreator('Gestionale AGUA GEST - aguagest.sourceforge.net');
             $pdf->SetAuthor($azienda);
 
-            $_parametri['link'] = "stampa_doc.php?tdoc=$_tdoc&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$dati[ndoc]&azione=Invia&intesta=$_GET[intesta]&prezzi=$_GET[prezzi]&dataora=$_GET[dataora]&lingua=$_GET[lingua]";
+            $_parametri['link'] = $link."?tdoc=$_tdoc&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$dati[ndoc]&azione=Invia&intesta=$_GET[intesta]&prezzi=$_GET[prezzi]&dataora=$_GET[dataora]&lingua=$_GET[lingua]";
         }
         else
         {
-            $_parametri['link'] = "stampa_doc.php?tdoc=$_tdoc&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$_GET[ndoc]&docfine=$_docfine&azione=Spedisci&intesta=$_GET[intesta]&prezzi=$_GET[prezzi]&dataora=$_GET[dataora]&lingua=$_GET[lingua]";
+            $_parametri['link'] = $link."?tdoc=$_tdoc&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$_GET[ndoc]&docfine=$_docfine&azione=Spedisci&intesta=$_GET[intesta]&prezzi=$_GET[prezzi]&dataora=$_GET[dataora]&lingua=$_GET[lingua]";
         }
 
 

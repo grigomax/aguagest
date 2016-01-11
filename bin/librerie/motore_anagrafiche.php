@@ -577,31 +577,18 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
     {
         $query = "select * from articoli where articolo='$_codice' limit 1";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
+        $result = domanda_db("query", $query, $_parametri);
+        
+        if($result != "NO")
         {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $dati['errori'] = "Nessun Articolo trovato";
+            $dati = $result->fetch(PDO::FETCH_ASSOC);
+            $dati['risultato'] = "SI";
         }
         else
         {
-            if ($result->rowCount() > "0")
-            {
-                foreach ($result AS $dati)
-                    ;
-                $dati['risultato'] = "SI";
-            }
-            else
-            {
-                $dati['risultato'] = "NO";
-            }
+            $dati['risultato'] = "NO";
         }
+        
     }
     elseif ($_cosa == "singola_prezzo")
     {
@@ -2150,7 +2137,7 @@ function tabella_clienti($_cosa, $_utente, $_parametri)
             scrittura_errori($_cosa, $_percorso, $_errori);
         }
 
-        foreach ($result as $dati);
+        $dati = $result->fetch(PDO::FETCH_ASSOC);
     }
     elseif ($_cosa == "partitaiva")
     {

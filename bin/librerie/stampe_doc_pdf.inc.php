@@ -21,15 +21,18 @@ $MARGINE_SUPERIORE = "5";
 //funzione che mi genera il castelletto d'iva
 function castello_iva_pdf($_ivadiversa, $_castiva, $pagina, $_pg, $_x_iva, $_y_iva, $datidoc, $LINGUA, $desciva, $dati)
 {
-//per prima cosa passiamo l'inclusione dei files vars.php
-    require "../../setting/vars.php";
+    global $pdf;
+    global $conn;
+    global $_percorso;
+    global $dec;
+    
+    //per prima cosa passiamo l'inclusione dei files vars.php
+    require $_percorso."../setting/vars.php";
 
     // includiamo il file delle lingue
-    include "../librerie/$LINGUA";
-    require_once "../librerie/lib_html.php";
-    require_once "../librerie/motore_anagrafiche.php";
-    //recuperiamo la variabile pdf
-    GLOBAL $pdf;
+    include $_percorso."librerie/$LINGUA";
+    require_once $_percorso."librerie/lib_html.php";
+    require_once $_percorso."librerie/motore_anagrafiche.php";
 
     //dobbiamo inserire le spese di trasporto nel castelletto iva
     //considerando le spese sono con iva 20%
@@ -110,10 +113,15 @@ function castello_iva_pdf($_ivadiversa, $_castiva, $pagina, $_pg, $_x_iva, $_y_i
 
 function intestazione_doc_pdf($datidoc, $LINGUA)
 {//inizio funzioni testata documenti
+//
+    global $conn;
+    global $dec;
+    global $_percorso;
+    
 //per prima cosa passiamo l'inclusione dei files vars.php
-    require "../../setting/vars.php";
+    require $_percorso."../setting/vars.php";
     // includiamo il file delle lingue
-    include "../librerie/$LINGUA";
+    include $_percorso."librerie/$LINGUA";
     // passo la variabile globale..
 
     GLOBAL $pdf;
@@ -203,6 +211,47 @@ function intestazione_doc_pdf($datidoc, $LINGUA)
 	    //provo a lasciare il puntatore
 	    $pdf->SetXY($MARGINE_SINISTRO, 40);
 	}
+        
+        if ($datidoc[ST_TLOGO] == "5")
+	{
+                //provo a lasciare il puntatore
+            $pdf->SetXY(10, 9);
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->SetX(10);
+            $pdf->Cell(80, 5, $azienda, 0, 1, 'L');
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->SetX(10);
+            $pdf->Cell(80, 4, $indirizzo, 0, 1, 'L');
+            $pdf->SetX(10);
+            $pdf->Cell(15, 4, $cap, 0, 0, 'L');
+            $pdf->Cell(60, 4, $citta, 0, 0, 'L');
+            $pdf->Cell(10, 4, $prov, 0, 1, 'L');
+            $pdf->SetX(10);
+            $pdf->Cell(40, 4, "P.I. " . $piva, 0, 0, 'L');
+            $pdf->Cell(40, 4, "Cod.Fisc " . $codfisc, 0, 1, 'L');
+            $pdf->SetX(10);
+            $pdf->Cell(40, 4, "Tel. " . $telefono, 0, 0, 'L');
+            $pdf->Cell(40, 4, "Tel. / Fax " . $fax, 0, 1, 'L');
+            $pdf->SetX(10);
+
+            if ($_parametri['email'] == "3")
+            {
+                $pdf->Cell(50, 4, "E-mail  " . $email3, 0, 1, 'L');
+            }
+            elseif ($_parametri['email'] == "2")
+            {
+                $pdf->Cell(50, 4, "E-mail  " . $email2, 0, 1, 'L');
+            }
+            else
+            {
+                $pdf->Cell(50, 4, "E-mail  " . $email1, 0, 1, 'L');
+            }
+
+            //provo a lasciare il puntatore
+            $pdf->SetXY(10, 30);
+        }
+        
+        
     }
 }
 
@@ -220,13 +269,15 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
     global $pdf;
     global $_percorso;
     global $_azione;
+    global $conn;
+    global $dec;
     
     global $MARGINE_SINISTRO;
     global $MARGINE_SUPERIORE;
     //per prima cosa passiamo l'inclusione dei files vars.php
-    require "../../setting/vars.php";
+    require $_percorso."../setting/vars.php";
     // includiamo il file delle lingue
-    include "../librerie/$LINGUA";
+    include $_percorso."librerie/$LINGUA";
 
     
     //qui mettiamo l'immagine per poterla inviare il documento
@@ -275,6 +326,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->Cell(10, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(70, 5, $dati2['codnazione'], 0, 1, 'L');
+        $pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(70, 5, $ID002 . $dati2['piva'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(80, 5, $ID003 . $dati2['telefono'], 0, 1, 'L');
@@ -502,7 +554,11 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	//	Rilascio il puntatore a sinistra
 	$pdf->SetXY($MARGINE_SINISTRO, $_y);
     }//fine testata n. 4
-
+    
+    if ($datidoc[ST_TIPOTESTATA] == "5")
+    {
+        $pdf->Cell(190,10, "$datidoc[ST_NDOC] $datidoc[tipo]  Pagina $_pg di $pagina", 0,1,'C');
+    }
 
 
 
@@ -713,12 +769,13 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
     global $MARGINE_SINISTRO;
     global $MARGINE_SUPERIORE;
     global $conn;
+    global $_percorso;
 
     //per prima cosa passiamo l'inclusione dei files vars.php
-    require "../../setting/vars.php";
+    require $_percorso."../setting/vars.php";
 
     // includiamo il file delle lingue
-    include "../librerie/$LINGUA";
+    include $_percorso."librerie/$LINGUA";
 
     #Splitto gli importi solo se diversi da nullo..
     if($corpo_doc!= "")
@@ -738,123 +795,142 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
     $_y = $_y + 5;
 
     $pdf->SetXY($MARGINE_SINISTRO, $_y);
+    $larghezza = "0";
 
     $pdf->SetFont($datidoc[ST_FONTCORPO], 'B', $datidoc[ST_FONTCORPOSIZE]);
 
     //verifichiamo se vogliono la colonna righe
     if ($datidoc[ST_RIGA] == "SI")
     {
-	$datidoc[ST_RIGA_LC] = $datidoc[ST_RIGA_LC] * "1.93";
+	//$datidoc[ST_RIGA_LC] = $datidoc[ST_RIGA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_RIGA_LC], 5, $CD001, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_RIGA_LC];
     }
     //verifichiamo se vogliono la colonna articolo
     if ($datidoc[ST_ARTICOLO] == "SI")
     {
 	//setto il rapporto millimetri percentuale 1.93
-	$datidoc[ST_ARTICOLO_LC] = $datidoc[ST_ARTICOLO_LC] * "1.93";
+	//$datidoc[ST_ARTICOLO_LC] = $datidoc[ST_ARTICOLO_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_ARTICOLO_LC], 5, $CD002, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_ARTICOLO_LC];
     }
 
     //verifichiamo se vogliono la colonna articolo
     if ($datidoc[ST_ARTFOR] == "SI")
     {
-	$datidoc[ST_ARTFOR_LC] = $datidoc[ST_ARTFOR_LC] * "1.93";
+	//$datidoc[ST_ARTFOR_LC] = $datidoc[ST_ARTFOR_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_ARTFOR_LC], 5, $CD003, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_ARTFOR_LC];
     }
 
     //verifichiamo se vogliono la colonna articolo
     if ($datidoc[ST_DESCRIZIONE] == "SI")
     {
-	$datidoc[ST_DESCRIZIONE_LC] = $datidoc[ST_DESCRIZIONE_LC] * "1.93";
+	//$datidoc[ST_DESCRIZIONE_LC] = $datidoc[ST_DESCRIZIONE_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_DESCRIZIONE_LC], 5, $CD004, '1', 0, 'L');
+        $larghezza = $larghezza + $datidoc[ST_DESCRIZIONE_LC];
     }
     //verifichiamo se vogliono la colonna articolo
     if ($datidoc[ST_UNITA] == "SI")
     {
-	$datidoc[ST_UNITA_LC] = $datidoc[ST_UNITA_LC] * "1.93";
+	//$datidoc[ST_UNITA_LC] = $datidoc[ST_UNITA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_UNITA_LC], 5, $CD005, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_UNITA_LC];
     }
     //verifichiamo se vogliono la colonna articolo
     if ($datidoc[ST_QUANTITA] == "SI")
     {
-	$datidoc[ST_QUANTITA_LC] = $datidoc[ST_QUANTITA_LC] * "1.93";
+	//$datidoc[ST_QUANTITA_LC] = $datidoc[ST_QUANTITA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_QUANTITA_LC], 5, $CD006, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_QUANTITA_LC];
     }
 
     //verifichiamo se vogliono la colonnna
     if ($datidoc[ST_QTAEVASA] == "SI")
     {
-	$datidoc[ST_QTAEVASA_LC] = $datidoc[ST_QTAEVASA_LC] * "1.93";
+	//$datidoc[ST_QTAEVASA_LC] = $datidoc[ST_QTAEVASA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_QTAEVASA_LC], 5, $CD007, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_QTAEVASA_LC];
     }
 
     //verifichiamo se vogliono la colonnna
     if ($datidoc[ST_QTAESTRATTA] == "SI")
     {
-	$datidoc[ST_QTAESTRATTA_LC] = $datidoc[ST_QTAESTRATTA_LC] * "1.93";
+	//$datidoc[ST_QTAESTRATTA_LC] = $datidoc[ST_QTAESTRATTA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_QTAESTRATTA_LC], 5, $CD008, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_QTAESTRATTA_LC];
     }
 
     //verifichiamo se vogliono la colonnna
     if ($datidoc[ST_QTASALDO] == "SI")
     {
-	$datidoc[ST_QTASALDO_LC] = $datidoc[ST_QTASALDO_LC] * "1.93";
+	//$datidoc[ST_QTASALDO_LC] = $datidoc[ST_QTASALDO_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_QTASALDO_LC], 5, $CD009, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_QTASALDO_LC];
     }
 
     //verifichiamo se vogliono la colonna articolo
     if ($datidoc[ST_LISTINO] == "SI")
     {
-	$datidoc[ST_LISTINO_LC] = $datidoc[ST_LISTINO_LC] * "1.93";
+	//$datidoc[ST_LISTINO_LC] = $datidoc[ST_LISTINO_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_LISTINO_LC], 5, $CD010, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_LISTINO_LC];
     }
     //verifichiamo se vogliono la colonna sconti
     if ($datidoc[ST_SCONTI] == "SI")
     {
-	$datidoc[ST_SCONTI_LC] = $datidoc[ST_SCONTI_LC] * "1.93";
+	//$datidoc[ST_SCONTI_LC] = $datidoc[ST_SCONTI_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_SCONTI_LC], 5, $CD011, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_SCONTI_LC];
     }
 
     //verifichiamo se vogliono la colonna sconto
     if ($datidoc[ST_NETTOVENDITA] == "SI")
     {
-	$datidoc[ST_NETTOVENDITA_LC] = $datidoc[ST_NETTOVENDITA_LC] * "1.93";
+	//$datidoc[ST_NETTOVENDITA_LC] = $datidoc[ST_NETTOVENDITA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_NETTOVENDITA_LC], 5, $CD012, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_NETTOVENDITA_LC];
     }
 
     //verifichiamo se vogliono la colonna sconto
     if ($datidoc[ST_TOTRIGA] == "SI")
     {
-	$datidoc[ST_TOTRIGA_LC] = $datidoc[ST_TOTRIGA_LC] * "1.93";
+	//$datidoc[ST_TOTRIGA_LC] = $datidoc[ST_TOTRIGA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_TOTRIGA_LC], 5, $CD013, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_TOTRIGA_LC];
     }
 
     //verifichiamo se vogliono la colonna articolo
     if ($datidoc[ST_CODIVA] == "SI")
     {
-	$datidoc[ST_CODIVA_LC] = $datidoc[ST_CODIVA_LC] * "1.93";
+	//$datidoc[ST_CODIVA_LC] = $datidoc[ST_CODIVA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_CODIVA_LC], 5, $CD014, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_CODIVA_LC];
     }
 
     //verifichiamo se vogliono la colonna consegna
     if ($datidoc[ST_PESO] == "SI")
     {
-	$datidoc[ST_PESO_LC] = $datidoc[ST_PESO_LC] * "1.93";
+	//$datidoc[ST_PESO_LC] = $datidoc[ST_PESO_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_PESO_LC], 5, $CD015, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_ST_PESO_LC];
     }
 
     //verifichiamo se vogliono la colonna consegna
     if ($datidoc[ST_RSALDO] == "SI")
     {
-	$datidoc[ST_RSALDO_LC] = $datidoc[ST_RSALDO_LC] * "1.93";
+	//$datidoc[ST_RSALDO_LC] = $datidoc[ST_RSALDO_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_RSALDO_LC], 5, $CD016, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_RSALDO_LC];
     }
 
     //verifichiamo se vogliono la colonna consegna
     if ($datidoc[ST_CONSEGNA] == "SI")
     {
-	$datidoc[ST_CONSEGNA_LC] = $datidoc[ST_CONSEGNA_LC] * "1.93";
+	//$datidoc[ST_CONSEGNA_LC] = $datidoc[ST_CONSEGNA_LC] * "1.93";
 	$pdf->Cell($datidoc[ST_CONSEGNA_LC], 5, $CD017, '1', 0, 'C');
+        $larghezza = $larghezza + $datidoc[ST_CONSEGNA_LC];
+        
     }
 
     //impostiamo i caratteri ed il font
@@ -901,8 +977,8 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_articolo = "";
 		}
-		$ST_ARTICOLO_ALL = substr($datidoc[ST_ARTICOLO_ALL], 0, 1);
-		$pdf->Cell($datidoc[ST_ARTICOLO_LC], 4, $_articolo, 'L', 0, $ST_ARTICOLO_ALL);
+                
+		$pdf->Cell($datidoc[ST_ARTICOLO_LC], 4, $_articolo, 'L', 0, $datidoc[ST_ARTICOLO_ALL]);
 	    }
 
 	    //verifichiamo se vogliono la colonna articoli
@@ -922,13 +998,13 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 	    //verifichiamo se vogliono la colonna descrizione
 	    if ($datidoc[ST_DESCRIZIONE] == "SI")
 	    {
-		$pdf->Cell($datidoc[ST_DESCRIZIONE_LC], 4, $dati3['descrizione'], 'L', 0, 'L');
+		$pdf->Cell($datidoc[ST_DESCRIZIONE_LC], 4, $dati3['descrizione'], 'L', 0, $datidoc[ST_DESCRIZIONE_ALL]);
 	    }
 
 	    //verifichiamo se vogliono la colonna unita
 	    if ($datidoc[ST_UNITA] == "SI")
 	    {
-		$pdf->Cell($datidoc[ST_UNITA_LC], 4, $dati3['unita'], 'L', 0, 'C');
+		$pdf->Cell($datidoc[ST_UNITA_LC], 4, $dati3['unita'], 'L', 0, $datidoc[ST_UNITA_ALL]);
 	    }
 
 	    //verifichiamo se vogliono la colonna descrizione
@@ -951,7 +1027,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_qtaevasa = "";
 		}
-		$pdf->Cell($datidoc[ST_QTAEVASA_LC], 4, $_qtaevasa, 'L', 0, 'C');
+		$pdf->Cell($datidoc[ST_QTAEVASA_LC], 4, $_qtaevasa, 'L', 0, $datidoc[ST_QTAEVASA_ALL]);
 	    }
 
 	    //verifichiamo se vogliono la colonna descrizione
@@ -962,7 +1038,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_qtaestratta = "";
 		}
-		$pdf->Cell($datidoc[ST_QTAESTRATTA_LC], 4, $_qtaestratta, 'L', 0, 'C');
+		$pdf->Cell($datidoc[ST_QTAESTRATTA_LC], 4, $_qtaestratta, 'L', 0, $datidoc[ST_QTAESTRATTA_ALL]);
 	    }
 
 	    //verifichiamo se vogliono la colonna descrizione
@@ -973,7 +1049,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_qtasaldo = "";
 		}
-		$pdf->Cell($datidoc[ST_QTASALDO_LC], 4, $_qtasaldo, 'L', 0, 'C');
+		$pdf->Cell($datidoc[ST_QTASALDO_LC], 4, $_qtasaldo, 'L', 0, $datidoc[ST_QTASALDO_ALL]);
 	    }
 
 	    //verifichiamo se vogliono la colonna descrizione
@@ -1004,7 +1080,6 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		}
 
 		$_stlistino = "$_listino $_pne";
-		$datidoc[ST_LISTINO_ALL] = substr($datidoc[ST_LISTINO_ALL], 0, 1);
 		$pdf->Cell($datidoc[ST_LISTINO_LC], 4, $_stlistino, 'LR', 0, $datidoc[ST_LISTINO_ALL]);
 	    }
 
@@ -1038,7 +1113,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		
 		$_sconti = "$_scva $_scvb $_scvc$_percentuale";
 		
-		$pdf->Cell($datidoc[ST_SCONTI_LC], 4, $_sconti, 'L', 0, 'C');
+		$pdf->Cell($datidoc[ST_SCONTI_LC], 4, $_sconti, 'L', 0, $datidoc[ST_SCONTI_ALL]);
 				
 		
 	    }
@@ -1050,7 +1125,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_nettovendita = "";
 		}
-		$pdf->Cell($datidoc[ST_NETTOVENDITA_LC], 4, $_nettovendita, 'LR', 0, 'R');
+		$pdf->Cell($datidoc[ST_NETTOVENDITA_LC], 4, $_nettovendita, 'LR', 0, $datidoc[ST_NETTOVENDITA_ALL]);
 	    }
 
 	    if ($datidoc[ST_TOTRIGA] == "SI")
@@ -1061,7 +1136,6 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		    $_totriga = "";
 		}
 		
-		$datidoc[ST_TOTRIGA_ALL] = substr($datidoc[ST_TOTRIGA_ALL], 0, 1);
 		$pdf->Cell($datidoc[ST_TOTRIGA_LC], 4, $_totriga, 'LR', 0, $datidoc[ST_TOTRIGA_ALL]);
 	    }
 
@@ -1073,7 +1147,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_iva = "";
 		}
-		$pdf->Cell($datidoc[ST_CODIVA_LC], 4, $_iva, 'LR', 0, 'C');
+		$pdf->Cell($datidoc[ST_CODIVA_LC], 4, $_iva, 'LR', 0, $datidoc[ST_CODIVA_ALL]);
 	    }
 
 	    if ($datidoc[ST_PESO] == "SI")
@@ -1083,7 +1157,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_peso = "";
 		}
-		$pdf->Cell($datidoc[ST_PESO_LC], 4, $_peso, 'LR', 0, 'C');
+		$pdf->Cell($datidoc[ST_PESO_LC], 4, $_peso, 'LR', 0, $datidoc[ST_PESO_ALL]);
 	    }
 
 	    if ($datidoc[ST_RSALDO] == "SI")
@@ -1093,7 +1167,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_rsaldo = "";
 		}
-		$pdf->Cell($datidoc[ST_RSALDO_LC], 4, $_rsaldo, 'LR', 0, 'C');
+		$pdf->Cell($datidoc[ST_RSALDO_LC], 4, $_rsaldo, 'LR', 0, $datidoc[ST_RSALDO_ALL]);
 	    }
 
 	    if ($datidoc[ST_CONSEGNA] == "SI")
@@ -1103,19 +1177,30 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_consegna = "";
 		}
-		$pdf->Cell($datidoc[ST_CONSEGNA_LC], 4, $_consegna, 'LR', 0, 'C');
+		$pdf->Cell($datidoc[ST_CONSEGNA_LC], 4, $_consegna, 'LR', 0, $datidoc[ST_CONSEGNA_ALL]);
 	    }
 
 	    // cALCOLO DEL CASTELLETTO IVA:
 	    $_ivariga = $dati3['iva'];
 	    $_castiva[$_ivariga] = ($_castiva[$_ivariga] + $dati3['totriga']);
 	    $_nettovendita = $_nettovendita + $dati3['totriga'];
+            $_totini = $dati3['quantita'] + $_totini;
+            $_totacq = $dati3['qtaevasa'] + $_totacq;
+            $_totvend = $dati3['qtaestratta'] + $_totvend;
+            
+            //azzero l'aary
+            $dati3 = "";
+            
 	}
     }
-    //chiodo il corpo
+    
+    
+    
+    //chiodo il corpo con la somma dei pubblicati..
+    
     $_y = $_y + 4;
     $pdf->SetXY($MARGINE_SINISTRO, $_y);
-    $pdf->Cell(191, 1, '', 'T', 0, 'C');
+    $pdf->Cell($larghezza, 1, '', 'T', 0, 'C');
 
     //LAscio il puntatore..
     $_y = $_y + 1;
@@ -1123,7 +1208,7 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 
     //impostiamo i ritorni..
     //ritorno il netto vendita ed l'iva..'
-    return array("netto" => $_nettovendita, "iva" => $_castiva);
+    return array("netto" => $_nettovendita, "iva" => $_castiva, "iniziale" => $_totini, "acquisto" => $_totacq, "venduta" => $_totvend);
 }
 
 //fine funzione costruzione corpo documenti html
@@ -1140,14 +1225,18 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 function calce_doc_pdf($datidoc, $pagina, $_pg, $_nettovendita, $_castiva, $dati, $LINGUA, $_ivadiversa, $desciva, $_pagamento)
 {//qui passeremo tutti gli arrre per la gestione..
 //recupero la variabile, PDF
-    GLOBAL $pdf;
+    global $pdf;
     global $MARGINE_SINISTRO;
     global $MARGINE_SUPERIORE;
+    global $_percorso;
+    global $conn;
+    global $dec;
+    
     //per prima cosa passiamo l'inclusione dei files vars.php
-    require "../../setting/vars.php";
+    require $_percorso."../setting/vars.php";
 
     // includiamo il file delle lingue
-    include "../librerie/$LINGUA";
+    include $_percorso."librerie/$LINGUA";
 
     //    Verifico la tipologia di stampa...
 
@@ -1653,19 +1742,25 @@ function calce_doc_pdf($datidoc, $pagina, $_pg, $_nettovendita, $_castiva, $dati
 	$pdf->Cell(98, 10, '', '1', 1, 'L');
     }//fine calce tipo 4
 
-    GLOBAL $pdf;
-
-    if ($_pagamento == "OMAGGIO CON RIVALSA IVA")
+    if ($datidoc[ST_TIPOCALCE] == "5")
     {
-	$_condi = "OMAGGIO CON RIVALSA IVA TOTALE DA PAGARE euro 0.00</b>";
+        $pdf->Cell(200, 8, "Q.ta Iniziale = $_nettovendita[iniziale] / acquistata = $_nettovendita[acquisto] / Venduta = $_nettovendita[venduta] / Valore tot. = ".number_format(($_nettovendita[netto]), 2, '.', ''), 1, 1, 'L');
     }
     else
     {
-	if ($CGV == "SI")
-	{
-	    $_condi = "$TC050 $sitointernet $TC051 $fax";
-	}
+        if ($_pagamento == "OMAGGIO CON RIVALSA IVA")
+        {
+            $_condi = "OMAGGIO CON RIVALSA IVA TOTALE DA PAGARE euro 0.00</b>";
+        }
+        else
+        {
+            if ($CGV == "SI")
+            {
+                $_condi = "$TC050 $sitointernet $TC051 $fax";
+            }
+        }
     }
+    
 
     $pdf->SetX($MARGINE_SINISTRO);
     $pdf->SetFont('Arial', '', 8);

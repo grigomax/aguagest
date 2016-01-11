@@ -14,6 +14,7 @@ session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
+require $_percorso . "librerie/motore_doc_pdo.php";
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
@@ -32,13 +33,16 @@ menu_tendina($_cosa, $_percorso);
 
 if ($_SESSION['user']['vendite'] > "1")
 {
-    echo "<span class=\"testo_blu\"><center><br><b>Controllo numeri mancanti d.d.t.</b></center></span><br>";
-
-
-// Stringa contenente la query di ricerca...
+    $_tdoc = $_GET['tdoc'];
+    $dati_doc = archivio_tdoc($_tdoc);
+    
     $_anno = date('Y');
+    $_anno_prec = $_anno-1;
+    
+    
+    echo "<span class=\"testo_blu\"><center><br><b>Controllo numeri mancanti $_tdoc</b></center></span><br>";
 
-    $query = sprintf("select * from bv_bolle INNER JOIN clienti ON bv_bolle.utente = clienti.codice where anno=\"%s\" order by suffix, ndoc", $_anno);
+    $query = "select * from $dati_doc[testacalce] INNER JOIN clienti ON $dati_doc[testacalce].utente = clienti.codice WHERE anno BETWEEN '$_anno_prec' AND '$_anno' order by anno, suffix, ndoc";
 
     $result = $conn->query($query);
 

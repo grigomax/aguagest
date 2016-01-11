@@ -13,8 +13,21 @@ Necessita di un server funzionante.
 
 Ecco le ultime novità delle versioni presenti.
 
+-VERSIONE 1.2.4 Rc 2 del 11/01/2016
+-1  ADMIN
+-   1   Nuovo aggiornamento layout documenti, ora sono tutti i pdf la loro modifica
+-       avviene con la larghezza stampa in mm
+-   2   Sistemazione Bug minori..
+
+-2  VENDITE
+-   1   Inserita la possibilità di controllo di numeri mancanti per l'anno in corso
+-       e l'anno precedente di tutti i documenti.
+
+-3  STAMPE
+-   1   Nuovo sistema di stampe in pdf, continua la conversione..
+
 --------------------------------------------------------------------------------
--VERSIONE 1.2.3 Rc 4 del 07/01/2016
+-VERSIONE 1.2.4 Rc 1 del 07/01/2016
 -1 ADMIN
 -   1   Fatto un piccolo programmino per poter lanciare delle query sql direttamente
 -       nella sezione admin / gestione archivi

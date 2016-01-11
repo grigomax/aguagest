@@ -14,16 +14,21 @@ session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
-require $_percorso . "librerie/motore_anagrafiche.php";
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
 
-
 if ($_SESSION['user']['magazzino'] > "1")
 {
 
+        //includo file per generazione pdf
+    define('FPDF_FONTPATH', '../../tools/fpdf/font/');
+    require('../../tools/fpdf/fpdf.php');
+
     require "../../librerie/stampe.inc.php";
+    require "../../librerie/motore_anagrafiche.php";
+    require $_percorso . "librerie/stampe_doc_pdf.inc.php";
+    require $_percorso . "librerie/invia_posta_allegato.php";
 
 
 //Cambio le variabili e le faccio vedere
@@ -40,20 +45,9 @@ if ($_SESSION['user']['magazzino'] > "1")
 
     $query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno LIMIT 1";
 
-    $result = $conn->query($query);
+    $result = domanda_db("query", $query, $_parametri);
 
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 1= $query - $_errore[2]";
-        $_errori['files'] = "rimanenze2.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-
-    foreach ($result AS $datianno)
-        ;
+    $datianno = $result->fetch(PDO::FETCH_ASSOC);
 
     if ($_anno < $datianno['anno'])
     {
@@ -76,31 +70,11 @@ if ($_SESSION['user']['magazzino'] > "1")
   			`totriga` float(10,2) default '0.00'
   			)";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 2= $query - $_errore[2]";
-        $_errori['files'] = "rimanenze2.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    domanda_db("exec", $query, $_parametri);
     
     $query = "TRUNCATE TABLE `rimanenze`";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 2bis= $query - $_errore[2]";
-        $_errori['files'] = "inventario_merc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    domanda_db("exec", $query, $_parametri);
     
     //carico su un array le categorie mercerologiche..
     
@@ -129,17 +103,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 
 // ora procediamo ad inserire il tutto nel database provvisorio
 // Esegue la query...
-    $result = $conn->query($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 3= $query - $_errore[2]";
-        $_errori['files'] = "rimanenze2.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("query", $query, $_parametri);
 
     foreach ($result AS $datia)
     {//5
@@ -147,17 +111,9 @@ if ($_SESSION['user']['magazzino'] > "1")
         $query = sprintf("INSERT INTO rimanenze ( articolo, descrizione, quantita, totriga ) values ( \"%s\", \"%s\", \"%s\", \"%s\" )", $datia['articolo'], $desc_array[$datia[$_tipo]], $datia['qtafinale'], $datia['valore']);
 
         //echo $queryt;
+        $result = domanda_db("exec", $query, $_parametri);
+        
         $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query 4= $query - $_errore[2]";
-            $_errori['files'] = "rimanenze2.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
 
         // se la query �andata a buon fine proseguiamo
     }// fine calcolo muovimento
@@ -169,10 +125,6 @@ if ($_SESSION['user']['magazzino'] > "1")
 //------------------------------------------------------------------------------
 //Fatto questo iniziamo a stampare..
 // a questo punto iniziamo la pagina della stampa..
-
-
-            base_html_stampa("chiudi", $_parametri);
-
 
 //selezioniamo il file di lingua
 
@@ -199,18 +151,9 @@ if ($_SESSION['user']['magazzino'] > "1")
 //Inventario magazzino
 //effettuo la prima selezione in ordine di codice e di gruppo merceologico
 // Esegue la query...
-    $result = $conn->query($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 5= $query - $_errore[2]";
-        $_errori['files'] = "rimanenze2.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-
+    
+    $result = domanda_db("query", $query, $_parametri);
+    
     // questa selezione mi permette di avere il numero di pagine ed il numero di
     //righe in anticipo
     //cerco il numero di righe
@@ -221,46 +164,47 @@ if ($_SESSION['user']['magazzino'] > "1")
     //arrotondo per eccesso
     $pagina = ceil($_pagine);
 
-// ciclo di for per estrarmi le pagine
-    #parte nuova..
 
-            base_html_stampa("chiudi", $_parametri);
-
-
-
-
-    echo "<BODY LANG=\"it-IT\" DIR=\"LTR\">";
-    echo "<center>\n";
-
+    //qui creiamo già la base della pagina globale..
+    $_title = "Inventario Magazzino";
+    $pdf = new FPDF('P', 'mm', 'A4');
+    $pdf->SetAutoPageBreak('off', 5);
+    $pdf->SetTitle($_title);
+    $pdf->SetCreator('Gestionale AGUA GEST - aguagest.sourceforge.net');
+    $pdf->SetAuthor($azienda);
+    $corpo_doc = "";
 
 
 
     for ($_pg = 1; $_pg <= $pagina; $_pg++)
     {
 
-        //settiamo la pagina documento
-        //creiamo una tabella grande quanto la pagina dove dentro mettiamo tutto
-        #echo "<table border=\"0\" align=\"center\" CELLPADDING=\"0\" CELLSPACING=\"0\" width=\"700\" height=\"950\" style=\"page-break-inside: avoid;\">\n";
-        # echo "<table border=\"0\" align=\"center\" CELLPADDING=\"0\" CELLSPACING=\"0\">\n";
-        # echo "<tr><td align=\"center\" valign=\"top\" width=\"95%\" height=\"100%\">\n";
-        echo "<center>\n";
+        // utility per inserire la pagina o creare la pagina.
+        $pdf->AddPage();
+
         //funzione del logo..
-        #intestazione_doc($datidoc, $LINGUA, $_percorso);
-        //creiamo la testata
-        testata_doc($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamento, $LINGUA, $_percorso);
-
-        echo "<br>\n";
-
+        intestazione_doc_pdf($datidoc, $LINGUA);
+        //testata_doc($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamento, $LINGUA, $_percorso);
+        testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamento, $LINGUA, $_parametri);
+        
         //creiamo il corpo del documento
-        $corpo_doc = (corpo_doc($datidoc, $result, $LINGUA, $corpo_doc, $_percorso));
+        //$corpo_doc = (corpo_doc($datidoc, $result, $LINGUA, $corpo_doc, $_percorso));
+        $corpo_doc = (corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc));
 
         //CREIAMO LA CALCE DEL DOCUMENTO
-        calce_doc($datidoc, $pagina, $_pg, $corpo_doc, $_iva, $dati, $LINGUA, $_ivadiversa, $desciva, $_pagamento, $_percorso);
+        //calce_doc($datidoc, $pagina, $_pg, $corpo_doc, $_iva, $dati, $LINGUA, $_ivadiversa, $desciva, $_pagamento, $_percorso);
+        calce_doc_pdf($datidoc, $pagina, $_pg, $corpo_doc, $_iva, $dati, $LINGUA, $_ivadiversa, $desciva, $_pagamento);
 
         //chiudiamo la pagina del documento.
         # echo "</td></tr></table>\n";
         #  echo "</CENTER>\n";
     }
+    
+    //finito il ciclo inviamo il file..
+    $_pdf = "inventario.pdf";
+    $pdf->Output("../../../spool/$_pdf", "I");
+    
+    
 }
 else
 {

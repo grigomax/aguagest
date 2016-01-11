@@ -63,11 +63,10 @@ if ($_SESSION['user']['anagrafiche'] > "2")
 
         $dati = tabella_articoli("singola", $_articolo, $_parametri);
 
-        if ($dati['errori'] != "")
+        if ($dati['risultato'] == "NO")
         {
             // Inizio tabella pagina principale ----------------------------------------------------------
             echo "<table width=\"95%\" cellspacing=\"0\" border=\"1\" align=\"left\" cellpadding=\"4\">\n";
-            echo "<span class=\"testo_blu\"><h3>Trovato un Errore.. = $dati[errori]</h3></span>";
             echo "<center><h2><br> Errore nessun articolo Trovato si prega di tornare indietro e riprovare</h2>\n";
             exit;
         }

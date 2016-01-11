@@ -11,7 +11,7 @@ require "../../../setting/vars.php";
 require "../../librerie/lib_html.php";
 include "../../include/version.inc.php";
 
-$conn = connessione_mysql("PDO");
+$conn = connessione_mysql("PDO", $query, $_parametri);
 
 
 base_html("chiudi", $_percorso);

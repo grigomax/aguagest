@@ -64,7 +64,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
     printf("<br><br><form action=\"doc_bvint.php?tdoc=$_tdoc\" method=\"POST\">");
 
-    echo "<tr><td align=center colspan=\"2\">anno selezionato <input type=\"radio\" name=\"anno\" value=\"$_anno\" checked>$_anno documento = $_tdoc<br><b>Selezionare il documento</b><br>";
+    echo "<tr><td align=center colspan=\"2\">anno selezionato <input type=\"radio\" name=\"anno\" value=\"$_anno\" checked>$_anno / <input type=\"radio\" name=\"suffix\" value=\"$_suffix\" checked>documento = $_tdoc<br><b>Selezionare il documento</b><br>";
 
     $result = seleziona_documento("elenco_select", $_tdoc, $_anno, $_suffix, $_ndoc, $_archivio, $_parametri);
 

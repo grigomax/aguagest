@@ -8,18 +8,18 @@
  */
 
 //carichiamo la base del programma includendo i file minimi
-$_percorso = "../";
-require_once $_percorso . "../setting/vars.php";
+//$_percorso = "../";
+require_once $_percorso."../setting/vars.php";
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
-require_once $_percorso . "librerie/lib_html.php";
+require_once $_percorso."librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
-require_once "../librerie/motore_doc_pdo.php";
+require_once $_percorso."librerie/motore_doc_pdo.php";
 
-require_once ("../tools/phpmailer/class.phpmailer.php");
+require_once $_percorso."tools/phpmailer/class.phpmailer.php";
 
 
 $_azione = $_GET['azione'];

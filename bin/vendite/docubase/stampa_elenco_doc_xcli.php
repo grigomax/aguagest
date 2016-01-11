@@ -30,11 +30,11 @@ $_dbdoc = archivio_tdoc($_tdoc);
 
 if ($_tdoc == "fornitori")
 {
-    $query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN fornitori ON $_dbdoc[testacalce].utente = fornitori.codice where anno='$_anno' AND status != 'evaso' order by ragsoc, anno, ndoc");
+    $query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN fornitori ON $_dbdoc[testacalce].utente = fornitori.codice where status != 'evaso' order by ragsoc, anno, suffix, ndoc");
 }
 else
 {
-    $query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where anno='$_anno' AND status != 'evaso' AND status != 'saldato' order by ragsoc, anno, ndoc");
+    $query = sprintf("select * from $_dbdoc[testacalce] INNER JOIN clienti ON $_dbdoc[testacalce].utente = clienti.codice where status != 'evaso' AND status != 'saldato' order by ragsoc, anno, suffix, ndoc");
 }
 
 // Esegue la query...

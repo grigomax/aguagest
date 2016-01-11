@@ -32,8 +32,12 @@ if ($_SESSION['user']['vendite'] > "2")
     $_tdoc = "FATTURA";
 //prendiamoci i il database..
     $_archivi = archivio_tdoc($_tdoc);
-    $_ndoc = $_GET['ndoc'];
-    $_anno = $_GET['anno'];
+    $_numero = $_GET['ndoc'];
+
+    
+    $_anno = substr($_numero, "0", "4");
+    $_suffix = substr($_numero, "4", "1");
+    $_ndoc = substr($_numero, "5", "11");
 
 
 

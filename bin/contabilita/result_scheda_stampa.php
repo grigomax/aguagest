@@ -28,9 +28,6 @@ require "../librerie/stampe_pdf.php";
 
 if ($_SESSION['user']['contabilita'] > "1")
 {
-
-
-
 //recupero tutti POST.
 
     $_start = $_GET['start'];
@@ -46,10 +43,12 @@ if ($_SESSION['user']['contabilita'] > "1")
 //completiamo il codice conto..
     if ($_tipo_cf == "C")
     {
+
         $dati = tabella_clienti("singola", $_codconto, $_parametri);
 
         $_descrizione = $dati['ragsoc'];
         $_tipo_cf = "C";
+
 
         //vuol dire che sono clienti
         $_conto = sprintf("%s%s", $MASTRO_CLI, $_codconto);
@@ -65,7 +64,6 @@ if ($_SESSION['user']['contabilita'] > "1")
     }
     else
     {
-        $_codconto = $_POST['diretto'];
         $dati = tabella_piano_conti("singola", $_codconto, $_parametri);
 
         $_descrizione = $dati['descrizione'];
@@ -84,6 +82,7 @@ if ($_SESSION['user']['contabilita'] > "1")
     //provo a prendermi il saldo precedente
     $query = "SELECT *, SUM(dare), SUM(avere), date_format(data_reg, '%d-%m-%Y') data_reg, date_format(data_cont, '%d-%m-%Y') data_cont, data_cont AS data from prima_nota where conto = '$_conto ' AND data_cont >= '$_anno-01-01' AND data_cont < '$_start' ORDER BY data ASC, nreg ";
 
+    //echo $query;
     $result = $conn->query($query);
     if ($conn->errorCode() != "00000")
     {
@@ -120,6 +119,9 @@ if ($_SESSION['user']['contabilita'] > "1")
     //arrotondo per eccesso
     $pagina = ceil($_pagine);
 
+    $data['day_start'] = $_start;
+    $data['day_end'] = $_end;
+    
     if ($_tipo == "pdf")
     {
 
@@ -140,7 +142,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             intesta_tabella($_cosa, $_codconto, $_descrizione, $data);
 
-            $_return = corpo_tabella($_cosa, $res2, $rpp, $_return);
+            $_return = corpo_tabella($_cosa, $result, $rpp, $_return);
 
             calce_tabella($_cosa, $_return['dare'], $_return['avere'], $_return['saldo'], "");
         }
@@ -166,20 +168,28 @@ if ($_SESSION['user']['contabilita'] > "1")
         {
 
 //selezioniamo il singolo per sapere cosa è ed apriamo una tabella..
+            $_parametri['tabella'] = " $_codconto - $_descrizione";
+            $_parametri['email'] = "3";
+            $_parametri['stampa'] = "Estratto conto contabile";
+            $_parametri['data'] = "DA $_start A $_end";
+            $_parametri['pg'] = $_pg;
+            $_parametri['pagina'] = $pagina;
+            
+            intestazione_html($_cosa, $_percorso, $_parametri);
 
-            echo "<table align=\"center\" width=\"95%\" border=\"0\ class=\"table\" style=\"page-break-inside: avoid;\">\n";
-            echo "<tr><td align=\"left\" colspan=\"6\"><h3>$azienda</h3></td></tr>\n";
-            echo "<tr><td align=\"left\" colspan=\"3\">$cap $citta $prov</td>\n";
-            echo "<td align=\"right\" colspan=\"3\">Pag. $_pg / $pagina</td></tr>\n";
+            echo "<table align=\"center\" width=\"100%\" border=\"0\ class=\"table\" style=\"page-break-inside: avoid;\">\n";
+            //echo "<tr><td align=\"left\" colspan=\"6\"><h3>$azienda</h3></td></tr>\n";
+            //echo "<tr><td align=\"left\" colspan=\"3\">$cap $citta $prov</td>\n";
+            //echo "<td align=\"right\" colspan=\"3\">Pag. $_pg / $pagina</td></tr>\n";
 
-            echo "<tr><td align=\"center\" colspan=\"6\"><h3>Estratto conto contabile</h3></td></tr>\n";
-            echo "<tr><td align=\"center\" colspan=\"6\"><h3>$_codconto - $_descrizione</h3></td></tr>\n";
-            echo "<tr><td align=\"center\" colspan=\"6\"><br>Dalla Data $_start  Alla data $_end</td></tr>\n";
+            //echo "<tr><td align=\"center\" colspan=\"6\"><h3>Estratto conto contabile</h3></td></tr>\n";
+            //echo "<tr><td align=\"center\" colspan=\"6\"><h3></h3></td></tr>\n";
+            //echo "<tr><td align=\"center\" colspan=\"6\"><br>Dalla Data $_start  Alla data $_end</td></tr>\n";
 
 
             echo "<tr>";
             echo "<td width=\"30\" align=\"center\" class=\"tabella\">N. Reg</span></td>\n";
-            echo "<td width=\"50\" align=\"center\" class=\"tabella\">Data cont.</span></td>\n";
+            echo "<td width=\"80\" align=\"center\" class=\"tabella\">Data cont.</span></td>\n";
             echo "<td width=\"30\" align=\"center\" class=\"tabella\">N. proto</span></td>\n";
             echo "<td width=\"380\" align=\"CENTER\" class=\"tabella\">Descrizione</span></td>\n";
             echo "<td width=\"60\" align=\"center\" class=\"tabella\">Dare</span></td>\n";
@@ -205,13 +215,13 @@ if ($_SESSION['user']['contabilita'] > "1")
                 if (($dati['dare'] == "") AND ( $dati['avere'] == ""))
                 {
                     echo "<tr>";
-                    echo "<td width=\"30\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td width=\"70\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td width=\"30\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td width=\"380\" align=\"CENTER\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td width=\"60\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td width=\"60\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td width=\"90\" align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td align=\"CENTER\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
+                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
                     echo "</tr>";
                 }
                 else

@@ -967,7 +967,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
              modpag, banca, abi, cab, cin, cc, iban, swift, sp_bancarie, imballo, trasporto, spesevarie, scoinco, vettore, listino, porto,
              aspetto, status, note, colli, pesotot, nettomerce, cod_iva_1, imponibile_1, imposta_1, cod_iva_2, imponibile_2, imposta_2, cod_iva_3, imponibile_3, imposta_3,
              cod_iva_4, imponibile_4, imposta_4, cod_iva_5, imponibile_5, imposta_5, totimpo, totiva, totdoc, totprovv, id_collo )
-             values('$_tdoc', '$_anno', '$_suffix', $_ndoc', '$_datareg', '$_utente', '$_parametri[dragsoc]', '$_parametri[dragsoc2]', '$_parametri[dindirizzo]', '$_parametri[dcap]', '$_parametri[dcitta]', '$_parametri[dprov]', '$_parametri[zona]',
+             values('$_tdoc', '$_anno', '$_suffix', '$_ndoc', '$_datareg', '$_utente', '$_parametri[dragsoc]', '$_parametri[dragsoc2]', '$_parametri[dindirizzo]', '$_parametri[dcap]', '$_parametri[dcitta]', '$_parametri[dprov]', '$_parametri[zona]',
                     '$_parametri[agente]', '$_parametri[modpag]', '$_parametri[banca]', '$_parametri[abi]', '$_parametri[cab]', '$_parametri[cin]', '$_parametri[cc]', '$_parametri[iban]', '$_parametri[swift]', '$_parametri[spbanca]', '$_parametri[spimba]', '$_parametri[trasporto]',
                     '$_parametri[varie]', '$_parametri[scoinco]', '$_parametri[vettore]', '$_parametri[listinocli]', '$_parametri[porto]', '$_parametri[aspetto]', '$_parametri[status]', '$_parametri[notedoc]', '$_parametri[colli]', '$_parametri[peso]',
                     '$_parametri[nettomerce]', \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",
@@ -2836,6 +2836,7 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 				listino='$_parametri[listino]', sca='$_parametri[sca]', scb='$_parametri[scb]', scc='$_parametri[scc]', nettovendita='$_nettovendita', totriga='$_totriga', iva='$_parametri[iva]', totrigaprovv='$_totrigaprovv',
 				peso='$_peso', agg='$_parametri[agg]', consegna='$_parametri[consegna]', rsaldo='$_rsaldo' WHERE sessionid='$id' AND rigo='$_rigo' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'" , addslashes($_parametri['descrizione']));
         //echo $query;
+        
         $result = $conn->exec($query);
 
         if ($conn->errorCode() != "00000")

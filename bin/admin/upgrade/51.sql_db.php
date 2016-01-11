@@ -9,24 +9,47 @@ require_once $_percorso . "librerie/lib_html.php";
 $conn = connessione_mysql("PDO", $query, $_parametri);
 
 
-/* AGGIORNAMENTO TABELLE DATABASE AL 02/04/2015
- * Aggiornamento sulle tabelle dei gruppi merceologici e tipoligie articolo
+/* AGGIORNAMENTO TABELLE DATABASE AL 10/01/2016
+ * Aggiornamento tabelle utenti
+ * aggiornamento tabella effetti
+ * aggiornamento tabelle documenti con inserimento suffisso di numertazione
+ * inserimento nuova tabella destinazione merce
+ * Nuova tabella destinazioni
  * 
  */
 
-echo "<h4>Inizio aggiornamento archivi versione 47</h4>\n";
+echo "<h4>Inizio aggiornamento archivi versione 51</h4>\n";
 
-$_versione = "47";
+$_versione = "51";
 $_punto = "0";
 
-$query = "ALTER TABLE scadenziario ADD contabilita CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NO',
-ADD note TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL";
+
+//cambiamo tutti i valori dei documenti..
+
+$query = "UPDATE stampe_layout set ST_RIGA_LC = ST_RIGA_LC * 1.93, "
+        . "ST_ARTICOLO_LC = ST_ARTICOLO_LC * 1.93,"
+        . "ST_ARTFOR_LC = ST_ARTFOR_LC * 1.93,"
+        . "ST_DESCRIZIONE_LC = ST_DESCRIZIONE_LC * 1.93,"
+        . "ST_UNITA_LC = ST_UNITA_LC * 1.93,"
+        . "ST_QUANTITA_LC = ST_QUANTITA_LC * 1.93,"
+        . "ST_QTAEVASA_LC = ST_QTAEVASA_LC * 1.93,"
+        . "ST_QTAESTRATTA_LC = ST_QTAESTRATTA_LC * 1.93,"
+        . "ST_QTASALDO_LC = ST_QTASALDO_LC * 1.93,"
+        . "ST_LISTINO_LC = ST_LISTINO_LC * 1.93, "
+        . "ST_SCONTI_LC = ST_SCONTI_LC * 1.93,"
+        . "ST_NETTO_LC = ST_NETTO_LC * 1.93,"
+        . "ST_TOTRIGA_LC = ST_TOTRIGA_LC * 1.93,"
+        . "ST_CODIVA_LC = ST_CODIVA_LC * 1.93,"
+        . "ST_RSALDO_LC = ST_RSALDO_LC * 1.93,"
+        . "ST_PESO_LC = ST_PESO_LC * 1.93,"
+        . "ST_CONSEGNA_LC = ST_CONSEGNA_LC * 1.93,"
+        . "ST_AVVISO_LC = ST_AVVISO_LC * 1.93";
 
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok
 {
-    echo "Alterazione scadenziario agg. $_versione punto $_punto ..  riuscita perfettamente <br>";
+    echo "Alterazione tabella $_versione punto $_punto ..  riuscita perfettamente <br>";
     $_num++;
     $fine = 1;
 }
@@ -50,20 +73,23 @@ else
 
 
 
-//------------------------------------------------------------------------------
+
+
+
+//fine aggiornamenti............................................
 //    Verifico che non ci siano stati errori
 if ($fine != "1")
 {
 #blocco il programma ancor prima di iniziare..
     echo "Impossibile continuare con il programma causa errori <br>";
     echo "Si richiede assistenza Ricopiare o stampare questa pagina <br>\n";
-    echo "Errore File update archivi n. 47 <br>\n";
+    echo "Errore File update archivi n. $_versione <br>\n";
     exit;
 }
 else
 {
 
-    echo "Aggiornamento tabella versione..... $_versione del 02/04/2015 COMPLETATO !<br>";
+    echo "Aggiornamento tabella versione..... $_versione del 05/09/2015 COMPLETATO !<br>";
 
     $_res = $conn->query("UPDATE version SET aguabase='$AGUABASE'");
 

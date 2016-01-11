@@ -44,6 +44,11 @@ if ($_SESSION['user']['vendite'] > "2")
     $id = session_id();
     $_anno = $_SESSION['anno'];
     $_ndoc = $_SESSION['ndoc'];
+    
+    if ($_calce == "calce2")
+    {
+        $_suffix = $_SESSION['suffix'];
+    }
 
 // prendo la fiunzione della muovimentaizone
     @$_calce = $_SESSION['calce'];

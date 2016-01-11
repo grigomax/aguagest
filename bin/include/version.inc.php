@@ -1,8 +1,8 @@
-<!--1241-->
+<!--1242-->
 <?php
-$AGUAGEST = "1241";
-$AGUABASE = "50";
-$_PROGRAM_VERSION = "1_2_4 Rc 1 - 07/01/2016";
+$AGUAGEST = "1242";
+$AGUABASE = "51";
+$_PROGRAM_VERSION = "1_2_4 Rc 2 - 11/01/2016";
 
 // Stringhe per il programma Agua GEST...
 ?>

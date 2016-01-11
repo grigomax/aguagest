@@ -49,9 +49,11 @@ function layout_menu_tendina($_cosa, $_campo_sx, $_campo_ALL, $_campo_CT, $_camp
     $_nome_LC = "ST_" . $_nomecampo . "_LC";
 
 
-    echo "<td colspan=\"2\"><hr></td></tr><tr>\n";
-    echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\"><B>$_campo_sx</B></td>\n";
-    echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><select name=\"$_nome\">\n";
+    echo "<td colspan=\"5\"><hr></td></tr>\n";
+    echo "<tr>\n";
+    
+    echo "<td style=\"width: 20%;\" align=\"left\" valign=\"top\"><B>$_campo_sx</B></td>\n";
+    echo "<td style=\"text-align: left;\" valign=\"top\"><select name=\"$_nome\">\n";
     if($dati[$_nome] == "")
     {
         $dati[$_nome] = "NO";
@@ -60,46 +62,80 @@ function layout_menu_tendina($_cosa, $_campo_sx, $_campo_ALL, $_campo_CT, $_camp
     echo "<option value=\"SI\">SI</option>\n";
     echo "<option value=\"NO\">NO</option>\n";
     echo "</select></td>\n";
-    echo "</tr>\n";
+    //echo "</tr>\n";
 
     if ($_cosa[(string) 'ALL'] != "NO")
     {
-        echo "<tr>\n";
-        echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">$_campo_ALL</td>\n";
-        echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><select name=\"$_nome_ALL\">\n";
-        echo "<option value=\"$dati[$_nome_ALL]\">$dati[$_nome_ALL]</option>\n";
-        echo "<option value=\"LEFT\">Sinistra</option>\n";
-        echo "<option value=\"CENTER\">Centrale</option>\n";
-        echo "<option value=\"RIGHT\">Destra</option>\n";
+        
+        //ripristianiamo la dicitura..
+        if($dati[$_nome_ALL] == "L")
+        {
+            $visivo = "Sinistra";
+        }
+        elseif($dati[$_nome_ALL] == "C")
+        {
+            $visivo = "Centrale";
+        }
+        elseif($dati[$_nome_ALL] == "R")
+        {
+            $visivo = "Destra";
+        }
+        else
+        {
+            $visivo = $dati[$_nome_ALL];
+            $dati[$_nome_ALL] = substr($dati[$_nome_ALL], "0", "1");
+        }
+        
+        
+        echo "<td style=\"text-align: left;\" valign=\"top\"><select name=\"$_nome_ALL\">\n";
+        echo "<option value=\"$dati[$_nome_ALL]\">$visivo</option>\n";
+        echo "<option value=\"L\">Sinistra</option>\n";
+        echo "<option value=\"C\">Centrale</option>\n";
+        echo "<option value=\"R\">Destra</option>\n";
         echo "</select></td>\n";
-        echo "</tr>\n";
+        //echo "</tr>\n";
+    }
+    else
+    {
+        echo "<td>&nbsp;</td>\n";
     }
 
     if ($_cosa[CT] != "NO")
     {
-        echo "<tr>\n";
-        echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">$_campo_CT</td>\n";
-        echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"5\" name=\"$_nome_CT\" value=\"$dati[$_nome_CT]\"> max $maxct</td>\n";
-        echo "</tr>\n";
+        //echo "<tr>\n";
+        //echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">$_campo_CT</td>\n";
+        echo "<td style=\"text-align: left;\" valign=\"top\"><input type=\"text\" size=\"5\" name=\"$_nome_CT\" value=\"$dati[$_nome_CT]\"> max $maxct</td>\n";
+        //echo "</tr>\n";
+    }
+    else
+    {
+        echo "<td>&nbsp;</td>\n";
     }
 
     if ($_cosa['LC'] != "NO")
     {
         if ($_nomecampo == "AVVISO")
         {
-            echo "<tr>\n";
-            echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Testo<br>\n";
+            //echo "<tr>\n";
+            //echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Testo<br>\n";
             echo "<input type=\"text\" size=\"65\" maxlenght = \"60\" name=\"$_nome_LC\" value=\"$dati[$_nome_LC]\"></td>\n";
-            echo "</tr><tr>\n";
+            //echo "</tr><tr>\n";
         }
         else
         {
-            echo "<tr>\n";
-            echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">$_campo_LC</td>\n";
-            echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"5\" name=\"$_nome_LC\" value=\"$dati[$_nome_LC]\">%  max $maxlc % (pixel se etichetta)</td>\n";
-            echo "</tr><tr>\n";
+            //echo "<tr>\n";
+            //echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">$_campo_LC</td>\n";
+            echo "<td style=\"text-align: left;\" valign=\"top\"><input type=\"text\" size=\"5\" name=\"$_nome_LC\" value=\"$dati[$_nome_LC]\">max $maxlc </td>\n";
+            //echo "</tr><tr>\n";
         }
     }
+    else
+    {
+        echo "<td>&nbsp;</td>\n";
+    }
+    
+    
+    echo "</tr>\n";
 }
 
 if ($_SESSION['user']['setting'] > "3")
@@ -235,6 +271,7 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<option value=\"2\">2 Logo Scritto con caratteri</option>\n";
     echo "<option value=\"3\">3 Logo Medio ovvero a sinistra il logo ed a destra scritto con caratteri</option>\n";
     echo "<option value=\"4\">4 Logo Medio ovvero a destra il logo ed a sinistra scritto con caratteri</option>\n";
+    echo "<option value=\"5\">Logo per inventario/rimanenze</option>\n";
     echo "</select>\n";
 
     echo "</td>\n";
@@ -372,23 +409,23 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
 
 //--------------------------------------------------------------CORPO-------------------------------------------------------------------------
     echo "<div id=\"tabs-3\">\n";
-    echo "<table class=\"tabs\">";
+    echo "<table class=\"tabs\" border=\"0\">";
 
-    echo "<tr><td colspan=\"2\"><br><hr><br></td></tr>\n";
+    echo "<tr><td colspan=\"5\"><br><hr><br></td></tr>\n";
 
     echo "<tr>\n";
-    echo "<td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\">Corpo documento</span></td>\n";
+    echo "<td colspan=\"5\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\">Corpo documento</span></td>\n";
     echo "</tr><tr>\n";
-    echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">Carattere corpo documento</td>\n";
-    echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><select name=\"ST_FONTCORPO\">\n";
+    echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Carattere corpo documento</td>\n";
+    echo "<td colspan=\"3\" style=\"text-align: left;\" valign=\"top\"><select name=\"ST_FONTCORPO\">\n";
     echo "<option value=\"$dati[ST_FONTCORPO]\">$dati[ST_FONTCORPO]</option>\n";
     echo "<option value=\"Arial\">Arial, Helvetica sans serif</option>\n";
     echo "<option value=\"Times\">Times serif</option>\n";
     echo "<option value=\"Courier\">Courier spazi larghi</option>\n";
     echo "</select></td>\n";
     echo "</tr><tr>\n";
-    echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">Grandezza font</td>\n";
-    echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><select name=\"ST_FONTCORPOSIZE\">\n";
+    echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Grandezza font</td>\n";
+    echo "<td colspan=\"3\" style=\"text-align: left;\" valign=\"top\"><select name=\"ST_FONTCORPOSIZE\">\n";
     echo "<option value=\"$dati[ST_FONTCORPOSIZE]\">$dati[ST_FONTCORPOSIZE]</option>\n";
     echo "<option value=\"7\">7 punti</option>\n";
     echo "<option value=\"8\">8 punti</option>\n";
@@ -411,11 +448,11 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
     //passiamo il ciclo funzioni e dividiamo in caso sia una etichetta
 
 
-    echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">Numeri di righe corpo documento</td>\n";
-    echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"5\" name=\"ST_RPP\" value=\"$dati[ST_RPP]\"> In genere dalle 15 alle 60</td>\n";
+    echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Numeri di righe corpo documento</td>\n";
+    echo "<td colspan=\"3\" style=\"text-align: left;\" valign=\"top\"><input type=\"text\" size=\"5\" name=\"ST_RPP\" value=\"$dati[ST_RPP]\"> In genere dalle 15 alle 60</td>\n";
     echo "</tr><tr>\n";
-    echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">Interlinea Righe corpo</td>\n";
-    echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><select name=\"ST_INTERLINEA\">\n";
+    echo "<td colspan=\"2\"style=\"width: 40%;\" align=\"left\" valign=\"top\">Interlinea Righe corpo</td>\n";
+    echo "<td colspan=\"3\"style=\"text-align: left;\" valign=\"top\"><select name=\"ST_INTERLINEA\">\n";
     echo "<option value=\"$dati[ST_INTERLINEA]\">$dati[ST_INTERLINEA]</option>\n";
     echo "<option value=\"0\">0 punti</option>\n";
     echo "<option value=\"1\">1 punti</option>\n";
@@ -428,11 +465,17 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
 
 
 
-    echo "<td colspan=\"2\" rowspan=\"1\" style=\"width: 100%;\" align=\"center\" valign=\"top\"><br>Selezionare le colonne da far apparire nel corpo<br>
-<b><font color=\"RED\"> ATTENZIONE per tutte le colonne che si seleziona SI <br>la somma della percentuale deve essere 100% altrimenti il programma non passa</b></font><BR>
-Per avere un riscontro tra il valore in percentuale e i mm bisogna moltiplicare il valore per 1.93</td>\n";
+    echo "<td colspan=\"5\" rowspan=\"1\" style=\"width: 100%;\" align=\"center\" valign=\"top\"><br>Selezionare le colonne da far apparire nel corpo<br>
+<b><font color=\"RED\"> ATTENZIONE per tutte le colonne che si seleziona SI <br>la somma dei millimetri deve essere max 200 altrimenti il programma non passa</b></font></td>\n";
     echo "</tr>\n";
 
+    echo "<tr><td colspan=\"5\">&nbsp;</td></tr>\n";
+    echo "<td rowspan=\"1\" width=\"40%\" align=\"left\" valign=\"top\"><b><i>Tipo Campo</b></i></td>\n";
+    echo "<td rowspan=\"1\" align=\"left\" valign=\"top\"><b><i>Apparire ?</b></i></td>\n";
+    echo "<td rowspan=\"1\" align=\"left\" valign=\"top\"><b><i>Allineamento</b></i></td>\n";
+    echo "<td rowspan=\"1\" align=\"left\" valign=\"top\"><b><i>Nr. Caratteri</b></i></td>\n";
+    echo "<td rowspan=\"1\" align=\"left\" valign=\"top\"><b><i>Larghezza mm <br>(pixel se etichetta)</b></i></td>\n";
+    
     if ($_eti == "SI")
     {
 
@@ -508,15 +551,15 @@ Per avere un riscontro tra il valore in percentuale e i mm bisogna moltiplicare 
 
         layout_menu_tendina($_cosa, "Campo $CD013", $_campo_ALL, $_campo_CT, $_campo_LC, "TOTRIGA", "20", "20");
 
-        layout_menu_tendina(($_cosa = ['CT' => 'NO']), $_campo_ALL, $_campo_CT, $_campo_LC, "Campo $CD014", "CODIVA", "20", "20");
+        layout_menu_tendina(($_cosa = ['CT' => 'NO']), "Campo $CD014", $_campo_CT, $_campo_LC, "Campo $CD014", "CODIVA", "20", "20");
         //azzeriamo l'arrey
         $_cosa = null;
 
-        layout_menu_tendina(($_cosa = ['CT' => 'NO']), $_campo_ALL, $_campo_CT, $_campo_LC, "Campo $CD016", "RSALDO", "10", "10");
+        layout_menu_tendina(($_cosa = ['CT' => 'NO']), "Campo $CD016", $_campo_CT, $_campo_LC, "Campo $CD016", "RSALDO", "10", "10");
         //azzeriamo l'arrey
         $_cosa = null;
 
-        layout_menu_tendina(($_cosa = ['CT' => 'NO']), $_campo_ALL, $_campo_CT, $_campo_LC, "Campo $CD015", "PESO", "10", "10");
+        layout_menu_tendina(($_cosa = ['CT' => 'NO']), "Campo $CD015", $_campo_CT, $_campo_LC, "Campo $CD015", "PESO", "10", "10");
         //azzeriamo l'arrey
         $_cosa = null;
 
@@ -637,6 +680,7 @@ Per avere un riscontro tra il valore in percentuale e i mm bisogna moltiplicare 
 
     echo "</tr></table></div>\n";
 
+    echo "<br>&nbsp;<br>&nbsp;<br>&nbsp;\n";
     echo "</body></html>\n";
 }
 else
