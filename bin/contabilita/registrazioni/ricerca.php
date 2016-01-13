@@ -55,6 +55,8 @@ if ($_SESSION['user']['contabilita'] > "1")
     echo "<option value=\"ndoc\">Numero documento</option>\n";
     echo "<option value=\"conto\">Conto Piano dei conti</option>\n";
     echo "<option value=\"status\">Status</option>\n";
+    echo "<option value=\"anno\">Anno registrazione</option>\n";
+    
     echo "</select>\n";
     echo "</td></tr>\n";
 

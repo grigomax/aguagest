@@ -2,18 +2,13 @@
 # la query e gia stata eseguita..
 #mi resta solo la esposizione dei dati..
 
-$result = $conn->query($query);
+$result = domanda_db("query", $query, "verbose");
 
-if ($conn->errorCode() != "00000")
+if ($result == "NO")
 {
-    $_errore = $conn->errorInfo();
-    echo $_errore['2'];
-    //aggiungiamo la gestione scitta dell'errore..
-    $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-    $_errori['files'] = "cli_for.php";
-    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "Niente da stampare\n";
+    exit;
 }
-
 //cerco il numero di righe
 
 $righe = $result->rowCount();
@@ -26,7 +21,7 @@ $_pagine = $righe / $rpp;
 //arrotondo per eccesso
 $pagina = ceil($_pagine);
 
-        base_html_stampa("chiudi", $_parametri);
+base_html_stampa("chiudi", $_parametri);
 
 
 $_parametri['data'] = date('d-m-Y');

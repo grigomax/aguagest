@@ -50,11 +50,11 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     
 // Inizio tabella pagina principale ----------------------------------------------------------
 
-    echo "<table valign=\"top\" width=\"100%\" border=\"0\"><tr><td valign=\"top\" align=\"left\" width=\"80%\">";
+    echo "<table valign=\"top\" width=\"60%\" border=\"0\" align=\"center\"><tr><td valign=\"top\" align=\"left\" width=\"80%\">";
     printf("<form action=\"mod-gruppo.php?tipo=$_tipo\" method=\"POST\">\n");
-    echo "<table width=\"80%\" border=\"0\" align=left>\n";
+    echo "<table width=\"80%\" border=\"0\" align=center>\n";
 
-    echo "<tr><td colspan=2 align=\"center\"><font size=3><b>Modifica $_selezione</b><br></font></span></td>\n";
+    echo "<tr><td colspan=2 align=\"center\"><h2 align=\"center\">Modifica $_selezione</h2></span></td>\n";
 
 
     echo "<tr><td colspan=2 align=center><br>";
@@ -63,6 +63,18 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     {
 	echo "Codice = <input type=\"text\" name=\"codice\" value=\"$dati[codice]\" size=\"20\" maxleght=\"18\">\n";
         echo "<br>Descrizione = <input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"50\" maxleght=\"70\">\n";
+        if($_tipo == "catmer")
+        {
+            if($dati['imballo'] == "1")
+            {
+                echo "<br>Questo gruppo sono imballi = <input type=\"checkbox\" name=\"imballo\" value=\"1\" checked>\n";
+            }
+            else
+            {
+                echo "<br>Questo gruppo sono imballi = <input type=\"checkbox\" name=\"imballo\" value=\"1\">\n";
+            }
+            
+        }
 	echo "<br><input type=\"submit\" name=\"azione\" value=\"Inserisci\"></td></tr>";
     }
     else
@@ -82,6 +94,21 @@ if ($_SESSION['user']['anagrafiche'] > "2")
 	echo "<input type=\"radio\" name=\"id\" value=\"$dati[id]\" checked >ID = $dati[id]<br>\n";
 	echo "Codice = <input type=\"text\" name=\"codice\" value=\"$dati[codice]\" size=\"20\" maxleght=\"18\">\n";
         echo "<br>Descrizione = <input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"50\" maxleght=\"70\">\n";
+        
+        if($_tipo == "catmer")
+        {
+            if($dati['imballo'] == "1")
+            {
+                echo "<br>Questo gruppo sono imballi = <input type=\"checkbox\" name=\"imballo\" value=\"1\" checked>\n";
+            }
+            else
+            {
+                echo "<br>Questo gruppo sono imballi = <input type=\"checkbox\" name=\"imballo\" value=\"1\">\n";
+            }
+            
+        }
+        
+        
         echo "<BR>Attenzione tutti gli articoli verranno aggiornati con il nuovo nome</td></tr>\n";
 	echo "<td align=RIGHT><input type=\"submit\" name=\"azione\" value=\"Modifica\"><input type=\"submit\" name=\"azione\" value=\"Elimina\"></td></tr>";
     }

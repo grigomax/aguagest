@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
@@ -36,11 +35,11 @@ if ($_SESSION['user']['stampe'] > "1")
 
     $_utente = $_GET['utente'];
 
-    echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";
+    echo "<table width=\"60%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";
     echo "<tr><td align=\"center\" valign=\"top\" colspan=\"2\">";
     echo "<span class=\"intestazione\"><br><b>Scegliere i $_utente da stampare</b><br></span><br></td></tr>\n";
 
-    printf("<form action=\"clifor_selezione.php?utente=$_utente\" target=\"sotto\"method=\"POST\">");
+    printf("<form action=\"clifor_selezione.php?utente=$_utente\" target=\"_blank\"method=\"POST\">");
 
 
     // CAMPO DOVE ---------------------------------------------------------------------------------------

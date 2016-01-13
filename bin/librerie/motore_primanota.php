@@ -1589,7 +1589,7 @@ function schermate_primanota($_finestra, $_parametri)
                     echo "<option value=\"\"></option>\n";
                 }
 		
-
+                echo "<option value=\"\"></option>\n";
 		
                 foreach ($_result AS $_cod_iva)
 		{
@@ -1703,18 +1703,21 @@ function schermate_calcenota($_finestra, $_parametri)
 		$_nreg = $_SESSION['nreg'];
 		$_utente = $_SESSION['utente'];
                 $_suffix_proto = $_SESSION['suffix_proto'];
+                
+                $_anno_proto = cambio_data("anno_it", $_data_cont);
+                //echo $_anno_proto;
 
 		//vediamo se stiamo inserendo oppure aggiornando
 		if ($_parametri != "Modifica")
 		{
 			//vuol dire che è standard..
 			$_nreg = tabella_primanota("ultimo_numero", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_parametri, $_percorso);
-			$_nproto = tabella_primanota("ultimo_proto", $id, $_anno, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_suffix_proto, $_percorso);
+			$_nproto = tabella_primanota("ultimo_proto", $id, $_anno_proto, $_nreg, $_causale, $_testo, $_data_reg, $_data_cont, $_suffix_proto, $_percorso);
 			echo "<tr><td colspan=\"3\"><br>Numero Registrazione = <input type=\"number\" name=\"nreg\" value=\"$_nreg\" size=\"7\" maxlenght=\"6\"></td>\n";
 			echo "<td colspan=\"3\"><br>Anno  Registrazione = <input type=\"number\" name=\"anno\" value=\"$_anno\" size=\"7\" maxlenght=\"4\"></td></tr>\n";
 			echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
 			echo "<tr><td colspan=\"3\"><br>Numero protocollo = <input type=\"number\" name=\"nproto\" value=\"$_nproto\" size=\"7\" maxlenght=\"6\"> Suffiso <input type=\"radio\" name=\"suffix_proto\" value=\"$_suffix_proto\" checked>$_suffix_proto</td>\n";
-			echo "<td colspan=\"3\"><br>Anno  Protocollo = <input type=\"number\" name=\"anno_proto\" value=\"$_anno\" size=\"7\" maxlenght=\"4\"></td></tr>\n";
+			echo "<td colspan=\"3\"><br>Anno  Protocollo = <input type=\"number\" name=\"anno_proto\" value=\"$_anno_proto\" size=\"7\" maxlenght=\"4\"></td></tr>\n";
 			echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
 			echo "<tr><td colspan=\"2\"><br>Numero Fattura Fornitore = <input type=\"text\" name=\"ndoc\" size=\"7\" maxlenght=\"6\"></td>\n";
 			echo "<td colspan=\"2\"><br>Anno Fattura<input type=\"number\" name=\"anno_doc\" size=\"7\" maxlenght=\"4\"></td>\n";

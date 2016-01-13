@@ -1,4 +1,5 @@
 <?php
+
 /* Programma Agua gest
  * Programma nato e gestito da grigolin massimo
  * prodotto sotto licenza GPL
@@ -8,13 +9,14 @@
 
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
-require $_percorso ."../setting/vars.php";
-session_start(); $_SESSION['keepalive']++;
+require $_percorso . "../setting/vars.php";
+session_start();
+$_SESSION['keepalive'] ++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 
 //carichiamo la base delle pagine:
@@ -32,79 +34,93 @@ if ($_SESSION['user']['anagrafiche'] > "2")
 
 // Inizio tabella pagina principale ----------------------------------------------------------
 
-    echo "<table><tr><td>";
-    printf("<br><br><form action=\"imballi.php\" method=\"POST\">\n");
-    echo "<table width=\"400\" border=\"1\" align=right>\n";
 
-    echo "<tr><td colspan=2 align=\"center\"><font size=3><b>Modifica Imballo</b><br></font></span></td>\n";
-    ;
+    printf("<br><br><form action=\"imballi.php\" method=\"POST\">\n");
+    echo "<table border=\"0\" align=\"center\">\n";
+
+    echo "<tr><td colspan=2 align=\"center\"><h2 align=\"center\">Modifica Imballo</h2></span></td>\n";
+
     echo "<tr><td colspan=2 align=\"center\"><font size=3>Se non trovi le modifiche aggiorna la pagina con ALT+F5</font></td>\n";
-    ;
+
 
 //inizio pagina alternativa
 
-
-
     if ($_POST['azione'] == "Inserisci")
     {
-	// prendo le variabili passate
+        // prendo le variabili passate
 
-	$_codice = $_POST['codice'];
+        $_codice = $_POST['codice'];
 
-	//cerco la riga se c'e l'aggiorno, se non c'e la inserisco
-	$query = ("SELECT * FROM imballi WHERE imballo='$_codice'") or die("Errore!");
-	//esegue la query
-	$res = mysql_query($query, $conn);
+        //cerco la riga se c'e l'aggiorno, se non c'e la inserisco
+        $query = ("SELECT * FROM imballi WHERE imballo='$_codice'");
+        //esegue la query
+        $result = domanda_db("query", $query, $_parametri);
 //	echo $query;
-	if (mysql_num_rows($res) > 0)
-	{
-	    echo "<td>Imballo $_articolo Gi&agrave; presente nell'archivio</td>";
-	}
-	else
-	{
-	    $query = ("insert into imballi ( imballo ) VALUES ( '$_codice')");
-	    //esegue la query
-	    mysql_query($query, $conn);
-	    echo "<td>Imballo $_articolo inserito correttamente</td>";
-	}
 
-	return;
+        if ($result->rowCount() > 0)
+        {
+            echo "<td>Imballo $_articolo Gi&agrave; presente nell'archivio</td>";
+        }
+        else
+        {
+            $query = ("insert into imballi ( imballo ) VALUES ( '$_codice')");
+            //esegue la query
+            $result = domanda_db("exec", $query, $_parametri);
+            echo "<td>Imballo $_articolo inserito correttamente</td>";
+        }
+
+        return;
     }// parentesi fine funzione inserimento
 //inizio aggiornamento
     if ($_POST['azione'] == "Modifica")
     {
-	// prendo le variabili passate
-	//cerco la riga se c' l'aggiorno, se non c' la inserisco
-	$query = sprintf("UPDATE imballi SET imballo = \"%s\" where id=\"%s\"", $_POST['codice'], $_POST['id']);
-	//esegue la query
-	if ($res = mysql_query($query, $conn) != 1)
-	    ;
-	{
-	    echo "<tr><td>Imballo $_articolo Modificato correttamente</td></td>";
-	}
+        // prendo le variabili passate
+        //cerco la riga se c' l'aggiorno, se non c' la inserisco
+        $query = sprintf("UPDATE imballi SET imballo = \"%s\" where id=\"%s\"", $_POST['codice'], $_POST['id']);
+        
+        
+        $result = domanda_db("exec", $query, "verbose");
+        
+        echo $result;
+        if($result != "NO")
+        {
+           echo "<tr><td>Imballo $_articolo Modificato correttamente</td></td>";
+        }
+        else
+        {
+            echo "<tr><td>Nessuna modifica effettuata</td></td>";
+        }
+        
 
-
-	return;
+        
+        
+        return;
     }// parentesi fine funzione inserimento
 //inizio eliminazione
     if ($_POST['azione'] == "Elimina")
     {
-	// prendo le variabili passate
-	//cerco la riga se c' l'aggiorno, se non c' la inserisco
-	$query = sprintf("DELETE FROM imballi where id=\"%s\"", $_POST['id']);
-	//esegue la query
-	if ($res = mysql_query($query, $conn) != 1)
-	    ;
-	{
-	    echo "<tr><td>Imballi $_articolo eliminato correttamente</td></td>";
-	}
+        // prendo le variabili passate
+        //cerco la riga se c' l'aggiorno, se non c' la inserisco
+        $query = "DELETE FROM imballi where id=".$conn->quote($_POST['id']);
+        
+        $result = domanda_db("exec", $query, "verbose");
+                
+        if($result != "NO")
+        {
+           echo "<tr><td>Imballo $_articolo Eliminato correttamente</td></td>"; 
+        }
+        else
+        {
+            echo "<tr><td>Nessuna riga eliminata</td></td>"; 
+        }
+        
 
 
-	return;
+        return;
     }// parentesi fine funzione inserimento
 
 
-    echo "<tr><td colspan=2 align=\"center\"><span class=\"testo_blu\"><b>Inserisci l'imballo da modificare:</b><br></span></td>\n";
+    echo "<tr><td align=\"center\"><span class=\"testo_blu\"><b>Inserisci l'imballo da modificare:</b><br></span></td>\n";
 
     echo "<tr><td colspan=2 align=center><br>";
     echo "<select name=\"codice\">\n";
@@ -113,21 +129,15 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     // Stringa contenente la query di ricerca...
     $query = sprintf("select * from imballi order by imballo ");
 
-    // Esegue la query...
-    if ($res = mysql_query($query, $conn))
+    $result = domanda_db("query", $query, $_parametri);
+
+    // Tutto procede a meraviglia...
+    echo "<span class=\"testo_blu\">";
+    foreach ($result AS $dati)
     {
-	// La query ?stata eseguita con successo...
-	// MA ANCORA NON SAPPIAMO SE L'UTENTE ESISTA O MENO...
-	if (mysql_num_rows($res))
-	{
-	    // Tutto procede a meraviglia...
-	    echo "<span class=\"testo_blu\">";
-	    while ($dati = mysql_fetch_array($res))
-	    {
-		printf("<option value=\"%s\">%s</option>\n", $dati['id'], $dati['imballo']);
-	    }
-	}
+        printf("<option value=\"%s\">%s</option>\n", $dati['id'], $dati['imballo']);
     }
+
     echo "</select>\n";
     echo "</td></tr>\n";
 

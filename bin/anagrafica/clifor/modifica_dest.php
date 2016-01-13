@@ -175,7 +175,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
                 }
                 else
                 {
-                    echo "value=\"0\">\n";
+                    echo "value=\"1\">\n";
                 }
                     
                     echo "</td></tr>\n";

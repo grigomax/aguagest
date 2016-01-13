@@ -85,7 +85,8 @@ if ($_SESSION['user']['vendite'] > "1")
     crea_pagina_pdf();
     $_parametri['email'] = "3";
     
-    $_parametri['link'] = "stampa_avviso.php?ndoc=$dati[numeff]&anno=$_anno&azione=Inoltra";
+    $link = substr("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], 0,(strpos("http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], '?')));
+    $_parametri['link'] = $link."?ndoc=$dati[numeff]&anno=$_anno&azione=Inoltra";
 
     crea_intestazione_ditta_pdf("", "effetto_$dati[numeff]", $_anno, $_pg, $pagina, $_parametri);
     //qui mi conviene comporla a mano..

@@ -523,15 +523,24 @@ function connessione_mysql($_cosa, $query, $_parametri)
     return $conn;
 }
 
+
+/**Funzione che mi connette al database e mi da risposte
+ * 
+ * @param type $_cosa indica se query o exec
+ * @param type $query
+ * @param type $_parametri verbose mi ma apparire a video i messaggi
+ * @return string
+ */
 function domanda_db($_cosa, $query, $_parametri)
 {
     global $conn;
     global $_percorso;
-    
+
+    //echo $_parametri;
     //qui passiamo le queri per la domanda.. così da poter avere sempre un risultato corretto 
-        
-    
-    if($_cosa == "exec")
+    //echo "<br>$query\n";
+
+    if ($_cosa == "exec")
     {
         $result = $conn->exec($query);
     }
@@ -539,32 +548,61 @@ function domanda_db($_cosa, $query, $_parametri)
     {
         $result = $conn->query($query);
     }
-        
-        if ($conn->errorCode() != "00000")
+
+    if ($conn->errorCode() != "00000")
+    {
+        $_errore = $conn->errorInfo();
+        echo $_errore['2'];
+        //aggiungiamo la gestione scitta dell'errore..
+        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        scrittura_errori($_cosa, $_percorso, $_errori);
+        $return['descrizione'] = $_errori['descrizione'];
+        $return['query'] = $query;
+        $return['result'] = "NO";
+    }
+
+    if ($_cosa == "exec")
+    {
+        if ($result == FALSE)
         {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['descrizione'] = $_errori['descrizione'];
-            $return['query'] = $query;
-            $return['result'] = "NO";
-        }
-        
-       /* if($result->rowCount() != 0 )
-        {
+            //echo "ciao";
+            $result-> null;
             $result = "NO";
-            echo "<center><h4><font color=\"green\">Errore Nessuna riga trovata</font></h4>\n";
+            
         }
-    */
+    }
+    else
+    {
+        if ($result->rowCount() < 1)
+        {
+            //echo "ciao";
+            $result-> null;
+            $result = "NO";
+            //echo $_parametri;
+            //echo $result;
+        }
+    }
     
+    if($result == "NO")
+    {
+        if ($_parametri == "verbose")
+        {
+            echo "<center><h4><font color=\"green\">Errore Nessuna Corrispondenza trovata</font></h4>\n";
+        }
+
+        if ($_parametri == "block")
+        {
+            echo "<h2 align=\"center\">Errore query</h2>\n";
+            echo "<br>$_errori[descrizione]\n";
+            echo "<br>$_query\n";
+            echo "<br>procedura bloccata\n";
+            exit;
+        }
+    }
+
     return $result;
 }
-
-
-
 
 /**
  * Funzione che scrive gli errori si output su un file dentro include..
@@ -692,33 +730,6 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
     fclose($fp);
 
     return $_return;
-}
-
-
-function gestione_result($_cosa, $_result, $_parametri)
-{
-    global $_percorso;
-    global $_conn;
-    
-    //funzione che mi permette di far apparire a video eventuali errori di result.
-    
-    if($_cosa == "silent")
-    {
-        
-    }
-    else
-    {
-        if ($_result['result'] == "NO")
-        {
-                echo "<h2 align=\"center\">Errore query</h2>\n";
-                echo "<br>$_result[descrizione]\n";
-                echo "<br>$_query\n";
-                echo "<br>procedura bloccata\n";
-                exit;
-        }
-    }
-     
-    
 }
 
 
@@ -1644,7 +1655,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/fatturev/generafatt.php\">Genera Fatt.</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/importa_doc.php?start=ddt&end=FATTURA\">Imp. DDT</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/importa_doc.php?start=conferma&end=$nomedoc\">Imp. Conferma</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/importa_doc.php?start=ddt_diretto&end=FATTURA\">Imp. DDT. diretto</a></li>\n";
+    //echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/importa_doc.php?start=ddt_diretto&end=FATTURA\">Imp. DDT. diretto</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/fatturev/fatturato/ricercadoc.php\">Fatturato</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/fatturev/fattura_PA.php\">Esporta P.A.</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/docubase/controllo_numeri.php?tdoc=FATTURA\">Controllo numeri</a></li>\n";
@@ -1738,8 +1749,8 @@ function menu_tendina($_cosa, $_percorso)
 
     echo "<li class=\"menu\"><a href=\"#\">Imballi</a><span class=\"dropRight\"></span>\n";
     echo "<ul class=\"menu\">\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/mag/imballi/imb_cliente.php\">Cerca per Cliente</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/mag/imballi/imb_fornitore.php\">Cerca per Fornitore</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/mag/imballi/imballi.php?tut=cliente\">Cerca per Cliente</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/mag/imballi/imballi.php?tut=fornitore\">Cerca per Fornitore</a></li>\n";
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -2503,6 +2514,7 @@ function maschera_invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $
     tiny_mce($_cosa, $_percorso);
 // questa funzione mi permette di non generare una e-mail vuota
 
+    echo "</head><body>\n";
 
     echo "<h1> Eventuale messaggio da includere nella mail</h1>\n";
 
@@ -2556,7 +2568,7 @@ function maschera_invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $
     }
     echo "<tr><td>Corpo : </td><td><textarea id=\"elm1\" cols=\"80\" rows=\"20\" name=\"Body\" value=\"$_parametri[BODY]\">$_parametri[BODY]</textarea></td></tr>\n";
 
-    echo "<tr><td align=\"center\" colspan=\"2\"><input type=\"submit\" name=\"send\" value=\"spedisci\"> </td></tr>\n";
+    echo "<tr><td align=\"center\" colspan=\"2\"><input type=\"submit\" name=\"send\" value=\"spedisci\"><br>&nbsp;<br>&nbsp; </td></tr>\n";
 
     echo "</form></table>";
 }
@@ -3562,6 +3574,7 @@ function gestione_iva($_cosa, $_castiva, $_totiva, $_imponibile, $_spese, $dati,
     global $ivasis;
     global $dec;
     global $DATAIVA;
+    global $_percorso;
     require_once "motore_anagrafiche.php";
 
     /* CASTELLETTO DELL'IVA..

@@ -1527,7 +1527,9 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
         {
             $_errori['errori'] = "OK";
         }
+        
         $return = $_errori;
+        
     }
     elseif ($_cosa == "leggi_corpo")
     {

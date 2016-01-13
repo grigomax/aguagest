@@ -121,10 +121,6 @@ if ($_SESSION['user']['vendite'] > "1")
             exit;
         }
 
-
-
-
-
         //bene.. ora passiamo tutto il discorso alla funzione estrai documento..
         //facciamo tutto dentro un unico if in modo da che se una cosa non va non va tutto..
         //farei una funzione che mi blocca il numero di documento che blocca inserendone la testa..
@@ -212,16 +208,25 @@ if ($_SESSION['user']['vendite'] > "1")
                 foreach ($daticorpo AS $datidettaglio)
                 {
 
+                    //echo "<br>mona to mare..3\n";
                     $_rigo = $_rigo + 1;
-                    //facciamo apparire anche le righe descrittive..
+                    //facciamo apparire anche le righe descrittive.. anche nel caso sia un ddt
+                    if($_tdoc_start == "ddt")
+                    {
+                        $datidettaglio['rsaldo'] = "NO";
+                    }
+                    //echo "<br>mona to mare..1\n";
+                    
                     if (($datidettaglio['articolo'] == "vuoto") AND ( $datidettaglio['rsaldo'] != "SI"))
                     {
+                        //echo "<br>mona to mare..2\n";
 
                         //verifichiamo che non ci siano prezzi a zero..
                         if ($_tdoc_start == "ddt")
                         {
                             if (($datidettaglio['listino'] == "0.00") AND ($datidettaglio['articolo'] != "vuoto"))
                             {
+                                //echo "<br>mona to mare..4\n";
                                 //verifichiamo se l'articolo può essere fatturato a zero..
                                 $_articolo = tabella_articoli("singola", $datidettaglio['articolo'], $_parametri);
 
@@ -244,6 +249,8 @@ if ($_SESSION['user']['vendite'] > "1")
                                     echo "<h3>Trovato articolo promozionale, Nessun problema</h3>\n";
                                 }
                             }
+                            
+                            
                         }
 
 
@@ -254,6 +261,38 @@ if ($_SESSION['user']['vendite'] > "1")
                             //questa è la riga che va scritta nel nuovo documento..
                             //echo "|$datidettaglio[articolo], $datidettaglio[descrizione]|<br><hr><br>";
                             //qui scriviamo il corpo nuovo..
+                            
+                            if($_tdoc_start == "ddt")
+                            {
+                                $_totriga_end = $datidettaglio['nettovendita'] * $datidettaglio['quantita'];
+                                $_provvnetto = number_format((($datidettaglio['nettovendita'] * $_provvart) / 100), $dec, '.', '');
+                                $_totrigaprovv_end = $_provvnetto * $datidettaglio['quantita'];
+                            }
+                            else
+                            {
+                                $_totriga_end = $datidettaglio['nettovendita'] * $datidettaglio['qtasaldo'];
+                                $_provvnetto = number_format((($datidettaglio['nettovendita'] * $_provvart) / 100), $dec, '.', '');
+                                $_totrigaprovv_end = $_provvnetto * $datidettaglio['qtasaldo'];
+                            }
+                            
+                            
+                            
+                            if ($_tdoc_start == "fornitore")
+                            {
+                                $_ivariga = $ivasis;
+                            }
+                            else
+                            {
+                                $_ivariga = $datidettaglio['iva'];
+                            }
+                            
+                            //echo "<br>mona to mare..5\n";
+                            //Calcolo L'iva per il documento end
+                            $_castiva_end[$_ivariga] = ($_castiva_end[$_ivariga] + $_totriga_end);
+                            $_totimpo_end = $_totimpo_end + $_totriga_end;
+                            
+                            //echo "<br>$_totimpo_end\n";
+                            
                             $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_rigo, $_codutente, $datidettaglio[articolo], $datidettaglio[descrizione], $datidettaglio[iva], $_parametri);
 
                             if ($resut_ins['errori'] != "OK")
@@ -279,7 +318,8 @@ if ($_SESSION['user']['vendite'] > "1")
                             $_parametri['rsaldo'] = "SI";
 
                             //qui togliamo la funzione di aggirnamento del documento di origine in caso che lo start sia un ddt
-
+                            
+                            
                             if (($_tdoc_start != "ddt") AND ( $_tdoc_start != "ddt_diretto"))
                             {
                                 $resut_agg = gestisci_dettaglio("aggiorna_singola", $_archivi_start, $_tdoc_start, $_anno_start, $_suffix_start, $_ndoc_start, $datidettaglio['rigo'], $_codutente, $datidettaglio[articolo], $datidettaglio[descrizione], $_iva, $_parametri);
@@ -506,6 +546,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
                 //in teoria qui abbiamo le ive già calcolate e giuste.
 
+                
                 $_imponibile_start = $_imponibili_start['totimpo'];
                 $_totimposta_start = $_imponibili_start['totiva'];
 
@@ -555,6 +596,9 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_varie = $_varie + $datidoc['spesevarie'];
                 $_scoinco = $_scoinco + $datidoc['scoinco'];
             }//chiudo forearch selezione documento
+            
+            
+            
             //qui calcoliamo tutte le ive..
             //dobbiamo aggiornare anche il pagamento che segue il documento insieme al corriere ecc..
             //qui dobbiamo fare il conto delle spese, poi passarlo direttamente allafunzione che
@@ -571,8 +615,8 @@ if ($_SESSION['user']['vendite'] > "1")
             $_imponibile = $_imponibili['totimpo'];
             $_totimposta = $_imponibili['totiva'];
 
-            #echo $_imponibile;
-            #echo $_totimposta;
+//            echo $_imponibile;
+  //          echo $_totimposta;
 
             $_totdoc = $_imponibile + $_totimposta;
 

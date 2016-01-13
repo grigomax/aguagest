@@ -28,18 +28,22 @@ $_mese = $_POST['mese'];
 $_tipo = $_POST['tipo'];
 
 
-// preparo la data ovvero datareg
-// anno odierno
-$_annoinc = date('Y');
+$query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno LIMIT 1";
 
-if ($_annoinc == $_anno)
-{
-    $_magazzino = "magazzino";
-}
-else
-{
-    $_magazzino = "magastorico";
-}
+    $result = domanda_db("query", $query, $_parametri);
+
+    $datianno = $result->fetch(PDO::FETCH_ASSOC);
+
+    if ($_anno < $datianno['anno'])
+    {
+        $_magazzino = "magastorico";
+    }
+    else
+    {
+        $_magazzino = "magazzino";
+    }
+
+
 // echo $_anno;
 // echo $_magazzino;
 $_mesec = "$_mese";

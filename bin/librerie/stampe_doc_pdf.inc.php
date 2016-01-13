@@ -131,7 +131,7 @@ function intestazione_doc_pdf($datidoc, $LINGUA)
 
     if ($_GET['intesta'] == "no")
     {
-	$pdf->SetXY($MARGINE_SINISTRO, 40);
+	$pdf->SetXY($MARGINE_SINISTRO, 45);
     }
     else
     {
@@ -641,8 +641,8 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         $_GET['size'] = "40";
         $_GET['text'] = $dati[anno].$dati[suffix].$dati[ndoc];
         include_once "../tools/barcode_2/barcode.php";
-        
-        $pdf->Image("../../spool/barcode_".$_SESSION['user']['user'].".png", '160','107', 40, 8, png);
+        $_Y_image = $pdf->GetY();
+        $pdf->Image("../../spool/barcode_".$_SESSION['user']['user'].".png", '160',$_Y_image+1, 40, 8, png);
         $pdf->Cell(43, 10,'', '1', 1, 'L');
         
         //<img src=$_percorso/tools/barcode/barcode.php?barcode=$dati[anno]$dati[suffix]$dati[ndoc]&width=250&height=40&text=0>

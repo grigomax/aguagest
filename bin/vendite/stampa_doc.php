@@ -154,6 +154,9 @@ if ($_SESSION['user']['vendite'] > "1")
         $_suffix = "";
         $_status = "";
         $_codpagamenti = "";
+        $_castiva="";
+        $_ivariga = "";
+        $corpo_doc = "";
 
         $dati = seleziona_documento("leggi_riga_testata", $_tdoc, $ciclo['anno'], $ciclo['suffix'], $ciclo['ndoc'], $_archivio, $_parametri);
 
@@ -349,6 +352,8 @@ if ($_SESSION['user']['vendite'] > "1")
             $_parametri['BODY'] = $datidoc['BODY'];
 
             maschera_invio_posta("documento", $_percorso, $_pdf, $_emailmittente, $_emaildestino, "", $_parametri);
+            
+            exit;
         }
 
         if ($_azione == "Spedisci")
@@ -366,7 +371,8 @@ if ($_SESSION['user']['vendite'] > "1")
             //oggeto
             $_oggetto = "Invio $_tdoc $dati[ndoc]/$dati[suffix] $azienda";
             //qui richiamiamo la funzione del file invia posta allegato.
-            $_invio = invio_posta($_cosa, $_percorso, $_pdf, $_emailmittente, $_emaildestino, $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $datidoc['BODY'], $_ricevuta, $_tdoc, $_anno, $dati['ndoc'], $_allegato, $_allegato2, $_parametri);
+            $_invio = invio_posta($_cosa, $_pdf, $_emailmittente, $_emaildestino, $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $datidoc['BODY'], $_ricevuta, $_tdoc, $_anno, $dati['suffix'], $dati['ndoc'], $_allegato, $_allegato2, $_parametri);
+            
         }
      
         if($MULTI == "singolo")

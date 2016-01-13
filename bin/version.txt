@@ -13,9 +13,20 @@ massimo@mcetechnik.it
 -2  VENDITE
 -   1   Inserita la possibilità di controllo di numeri mancanti per l'anno in corso
 -       e l'anno precedente di tutti i documenti.
+-   2   Sistemato bug errore importazione righe descrittive con importo tra i 
+-       documenti.
 
 -3  STAMPE
 -   1   Nuovo sistema di stampe in pdf, continua la conversione..
+-   2   Sistemato bug riporto castelletto iva nelle stampe multiple.
+
+-4  MAGAZZINO
+-   1   Sistemate le stampe per la gestione degli imballi
+
+-5  ANAGRAFICHE
+-   1   Nuovo parametro nelle categorie mercerologiche, ora è possibile indicare
+-       quali appartengono alla gestione degli imballi.
+
 
 --------------------------------------------------------------------------------
 -VERSIONE 1.2.4 Rc 1 del 07/01/2016

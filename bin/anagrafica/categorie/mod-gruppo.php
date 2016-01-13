@@ -45,13 +45,14 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         $_descrizione = "Categoria Merceologica";
     }
 
+    
+    //echo $_POST['imballo'];
 // Inizio tabella pagina principale ----------------------------------------------------------
 
-    echo "<table valign=\"top\"><tr><td>";
     printf("<form action=\"gruppo.php?tipo=$_tipo\" method=\"POST\">\n");
-    echo "<table width=\"400\" border=\"0\" align=right>\n";
+    echo "<br><br><table border=\"0\" align=center>\n";
 
-    echo "<tr><td colspan=2 align=\"center\"><font size=3><b>Modifica $_descrizione</b><br></font></span></td>\n";
+    echo "<tr><td colspan=2 align=\"center\"><h2 align=\"center\">Modifica $_descrizione</h2></span></td>\n";
 //inizio pagina alternativa
 
     if ($_POST['azione'] == "Inserisci")
@@ -63,6 +64,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         $_descrizione = $_POST['descrizione'];
         $_parametri['id'] = $_POST['id'];
         $_parametri['descrizione'] = addslashes($_POST['descrizione']);
+        $_parametri['imballo'] = $_POST['imballo'];
 
         if ($_tipo == "tipart")
         {
@@ -110,6 +112,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         $_codice = $_POST['codice'];
         $_parametri['id'] = $_POST['id'];
         $_parametri['descrizione'] = addslashes($_POST['descrizione']);
+        $_parametri['imballo'] = $_POST['imballo'];
 
 
         if ($_tipo == "tipart")

@@ -9,13 +9,13 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso ."../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME); 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
+require $_percorso . "librerie/motore_anagrafiche.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 //carichiamo la base delle pagine:
 base_html("chiudi", $_percorso);
@@ -38,35 +38,25 @@ if ($_SESSION['user']['magazzino'] > "1")
 
 
     <?php
-    printf("<br><br><form action=\"stampa_cli.php\" target=\"sotto\" method=\"POST\">");
+    $_tut = $_GET['tut'];
+    printf("<br><br><form action=\"stampa_imballi.php?tut=$_tut\" target=\"_blank\" method=\"POST\">");
 
-    echo "<tr><td align=center>Selezionare il Cliente da stampare<br>";
-    echo "<select name=\"codice\">\n";
-    echo "<option value=\"\"></option>";
-
-    // Stringa contenente la query di ricerca...
-    $query = sprintf("select ragsoc, codice from clienti order by ragsoc");
-    // Esegue la query...
-    if ($res = mysql_query($query, $conn))
+    echo "<tr><td align=center>Selezionare il $_tut da stampare<br>";
+    
+    if($_tut == "fornitore")
     {
-	// La query ?stata eseguita con successo...
-	// MA ANCORA NON SAPPIAMO SE L'UTENTE ESISTA O MENO...
-	if (mysql_num_rows($res))
-	{
-	    // Tutto procede a meraviglia...
-	    echo "<span class=\"testo_blu\">";
-	    while ($dati = mysql_fetch_array($res))
-	    {
-		printf("<option value=\"%s\">%s</option>\n", $dati['codice'], $dati['ragsoc']);
-	    }
-	}
+        tabella_fornitori("elenca_select", "codice", $_parametri);
     }
-    echo "</select>\n";
+    else
+    {
+        tabella_clienti("elenca_select", "codice", $_parametri);
+    }
+    
+    
     echo "</td></tr>\n";
 
 
-    echo "</table><center><br><input type=\"reset\" value=\"Cancella\">&nbsp;<input
-type=\"submit\" value=\"Stampa\");>\n";
+    echo "</table><center><br><input type=\"reset\" value=\"Cancella\">&nbsp;<input type=\"submit\" value=\"Stampa\");>\n";
     echo "</form>\n</td>\n";
     echo "</td>\n</tr>\n";
 

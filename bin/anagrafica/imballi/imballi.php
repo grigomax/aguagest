@@ -9,13 +9,12 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso ."../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME); 
 session_start(); $_SESSION['keepalive']++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 
 //carichiamo la base delle pagine:
@@ -33,13 +32,12 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     // prendiamoci il codice articolo da modificare
     $_articolo = $_POST['codice'];
 
-    echo "<table><tr><td>";
     printf("<br>\n<span class=\"testo_blu\">%s</span>\n", $_testo);
     printf("<br><br><form action=\"mod-imballi.php\" method=\"POST\">\n");
-    echo "<table width=\"400\" border=\"1\" align=right>\n";
+    echo "<table border=\"0\" align=center>\n";
 
     echo "<tr><td colspan=2 align=\"center\"><font size=3<<span class=\"testo_blu\"><b>Inserisci o Modifica o Elimina imballoo</b><br></font></span></td>\n";
-    ;
+    
 
     echo "<tr><td colspan=2 align=center><br>";
 
@@ -53,11 +51,11 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
 	$query = sprintf("select * from imballi where id=\"%s\"", $_POST['codice']);
 
-	// Esegue la query...
-	$res = mysql_query($query, $conn);
+        
+	$result = domanda_db("query", $query, "verbose");
 
 	// Tutto procede a meraviglia...
-	while ($dati = mysql_fetch_array($res))
+	foreach ($result AS $dati)
 	{
 	    printf("id <input type=\"text\" name=\"id\" value=\"%s\" size=\"4\" maxleght=\"3\">", $dati['id']);
 	    printf(" Nome :<input type=\"text\" name=\"codice\" value=\"%s\" size=\"40\" maxleght=\"40\"></td></tr>", $dati['imballo']);

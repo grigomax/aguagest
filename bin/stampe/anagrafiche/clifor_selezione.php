@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
@@ -28,15 +27,16 @@ $_stampa = $_POST['stampa'];
 $_campi = $_POST['campi'];
 $_descrizione = $_POST['descrizione'];
 
-$_utente = $_GET['fornitore'];
+$_utente = $_GET['utente'];
 
 if ($_utente == "fornitori")
 {
-    $_tabella = "clienti";
+    $_tabella = "fornitori";
+    
 }
 else
 {
-    $_tabella = "fornitori";
+    $_tabella = "clienti";
 }
 
 $_parametri[tabella] = "Stampa Anagrafica $_tabella";

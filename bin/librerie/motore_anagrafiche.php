@@ -495,6 +495,7 @@ function tabella_aliquota($_cosa, $_codiva, $_parametri)
         echo "<select name=\"$_parametri\">\n";
         
         echo "<option value=\"$_codiva\">$_codiva</option>\n";
+        echo "<option value=\"\"></option>\n";
 
         foreach ($result AS $dati)
         {
@@ -1825,7 +1826,7 @@ function tabella_catmer($_cosa, $_codice, $_parametri)
     {
 
 //mi restituisce l'arre singolo
-        $query = "UPDATE catmer SET codice='$_codice', catmer = '$_parametri[descrizione]' where id='$_parametri[id]'";
+        $query = "UPDATE catmer SET codice='$_codice', catmer = '$_parametri[descrizione]', imballo='$_parametri[imballo]' where id='$_parametri[id]'";
 
 // Esegue la query...
         $result = $conn->exec($query);
@@ -1877,7 +1878,7 @@ function tabella_catmer($_cosa, $_codice, $_parametri)
     elseif($_cosa == "inserisci")
     {
         
-        $query = "insert into catmer ( codice, catmer ) VALUES ( '$_codice', '$_parametri[descrizione]')";
+        $query = "insert into catmer ( codice, catmer, imballo ) VALUES ( '$_codice', '$_parametri[descrizione]', '$_parametri[imballo]')";
         
         $result = $conn->exec($query);
 
@@ -2324,7 +2325,7 @@ function tabella_destinazioni($_cosa, $_utente, $_codice, $_parametri)
             $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
             scrittura_errori($_cosa, $_percorso, $_errori);
         }
-        echo "<option value=\"\"></option>\n";
+        echo "<option value=\"0\">Inserimento manuale</option>\n";
         echo "<span class=\"tabella_elenco\">";
         foreach ($result as $dati)
         {
@@ -2352,7 +2353,7 @@ function tabella_destinazioni($_cosa, $_utente, $_codice, $_parametri)
             $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
             scrittura_errori($_cosa, $_percorso, $_errori);
         }
-        echo "<option value=\"\"></option>\n";
+        echo "<option value=\"0\">Inserimento manuale</option>\n";
         echo "<span class=\"tabella_elenco\">";
         foreach ($result as $dati)
         {

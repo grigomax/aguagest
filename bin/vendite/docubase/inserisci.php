@@ -88,6 +88,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
         //sistemiamo la destinazione se diversa..
         //verifichiamo la destinazione
+        //echo "<br> il post passato è $_POST[destinazione]\n";
         if ($_POST['destinazione'] != "0")
         {
             //selezioniamo l'archivio e sovrascriviamo il post passatp.

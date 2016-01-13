@@ -8,7 +8,12 @@
  */
 
 //carichiamo la base del programma includendo i file minimi
-//$_percorso = "../";
+
+if(empty($_percorso))
+{
+    $_percorso = "../";
+}
+
 require_once $_percorso."../setting/vars.php";
 session_start();
 $_SESSION['keepalive'] ++;
@@ -26,7 +31,7 @@ $_azione = $_GET['azione'];
 
 //qui creiamo una funzione per poter effettuare l'invio multiplo dei coumenti
 
-function invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $_emaildestino, $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $_messaggio, $_ricevuta, $_tdoc, $_anno, $_ndoc, $_allegato, $_allegato2, $_parametri)
+function invio_posta($_cosa, $_nomefile, $_emailmittente, $_emaildestino, $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $_messaggio, $_ricevuta, $_tdoc, $_anno, $_suffix, $_ndoc, $_allegato, $_allegato2, $_parametri)
 {
     global $conn;
     global $mailsmtp;
@@ -34,6 +39,7 @@ function invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $_emaildes
     global $smtppass;
     global $smtpuser;
     global $azienda;
+    global $_percorso;
 
     require_once $_percorso . "tools/phpmailer/PHPMailerAutoload.php";
     #require_once $_percorso . "tools/phpmailer/class.phpmailer.php";
@@ -109,7 +115,7 @@ function invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $_emaildes
 
             $db_doc = archivio_tdoc($_tdoc);
 
-            $query = sprintf("UPDATE $db_doc[testacalce] SET invio='er' where anno=\"%s\" and ndoc=\"%s\"", $_anno, $_ndoc);
+            $query = "UPDATE $db_doc[testacalce] SET invio='er' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
 
             $result = $conn->exec($query);
 
@@ -135,7 +141,7 @@ function invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $_emaildes
 
             $db_doc = archivio_tdoc($_tdoc);
 
-            $query = sprintf("UPDATE $db_doc[testacalce] SET invio='si' where anno=\"%s\" and ndoc=\"%s\"", $_anno, $_ndoc);
+            $query = "UPDATE $db_doc[testacalce] SET invio='si' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
 
             echo "<h4>Email inoltrata correttamente all'indirizzo = $_emaildestino per documento nr $_ndoc <h4>\n";
 
@@ -425,7 +431,7 @@ if ($_GET['azione'] == "documento")
         
         
 
-        $_risultato = invio_posta($_cosa, $_percorso, $_POST['AddAttachment'], $_POST['From'], $_POST['AddAddress'], $_POST['AddAddressCC'], $_POST['AddAddressBCC'], $_POST['Subject'], $_POST['Body'], $_POST['ricevuta'], $_POST['tdoc'], $_POST['anno'], $_POST['ndoc'], $_allegato, $_allegato2, $_parametri);
+        $_risultato = invio_posta($_cosa, $_POST['AddAttachment'], $_POST['From'], $_POST['AddAddress'], $_POST['AddAddressCC'], $_POST['AddAddressBCC'], $_POST['Subject'], $_POST['Body'], $_POST['ricevuta'], $_POST['tdoc'], $_POST['anno'], $_POST['suffix'], $_POST['ndoc'], $_allegato, $_allegato2, $_parametri);
 
         echo "<span class=\"testo_blu\"><h2>Risulato Invio e-mail</h2></span>\n";
 

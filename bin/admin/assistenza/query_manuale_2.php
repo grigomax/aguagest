@@ -41,42 +41,39 @@ if ($_SESSION['user']['setting'] > "3")
 
     $query = "$_POST[query]";
 
-    if ($_POST['azione'] == "exec")
-    {
-        $result = $conn->exec($query);
-    }
-    else
-    {
-        $result = $conn->query($query);
-    }
+    $result = domanda_db($_POST['azione'], $query, $_parametri);
 
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    else
+    if ($result != "NO")
     {
         echo "<br>Connessione eseguita\n";
-        if ($result->num_rows > 0)
+
+        if ($_POST['azione'] == "exec")
+        {
+            echo "<br> Numero righe coinvolte " . $result . "\n";
+        }
+        else
         {
             echo "<br> Numero righe  " . $result->rowCount() . "\n";
-
+            echo "<br> Numero colonne  " . $result->columnCount() . "\n";
+            $total_column = $result->columnCount();
+            
             if (stristr($_POST['query'], "SELECT") != FALSE)
             {
                 echo "<br>vediamo i risultati";
 
                 echo "<table width=\"95%\" border=\"1\" align=\"center\">\n";
+                for ($index = 0; $index <= $total_column; $index++)
+                    {
+                        echo "<td><b>\n";
+                        $colonna = $result->getColumnMeta($index);
+                        echo $colonna['name'];
+                        echo "</b></td>\n";
+                    }
+                $index = "0";
                 foreach ($result AS $dati)
                 {
                     echo "<tr>\n";
-                    $for = count($dati);
-                    for ($index = 0; $index <= $for; $index++)
+                    for ($index = 0; $index <= $total_column; $index++)
                     {
                         echo "<td>\n";
                         echo $dati[$index];
@@ -88,10 +85,6 @@ if ($_SESSION['user']['setting'] > "3")
 
                 echo "</table>\n";
             }
-        }
-        else
-        {
-            echo "<br> 0 righe modificate. nessun riscontro";
         }
     }
 }

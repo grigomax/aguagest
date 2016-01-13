@@ -72,6 +72,87 @@ else
 
 
 
+$query = "ALTER TABLE catmer ADD imballo INT(1) NOT NULL DEFAULT '0' AFTER catmer, ADD ts TIMESTAMP NOT NULL AFTER imballo";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Alterazione tabella $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Alterazione tabella agg. $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+//inseriamo la possibilità di escludere il cliente dalla pupplicità
+
+$query = "ALTER TABLE clienti ADD es_pubblicita CHAR(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NO' AFTER es_selezione";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Alterazione tabella $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Alterazione tabella agg. $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
+
+
+$query = "ALTER TABLE stampe_layout ADD PRIMARY KEY(tdoc)";
+
+$conn->exec($query);
+$_punto++;
+if ($conn->errorCode() == "00000") // ... tutto ok
+{
+    echo "Alterazione tabella $_versione punto $_punto ..  riuscita perfettamente <br>";
+    $_num++;
+    $fine = 1;
+}
+else
+{
+    echo "Alterazione tabella agg. $_versione punto $_punto $db_nomedb<br>";
+
+    $errorinfo = $conn->errorInfo();
+    echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
+    $_errori['descrizione'] = $errorinfo[2];
+    $_errori['files'] = "$_versione.sql.db.php";
+    scrittura_errori($_cosa, $_percorso, $_errori);
+    echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
+    echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
+    echo "</body></html>";
+    $fine = 0;
+    exit;
+}
 
 
 

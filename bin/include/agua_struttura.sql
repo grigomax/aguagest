@@ -313,8 +313,10 @@ CREATE TABLE `catmer` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `codice` varchar(18) NOT NULL,
   `catmer` varchar(70) DEFAULT NULL,
+  `imballo` int(1) NOT NULL DEFAULT '0',
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS causali_contabili;
 
@@ -396,6 +398,7 @@ CREATE TABLE `clienti` (
   `indice_pa` varchar(7) DEFAULT NULL,
   `cod_ute_dest` varchar(15) DEFAULT NULL,
   `es_selezione` char(2) NOT NULL DEFAULT 'NO',
+  `es_pubblicita` char(2) NOT NULL DEFAULT 'NO',
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`codice`),
   UNIQUE KEY `pi` (`piva`)
