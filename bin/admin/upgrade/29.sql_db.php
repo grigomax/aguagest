@@ -70,7 +70,7 @@ else
 //aggiorniamo il database zone e lo postiamo a Myisam;
 
 
-$conn->exec("ALTER TABLE agua.zone ENGINE = MyISAM");
+$conn->exec("ALTER TABLE zone ENGINE = MyISAM");
 
 
 if ($conn->errorCode() == "00000") // ... tutto ok

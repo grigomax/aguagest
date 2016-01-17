@@ -54,7 +54,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         //cerco la riga se c'e l'aggiorno, se non c'e la inserisco
         $query = ("SELECT * FROM imballi WHERE imballo='$_codice'");
         //esegue la query
-        $result = domanda_db("query", $query, $_parametri);
+        $result = domanda_db("query", $query, $_ritorno, $_parametri);
 //	echo $query;
 
         if ($result->rowCount() > 0)
@@ -65,7 +65,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         {
             $query = ("insert into imballi ( imballo ) VALUES ( '$_codice')");
             //esegue la query
-            $result = domanda_db("exec", $query, $_parametri);
+            $result = domanda_db("exec", $query, $_ritorno, $_parametri);
             echo "<td>Imballo $_articolo inserito correttamente</td>";
         }
 
@@ -79,7 +79,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         $query = sprintf("UPDATE imballi SET imballo = \"%s\" where id=\"%s\"", $_POST['codice'], $_POST['id']);
         
         
-        $result = domanda_db("exec", $query, "verbose");
+        $result = domanda_db("exec", $query, $_ritorno, "verbose");
         
         echo $result;
         if($result != "NO")
@@ -103,7 +103,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         //cerco la riga se c' l'aggiorno, se non c' la inserisco
         $query = "DELETE FROM imballi where id=".$conn->quote($_POST['id']);
         
-        $result = domanda_db("exec", $query, "verbose");
+        $result = domanda_db("exec", $query, $_ritorno, "verbose");
                 
         if($result != "NO")
         {
@@ -129,7 +129,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     // Stringa contenente la query di ricerca...
     $query = sprintf("select * from imballi order by imballo ");
 
-    $result = domanda_db("query", $query, $_parametri);
+    $result = domanda_db("query", $query, $_ritorno, $_parametri);
 
     // Tutto procede a meraviglia...
     echo "<span class=\"testo_blu\">";

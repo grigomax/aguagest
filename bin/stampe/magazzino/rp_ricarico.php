@@ -30,7 +30,7 @@ $_tipo = $_POST['tipo'];
 
 $query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno LIMIT 1";
 
-    $result = domanda_db("query", $query, $_parametri);
+    $result = domanda_db("query", $query, $_ritorno, $_parametri);
 
     $datianno = $result->fetch(PDO::FETCH_ASSOC);
 

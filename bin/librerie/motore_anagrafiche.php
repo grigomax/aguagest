@@ -578,7 +578,7 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
     {
         $query = "select * from articoli where articolo='$_codice' limit 1";
 
-        $result = domanda_db("query", $query, $_parametri);
+        $result = domanda_db("query", $query, $_ritorno, $_parametri);
         
         if($result != "NO")
         {

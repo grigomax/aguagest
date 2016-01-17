@@ -181,7 +181,7 @@ else
 }
 
 
-$query = "ALTER TABLE agua.fv_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( tdoc, anno, suffix, ndoc )";
+$query = "ALTER TABLE fv_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( tdoc, anno, suffix, ndoc )";
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok
@@ -292,7 +292,7 @@ else
 }
 
 
-$query = "ALTER TABLE agua.bv_bolle DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
+$query = "ALTER TABLE bv_bolle DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok
@@ -429,7 +429,7 @@ else
 }
 
 
-$query = "ALTER TABLE agua.co_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
+$query = "ALTER TABLE co_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok
@@ -565,7 +565,7 @@ else
 }
 
 
-$query = "ALTER TABLE agua.oc_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
+$query = "ALTER TABLE oc_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok
@@ -702,7 +702,7 @@ else
 }
 
 
-$query = "ALTER TABLE agua.of_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
+$query = "ALTER TABLE of_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok
@@ -839,7 +839,7 @@ else
 }
 
 
-$query = "ALTER TABLE agua.pv_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
+$query = "ALTER TABLE pv_testacalce DROP PRIMARY KEY, ADD PRIMARY KEY ( anno, suffix, ndoc )";
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok
@@ -948,7 +948,7 @@ else
     exit;
 }
 
-$query = "ALTER TABLE agua.doc_basket DROP PRIMARY KEY, ADD PRIMARY KEY ( sessionid, rigo, anno, suffix, ndoc )";
+$query = "ALTER TABLE doc_basket DROP PRIMARY KEY, ADD PRIMARY KEY ( sessionid, rigo, anno, suffix, ndoc )";
 $conn->exec($query);
 $_punto++;
 if ($conn->errorCode() == "00000") // ... tutto ok

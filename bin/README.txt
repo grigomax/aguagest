@@ -13,6 +13,19 @@ Necessita di un server funzionante.
 
 Ecco le ultime novità delle versioni presenti.
 
+-VERSIONE 1.2.4 Rc3 del 14/01/2016
+-1 ADMIN
+-   1   Sistemato bug gestione delle query manuale
+
+-2  VENDITE
+-   1   Sistemato bug modifica righe documenti durante le modifica dello stesso
+
+-3  CONTABILITA
+-   1   Sistemato bug campo selezione iva durante la modifica della registrazione
+-   2   sistemato bug associazione numero protocollo in base all'anno
+
+-------------------------------------
+
 -VERSIONE 1.2.4 Rc 2 del 11/01/2016
 -1  ADMIN
 -   1   Nuovo aggiornamento layout documenti, ora sono tutti i pdf la loro modifica

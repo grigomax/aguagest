@@ -104,7 +104,7 @@ ul.menu a {
     text-decoration: none;
     display: block;
     color: #FFFFFF;
-    padding: 4px 10px;
+    padding: 6px 10px;
     width: 7em;
     text-align: center;
     font-size: 0.9em;
@@ -127,7 +127,7 @@ ul.menu li a:hover {
 ul.menu li li a {
     color: #3B5998;
     text-align: left;
-    padding: 4px 10px;
+    padding: 5px 10px;
     font-size: 0.9em;
     width: 12em;
     z-index: 999;

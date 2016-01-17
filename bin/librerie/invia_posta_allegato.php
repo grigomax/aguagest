@@ -24,7 +24,8 @@ require_once $_percorso."librerie/lib_html.php";
 $conn = permessi_sessione("verifica_PDO", $_percorso);
 require_once $_percorso."librerie/motore_doc_pdo.php";
 
-require_once $_percorso."tools/phpmailer/class.phpmailer.php";
+
+require_once $_percorso."tools/phpmailer/PHPMailerAutoload.php";
 
 
 $_azione = $_GET['azione'];
@@ -34,39 +35,46 @@ $_azione = $_GET['azione'];
 function invio_posta($_cosa, $_nomefile, $_emailmittente, $_emaildestino, $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $_messaggio, $_ricevuta, $_tdoc, $_anno, $_suffix, $_ndoc, $_allegato, $_allegato2, $_parametri)
 {
     global $conn;
-    global $mailsmtp;
-    global $smtpaut;
-    global $smtppass;
-    global $smtpuser;
     global $azienda;
     global $_percorso;
 
-    require_once $_percorso . "tools/phpmailer/PHPMailerAutoload.php";
-    #require_once $_percorso . "tools/phpmailer/class.phpmailer.php";
-    //require_once $_percorso . "tools/phpmailer/class.smtp.php";
-    require_once $_percorso . "librerie/motore_doc_pdo.php";
+    //require $_percorso . "tools/phpmailer/PHPMailerAutoload.php";
+    //require $_percorso . "librerie/motore_doc_pdo.php";
+    require $_percorso . "../setting/vars.php";
 
+    
     if ($_emaildestino != "")
     {
 
         $mail = new PHPMailer();
-        $mail->SetLanguage("it", $_percorso . "tools/phpmailer/language/");
         $mail->isSMTP(); // set mailer to use SMTP
-
-        $mail->Host = "$mailsmtp"; // specify main and backup server
-        $mail->Port = "$PORTSMTP";
-        $mail->SMTPAuth = "$smtpaut"; // turn on SMTP authentication
-        $mail->Username = "$smtpuser"; // SMTP username
-        $mail->Password = "$smtppass"; // SMTP password
+        $mail->CharSet = 'UTF-8';
+        $mail->SetLanguage("it", $_percorso . "tools/phpmailer/language/");
+        //$mail->SMTPDebug  = 4;                     // enables SMTP debug information (for testing)
+        //$mail->Debugoutput = 'html';
         $mail->Hostname = "$HOSTNAME";
-
+        $mail->Host = $mailsmtp; // specify main and backup server
+        $mail->Port = $PORTSMTP;
+        
+        //echo "<br>Ciao $mailsmtp";
+       
         if ($SSL != "NO")
         {
-            $mail->SMTPSecure = "$SSL";                            // Enable encryption, 'ssl' also accepted
+            $mail->SMTPSecure = $SSL;      
+            // Enable encryption, 'ssl' also accepted
+            
+            $mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
+            
         }
+        
+                
+        $mail->SMTPAuth = $smtpout; // turn on SMTP authentication
+        
+        $mail->Username = $smtpuser; // SMTP username
+        $mail->Password = $smtppass; // SMTP password
+        
+        $mail->setFrom($_emailmittente, $_azienda);
 
-        $mail->From = $_emailmittente;
-        $mail->FromName = $_azienda;
         $mail->AddAddress($_emaildestino);
 
         if ($_emaildestinoCC != "")
@@ -161,6 +169,7 @@ function invio_posta($_cosa, $_nomefile, $_emailmittente, $_emaildestino, $_emai
     }// fine graffa funzione controllo esistenza campo email
 
     return $_return;
+
 }
 
 if ($_GET['azione'] == "singolo")
@@ -251,25 +260,35 @@ if ($_GET['azione'] == "singolo")
             //se invece va bene lo alleghiamo alla e-mail..
         }
 
-
         $mail = new PHPMailer();
 
         //$mail->SMTPDebug = 3;
         $mail->isSMTP(); // set mailer to use SMTP
+        $mail->CharSet = 'UTF-8';
         $mail->SetLanguage("it", $_percorso . "tools/phpmailer/language/");
-        $mail->Host = "$mailsmtp"; // specify main and backup server
-        $mail->SMTPAuth = "$smtpaut"; // turn on SMTP authentication
-        $mail->Port = "$PORTSMTP";
-        $mail->Username = "$smtpuser"; // SMTP username
-        $mail->Password = "$smtppass"; // SMTP password
-
+        //$mail->SMTPDebug  = 2;                     // enables SMTP debug information (for testing)
+        //$mail->Debugoutput = 'html';
+        $mail->Hostname = "$HOSTNAME";
+        $mail->Host = $mailsmtp; // specify main and backup server
+        $mail->Port = $PORTSMTP;
+       
         if ($SSL != "NO")
         {
-            $mail->SMTPSecure = "$SSL";                            // Enable encryption, 'ssl' also accepted
+            $mail->SMTPSecure = $SSL;      
+            // Enable encryption, 'ssl' also accepted
+            
+            $mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
+            
         }
-
-        $mail->From = $_POST['From'];
-        $mail->FromName = $_POST['FromName'];
+        
+                
+        $mail->SMTPAuth = $smtpout; // turn on SMTP authentication
+        
+        $mail->Username = $smtpuser; // SMTP username
+        $mail->Password = $smtppass; // SMTP password
+        
+        $mail->setFrom($_POST['From'], $_POST['FromName']);
+        
         $mail->AddAddress($_POST['AddAddress']);
 
         if ($_POST['AddAddressCC'] != "")
@@ -312,6 +331,10 @@ if ($_GET['azione'] == "singolo")
             echo "C'e stato un errore nella presa in consegna del messaggio.. indirizzo errato ? controllare e riprovare";
 
             echo "<br>Tipo di errore: " . $mail->ErrorInfo;
+            
+            echo "<h3>Nel caso di un accesso google è necessario </h3><h3>Fare la procedura di autentificazione</h3>\n";
+            echo "<h4><a href=\"http://www.google.com/intl/it/landing/2step/\">http://www.google.com/intl/it/landing/2step/</a></h4>\n";
+            
             exit;
         }
         else

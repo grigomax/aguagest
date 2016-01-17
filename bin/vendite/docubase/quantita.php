@@ -442,7 +442,7 @@ if ($_SESSION['user']['vendite'] > "2")
                     $dati_corr = tabella_articoli("singola", $dati2['artcorr'], $_parametri);
                     echo "<tr><td colspan=\"7\" align=\"left\">Trovato Articolo correlato:<br>";
                     echo "<font size=\"2\" face=\"arial\">$dati_corr[articolo] $dati_corr[descrizione]</td>\n";
-                    echo "<td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia => <input type=\"checkbox\" name=\"aggancia\" value=\"$dati_corr[articolo]\"></td></tr>";
+                    echo "</span><td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia => <input type=\"checkbox\" name=\"aggancia\" value=\"$dati_corr[articolo]\"></td></tr>";
                 }
                 
                 if($dati2[artcorr_2] != "")
@@ -480,20 +480,12 @@ if ($_SESSION['user']['vendite'] > "2")
         // inizio variabili ambiantali..
         $_anno = date('Y');
 
-        $query = sprintf("select sum(qtacarico) AS qtacarico, SUM(valoreacq) AS valoreacq, sum(qtascarico) AS qtascarico from magazzino where anno=\"%s\" and articolo=\"%s\"", $_anno, $dati2['articolo']);
+        //$query = "select sum(qtacarico) AS qtacarico, sum(qtascarico) AS qtascarico from magazzino where articolo='$_articolo'";
+        $query = "select sum(qtacarico) AS qtacarico, SUM(valoreacq) AS valoreacq, sum(qtascarico) AS qtascarico from magazzino where articolo='$dati2[articolo]'";
 
-        $result = $conn->query($query);
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "quantita.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-        foreach ($result AS $dati_mag)
-            $_qtacarico = $dati_mag['qtacarico'];
+        $dati_mag = domanda_db("query", $query, "fetch", $_parametri);
+        
+        $_qtacarico = $dati_mag['qtacarico'];
         $_qtascarico = $dati_mag['qtascarico'];
         $_valoreacq = $dati_mag['valoreacq'];
         $_giacenza = ($_qtacarico - $_qtascarico);

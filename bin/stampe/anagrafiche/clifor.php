@@ -2,7 +2,7 @@
 # la query e gia stata eseguita..
 #mi resta solo la esposizione dei dati..
 
-$result = domanda_db("query", $query, "verbose");
+$result = domanda_db("query", $query, $_ritorno, "verbose");
 
 if ($result == "NO")
 {

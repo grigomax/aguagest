@@ -10,14 +10,13 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 
 //carichiamo la base delle pagine:
@@ -40,9 +39,8 @@ if ($_SESSION['user']['setting'] > "3")
         // Stringa contenente la query di ricerca...
         $query = sprintf("select anno from magazzino GROUP BY anno order by anno ASC");
 // Esegue la query...
-        $res = mysql_query($query, $conn);
-// Tutto procede a meraviglia...
-        $dati = mysql_fetch_array($res);
+        $dati = domanda_db("query", $query, "fetch", "verbose");
+        
         $_anno_arc = $dati['anno'];
         $_anno = date('Y');
     }
@@ -55,15 +53,16 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";
     echo "<tr>\n";
     echo "<td colspan=\"8\" align=\"center\" >\n";
-    echo "<span class=\"intestazione\"><b>Programma per la chiusura e la riapertura dell'esercizio di magazzino</b><br>Si chiude sempre l'anno precedente gli esercizi si aprono in automatico</span><br></td></tr>\n";
+    echo "<span class=\"intestazione\"><b>Programma per la chiusura e la riapertura dell'esercizio di magazzino</b>\n";
+    echo "<br>Si chiude sempre l'anno precedente gli esercizi si aprono in automatico</span><br></td></tr>\n";
 
 
 
 
     echo "<tr><td align=center colspan=8><font color=\"red\">\n";
-    echo "<br> Attenzione:  il programma effettua una verifica sull'archivio delle bolle e delle fatture,
+    echo "<br> Attenzione:  il programma effettua una verifica sull'archivio delle bolle e delle fatture,<br>
     non verifica in alcun modo l'archivio dei carichi del magazzino.\n";
-    echo "L'operazione pu&ugrave; essere effettuata una volta sola, <b>ed &egrave; irreversibile.</b><br>\n";
+    echo "<br>L'operazione pu&ugrave; essere effettuata una volta sola, <b>ed &egrave; irreversibile.</b><br>\n";
     echo "<font size=\"3\"><b> Quindi SI CONSIGLIA DI FARE LE COPIE DEGLI ARCHIVI PRIMA DI PROSEGUIRE... GRAZIE \"Agua staff\"</b><br>\n";
     echo "L'operazione deve essere eseguita nell'anno nuovo, il programma evidenzia in automatico l'anno da chiudere</font></font></td></tr>\n";
 
@@ -90,9 +89,10 @@ if ($_SESSION['user']['setting'] > "3")
             $query = sprintf("SELECT * FROM magazzino WHERE anno <= \"%s\" ORDER BY datareg DESC", $_anno_arc);
         }
 // Esegue la query...
-        $res = mysql_query($query, $conn) or mysql_error();
+        
+        $result = domanda_db("query", $query, $_ritorno, $_parametri);
 
-        if (mysql_num_rows($res) > 0)
+        if ($result->rowCount() > 0)
         {
             echo "<tr><td colspan=\"8\" align=\"center\"><h3>Impossibile proseguire in quanto ci sono delle discordanze tra le date presenti negli archivi </h3></td></tr>\n";
             //echo "<tr><td colspan=\"8\" align=\"center\"><h4>Cambiare anno di riferimento per sistemare gli archivi magazzino Prima di procedere</h4><br></td></tr>\n";
@@ -103,7 +103,7 @@ if ($_SESSION['user']['setting'] > "3")
 
             // Tutto procede a meraviglia...
             echo "<span class=\"testo_blu\">";
-            while ($dati = mysql_fetch_array($res))
+            foreach ($result AS $dati)
             {
                 $_annov = $dati['anno'];
                 echo "<tr><td>$dati[anno]</td><td align=\"left\">$dati[datareg]</td><td>$dati[tut]</td><td>$dati[tdoc]</td><td>$dati[ndoc]</td><td>$dati[articolo]</td><td>$dati[qtacarico]</td><td>$dati[qtascarico]</td></tr>\n";

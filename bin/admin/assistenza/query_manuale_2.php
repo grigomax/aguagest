@@ -41,7 +41,7 @@ if ($_SESSION['user']['setting'] > "3")
 
     $query = "$_POST[query]";
 
-    $result = domanda_db($_POST['azione'], $query, $_parametri);
+    $result = domanda_db($_POST['azione'], $query, $_ritorno, $_parametri);
 
     if ($result != "NO")
     {

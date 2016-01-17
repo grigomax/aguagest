@@ -384,7 +384,14 @@ if ($_SESSION['user']['setting'] > "3")
                     <td>e-mail negozio on line</td>
                     <td><input type=\"text\" size=\"70\" name=\"email4\" value=\"$email4\"></td>
                 </tr>
-                <tr>
+                <tr><td colspan=\"2\"><hr></td></tr>\n";
+                echo "<tr><td colspan=\"2\"><h3>Nel caso di un accesso google è necessario Fare la procedura di autentificazione</h3>\n";
+                echo "<h4><a href=\"http://www.google.com/intl/it/landing/2step/\">http://www.google.com/intl/it/landing/2step/</a></h4>\n";
+            
+                echo "</td></tr>\n";
+
+
+                echo "<tr>
                     <td>nome Host locale</td>
                     <td><input type=\"text\" size=\"70\" name=\"HOSTNAME\" value=\"$HOSTNAME\"><br> es. localhost</td>
                 </tr>						
@@ -394,7 +401,7 @@ if ($_SESSION['user']['setting'] > "3")
                 </tr>
                 <tr>
                     <td>numero porta uscita posta</td>
-                    <td><input type=\"text\" size=\"70\" name=\"PORTSMTP\" value=\"$PORTSMTP\"><br> es. 25 o 587 oppure per gmail 465 o 587</td>
+                    <td><input type=\"text\" size=\"70\" name=\"PORTSMTP\" value=\"$PORTSMTP\"><br> es. 25 o 587 oppure per gmail 587</td>
                 </tr>
                 <tr>
                     <td>il server posta richiede la password in uscita ?</td>
@@ -428,7 +435,7 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<option value=\"NO\">NO</option>\n";
     echo "<option value=\"ssl\">ssl</option>\n";
     echo "<option value=\"tls\">tls</option>\n";
-    echo "</select>Esempio per Gmail è la SSL</td>\n";
+    echo "</select>Esempio per Gmail è la tls</td>\n";
     echo "</tr><tr>\n";
 
     echo "

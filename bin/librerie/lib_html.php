@@ -531,7 +531,7 @@ function connessione_mysql($_cosa, $query, $_parametri)
  * @param type $_parametri verbose mi ma apparire a video i messaggi
  * @return string
  */
-function domanda_db($_cosa, $query, $_parametri)
+function domanda_db($_cosa, $query, $_ritorno, $_parametri)
 {
     global $conn;
     global $_percorso;
@@ -540,68 +540,89 @@ function domanda_db($_cosa, $query, $_parametri)
     //qui passiamo le queri per la domanda.. così da poter avere sempre un risultato corretto 
     //echo "<br>$query\n";
 
-    if ($_cosa == "exec")
+    if ($_ritorno == "solo_fetch")
     {
-        $result = $conn->exec($query);
+        $return = $_parametri->fetch(PDO::FETCH_ASSOC);
     }
     else
     {
-        $result = $conn->query($query);
-    }
 
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-        $return['descrizione'] = $_errori['descrizione'];
-        $return['query'] = $query;
-        $return['result'] = "NO";
-    }
 
-    if ($_cosa == "exec")
-    {
-        if ($result == FALSE)
+        if ($_cosa == "exec")
         {
-            //echo "ciao";
-            $result-> null;
-            $result = "NO";
-            
+            $result = $conn->exec($query);
         }
-    }
-    else
-    {
-        if ($result->rowCount() < 1)
+        else
         {
-            //echo "ciao";
-            $result-> null;
-            $result = "NO";
-            //echo $_parametri;
-            //echo $result;
-        }
-    }
-    
-    if($result == "NO")
-    {
-        if ($_parametri == "verbose")
-        {
-            echo "<center><h4><font color=\"green\">Errore Nessuna Corrispondenza trovata</font></h4>\n";
+            $result = $conn->query($query);
         }
 
-        if ($_parametri == "block")
+        if ($conn->errorCode() != "00000")
         {
-            echo "<h2 align=\"center\">Errore query</h2>\n";
-            echo "<br>$_errori[descrizione]\n";
-            echo "<br>$_query\n";
-            echo "<br>procedura bloccata\n";
-            exit;
+            $_errore = $conn->errorInfo();
+            echo $_errore['2'];
+            //aggiungiamo la gestione scitta dell'errore..
+            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+            scrittura_errori($_cosa, $_percorso, $_errori);
+            $return['descrizione'] = $_errori['descrizione'];
+            $return['query'] = $query;
+            $return['result'] = "NO";
+        }
+
+        if ($_cosa == "exec")
+        {
+            if ($result == FALSE)
+            {
+                //echo "ciao";
+                $result->null;
+                $return = "NO";
+            }
+        }
+        else
+        {
+            if ($result->rowCount() < 1)
+            {
+                //echo "ciao";
+                $result->null;
+                $return = "NO";
+                //echo $_parametri;
+                //echo $result;
+            }
+        }
+
+        if ($return == "NO")
+        {
+            if ($_parametri == "verbose")
+            {
+                echo "<center><h4><font color=\"green\">Errore Nessuna Corrispondenza trovata</font></h4>\n";
+            }
+
+            if ($_parametri == "block")
+            {
+                echo "<h2 align=\"center\">Errore query</h2>\n";
+                echo "<br>$_errori[descrizione]\n";
+                echo "<br>$query\n";
+                echo "<br>procedura bloccata\n";
+                exit;
+            }
+        }
+        else
+        {
+            if ($_ritorno == "fetch")
+            {
+                $return = $result->fetch(PDO::FETCH_ASSOC);
+            }
+            else
+            {
+                $return = $result;
+            }
         }
     }
 
-    return $result;
+
+
+    return $return;
 }
 
 /**

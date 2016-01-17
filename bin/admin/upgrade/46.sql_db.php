@@ -45,7 +45,7 @@ else
     exit;
 }
 
-$query = "ALTER TABLE agua.scadenziario DROP PRIMARY KEY , ADD PRIMARY KEY ( anno , nscad )";
+$query = "ALTER TABLE scadenziario DROP PRIMARY KEY , ADD PRIMARY KEY ( anno , nscad )";
 
 $conn->exec($query);
 $_punto++;
