@@ -46,33 +46,32 @@ if ($_SESSION['user']['setting'] > "3")
     {
         //ed il nome del documento da prendere..
         $_tdoc = $_POST['tdoc'];
-        
+
         $_tipo = substr($_tdoc, "0", "3");
-        
+
         if (($_tipo == "eti") OR ( $_GET[eti] == "SI"))
         {
             //confermiamo che la etichetta è una etichetta
 
             $_eti = "SI";
         }
-        
+
         if (($_tipo == "lis") OR ( $_GET[lis] == "SI"))
         {
             //confermiamo che la etichetta è una etichetta
 
             $_lis = "SI";
         }
-        
     }
     else
     {
         $_tdoc = $_GET['tdoc'];
     }
-   
 
 
 
-    echo "<h2>Controllo larghezza corpo documento</h2>\n";
+
+    echo "<h3 align=\"center\">Controllo larghezza corpo documento</h3>\n";
     $_spazio = "0";
     if ($_POST['ST_RIGA'] == "SI")
     {
@@ -296,7 +295,7 @@ if ($_SESSION['user']['setting'] > "3")
 
 //ora che abbiamo la somma del corpo, verifichiamo che sia uguale a 100% altrimenti blocchiamo e facciamo tornare indietro
 
-    if (($_spazio >= "200") AND ( $_eti != SI))
+    if (($_spazio >= "201") AND ( $_eti != SI))
     {
         echo "<h3>Somma corpo documenti = $_spazio mm </h3>\n";
         echo "<h2> Errore la somma delle percentuali del corpo &egrave; diversa da 200mm</h2>\n";
@@ -378,9 +377,7 @@ if ($_SESSION['user']['setting'] > "3")
     ST_QTAESTRATTA_LC, ST_QTASALDO, ST_QTASALDO_ALL, ST_QTASALDO_CT, ST_QTASALDO_LC , ST_LISTINO, ST_LISTINO_ALL, ST_LISTINO_CT, ST_LISTINO_LC, ST_AVV_PN, ST_SCONTI, ST_SCONTI_ALL,
     ST_SCONTI_LC, ST_NETTO, ST_NETTO_ALL, ST_NETTO_CT, ST_NETTO_LC, ST_TOTRIGA, ST_TOTRIGA_ALL, ST_TOTRIGA_CT , ST_TOTRIGA_LC, ST_CODIVA, ST_CODIVA_ALL, ST_CODIVA_LC,
     ST_RSALDO, ST_RSALDO_ALL, ST_RSALDO_LC, ST_PESO, ST_PESO_ALL , ST_PESO_LC, ST_CONSEGNA, ST_CONSEGNA_ALL, ST_CONSEGNA_CT, ST_CONSEGNA_LC, ST_AVVISO, ST_AVVISO_ALL ,
-    ST_AVVISO_LC, ST_PREZZI , ST_DATA, BODY, ST_INTERLINEA )
-						
-						VALUES
+    ST_AVVISO_LC, ST_PREZZI , ST_DATA, BODY, ST_INTERLINEA )VALUES
 						( '$_tdoc',  '$_NDOC', '$_POST[ST_LOGOG]', '$_POST[ST_LOGOM]', '$_POST[ST_LOGOP]',
     '$_POST[ST_TLOGO]', '$_POST[ST_FONTLOGO]', '$_POST[ST_FONTLOGOSIZE]', '$_POST[ST_TIPOTESTATA]',
     '$_POST[ST_SOTTOTESTATA]', '$_POST[ST_FONTINTEST]',  '$_POST[ST_FONTINTESTSIZE]',  '$_POST[ST_TIPOCALCE]',
@@ -442,32 +439,12 @@ if ($_SESSION['user']['setting'] > "3")
         $query = "DELETE FROM stampe_layout WHERE ndoc='$_todc' LIMIT 1";
     }
 
-    $result = $conn->query($query);
 
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "salva_layout.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
+    $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
-        echo "Errore nell'aggiornamento punto inserimento $_tdoc  $db_nomedb";
-        echo "<br> ecco la query <br>$query<br>\n";
-        echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
-        
-        echo "</body></html>";
-        $fine = 0;
-        exit;
-    }
-
-
-
-    echo "<center>";
-    echo "<h2>Se non appaiono errori a video<br> il file &egrave; stato <br>modificato con successo</h2>";
+    echo "<h2 align=\"center\"><a href=\"../../index.php\">Torna all'indice</a></h2>";
     echo "<br>";
-   
+
     echo "</body></html>";
 }
 else

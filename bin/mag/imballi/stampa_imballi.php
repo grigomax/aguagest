@@ -40,7 +40,7 @@ if ($_SESSION['user']['magazzino'] > "1")
     }
     
 
-    $result = domanda_db("query", $query, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
     $dati = $result->fetch(PDO::FETCH_ASSOC);
 
@@ -59,7 +59,7 @@ if ($_SESSION['user']['magazzino'] > "1")
     }
     
     
-    $result = domanda_db("query", $query, $_ritorno, ($_parametri['echo'] = "verbose"));
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, ($_parametri['echo'] = "verbose"));
 
     if ($result != "NO")
     {
@@ -78,7 +78,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 
     $query = "SELECT * FROM catmer where imballo = '1'";
 
-    $result = domanda_db("query", $query, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
     $dati = $result->fetch(PDO::FETCH_ASSOC);
 
@@ -97,7 +97,7 @@ if ($_SESSION['user']['magazzino'] > "1")
     }
     
 
-    $result = domanda_db("query", $query, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
 
     // Tutto procede a meraviglia...
@@ -126,7 +126,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 
 // inizio estrazioni dati e pagina visiva
 
-    $result = domanda_db("cosa", $query, $_ritorno, $_parametri);
+    $result = domanda_db("cosa", $query, $_cosa, $_ritorno, $_parametri);
 
 
     // Tutto procede a meraviglia...

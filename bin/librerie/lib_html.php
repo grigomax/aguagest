@@ -51,14 +51,13 @@ if(isset($DEBUG))
     }
     else
     {
-        set_error_handler("gestione_errori", E_ALL & ~E_DEPRECATED);
+        set_error_handler("gestione_errori", E_ALL & ~E_DEPRECATED & ~E_STRICT);
     }
 }
 else
 {
-    set_error_handler("gestione_errori", E_ALL & ~E_DEPRECATED);
+    set_error_handler("gestione_errori", E_ALL & ~E_DEPRECATED & ~E_STRICT);
 }
-
 
 
 //funzione sperimentale che mi consente di verificare una sessione aperta..
@@ -531,7 +530,7 @@ function connessione_mysql($_cosa, $query, $_parametri)
  * @param type $_parametri verbose mi ma apparire a video i messaggi
  * @return string
  */
-function domanda_db($_cosa, $query, $_ritorno, $_parametri)
+function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
 {
     global $conn;
     global $_percorso;
@@ -547,8 +546,9 @@ function domanda_db($_cosa, $query, $_ritorno, $_parametri)
     else
     {
 
+        registra_operazioni($_cosa, $query, $_parametri);
 
-        if ($_cosa == "exec")
+        if ($_tipo == "exec")
         {
             $result = $conn->exec($query);
         }
@@ -570,7 +570,7 @@ function domanda_db($_cosa, $query, $_ritorno, $_parametri)
             $return['result'] = "NO";
         }
 
-        if ($_cosa == "exec")
+        if ($_tipo == "exec")
         {
             if ($result == FALSE)
             {
@@ -595,8 +595,32 @@ function domanda_db($_cosa, $query, $_ritorno, $_parametri)
         {
             if ($_parametri == "verbose")
             {
-                echo "<center><h4><font color=\"green\">Errore Nessuna Corrispondenza trovata</font></h4>\n";
+                if($_tipo == "query")
+                {
+                    echo "<h4 align=\"center\"><font color=\"green\">Nessuna Corrispondenza trovata nella ricerca</font></h4>\n";
+                }
+                else
+                {
+                    echo "<h4 align=\"center\"><font color=\"green\">Nessuna Variazione Effettuata</font></h4>\n";
+                }
+                
             }
+            
+            if ($_parametri == "verbose2")
+            {
+                if($_tipo == "query")
+                {
+                    $_messaggio = "Nessuna Corrispondenza trovata nella ricerca\n";
+                }
+                else
+                {
+                    $_messaggio = "Nessuna Variazione Effettuata\n";
+                }
+                
+            }
+            
+            
+            
 
             if ($_parametri == "block")
             {
@@ -604,11 +628,42 @@ function domanda_db($_cosa, $query, $_ritorno, $_parametri)
                 echo "<br>$_errori[descrizione]\n";
                 echo "<br>$query\n";
                 echo "<br>procedura bloccata\n";
+                $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+                $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+                //scriviamo gli errori per i posteri
+                scrittura_errori($_cosa, $_percorso, $_errori);
                 exit;
             }
         }
         else
         {
+            
+            if ($_parametri == "verbose")
+            {
+                if($_tipo == "query")
+                {
+                    echo "<h4 align=\"center\"><font color=\"green\">Trovate Nr. ".$result->rowCount()."</font></h4>\n";
+                }
+                else
+                {
+                    echo "<h4 align=\"center\"><font color=\"green\">Variazione Effettuata su NR $result riga/e</font></h4>\n";
+                }
+                
+            }
+            
+            if ($_parametri == "verbose2")
+            {
+                if($_tipo == "query")
+                {
+                    $_messaggio = "Trovate Nr. ".$result->rowCount()."\n";
+                }
+                else
+                {
+                    $_messaggio = "Variazione Effettuata su NR $result riga/e\n";
+                }
+                
+            }
+            
             if ($_ritorno == "fetch")
             {
                 $return = $result->fetch(PDO::FETCH_ASSOC);
@@ -619,9 +674,17 @@ function domanda_db($_cosa, $query, $_ritorno, $_parametri)
             }
         }
     }
+    
+    //echo $result;
+    
+    if($_parametri == "verbose2")
+    {
+        $return = "";
+        $return['result'] = $result;
+        $return['messaggio'] = $_messaggio;
+    }
 
-
-
+    //echo $return;
     return $return;
 }
 
@@ -706,7 +769,7 @@ EOTABLE;
         $_operazione = "|$err_type:|($in_errfile, line $in_errline)| $in_errstr |";
 
 
-        error_log(date('d-m-Y/ H:m') . "|utente " . $_SESSION['user']['user'] . " |fallita operazione $_operazione\n", 3, $_percorso . "../spool/agua_php.log");
+        error_log(date('d-m-Y/H:m') . "|utente " . $_SESSION['user']['user'] . " |fallita operazione $_operazione\n", 3, $_percorso . "../spool/agua_php.log");
 
         // exit on errors, continue otherwise.
         if ($in_errno == E_USER_ERROR)
@@ -728,10 +791,34 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
 {
     global $conn;
     global $_percorso;
+    require_once $_percorso . "librerie/invia_posta_allegato.php";
 
+    if (!isset($azienda))
+    {
+        require $_percorso . "../setting/vars.php";
+    }
+
+
+    if($_cosa == "block")
+    {
+        echo "<h2 align=\"center\">Errore Generale</h2>\n";
+        echo "<br>$_errori[descrizione]\n";
+        echo "<br>$query\n";
+        echo "<br>procedura bloccata\n";
+        $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+        //scriviamo gli errori per i posteri
+        scrittura_errori($_cosa, $_percorso, $_errori);
+        exit;
+        echo "errore Generale";
+    }
+    
+    
+    
     date_default_timezone_set('Europe/Rome');
     //tipologia di errori
 
+    $_file = "agua_gest.log";
     $nfile = $_percorso . "../spool/agua_gest.log";
     // creo il files e nascondo la soluzione
     $fp = fopen($nfile, "a");
@@ -750,9 +837,84 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
     // chiudiamo il files
     fclose($fp);
 
+
+    //vediamo se riesco a farmi una e-mail..
+    if ($ERRORMAIL == "SI")
+    {
+        $_oggetto = "Invio errori $azienda";
+        //qui richiamiamo la funzione del file invia posta allegato.
+        $_invio = invio_posta("invio_errori", $_file, $email1, "grigomax@mcetechnik.it", $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $_commento, $_ricevuta, $_tdoc, $_anno, "", "", $_allegato, $_allegato2, $_parametri);
+    }
+
+
+    if($_cosa == "block")
+    {
+        exit;
+    }
+    
+    
     return $_return;
 }
 
+function registra_operazioni($_cosa, $query, $_parametri)
+{
+    global $conn;
+    global $_percorso;
+    require_once $_percorso . "librerie/invia_posta_allegato.php";
+
+    if (!isset($azienda))
+    {
+        require $_percorso . "../setting/vars.php";
+    }
+
+
+    if ($REGISTRA == "SI")
+    {
+        date_default_timezone_set('Europe/Rome');
+        //tipologia di errori
+
+        $_file = "agua_recorder.log";
+        $nfile = $_percorso . "../spool/agua_recorder.log";
+        // creo il files e nascondo la soluzione
+        $fp = fopen($nfile, "a");
+//controllo l'esito
+        if (!$fp)
+            die("Errore.. non sono riuscito a creare il file.. Permessi ?");
+
+        //la variabile $_errori è un array contente ò'errore
+
+        fwrite($fp, "Inizio query ". date('d-m-Y/H:m'). " $_SERVER[SCRIPT_FILENAME]\n");
+        if (!$fp)
+            die("Errore.. Riga non inserita ?");
+
+
+        $_commento =  "| $query\n";
+
+        fwrite($fp, $_commento);
+        if (!$fp)
+            die("Errore.. Riga non inserita ?");
+
+        fwrite($fp, "Fine query\n");
+        if (!$fp)
+            die("Errore.. Riga non inserita ?");
+
+
+
+        // chiudiamo il files
+        fclose($fp);
+
+        if ($_cosa == "invia")
+        {
+            $_oggetto = "Invio errori $azienda";
+            //qui richiamiamo la funzione del file invia posta allegato.
+            $_invio = invio_posta("invio_errori", $_file, $email1, "grigomax@mcetechnik.it", $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $_commento, $_ricevuta, $_tdoc, $_anno, "", "", $_allegato, $_allegato2, $_parametri);
+        }
+    }
+
+    //vediamo se riesco a farmi una e-mail..
+
+    return $_return;
+}
 
 /*
  * Funzione pag. base..
@@ -1282,7 +1444,7 @@ function testata_html($_cosa, $_percorso)
     echo "<img src=\"" . $_percorso . "images/aguagest.png\" height=\"30\" border=\"0\"> </a></font></td>\n";
     echo "<td bgcolor=\"#053487\"><font color=\"white\" size=\"1\">Versione Agua: $_PROGRAM_VERSION - Archivi : $AGUABASE<br>Azienda $azienda</font></td>\n";
     echo "<td bgcolor=\"#053487\" align=\"center\" valign=\"middle\"><font color=\"white\" size=\"1\">\n";
-    echo "CopyRight 2003-2015&copy;<br>Grigolin Massimo</font></td>\n";
+    echo "CopyRight 2003-2016&copy;<br>Grigolin Massimo</font></td>\n";
     echo "<td bgcolor=\"#053487\" valign=\"middle\" align=\"center\" ><font color=\"white\"><font size=\"2\" face=\"Arial, Helvetica, sans-serif\">Benvenuto <font color=\"yellow\">" . $_SESSION['user']['user'] . "</font></font><font size=\"1\"> <br> N.s. $_SESSION[keepalive]</font></font></font></td>\n";
     echo "</tr></table>\n";
 }

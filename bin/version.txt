@@ -4,12 +4,25 @@ http://aguagest.sourceforge.net/
 massimo@mcetechnik.it
 
 
-VERSIONE 1.2.4 Rc4 del 17/01/2016
+VERSIONE 1.2.5 Rc 1 del 26/01/2016
+-1  ADMIN
+-   1   Inserita la possibilità di inviare gli errori programmati via e-mail
+-   2   Inserita la possibilità di registrare l'attivita del programma
+
+-2  Nuovo programma sul controllo dei dati scritti, la versione 1.2.5 sarà sotto
+-   Revisione totala dei dati scritti nel database.. 
+
+
+
+--------------------------------------------------------------------------------
+VERSIONE 1.2.4 Rc4 del 19/01/2016
 -1  ADMIN
 -   1   Aggiornato il tools phpmailer per l'invio delle e-mail direttamente al
 -       Proprio account di posta elettronica.. Ora il programma è certificato per
 -       Aruba e Google.
 
+-   STAMPE
+-   1   Sistemati un po' di bug qui e li..
 
 
 --------------------------------------------------------------------------------

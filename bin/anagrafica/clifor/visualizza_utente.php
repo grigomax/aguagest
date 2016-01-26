@@ -440,7 +440,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
             $_annodoc = substr($dati['anno'], 0, 4);
 
-            printf("<tr><td align=\"left\">%s</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddtacq&anno=$_annodoc&ndoc=%s\">%s</a></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>", $dati['datareg'], $dati['ndoc'], $dati['ndoc'], $dati['ragsoc'], $dati['qtacarico'], $dati['valoreacq'], number_format(($_nettoacq), 2));
+            printf("<tr><td align=\"left\">%s</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddtacq&anno=$_annodoc&suffix=$dati[suffix]&ndoc=%s\">%s</a></td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>", $dati['datareg'], $dati['ndoc'], $dati['ndoc'], $dati['ragsoc'], $dati['qtacarico'], $dati['valoreacq'], number_format(($_nettoacq), 2));
         }
 
 

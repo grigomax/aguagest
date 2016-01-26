@@ -100,7 +100,19 @@ if ($_SESSION['user']['contabilita'] > "1")
         //parametri contro conto..
         $_parametri['dare'] = "";
 
-        $_banca = tabella_banche("singola", $_POST['banca'], $_abi, $_cab, $_parametri);
+        if($_POST['banca'] == "AV")
+        {
+            $_banca['banca'] = "Avviso Bonario";
+        }
+        elseif($_POST['banca'] == "MC")
+        {
+            $_banca['banca'] = "Movimento di chiusura";
+        }
+        else
+        {
+            $_banca = tabella_banche("singola", $_POST['banca'], $_abi, $_cab, $_parametri);
+        }
+        
 
         //ora riapriamo la bana in avere..
         //m prima cancelliamo il dare
@@ -125,7 +137,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         $_parametri['data_vers'] = $_datareg;
         $_return = tabella_liquid_iva_periodica("aggiornamento_liquid", $_anno, $_periodo, $_parametri);
 
-        if ($_return['result'] == "NO")
+        if ($_return == "NO")
         {
             echo "<h2>Errore nell'inserimento</h2>\n";
             echo $_return[errori][descrizione];

@@ -209,7 +209,7 @@ if ($_SESSION['user']['vendite'] > "2")
     $_commento.= '              <TipoDocumento>' . $TD . '</TipoDocumento>' . "\n";
     $_commento.= '              <Divisa>EUR</Divisa>' . "\n";
     $_commento.= '              <Data>' . $dati_start['datareg'] . '</Data>' . "\n";
-    $_commento.= '              <Numero>' . $dati_start['ndoc'] . '</Numero>' . "\n";
+    $_commento.= '              <Numero>' . $dati_start['ndoc'].'/'.$dati_start[suffix] . '</Numero>' . "\n";
     $_commento.= '              <Art73>SI</Art73>' . "\n";
     $_commento.= '          </DatiGeneraliDocumento>' . "\n";
     fwrite($fp, $_commento);

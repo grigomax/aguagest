@@ -45,7 +45,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 
     $query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno LIMIT 1";
 
-    $result = domanda_db("query", $query, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
     $datianno = $result->fetch(PDO::FETCH_ASSOC);
 
@@ -70,11 +70,11 @@ if ($_SESSION['user']['magazzino'] > "1")
   			`totriga` float(10,2) default '0.00'
   			)";
 
-    domanda_db("exec", $query, $_ritorno, $_parametri);
+    domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
     
     $query = "TRUNCATE TABLE `rimanenze`";
 
-    domanda_db("exec", $query, $_ritorno, $_parametri);
+    domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
     
     //carico su un array le categorie mercerologiche..
     
@@ -103,7 +103,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 
 // ora procediamo ad inserire il tutto nel database provvisorio
 // Esegue la query...
-    $result = domanda_db("query", $query, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
     foreach ($result AS $datia)
     {//5
@@ -111,7 +111,7 @@ if ($_SESSION['user']['magazzino'] > "1")
         $query = sprintf("INSERT INTO rimanenze ( articolo, descrizione, quantita, totriga ) values ( \"%s\", \"%s\", \"%s\", \"%s\" )", $datia['articolo'], $desc_array[$datia[$_tipo]], $datia['qtafinale'], $datia['valore']);
 
         //echo $queryt;
-        $result = domanda_db("exec", $query, $_ritorno, $_parametri);
+        $result = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
         
         $result = $conn->exec($query);
 
@@ -152,7 +152,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 //effettuo la prima selezione in ordine di codice e di gruppo merceologico
 // Esegue la query...
     
-    $result = domanda_db("query", $query, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
     
     // questa selezione mi permette di avere il numero di pagine ed il numero di
     //righe in anticipo

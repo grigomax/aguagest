@@ -635,6 +635,23 @@ if ($_SESSION['user']['setting'] > "3")
     if (!$fp)
         die("Errore.. Riga non inserita ?");
 
+    
+        $_scrivi = sprintf('$ERRORMAIL = "%s";' .
+            "\n", $_POST['ERRORMAIL']);
+    fwrite($fp, $_scrivi);
+    if (!$fp)
+        die("Errore.. Riga non inserita ?");
+    
+        $_scrivi = sprintf('$REGISTRA = "%s";' .
+            "\n", $_POST['REGISTRA']);
+    fwrite($fp, $_scrivi);
+    if (!$fp)
+        die("Errore.. Riga non inserita ?");
+    
+    
+    
+    
+    
 
 // chiudiamo il file php
     $_commento = "?>";

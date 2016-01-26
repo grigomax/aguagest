@@ -22,6 +22,7 @@ $conn = permessi_sessione("verifica_PDO", $_percorso);
 require "../../librerie/motore_doc_pdo.php";
 require "../../librerie/motore_anagrafiche.php";
 
+
 //carichiamo la base delle pagine:
 base_html("chiudi", $_percorso);
 
@@ -76,15 +77,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
         $result = tabella_doc_basket("delete_rigo", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['articolo'], $_POST);
 
-
-        if ($result['errori'] != "OK")
-        {
-            echo $result['descrtizione'];
-        }
-        else
-        {
-            $_messaggio = "Riga eliminata correttamente \n";
-        }
+        $_messaggio = $result['messaggio'];
     }
 
 // funzione modifica articolo riga corpo
@@ -146,15 +139,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
         $result = tabella_doc_basket("update", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['articolo'], $_POST);
 
-
-        if ($result['errori'] != "OK")
-        {
-            echo $result['descrizione'];
-        }
-        else
-        {
-            $_messaggio = "Riga Modificata correttamente";
-        }
+        $_messaggio = $result['messaggio'];
     }
 
     if ($_cosa == "inserisci")
@@ -165,15 +150,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
         $result = tabella_doc_basket("inserisci", $id, $_POST['rigo'], $_anno, $_suffix, $_ndoc, $_utente, $_POST['articolo'], $_POST);
 
-
-        if ($result['errori'] != "OK")
-        {
-            echo $result['descrizione'];
-        }
-        else
-        {
-            $_messaggio = "Riga inserita correttamente";
-        }
+        $_messaggio = $result['messaggio'];
 
         //verifichiamo che non si siano aggregate 
         if ($_POST['aggancia'] != "")

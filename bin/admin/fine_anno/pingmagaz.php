@@ -39,7 +39,7 @@ if ($_SESSION['user']['setting'] > "3")
         // Stringa contenente la query di ricerca...
         $query = sprintf("select anno from magazzino GROUP BY anno order by anno ASC");
 // Esegue la query...
-        $dati = domanda_db("query", $query, "fetch", "verbose");
+        $dati = domanda_db("query", $query, $_cosa, "fetch", "verbose");
         
         $_anno_arc = $dati['anno'];
         $_anno = date('Y');
@@ -90,7 +90,7 @@ if ($_SESSION['user']['setting'] > "3")
         }
 // Esegue la query...
         
-        $result = domanda_db("query", $query, $_ritorno, $_parametri);
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
         if ($result->rowCount() > 0)
         {

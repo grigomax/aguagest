@@ -51,7 +51,7 @@ if ($_SESSION['user']['setting'] > "3")
         $query = sprintf("(select status, anno, ndoc, utente from bv_bolle where status != 'evaso' and anno=\"%s\") UNION (select status, anno, ndoc, utente from fv_testacalce where status != 'evaso' AND anno=\"%s\")", $_anno, $_anno);
     }
 
-    $result = domanda_db("query", $query, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
 
     if ($result->rowCount() > "0")
@@ -79,7 +79,7 @@ if ($_SESSION['user']['setting'] > "3")
             echo "Progress...30%<br>\n";
             $query = sprintf("SELECT * FROM magazzino WHERE anno <= \"%s\" ORDER BY datareg DESC", $_anno);
 
-            $result = domanda_db("query", $query, $_ritorno, $_parametri);
+            $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
             foreach ($result AS $dati)
             {
@@ -90,7 +90,7 @@ if ($_SESSION['user']['setting'] > "3")
                 $query = "DELETE FROM magastorico WHERE anno='$dati[anno]' AND datareg='$dati[datareg] AND articolo='$dati[articolo]' AND tut='$dati[tut]' LIMIT 1 ";
 
 // Esegue la query...
-                domanda_db("exec", $query, $_ritorno, "vebose");
+                domanda_db("exec", $query, $_cosa, $_ritorno, "vebose");
 
                 echo "Eseguito <br>";
 
@@ -102,7 +102,7 @@ if ($_SESSION['user']['setting'] > "3")
             VALUES ('$dati[tdoc]', '$dati[anno]', '$dati[suffix]', '$dati[ndoc]', '$dati[datareg]', '$dati[tut]', '$dati[rigo]', '$dati[utente]', '$dati[articolo]', '$dati[qtacarico]', '$dati[valoreacq]', '$dati[qtascarico]', '$dati[valorevend]', '$dati[ddtfornitore]', '$dati[fatturacq]', '$dati[protoiva]', CURRENT_TIMESTAMP )";
 // Esegue la query...
 
-                domanda_db("exec", $query, $_ritorno, "block");
+                domanda_db("exec", $query, $_cosa, $_ritorno, "block");
 
                 echo "Eseguito... <br>";
 
@@ -112,7 +112,7 @@ if ($_SESSION['user']['setting'] > "3")
                 // elimino in ogni caso l'anno prima di inserirlo
                 $query = "DELETE FROM magazzino WHERE anno='$dati[anno]' AND datareg='$dati[datareg]' AND articolo='$dati[articolo]' AND tut='$dati[tut]' limit 1";
 
-                domanda_db("exec", $query, $_ritorno, "block");
+                domanda_db("exec", $query, $_cosa, $_ritorno, "block");
 
                 echo "Eseguito... <br>";
             }
@@ -131,7 +131,7 @@ if ($_SESSION['user']['setting'] > "3")
             // elimino in ogni caso l'anno prima di inserirlo
             $query = sprintf("DELETE FROM magastorico WHERE anno=\"%s\"", $_anno);
 
-            domanda_db("exec", $query, $_ritorno, "block");
+            domanda_db("exec", $query, $_cosa, $_ritorno, "block");
 
             echo "Eseguito... <br>";
 
@@ -141,14 +141,14 @@ if ($_SESSION['user']['setting'] > "3")
 
             $query1 = sprintf("SELECT * FROM magazzino WHERE anno=\"%s\" ORDER BY datareg", $_anno);
 
-            $result1 = domanda_db("query", $query1, $_ritorno, "verbose");
+            $result1 = domanda_db("query", $query1, $_cosa, $_ritorno, "verbose");
 
             foreach ($result1 AS $dati1)
             {
                 $query2 = sprintf(" INSERT INTO magastorico (tdoc, anno, ndoc, datareg, tut, rigo, utente, articolo, qtacarico, valoreacq, qtascarico, valorevend, ddtfornitore, fatturacq, protoiva, ts) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\")", $dati1['tdoc'], $dati1['anno'], $dati1['ndoc'], $dati1['datareg'], $dati1['tut'], $dati1['rigo'], $dati1['utente'], $dati1['articolo'], $dati1['qtacarico'], $dati1['valoreacq'], $dati1['qtascarico'], $dati1['valorevend'], $dati1['ddtfornitore'], $dati1['fatturacq'], $dati1['protoiva'], $dati1['ts']);
 
 
-                domanda_db("exec", $query2, $_ritorno, "block");
+                domanda_db("exec", $query2, $_cosa, $_ritorno, "block");
             }//3
 
 
@@ -159,7 +159,7 @@ if ($_SESSION['user']['setting'] > "3")
             // elimino in ogni caso l'anno prima di inserirlo
             $query = "DELETE FROM magazzino WHERE anno='$_anno'";
 
-            domanda_db("exec", $query, $_ritorno, "block");
+            domanda_db("exec", $query, $_cosa, $_ritorno, "block");
             echo "Eseguito... <br>";
 
 
@@ -169,7 +169,7 @@ if ($_SESSION['user']['setting'] > "3")
 
             $query = "SELECT articolo FROM articoli ORDER BY articolo";
 
-            $result = domanda_db("query", $query, $_ritorno, "verbose");
+            $result = domanda_db("query", $query, $_cosa, $_ritorno, "verbose");
 
             foreach ($result AS $dati4)
             {//3
@@ -177,18 +177,18 @@ if ($_SESSION['user']['setting'] > "3")
                 $query5 = sprintf("SELECT (SUM(qtacarico) - SUM(qtascarico)) AS qtafinale, (SUM(valoreacq) / SUM(qtacarico)) * (SUM(qtacarico) - SUM(qtascarico)) AS valorefin FROM `magastorico` where articolo=\"%s\" AND anno=\"%s\"", $dati4['articolo'], $_anno);
                 //echo $query5;
 
-                $result5 = domanda_db("query", $query5, $_ritorno, "verbose");
+                $result5 = domanda_db("query", $query5, $_cosa, $_ritorno, "verbose");
                 if ($result5->rowCount() >= 1)
                 {//2
                     
-                    $dati5 = domanda_db("query", $query5, "solo_fetch", $result5);
+                    $dati5 = domanda_db("query", $query5, $_cosa, "solo_fetch", $result5);
                     // ora procedo ad inserirli nel magazzino nuovo
                     $_tut = "giain";
                     $_mezzo = "-01.01";
                     $_data = $_annonuovo . $_mezzo;
                     $query6 = sprintf(" INSERT INTO magazzino (anno, datareg, tut, articolo, qtacarico, valoreacq ) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\")", $_annonuovo, $_data, $_tut, $dati4['articolo'], $dati5['qtafinale'], $dati5['valorefin']);
                     //echo $query6;
-                    domanda_db("exec", $query6, $_ritorno, "block");
+                    domanda_db("exec", $query6, $_cosa, $_ritorno, "block");
                 }//chiusuradomanda magazzino
                 // fine parte lavorativa ora inizia quella visiva
                 echo "Eseguito. <br><br>";

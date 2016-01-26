@@ -54,6 +54,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
     if ($_SESSION['user']['anagrafiche'] >= "2")
     {
+        pulsanti("ritorna", "submit", "", "get", "ricerca.php", "40px", "40px", "Indietro", "", "", "Indietro", $_id);
         pulsanti("cerca", "submit", "", "get", "ricerca.php", "40px", "40px", "Cerca", "", "", "Cerca", $_id);
     }
 
@@ -72,15 +73,11 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
 
     echo "</center>\n";
-
-
+    
 // Inizio tabella pagina principale ----------------------------------------------------------
     echo "<table width=\"100%\" border=0 cellspacing=\"0\" align=\"left\" cellpadding=\"0\">\n";
 
     echo "<td width=\"90%\" align=\"center\" valign=\"top\" class=\"foto\">\n";
-
-
-
 
 // mi prendo il GET appena passato
 
@@ -93,8 +90,6 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         echo "<span class=\"testo_blu\"><h3>Trovato un Errore.. = $dati[errori]</h3></span>";
         exit;
     }
-
-
 
     echo "<span class=\"testo_blu\"><h3>Visualizzazione ARTICOLO</h3></span>";
 
@@ -392,6 +387,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
     echo "</div>\n";
 
+    //----------------------------------------------------------------tabella 4
 
     echo "<div id=\"tabs-4\">\n";
     echo "<table class=\"classic_bordo\">";

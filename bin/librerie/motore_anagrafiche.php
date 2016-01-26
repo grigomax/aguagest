@@ -290,21 +290,9 @@ function tabella_aliquota($_cosa, $_codiva, $_parametri)
     {
 //mi restituisce l'arre singolo
         $query = "select * from aliquota where codice='$_codiva' limit 1";
+        
+        $dati = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        foreach ($result as $dati)
-            ;
     }
     elseif ($_cosa == "desc_singola")
     {
@@ -332,20 +320,8 @@ function tabella_aliquota($_cosa, $_codiva, $_parametri)
 //mi restituisce l'arre singolo
         $query = "select * from aliquota where codice='$_codiva' limit 1";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        foreach ($result as $array)
-            ;
+        $array = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        
         $dati = $array['aliquota'];
     }
     elseif ($_cosa == "elenco_codice")
@@ -480,18 +456,8 @@ function tabella_aliquota($_cosa, $_codiva, $_parametri)
     {
         $query = "select codice from aliquota order by codice";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
         echo "<select name=\"$_parametri\">\n";
         
         echo "<option value=\"$_codiva\">$_codiva</option>\n";
@@ -578,7 +544,7 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
     {
         $query = "select * from articoli where articolo='$_codice' limit 1";
 
-        $result = domanda_db("query", $query, $_ritorno, $_parametri);
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
         
         if($result != "NO")
         {
@@ -619,30 +585,19 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
 
         $query = sprintf("select * from articoli where artfor=\"%s\" or artfor2=\"%s\" or artfor_3=\"%s\" limit 1", $_codice, $_codice, $_codice);
 
-        $result = $conn->query($query);
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
 
-        if ($conn->errorCode() != "00000")
+        if ($result->rowCount() > "0")
         {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $dati['errori'] = "Nessun Articolo trovato";
+            $dati = domanda_db("query", $query, $_cosa, "solo_fetch", $result);
+            $dati['risultato'] = "SI";
         }
         else
         {
-            if ($result->rowCount() > "0")
-            {
-                foreach ($result AS $dati);
-                $dati['risultato'] = "SI";
-            }
-            else
-            {
-                $dati['risultato'] = "NO";
-            }
+            $dati['risultato'] = "NO";
         }
+        
     }
     elseif ($_cosa == "ricerca")
     {
@@ -1078,19 +1033,9 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
     elseif ($_cosa == "esma")
     {
         $query = "select esma from articoli where articolo='$_codice'";
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        foreach ($result AS $dati2);
+        
+        $dati2 = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        
         $dati = $dati2['esma'];
     }
     elseif($_cosa == "aggiorna_fornitore")
@@ -1253,22 +1198,8 @@ function tabella_banche($_cosa, $_codice, $_abi, $_cab, $_parametri)
 //mi restituisce l'arre singolo
         $query = "select * from banche where banca='$_codice' limit 1";
 
-        $result = $conn->query($query);
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $dati = "errore";
-        }
-        else
-        {
-            foreach ($result AS $dati)
-                ;
-        }
+        $dati = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        
     }
     elseif ($_cosa == "singolo_abi")
     {
@@ -1541,21 +1472,11 @@ function tabella_barcode($_cosa, $_codbar, $_articolo, $_rigo)
 
         $query = "SELECT * FROM barcode WHERE codbar='$_codbar' limit 1";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
         
         if($result->rowCount() > 0 )
         {
-            foreach ($result as $dati);
+            $dati = domanda_db("query", $query, $_cosa, "solo_fetch", $result);
             $return = $dati['articolo'];
         }
         else
@@ -2125,20 +2046,9 @@ function tabella_clienti($_cosa, $_utente, $_parametri)
     {
 //mi restituisce l'arre singolo
         $query = "select * from clienti where codice='$_utente' limit 1";
+        
+        $return = domanda_db("query", $query, $_cosa, "fetch", "");
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        $dati = $result->fetch(PDO::FETCH_ASSOC);
     }
     elseif ($_cosa == "partitaiva")
     {
@@ -2158,7 +2068,7 @@ function tabella_clienti($_cosa, $_utente, $_parametri)
             scrittura_errori($_cosa, $_percorso, $_errori);
         }
 
-        foreach ($result as $dati)
+        foreach ($result as $return)
             ;
     }
     elseif ($_cosa == "elenca_select")
@@ -2168,18 +2078,8 @@ function tabella_clienti($_cosa, $_utente, $_parametri)
         echo "<option value=\"\"></option>\n";
 
         $query = sprintf("select codice, ragsoc from clienti where es_selezione != 'SI' order by ragsoc");
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
         echo "<span class=\"tabella_elenco\">";
         foreach ($result as $dati)
         {
@@ -2196,19 +2096,9 @@ function tabella_clienti($_cosa, $_utente, $_parametri)
         echo "<option value=\"\"></option>\n";
 
         $query = "select codice, ragsoc from clienti where codice = '$_parametri'";
-        $result = $conn->query($query);
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        echo "<span class=\"tabella_elenco\">";
+         echo "<span class=\"tabella_elenco\">";
         foreach ($result as $dati)
         {
             printf("<option value=\"%s\">%s - %s</option>\n", $dati['codice'], $dati['ragsoc'], $dati['codice']);
@@ -2251,10 +2141,10 @@ function tabella_clienti($_cosa, $_utente, $_parametri)
         $query = "select * from clienti ORDER BY ragsoc";
 
 // Esegue la query...
-        $dati = mysql_query($query, $conn);
+        $return = mysql_query($query, $conn);
     }
 
-    return $dati;
+    return $return;
 }
 
 //-----------------------------------------------------------------------
@@ -2991,27 +2881,9 @@ function tabella_fornitori($_cosa, $_utente, $_parametri)
     {
 
         $query = "select * from fornitori where codice='$_utente' limit 1";
-
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $dati['errori'] = "Nessun Fornitore trovato";
-        }
-        else
-        {
-
-            foreach ($result AS $dati)
-                ;
-
-            $return = $dati;
-        }
+        
+        $return = domanda_db("query", $query, $_cosa, "fetch", "");
+        
     }
     elseif ($_cosa == "singola_parametri")//restituisce array con la riga del fornitore..
     {
@@ -3112,18 +2984,9 @@ function tabella_fornitori($_cosa, $_utente, $_parametri)
         echo "<option value=\"\"></option>\n";
 
         $query = sprintf("select codice, ragsoc from fornitori where es_selezione != 'SI' order by ragsoc");
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
+        
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
         echo "<span class=\"tabella_elenco\">";
         foreach ($result as $dati)
         {
@@ -3308,21 +3171,7 @@ function tabella_liquid_iva_periodica($_cosa, $_anno, $_periodo, $_parametri)
             VALUES ('$_anno', '$_periodo', '$_parametri[iva_acq]', '$_parametri[iva_vend]', '$_parametri[diff_periodo]', '$_parametri[cred_residuo]', '$_parametri[val_liquid]', '$_parametri[versato]',
             '$_parametri[banca]', '$_parametri[data_vers]', '$_parametri[n_reg]', '$_parametri[cod_tributo]')";
 
-        $result = $conn->exec($query);
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['descrizione'] = $_errori['descrizione'];
-            $return['query'] = $query;
-            $return['result'] = "NO";
-        }
-        
-        
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
         
     }
     elseif ($_cosa == "elenco_aperte")
@@ -3368,19 +3217,7 @@ function tabella_liquid_iva_periodica($_cosa, $_anno, $_periodo, $_parametri)
     {
         $query = "UPDATE liquid_iva_periodica set versato='SI', banca='$_parametri[banca]', data_vers='$_parametri[data_vers]', n_reg='$_parametri[n_reg]' WHERE anno='$_anno' AND periodo='$_periodo' limit 1";
 
-        $result = $conn->exec($query);
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['descrizione'] = $_errori['descrizione'];
-            $return['query'] = $query;
-            $return['result'] = "NO";
-        }
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
 
     }
     elseif ($_cosa == "elenco_anno")
@@ -3859,47 +3696,31 @@ function tabella_magazzino($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, 
     if ($_cosa == "ultima_vendita")
     {
 
-        $query = "select * from magazzino where tut='c' AND utente='$_parametri' and articolo='$_codice' order by anno, datareg ASC limit 1";
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
+        if(($_SESSION['tdoc'] == "ddtacq") or ($_SESSION['tdoc'] == "fornitore"))
         {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query ultima_vendita = $query - $_errore[2]";
-            $_errori['files'] = "motore.anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "Nessun Muovimento trovato";
+            $query = "select * from magazzino where tut='f' AND utente='$_parametri' and articolo='$_codice' order by anno, datareg ASC limit 1";
+        
+            $maga = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+
+            @$return = $maga['valoreacq'] / $maga['qtacarico'];
         }
+        else
+        {
+            $query = "select * from magazzino where tut='c' AND utente='$_parametri' and articolo='$_codice' order by anno, datareg ASC limit 1";
+        
+            $maga = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
-        foreach ($result AS $maga)
-            ;
-
-        @$return = $maga['valorevend'] / $maga['qtascarico'];
+            @$return = $maga['valorevend'] / $maga['qtascarico'];
+        }
+        
     }
 
 
     if ($_cosa == "elimina_documento")
     {
-        $query = sprintf(" delete from magazzino where tdoc=\"%s\" and anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_tdoc, $_anno, $_suffix, $_ndoc);
+        $query = sprintf("DELETE from magazzino where tdoc=\"%s\" and anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_tdoc, $_anno, $_suffix, $_ndoc);
 
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-//aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore.anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "Nessun Muovimento trovato";
-        }
-        else
-        {
-            $return['errori'] = "OK";
-        }
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "");
     }
 
     if ($_cosa == "inserisci_singola")
@@ -3910,22 +3731,8 @@ function tabella_magazzino($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, 
 						'$_parametri[valorevend]','$_parametri[ddtfornitore]', '$_parametri[fatturacq]', '$_parametri[protoiva]','$_parametri[status]')";
 
         #echo $query;
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-//aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "motore.anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "NO";
-        }
-        else
-        {
-            $return['errori'] = "OK";
-        }
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "");
+        
     }
     
     if($_cosa == "calcola_giacenze")
@@ -4735,20 +4542,8 @@ function tabella_stampe_layout($_cosa, $_percorso, $_tdoc)
     {
 
         $query = "SELECT * FROM stampe_layout WHERE tdoc = '$_tdoc' limit 1";
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        foreach ($result AS $return)
-            ;
+        $return = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        
     }
     elseif ($_cosa == "elenco_etichette")
     {

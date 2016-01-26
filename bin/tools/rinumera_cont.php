@@ -49,7 +49,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         
         $query = "SELECT * FROM prima_nota where anno='2016' GROUP BY nreg order by nreg, rigo";
         
-        $result = domanda_db("query", $query, $_ritorno, "verbose");
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, "verbose");
                 
         $_nreg_new = "0";
         
@@ -60,7 +60,7 @@ if ($_SESSION['user']['contabilita'] > "1")
             
             $query = "UPDATE prima_nota SET nreg='$_nreg_new' where nreg='$dati[nreg]' AND anno='2016'";
             
-            $risultato = domanda_db("exec", $query, $_ritorno, "verbose");
+            $risultato = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
             
             if($risultato != "NO")
             {

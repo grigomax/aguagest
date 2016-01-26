@@ -483,7 +483,7 @@ if ($_SESSION['user']['vendite'] > "2")
         //$query = "select sum(qtacarico) AS qtacarico, sum(qtascarico) AS qtascarico from magazzino where articolo='$_articolo'";
         $query = "select sum(qtacarico) AS qtacarico, SUM(valoreacq) AS valoreacq, sum(qtascarico) AS qtascarico from magazzino where articolo='$dati2[articolo]'";
 
-        $dati_mag = domanda_db("query", $query, "fetch", $_parametri);
+        $dati_mag = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
         
         $_qtacarico = $dati_mag['qtacarico'];
         $_qtascarico = $dati_mag['qtascarico'];
@@ -499,8 +499,8 @@ if ($_SESSION['user']['vendite'] > "2")
         // fine calcolo giacenza
         echo "<tr><td colspan=\"10\"><hr></td></tr>\n";
         echo "<tr><td colspan=\"2\" align=\"center\"><span class=\"testo_blu\">Giacenza articolo in magazzino ==>&nbsp;</span> <b>$_giacenza</b></td>";
-        echo "<td colspan=\"3\" align=\"CENTER\"><span class=\"testo_blu\">Valore medio acquisto ==>&nbsp;</span> <b>$_mediaacq</b></td>";
-        echo "<td colspan=\"3\" align=\"center\"><span class=\"testo_blu\">Ultima vendita di questo articolo al cliente.. ==>&nbsp;</span><b>$_ultimavend</b></td></tr>";
+        echo "<td colspan=\"3\" align=\"CENTER\"><span class=\"testo_blu\">  Valore medio acquisto ==>&nbsp;</span> <b>$_mediaacq</b></td>";
+        echo "<td colspan=\"3\" align=\"center\"><span class=\"testo_blu\">  Ultimo valore articolo ==>&nbsp;</span><b>$_ultimavend</b></td></tr>";
 
 
         annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);

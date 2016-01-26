@@ -1177,7 +1177,8 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 		{
 		    $_consegna = "";
 		}
-		$pdf->Cell($datidoc[ST_CONSEGNA_LC], 4, $_consegna, 'LR', 0, $datidoc[ST_CONSEGNA_ALL]);
+                
+		$pdf->Cell($datidoc[ST_CONSEGNA_LC], 4, substr($_consegna, 0, $datidoc[ST_CONSEGNA_CT]), 'LR', 0, $datidoc[ST_CONSEGNA_ALL]);
 	    }
 
 	    // cALCOLO DEL CASTELLETTO IVA:

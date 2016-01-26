@@ -52,7 +52,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 	$query = sprintf("select * from imballi where id=\"%s\"", $_POST['codice']);
 
         
-	$result = domanda_db("query", $query, $_ritorno, "verbose");
+	$result = domanda_db("query", $query, $_cosa, $_ritorno, "verbose");
 
 	// Tutto procede a meraviglia...
 	foreach ($result AS $dati)

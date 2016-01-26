@@ -185,10 +185,11 @@ if ($_SESSION['user']['vendite'] > "1")
                     //qui scriviamo la riga nel database..
                     $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_rigo, $_codutente, $_codice, $_descrizione, $_iva, $_parametri);
 
-                    if ($resut_ins['errori'] != "OK")
+                    if ($resut_ins == "NO")
                     {
-                        echo "errore numero 1 inserimento riga descrittiva<br>";
-                        exit;
+                        $_errori['descrizione'] =  "errore numero 1 inserimento riga descrittiva<br>\n";
+                        echo $_errori['descrizione'];
+                        scrittura_errori("block", $_percorso, $_errori);
                     }
                 }
 
@@ -295,10 +296,11 @@ if ($_SESSION['user']['vendite'] > "1")
                             
                             $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_rigo, $_codutente, $datidettaglio[articolo], $datidettaglio[descrizione], $datidettaglio[iva], $_parametri);
 
-                            if ($resut_ins['errori'] != "OK")
+                            if ($resut_ins == "NO")
                             {
-                                echo "errore numero due inserimento corpo dettaglio <br>";
-                                exit;
+                                $_errori['descrizione'] =  "errore numero due inserimento corpo dettaglio <br>";
+                                echo $_errori['descrizione'];
+                                scrittura_errori("block", $_percorso, $_errori);
                             }
                         }
                     }
@@ -324,10 +326,11 @@ if ($_SESSION['user']['vendite'] > "1")
                             {
                                 $resut_agg = gestisci_dettaglio("aggiorna_singola", $_archivi_start, $_tdoc_start, $_anno_start, $_suffix_start, $_ndoc_start, $datidettaglio['rigo'], $_codutente, $datidettaglio[articolo], $datidettaglio[descrizione], $_iva, $_parametri);
 
-                                if ($resut_agg['errori'] != "OK")
+                                if ($resut_agg == "NO")
                                 {
-                                    echo "errore numero tre aggiornamento corpo dettaglio <br>";
-                                    exit;
+                                    $_errori['descrizione'] =  "errore numero tre aggiornamento corpo dettaglio <br>";
+                                    echo $_errori['descrizione'];
+                                    scrittura_errori("block", $_percorso, $_errori);
                                 }
                             }
                         }
@@ -432,10 +435,12 @@ if ($_SESSION['user']['vendite'] > "1")
                         {
                             $resut_agg = gestisci_dettaglio("aggiorna_singola", $_archivi_start, $_tdoc_start, $_anno_start, $_suffix_start, $_ndoc_start, $datidettaglio['rigo'], $_codutente, $datidettaglio[articolo], $datidettaglio[descrizione], $_iva, $_parametri);
 
-                            if ($resut_agg['errori'] != "OK")
+                            if ($resut_agg == "NO")
                             {
-                                echo "errore numero tre aggiornamento corpo dettaglio <br>";
-                                exit;
+                             
+                                $_errori['descrizione'] =  "errore numero tre aggiornamento corpo dettaglio <br>";
+                                echo $_errori['descrizione'];
+                                scrittura_errori("block", $_percorso, $_errori);
                             }
                         }
                         //andiamo ora a scrivere la nuova riga per il documento creato nuovo..
@@ -506,10 +511,11 @@ if ($_SESSION['user']['vendite'] > "1")
 
                         $resut_ins = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_rigo, $_codutente, $datidettaglio[articolo], $_descrizione, $datidettaglio[iva], $_parametri);
 
-                        if ($resut_ins['errori'] != "OK")
+                        if ($resut_ins == "NO")
                         {
-                            echo "errore numero quattro inserimento corpo nuovo dettaglio <br>";
-                            exit;
+                            $_errori['descrizione'] =  "errore numero quattro inserimento corpo nuovo dettaglio <br>";
+                            echo $_errori['descrizione'];
+                            scrittura_errori("block", $_percorso, $_errori);
                         }
 
                         //se tutto ok aggiorniamo l'anagrafica articoli sull'ultimo acquisto..
@@ -522,18 +528,8 @@ if ($_SESSION['user']['vendite'] > "1")
                             @$_ultacq = $_parametri['totriga'] / $_parametri['quantita'];
                             $query = "UPDATE articoli SET ultacq='$_ultacq' where articolo='$datidettaglio[articolo]'";
 // Esegue la query...
-                            $result = $conn->exec($query);
+                            $result = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
 
-                            if ($conn->errorCode() != "00000")
-                            {
-                                $_errore = $conn->errorInfo();
-                                echo $_errore['2'];
-                                //aggiungiamo la gestione scitta dell'errore..
-                                $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-                                $_errori['files'] = "esegui impo doc.php";
-                                scrittura_errori($_cosa, $_percorso, $_errori);
-                                $_errori['errori'] = "NO";
-                            }
                         }//fine ddtacq
                     }//fine di divisione descrittiva da codici
                 }//fine dettaglio..
@@ -581,10 +577,12 @@ if ($_SESSION['user']['vendite'] > "1")
 
                 $result_agg = gestisci_testata("aggiorna_chiudi", $_codutente, $_tdoc_start, $_anno_start, $_suffix_start, $_ndoc_start, $_datareg, $_archivi_start, $_parametri);
 
-                if ($result_agg['errori'] != "OK")
-                {
-                    echo "errore numero cinque aggiorna e chiudi <br>";
-                    exit;
+                if ($result_agg == "NO")
+                { 
+                    $_errori['descrizione'] =  "errore numero 5 aggiorna e chiudi <br>";
+                    echo $_errori['descrizione'];
+                    scrittura_errori("block", $_percorso, $_errori);
+                    
                 }
 
                 // faccio la somma delle spese di trasporto
@@ -654,10 +652,11 @@ if ($_SESSION['user']['vendite'] > "1")
 
                 $result_agg = gestisci_testata("aggiorna_travasa", $_codutente, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_datareg, $_archivi_end, $_parametri);
 
-                if ($result_agg['errori'] != "OK")
+                if ($result_agg == "NO")
                 {
-                    echo "errore numero sei aggiorna finale <br>";
-                    exit;
+                    $_errori['descrizione'] =  "errore numero sei aggiorna finale <br>";
+                    echo $_errori['descrizione'];
+                    scrittura_errori("block", $_percorso, $_errori);
                 }
             }
 
@@ -676,7 +675,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
                 $_magazzino = gestisci_magazzino("Evadi", $id, $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_datareg, $_codutente, $_tut, $_archivi_end, $_parametri);
 
-                if ($_magazzino['errori'] != "OK")
+                if ($_magazzino['errori'] == "NO")
                 {
                     $_return['descrizione'] = "Si &egrave; verificato un errore nella query inserimento in magazzino:<br>\n\"$query\"\n";
                     $_return['errore'] = "errore";
@@ -693,7 +692,7 @@ if ($_SESSION['user']['vendite'] > "1")
                 $_provvigioni = gestione_provvigioni("inserisci", $_tdoc_end, $_anno, $_suffix_end, $_ndoc, $_utente['codagente'], $_datareg, $_codutente, $_totdoc, $_totprovv);
 
 
-                if ($_provvigioni['errore'] != "OK")
+                if ($_provvigioni == "NO")
                 {
                     $_return['descrizione'] = "Si &egrave; verificato un errore nella query inserimento in provvigioni:<br>\n\"$query\"\n";
                     $_return['errore'] = "errore";

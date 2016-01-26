@@ -9,23 +9,23 @@
 
 //carichiamo la base del programma includendo i file minimi
 
-if(empty($_percorso))
+if (empty($_percorso))
 {
     $_percorso = "../";
 }
 
-require_once $_percorso."../setting/vars.php";
+require_once $_percorso . "../setting/vars.php";
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
-require_once $_percorso."librerie/lib_html.php";
+require_once $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
-require_once $_percorso."librerie/motore_doc_pdo.php";
+require_once $_percorso . "librerie/motore_doc_pdo.php";
 
 
-require_once $_percorso."tools/phpmailer/PHPMailerAutoload.php";
+require_once $_percorso . "tools/phpmailer/PHPMailerAutoload.php";
 
 
 $_azione = $_GET['azione'];
@@ -42,7 +42,7 @@ function invio_posta($_cosa, $_nomefile, $_emailmittente, $_emaildestino, $_emai
     //require $_percorso . "librerie/motore_doc_pdo.php";
     require $_percorso . "../setting/vars.php";
 
-    
+
     if ($_emaildestino != "")
     {
 
@@ -55,24 +55,23 @@ function invio_posta($_cosa, $_nomefile, $_emailmittente, $_emaildestino, $_emai
         $mail->Hostname = "$HOSTNAME";
         $mail->Host = $mailsmtp; // specify main and backup server
         $mail->Port = $PORTSMTP;
-        
+
         //echo "<br>Ciao $mailsmtp";
-       
+
         if ($SSL != "NO")
         {
-            $mail->SMTPSecure = $SSL;      
+            $mail->SMTPSecure = $SSL;
             // Enable encryption, 'ssl' also accepted
-            
-            $mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
-            
+
+            $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
         }
-        
-                
+
+
         $mail->SMTPAuth = $smtpout; // turn on SMTP authentication
-        
+
         $mail->Username = $smtpuser; // SMTP username
         $mail->Password = $smtppass; // SMTP password
-        
+
         $mail->setFrom($_emailmittente, $_azienda);
 
         $mail->AddAddress($_emaildestino);
@@ -100,7 +99,7 @@ function invio_posta($_cosa, $_nomefile, $_emailmittente, $_emaildestino, $_emai
         {
             $mail->AddAttachment("../../spool/" . $_allegato['file']['name'] . "", $_FILES["file"]["name"]); // add attachments
         }
-        
+
         if ($_allegato2['verifica'] == "OK")
         {
             $mail->AddAttachment("../../spool/" . $_allegato['file2']['name'] . "", $_FILES["file2"]["name"]); // add attachments
@@ -112,64 +111,76 @@ function invio_posta($_cosa, $_nomefile, $_emailmittente, $_emaildestino, $_emai
 
         $mail->Body = addslashes($_messaggio);
 
-
-        if (!$mail->Send())
+        if ($_cosa == "invio_errori")
         {
-
-            $_return['errore'] = "E-mail non inoltrata \n";
-            $_return['result_send'] = $mail->ErrorInfo;
-            $_return['risultato'] = "errore";
-            //passiamo il tipo di documento alla funzione per sapere che databse cambiare..
-
-            $db_doc = archivio_tdoc($_tdoc);
-
-            $query = "UPDATE $db_doc[testacalce] SET invio='er' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
-
-            $result = $conn->exec($query);
-
-            if ($conn->errorCode() != "00000")
+            if(!$mail->Send())
             {
-                $_errore = $conn->errorInfo();
-                echo $_errore['2'];
-                //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query 1 = $query - $_errore[2]";
-                $_errori['files'] = "invia_posta_allegato.php";
-                scrittura_errori($_cosa, $_percorso, $_errori);
-                $_return['errore_sql'] = "E-mail non inoltrata ed inoltre Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-                $_return['risultato_sql'] = "errore";
+                echo "non partita\n";
             }
-            echo "<h4>Errore Inoltro email = $_emaildestino per documento nr $_ndoc <h4>\n";
-            echo "Tipo di errore: " . $mail->ErrorInfo;
+            else
+            {
+                echo "partita\n";
+            }
         }
         else
         {
-            $_return['errore'] = "E-mail Inoltrata \n";
-            #$_return['result_send'] = $mail->ErrorInfo;
-            $_return['risultato'] = "";
-
-            $db_doc = archivio_tdoc($_tdoc);
-
-            $query = "UPDATE $db_doc[testacalce] SET invio='si' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
-
-            echo "<h4>Email inoltrata correttamente all'indirizzo = $_emaildestino per documento nr $_ndoc <h4>\n";
-
-            $result = $conn->exec($query);
-            if ($conn->errorCode() != "00000")
+            if (!$mail->Send())
             {
-                $_errore = $conn->errorInfo();
-                echo $_errore['2'];
-                //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query 2 = $query - $_errore[2]";
-                $_errori['files'] = "invia_posta_allegato.php";
-                scrittura_errori($_cosa, $_percorso, $_errori);
-                $_return['errore_sql'] = "E-mail non inoltrata ed inoltre Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-                $_return['risultato_sql'] = "errore";
+
+                $_return['errore'] = "E-mail non inoltrata \n";
+                $_return['result_send'] = $mail->ErrorInfo;
+                $_return['risultato'] = "errore";
+                //passiamo il tipo di documento alla funzione per sapere che databse cambiare..
+
+                $db_doc = archivio_tdoc($_tdoc);
+
+                $query = "UPDATE $db_doc[testacalce] SET invio='er' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
+
+                $result = $conn->exec($query);
+
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query 1 = $query - $_errore[2]";
+                    $_errori['files'] = "invia_posta_allegato.php";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                    $_return['errore_sql'] = "E-mail non inoltrata ed inoltre Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
+                    $_return['risultato_sql'] = "errore";
+                }
+                echo "<h4>Errore Inoltro email = $_emaildestino per documento nr $_ndoc <h4>\n";
+                echo "Tipo di errore: " . $mail->ErrorInfo;
             }
-        }// fine graffa funzione controllo invio
+            else
+            {
+                $_return['errore'] = "E-mail Inoltrata \n";
+                #$_return['result_send'] = $mail->ErrorInfo;
+                $_return['risultato'] = "";
+
+                $db_doc = archivio_tdoc($_tdoc);
+
+                $query = "UPDATE $db_doc[testacalce] SET invio='si' where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc'";
+
+                echo "<h4>Email inoltrata correttamente all'indirizzo = $_emaildestino per documento nr $_ndoc <h4>\n";
+
+                $result = $conn->exec($query);
+                if ($conn->errorCode() != "00000")
+                {
+                    $_errore = $conn->errorInfo();
+                    echo $_errore['2'];
+                    //aggiungiamo la gestione scitta dell'errore..
+                    $_errori['descrizione'] = "Errore Query 2 = $query - $_errore[2]";
+                    $_errori['files'] = "invia_posta_allegato.php";
+                    scrittura_errori($_cosa, $_percorso, $_errori);
+                    $_return['errore_sql'] = "E-mail non inoltrata ed inoltre Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
+                    $_return['risultato_sql'] = "errore";
+                }
+            }// fine graffa funzione controllo invio
+        }
     }// fine graffa funzione controllo esistenza campo email
 
     return $_return;
-
 }
 
 if ($_GET['azione'] == "singolo")
@@ -224,7 +235,7 @@ if ($_GET['azione'] == "singolo")
 
         if ($_FILES['file2'] != "")
         {
-            
+
             //controlliamo che il file rispetti le dimensioni impostate
             if ($_FILES["file2"]["size"] < 10240000)
             {
@@ -271,24 +282,23 @@ if ($_GET['azione'] == "singolo")
         $mail->Hostname = "$HOSTNAME";
         $mail->Host = $mailsmtp; // specify main and backup server
         $mail->Port = $PORTSMTP;
-       
+
         if ($SSL != "NO")
         {
-            $mail->SMTPSecure = $SSL;      
+            $mail->SMTPSecure = $SSL;
             // Enable encryption, 'ssl' also accepted
-            
-            $mail->SMTPOptions = array('ssl' => array('verify_peer' => false,'verify_peer_name' => false,'allow_self_signed' => true));
-            
+
+            $mail->SMTPOptions = array('ssl' => array('verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true));
         }
-        
-                
+
+
         $mail->SMTPAuth = $smtpout; // turn on SMTP authentication
-        
+
         $mail->Username = $smtpuser; // SMTP username
         $mail->Password = $smtppass; // SMTP password
-        
+
         $mail->setFrom($_POST['From'], $_POST['FromName']);
-        
+
         $mail->AddAddress($_POST['AddAddress']);
 
         if ($_POST['AddAddressCC'] != "")
@@ -310,7 +320,7 @@ if ($_GET['azione'] == "singolo")
         {
             $mail->AddAttachment("../../spool/" . $_FILES['file']['name'] . "", $_FILES["file"]["name"]); // add attachments
         }
-        
+
         if ($_allegato2 == "OK")
         {
             $mail->AddAttachment("../../spool/" . $_FILES['file2']['name'] . "", $_FILES["file2"]["name"]); // add attachments
@@ -331,10 +341,10 @@ if ($_GET['azione'] == "singolo")
             echo "C'e stato un errore nella presa in consegna del messaggio.. indirizzo errato ? controllare e riprovare";
 
             echo "<br>Tipo di errore: " . $mail->ErrorInfo;
-            
+
             echo "<h3>Nel caso di un accesso google è necessario </h3><h3>Fare la procedura di autentificazione</h3>\n";
             echo "<h4><a href=\"http://www.google.com/intl/it/landing/2step/\">http://www.google.com/intl/it/landing/2step/</a></h4>\n";
-            
+
             exit;
         }
         else
@@ -408,11 +418,11 @@ if ($_GET['azione'] == "documento")
                 echo "File numero uno allegato è troppo grande!!";
                 exit;
             }
-            
+
 
             //se invece va bene lo alleghiamo alla e-mail..
         }
-        
+
         if ($_FILES['file2'] != "")
         {
             //controlliamo che il file rispetti le dimensioni impostate
@@ -447,12 +457,12 @@ if ($_GET['azione'] == "documento")
                 echo "File numero due allegato è troppo grande!!";
                 exit;
             }
-            
+
 
             //se invece va bene lo alleghiamo alla e-mail..
         }
-        
-        
+
+
 
         $_risultato = invio_posta($_cosa, $_POST['AddAttachment'], $_POST['From'], $_POST['AddAddress'], $_POST['AddAddressCC'], $_POST['AddAddressBCC'], $_POST['Subject'], $_POST['Body'], $_POST['ricevuta'], $_POST['tdoc'], $_POST['anno'], $_POST['suffix'], $_POST['ndoc'], $_allegato, $_allegato2, $_parametri);
 

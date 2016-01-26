@@ -366,20 +366,9 @@ function documenti_inevasi($_codutente, $_tdoc)
         $query = "select * from of_testacalce where utente='$_codutente' and status != 'evaso' ORDER BY ndoc limit 10";
     }
 
-    $result = $conn->query($query);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "motore_doc_pdo.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-        $_errori['errori'] = "NO";
-    }
-
-    if ($result->rowCount() > 0)
+    if ($result != "NO")
     {
         $righe = "1";
         echo "<tr><td colspan=\"5\" align=\"center\" class=\"tabella\"><font size=\"3\">Il seguente cliente ha Questi $_documenti inevasi.</font></td></tr>";
@@ -1006,24 +995,8 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
                     $_parametri['status'], $_parametri['notedoc'], $_parametri['colli'], $_parametri['trasporto'], $_parametri['peso'], $_parametri['imponibile'], $_parametri['totimposta'], $_parametri['totdoc']);
         }
         
-        $result = $conn->exec($query);
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "block");
 
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "NO";
-        }
-        else
-        {
-            $return['errori'] = "OK";
-        }
-        
-        
     }
     elseif ($_cosa == "inserisci_testata")
     {
@@ -1038,22 +1011,9 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         }
 
 
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "NO";
-        }
-        else
-        {
-            $return['errori'] = "OK";
-        }
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
+        
+        
     }
     elseif($_cosa == "aggiorna")
     {
@@ -1125,26 +1085,8 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
                     $_rev1, $_anno, $_suffix, $_ndoc);
         }
 
-        $result = $conn->exec($query);
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "block");
 
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "NO";
-        }
-        else
-        {
-            $return['errori'] = "OK";
-        }
-            
-            
-            
-            
     }
     elseif ($_cosa == "blocca_numero")
     {
@@ -1166,7 +1108,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
             $_parametri['status'] = "inserito";
             $errori = gestisci_testata("inserisci_testata", $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_archivi, $_parametri);
 
-            if ($errori['errori'] != "OK")
+            if ($errori == "NO")
             {
                 echo "errore inserimento parte testata blocca numero<br>";
                 $return['errori'] = "NO";
@@ -1179,8 +1121,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         }
         else
         {
-            echo "errore Generale";
-            exit;
+            scrittura_errori("blocca", $_percorso, $_errori);
         }
     }
     elseif ($_cosa == "aggiorna_chiudi")
@@ -1190,22 +1131,8 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
         $query = "UPDATE $_archivi[testacalce] SET status='$_parametri[status]', tdocevaso='$_parametri[t_doc_end]', evasonum='$_parametri[ndoc_end]', evasoanno='$_parametri[anno_end]', evasosuffix='$_parametri[suffix_end]' WHERE anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'";
 
 
-        $result = $conn->exec($query);
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
 
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "NO";
-        }
-        else
-        {
-            $return['errori'] = "OK";
-        }
     }
     elseif ($_cosa == "aggiorna_travasa")
     {
@@ -1240,22 +1167,8 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
                         where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'", addslashes($dati3['dragsoc']), addslashes($dati3['dragsoc2']), addslashes($dati3['dindirizzo']), $dati3['dcap'], addslashes($dati3['dcitta']), $dati3['dprov'], $_banca, $dati3['vettore'], $dati3['porto'], $dati3['aspetto'], $dati3['modpag'], $_parametri['colli'], $_parametri['peso'], $_parametri['trasporto'], $_parametri['varie'], $_parametri['imponibile'], $_parametri['imposta'], $_parametri['totdoc']);
         }
 
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $return['errori'] = "NO";
-        }
-        else
-        {
-            $return['errori'] = "OK";
-        }
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
+        
     }
     elseif ($_cosa == "leggi_riga_testata")
     {
@@ -1419,23 +1332,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
 
         $query = "SELECT * from $_archivi[testacalce] where anno='$_anno' AND suffix='$_suffix' and utente='$_utente' and ndoc = '$_ndoc'";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-           $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            foreach ($result AS $return)
-                ;
-        }
+        $return = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
     }
 
 
@@ -1511,24 +1408,7 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
 								'$_parametri[listino]', '$_parametri[scva]', '$_parametri[scvb]', '$_parametri[scvc]', '$_parametri[nettovendita]', '$_parametri[totriga]', '$_iva', '$_parametri[totrigaprovv]', '$_parametri[peso]', '$_parametri[consegna]' )";
         }
 
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-        
-        $return = $_errori;
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "block");
         
     }
     elseif ($_cosa == "leggi_corpo")
@@ -1543,26 +1423,9 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
             $query = "SELECT * from $_archivi[dettaglio] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente' order by rigo";
         }
 
-        //echo $query;
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-
-        $return = $result;
+        
     }
     elseif ($_cosa == "aggiorna_singola")
     {
@@ -1576,53 +1439,23 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
             $query = "UPDATE $_archivi[dettaglio] SET qtaevasa='$_parametri[qtaevasa]', qtaestratta='$_parametri[qtaestratta]', qtasaldo='$_parametri[qtasaldo]', rsaldo='$_parametri[rsaldo]', totriga='$_parametri[totriga]', totrigaprovv='$_parametri[totrigaprovv]' , peso='$_parametri[peso]' WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' AND rigo='$_rigo' AND utente='$_utente'";
         }
 
-        //echo $query;
-
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-           $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-        $return = $_errori;
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "");
+        
     }
     elseif ($_cosa == "verifica_saldo")
     {
 
         $query = "SELECT * FROM $_archivi[dettaglio] where articolo != 'vuoto' AND rsaldo != 'SI' and anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente'";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
+        if($result == "NO")
         {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-
-        $_righe = $result->rowCount();
-
-        if ($_righe > "0")
-        {
-            $_status = "parziale";
+            $_status = "evaso";
         }
         else
         {
-            $_status = "evaso";
+            $_status = "parziale";
         }
 
         $return = $_status;
@@ -1640,24 +1473,8 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
             $query = "delete from $_archivi[dettaglio] where anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
         }
         
-
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-        $return = $_errori;
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "block");
+        
     }
     else
     {
@@ -1665,24 +1482,8 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
 
         $query = "SELECT * from $_archivi[dettaglio] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' and utente='$_utente' order by rigo";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-
-            $return = $result;
-        }
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
     }
 
 
@@ -1721,7 +1522,7 @@ function gestisci_magazzino($_cosa, $id, $_tdoc, $_anno, $_suffix, $_ndoc, $_dat
 
         $_errori = tabella_magazzino("elimina_documento", $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_tut, $_rigo, $_utente, $_codice, $_parametri);
 
-        if ($_errori['errori'] != "OK")
+        if ($_errori == "NO")
         {
             echo "errore eliminazione documento di magazzino $_ndoc";
         }
@@ -1780,6 +1581,12 @@ function gestisci_magazzino($_cosa, $id, $_tdoc, $_anno, $_suffix, $_ndoc, $_dat
 
                     $_errori = tabella_magazzino("inserisci_singola", $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, "c", $_rigo, $dati['utente'], $dati['articolo'], $_parametri);
                 }
+                
+                if($_errori == "NO")
+                {
+                    echo "<h3 align=\"center\"> Attenzione errore inserimento in magazzino </h3>\n";
+                }
+                
             }//5
         }// fine esclusione magazzino
     }
@@ -1837,22 +1644,7 @@ function gestione_provvigioni($_funzione, $_tdoc, $_anno, $_suffix, $_ndoc, $_ag
         }
     }
 
-    $result = $conn->query($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        $_errori['errori'] = "NO";
-    }
-    else
-    {
-        $_errori['errori'] = "OK";
-    }
+    $_errori = domanda_db("exec", $query, $_cosa, $_ritorno, "");
 
 
     return $_errori;
@@ -2425,18 +2217,12 @@ function impegno_articolo($_cosa, $_articolo)
     // proviamo a vedere se l'articolo cercato e gia stato ordinato presso un'altro fornitore oppure non e ancora stato conseganto.
     // verifico se il cliente ha conferme d'ordine inevase
     // avviso su monitor se ci sono e quali
-    $query = sprintf("select * from of_dettaglio INNER JOIN of_testacalce ON of_dettaglio.ndoc=of_testacalce.ndoc where articolo=\"%s\" and status != 'evaso' AND rsaldo != 'SI' ORDER BY of_dettaglio.ndoc", $_articolo);
+    
+    $query = "select * from of_dettaglio INNER JOIN of_testacalce ON of_dettaglio.ndoc=of_testacalce.ndoc where articolo='$_articolo' and status != 'evaso' AND rsaldo != 'SI' ORDER BY of_dettaglio.ndoc";
+    
+    
 
-    $result = $conn->query($query);
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "motore_doc_pdo.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
     if ($result->rowCount() > 0)
     {
@@ -2475,24 +2261,8 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
     {
         $query = sprintf("delete from doc_basket where sessionid = \"%s\"", $id);
 
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_doc_pdo.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-
-        $return = $_errori;
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "");
+        
     }
     elseif ($_cosa == "delete_rigo")
     {
@@ -2500,24 +2270,10 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 
         $query = sprintf("DELETE from doc_basket where sessionid=\"%s\" and rigo=\"%s\"", $id, $_rigo);
 
-        $result = $conn->exec($query);
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose2");
+        
+        //echo $return['messaggio'];
 
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_doc_pdo.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-
-        $return = $_errori;
     }
     elseif ($_cosa == "inserisci")
     {
@@ -2548,19 +2304,8 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
             //se la riga è diversa dobbiamo cambiare la riga ma prima bisogna verificare che la stessa sia disponibile
             $query = "SELECT * FROM doc_basket where sessionid=\"$id\" AND rigo=\"$_rigo\"";
 
-            $result = $conn->query($query);
-
-            if ($conn->errorCode() != "00000")
-            {
-                $_errore = $conn->errorInfo();
-                echo $_errore['2'];
-                //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-                $_errori['files'] = "motore_doc_pdo.php";
-                scrittura_errori($_cosa, $_percorso, $_errori);
-                $_errori['errori'] = "NO";
-            }
-
+            $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+    
             if ($result->rowCount() > 0)
             {
                 //impossibile cambiare rigo la lasciamo normale
@@ -2621,24 +2366,10 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 	     values( \"%s\", \"%s\",\"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",
 	     \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri['artfor'], $_parametri['descrizione'], $_parametri['unita'], $_parametri['qta'], $_qtaevasa, $_qtaestratta, $_qtasaldo, $_rsaldo, $_parametri['listino'], $_parametri['sca'], $_parametri['scb'], $_parametri['scc'], $_nettovendita, $_totriga, $_parametri['iva'], $_totrigaprovv, $_peso, $_parametri['consegna'], $_parametri['agg']);
 
-                $result = $conn->exec($query);
+                $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose2");
+                
 
-                if ($conn->errorCode() != "00000")
-                {
-                    $_errore = $conn->errorInfo();
-                    echo $_errore['2'];
-                    //aggiungiamo la gestione scitta dell'errore..
-                    $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-                    $_errori['files'] = "motore_doc_pdo.php";
-                    scrittura_errori($_cosa, $_percorso, $_errori);
-                    $_errori['errori'] = "NO";
-                }
-                else
-                {
-                    $_errori['errori'] = "OK";
-                }
-
-        $return = $_errori;
+        $return = $result;
     }
     elseif ($_cosa == "leggi_singola")
     {
@@ -2676,24 +2407,8 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 
         //echo $query;
 
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa= $query - $_errore[2]";
-            $_errori['files'] = "motore_doc_pdo.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-
-        $return = $_errori;
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
+        
     }
     elseif ($_cosa == "update")
     {
@@ -2839,24 +2554,8 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 				peso='$_peso', agg='$_parametri[agg]', consegna='$_parametri[consegna]', rsaldo='$_rsaldo' WHERE sessionid='$id' AND rigo='$_rigo' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'" , addslashes($_parametri['descrizione']));
         //echo $query;
         
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore update doc_basket funz. update Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_doc_pdo.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = 'OK';
-        }
-
-        $return = $_errori;
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose2");
+        
     }//chiusura funzioni..
     else
     {
@@ -2864,24 +2563,8 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 
         $query = sprintf("select * from doc_basket where sessionid=\"%s\" order by rigo", $id);
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_doc_pdo.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori = $result;
-        }
-
-        $return = $_errori;
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
     }
 
 
@@ -3023,7 +2706,7 @@ function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_suffix, $
 
             $errori = tabella_doc_basket("travasa", $id, $dati2['rigo'], $dati2['anno'], $dati2['suffix'], $dati2['ndoc'], $dati2['utente'], $dati2['articolo'], $dati2);
 
-            if ($errori['errori'] != "OK")
+            if ($errori== "NO")
             {
                 echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
                 $_return = "errore inserimento bascket";
@@ -3732,7 +3415,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
         {
             $testata = gestisci_testata("inserisci", $_codutente, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_archivio, $_parametri);
         
-            if($testata['errori'] != "OK")
+            if($testata == "NO")
             {
                 echo "Inserimento documento Fallito..";
                 exit;
@@ -3759,7 +3442,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
         {
             $testata = gestisci_testata("aggiorna", $_codutente, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_archivio, $_parametri);
 
-            if ($testata['errori'] != "OK")
+            if ($testata == "NO")
             {
                 echo "Aggiornamento documento Fallito..";
                 exit;
@@ -3776,16 +3459,11 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
         
         $dettaglio = gestisci_dettaglio("elimina", $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, $_rigo, $_utente, $_codice, $_descrizione, $_iva, $_parametri);
         
-        if($dettaglio['errori'] != "OK")
+        if($dettaglio == "NO")
         {
             echo "Eliminazione corpo Fallito..";
             exit;
         }
-        
-        //eliminiamo anche il magazino e le provvigioni..
-        
-        
-        
         
     }
 
@@ -3811,7 +3489,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
         
         $dettaglio = gestisci_dettaglio("inserisci_singola", $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, $dati2['rigo'], $_codutente, $dati2['articolo'], $dati2['descrizione'], $dati2['iva'], $dati2);
         
-        if($dettaglio['errori'] != "OK")
+        if($dettaglio == "NO")
         {
             echo "Inserimento riga corpo Fallito..";
             exit;
@@ -3833,10 +3511,9 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
 
                 $_magazzino = gestisci_magazzino("automatico", $id, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_codutente, $_tut, $_archivio, $_parametri);
 
-                if ($_magazzino['errori'] != "OK")
+                if ($_magazzino == "NO")
                 {
-                    $_return['descrizione'] = "Si &egrave; verificato un errore nella query inserimento in magazzino:<br>\n\"$query\"\n";
-                    $_return['errore'] = "errore";
+                    echo "Si &egrave; verificato un errore nella query inserimento in magazzino:<br>\n\"$query\"\n";
                 }
             }
 
@@ -3857,12 +3534,10 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
                     $_provvigioni = gestione_provvigioni("inserisci", $_tdoc, $_anno, $_suffix, $_ndoc, $_parametri['agente'], $_datareg, $_codutente, $_parametri['totdoc'], $_parametri['totprovv']);
 
                 }
-                
 
-                if ($_provvigioni['errori'] != "OK")
+                if ($_provvigioni == "NO")
                 {
-                    $_return['descrizione'] = "Si &egrave; verificato un errore nella query inserimento in provvigioni:<br>\n\"$query\"\n";
-                    $_return['errore'] = "errore";
+                    echo "Si &egrave; verificato un errore nella query inserimento in provvigioni:<br>\n\"$query\"\n";
                 }
             }
 
@@ -4049,21 +3724,12 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
             
         }
 
-
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-
-        if ($result->rowCount() > 0)
+        //mi ritorna NO nel caso non abbia trovato niente quindi è libero
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+        
+        //echo "merda";
+        //echo $result;
+        if ($result != "NO")
         {
             //se è accupato.. aggiungo un numero e riprovo...
             $_ndoc_n = $_ndoc + 1;
@@ -4079,20 +3745,9 @@ function seleziona_documento($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_archivi
             }
 
 
-            $result = $conn->query($query);
+            $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
-            if ($conn->errorCode() != "00000")
-            {
-                $_errore = $conn->errorInfo();
-                echo $_errore['2'];
-                //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-                $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-                scrittura_errori($_cosa, $_percorso, $_errori);
-                $_errori['errori'] = "NO";
-            }
-
-            if ($result->rowCount() > 0)
+            if ($result != "NO")
             {
                 //se anche questa volta è accupato.. vuol dire che si è proprio sbagliato.
 

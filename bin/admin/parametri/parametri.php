@@ -45,7 +45,8 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<li><a href=\"#tabs-2\">Ragione Fiscale</a></li>\n";
     echo "<li><a href=\"#tabs-3\">Parametri Funzionamento</a></li>\n";
     echo "<li><a href=\"#tabs-4\">Mail</a></li>\n";
-    echo "<li><a href=\"#tabs-5\">Connessione e Mysql</a></li>\n";
+    echo "<li><a href=\"#tabs-5\">Connessione Al Database</a></li>\n";
+    echo "<li><a href=\"#tabs-6\">Sezione Programmatore</a></li>\n";
     echo "</ul>\n";
 
     echo "<div id=\"tabs-1\">\n";
@@ -485,15 +486,35 @@ if ($_SESSION['user']['setting'] > "3")
                 </tr>
                 
 
-                <tr>
-                    <td>Modatità Debug</td>
-                    <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"3\" name=\"DEBUG\" value=\"$DEBUG\"></td>
-                </tr>
+                
 \n";
 
     echo "</table>\n";
     echo "</div>\n";
 
+    echo "<div id=\"tabs-6\">\n";
+    echo "<table class=\"tabs\">";
+    echo " <tr>
+                    <td>Modatità Debug</td>
+                    <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"3\" name=\"DEBUG\" value=\"$DEBUG\"></td>
+                </tr>\n";
+    
+    echo " <tr>
+                    <td>Modatità Inoltra Errori per posta</td>
+                    <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"3\" name=\"ERRORMAIL\" value=\"$ERRORMAIL\"></td>
+                </tr>\n";
+    
+    echo " <tr>
+                    <td>Registra Query</td>
+                    <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"3\" name=\"REGISTRA\" value=\"$REGISTRA\"></td>
+                </tr>\n";
+    
+    echo "</table>\n";
+    echo "</div>\n";
+    
+    
+    
+    
     echo "<td colspan=\"2\" align=\"center\"><br><input type=\"submit\" name=\"azione\" value=\"Modifica\"></td></tr>\n";
 
     echo "</tbody></table></form></div></body></html>\n";

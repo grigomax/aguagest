@@ -120,19 +120,12 @@ if ($_SESSION['user']['vendite'] > "1")
 
 		#echo $query;
 
-		$result = $conn->query($query);
-
-		if ($conn->errorCode() != "00000")
-		{
-			$_errore = $conn->errorInfo();
-			echo $_errore['2'];
-			//aggiungiamo la gestione scitta dell'errore..
-			$_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-			$_errori['files'] = "filtro_doc.php";
-			scrittura_errori($_cosa, $_percorso, $_errori);
-		}
+		$result = domanda_db("query", $query, $_cosa, $_ritorno, "verbose2");
 
 
+                echo "<tr><td colspan=\"10\" align=\"center\" valign=\"top\">";
+		echo "<font color=\"green\"><h4 align=\"center\">$result[messaggio]</h4></font></td></tr>";
+                
 		echo "<tr>";
 		echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Seleziona doc</span></td>";
 		echo "<td width=\"100\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Data</span></td>";
@@ -157,7 +150,7 @@ if ($_SESSION['user']['vendite'] > "1")
 		echo "</tr>";
 
 		// azzero la variabile
-		foreach ($result AS $dati_start)
+		foreach ($result['result'] AS $dati_start)
 		{
 			echo "<tr>";
 			printf("<td align=\"center\"><input type=\"checkbox\" name=\"numero[]\" value=\"%s%s%s\"></td>\n", $dati_start['anno'], $dati_start['suffix'], $dati_start['ndoc']);

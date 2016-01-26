@@ -127,12 +127,18 @@ if ($_SESSION['user']['vendite'] > "2")
                 $_ndoc = $_disponibilita['ndoc'];
 
                 $_documento = scrivi_doc("inserisci", $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_datareg, $_POST);
+                
+                if ($_documento == "NO")
+                {
+                    echo "<h3 align=\"center\">Documento inserito ma con errori</h3>\n";
+                }
+                
 
                 $_result = tabella_doc_basket("azzera_sessione", $id, $_rigo, $_anno, $_suffix, $_ndoc, $_utente, $_articolo, $_parametri);
 
-                if ($_result['errori'] != "OK")
+                if ($_result == "NO")
                 {
-                    echo $_result['descrizione'];
+                    echo "<h3 align=\"center\">Errore Svuotamento sessione</h3>\n";
                 }
             }
         }
