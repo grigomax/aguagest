@@ -33,7 +33,7 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<h2 align=\"center\">Parametri Azienda e Programma</h2>
 
     Attenzione non si possono inserire nei campi di scrittura
-    NE parole accentate NE apostrofi e TANTOMENO virgolette. 
+    NE parole accentate NE apostrofi e TANTOMENO virgolette.<br> 
     La non osservanza potrebbe compromettere l'uso del programma.
     \n";
 
@@ -236,8 +236,7 @@ if ($_SESSION['user']['setting'] > "3")
         echo "<span class=\"testo_blu\">";
 
         $res_2 = tabella_aliquota("elenca_codice", $_codiva, $_percorso);
-        foreach ($res_2 AS
-                $dati)
+        foreach ($res_2 AS $dati)
         {
             printf("<option value=\"%s\">%s - %s</option>\n", $dati['codice'], $dati['descrizione'], $dati['codice']);
         }
@@ -386,13 +385,13 @@ if ($_SESSION['user']['setting'] > "3")
                     <td><input type=\"text\" size=\"70\" name=\"email4\" value=\"$email4\"></td>
                 </tr>
                 <tr><td colspan=\"2\"><hr></td></tr>\n";
-                echo "<tr><td colspan=\"2\"><h3>Nel caso di un accesso google è necessario Fare la procedura di autentificazione</h3>\n";
-                echo "<h4><a href=\"http://www.google.com/intl/it/landing/2step/\">http://www.google.com/intl/it/landing/2step/</a></h4>\n";
-            
-                echo "</td></tr>\n";
+    echo "<tr><td colspan=\"2\"><h3>Nel caso di un accesso google è necessario Fare la procedura di autentificazione</h3>\n";
+    echo "<h4><a href=\"http://www.google.com/intl/it/landing/2step/\">http://www.google.com/intl/it/landing/2step/</a></h4>\n";
+
+    echo "</td></tr>\n";
 
 
-                echo "<tr>
+    echo "<tr>
                     <td>nome Host locale</td>
                     <td><input type=\"text\" size=\"70\" name=\"HOSTNAME\" value=\"$HOSTNAME\"><br> es. localhost</td>
                 </tr>						
@@ -498,23 +497,27 @@ if ($_SESSION['user']['setting'] > "3")
                     <td>Modatità Debug</td>
                     <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"3\" name=\"DEBUG\" value=\"$DEBUG\"></td>
                 </tr>\n";
-    
+
     echo " <tr>
                     <td>Modatità Inoltra Errori per posta</td>
                     <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"3\" name=\"ERRORMAIL\" value=\"$ERRORMAIL\"></td>
                 </tr>\n";
-    
+
     echo " <tr>
                     <td>Registra Query</td>
                     <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"3\" name=\"REGISTRA\" value=\"$REGISTRA\"></td>
                 </tr>\n";
-    
+    echo " <tr>
+                    <td>Email sviluppatore</td>
+                    <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"50\" name=\"EMAILSVILUPPO\" value=\"$EMAILSVILUPPO\"></td>
+                </tr>\n";
+
     echo "</table>\n";
     echo "</div>\n";
-    
-    
-    
-    
+
+
+
+
     echo "<td colspan=\"2\" align=\"center\"><br><input type=\"submit\" name=\"azione\" value=\"Modifica\"></td></tr>\n";
 
     echo "</tbody></table></form></div></body></html>\n";

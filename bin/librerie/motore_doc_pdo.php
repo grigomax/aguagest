@@ -15,6 +15,8 @@
  * 
  */
 
+
+
 //fine funzioni di annulla documento
 #Inizio funzioni riguardanti l'invio per la stampa dei documenti'
 function genera_maschera_stampe($file_stampa, $maschera, $_documento)
@@ -1111,6 +1113,7 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
             if ($errori == "NO")
             {
                 echo "errore inserimento parte testata blocca numero<br>";
+               // scrittura_errori("block", $_percorso, $_errori);
                 $return['errori'] = "NO";
             }
             else
@@ -1306,25 +1309,11 @@ function gestisci_testata($_cosa, $_utente, $_tdoc, $_anno, $_suffix, $_ndoc, $_
             $query = "select * from $_archivi[testacalce] where anno='$_anno' AND suffix='$_suffix' ORDER BY ndoc DESC LIMIT 1";
         }
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            foreach ($result AS $dati)
-                ;
-
-            $return = $dati['ndoc'] + 1;
-        }
+        $dati = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        
+        
+        $return = $dati['ndoc'] + 1;
+        
     }
     else
     {
@@ -1439,7 +1428,7 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
             $query = "UPDATE $_archivi[dettaglio] SET qtaevasa='$_parametri[qtaevasa]', qtaestratta='$_parametri[qtaestratta]', qtasaldo='$_parametri[qtasaldo]', rsaldo='$_parametri[rsaldo]', totriga='$_parametri[totriga]', totrigaprovv='$_parametri[totrigaprovv]' , peso='$_parametri[peso]' WHERE anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc' AND rigo='$_rigo' AND utente='$_utente'";
         }
 
-        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "");
+        $return = domanda_db("exec", $query, $_cosa, "solo_error", "");
         
     }
     elseif ($_cosa == "verifica_saldo")
@@ -1518,14 +1507,21 @@ function gestisci_magazzino($_cosa, $id, $_tdoc, $_anno, $_suffix, $_ndoc, $_dat
     }
     else
     {
-        //eliminiamo eventuale prova..
+        //eliminiamo eventuale prova.. la cerchiamo e la eliminiamo..
+        
+        $result = tabella_magazzino("singola", $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_tut, $_rigo, $_utente, $_codice, $_parametri);
+        
+        if($result != "NO")
 
-        $_errori = tabella_magazzino("elimina_documento", $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_tut, $_rigo, $_utente, $_codice, $_parametri);
-
-        if ($_errori == "NO")
         {
-            echo "errore eliminazione documento di magazzino $_ndoc";
+            $_errori = tabella_magazzino("elimina_documento", $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_tut, $_rigo, $_utente, $_codice, $_parametri);
+
+            if ($_errori == "NO")
+            {
+                echo "errore eliminazione documento di magazzino $_ndoc";
+            }
         }
+        
 
         // ora procediamo a inserire gli articoli che sono legati al magazzino
         // dopo averlo cancellato lo reinserisco
@@ -1974,13 +1970,13 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
 
         if ($_cosa == "vuota")
         {
-            echo "<td align=left colspan=\"6\"><input type=\"text\" autofocus name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
+            echo "<td align=left colspan=\"6\"><textarea cols=\"60\" rows=\"1\" name=\"descrizione\" value=\"$_descrizione\" autofocus>$_descrizione</textarea></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }
         else
         {
-            echo "<td align=left colspan=\"6\"><input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
+            echo "<td align=left colspan=\"6\"><textarea cols=\"60\" rows=\"1\" name=\"descrizione\" value=\"$_descrizione\">$_descrizione</textarea></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" autofocus name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }
@@ -2065,7 +2061,7 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
 
         printf("<td align=center><input type=\"text\" name=\"artfor\" value=\"%s\" size=\"15\" maxlength=\"25\"></td>", $_artfor);
         echo "<td align=center><input type=\"radio\" name=\"articolo\" value=\"$_articolo\" checked>$_articolo</td>\n";
-        printf("<td colspan=\"4\" align=left><input type=\"text\" name=\"descrizione\" value=\"%s\" size=\"50\" maxlength=\"80\"></td>", $_descrizione);
+        echo "<td colspan=\"4\" align=left><textarea cols=\"60\" rows=\"1\" name=\"descrizione\" value=\"$_descrizione\">$_descrizione</textarea></td>\n";
         printf("<td align=center><input type=\"text\" name=\"unita\" value=\"%s\" size=\"2\" maxlength=\"2\"></td></tr>", $_unita);
 
         echo "<tr><td align=\"center\" >Q.t&agrave;</span></td>";
@@ -2137,13 +2133,15 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
         echo "<tr>";
         if ($_cosa == "vuota")
         {
-            echo "<td align=left colspan=\"4\"><input type=\"text\" autofocus name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
+            echo "<td align=left colspan=\"4\">\n";
+            echo "<textarea cols=\"60\" rows=\"1\" name=\"descrizione\" value=\"$_descrizione\" autofocus >$_descrizione</textarea></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }
         else
         {
-            echo "<td align=left colspan=\"4\"><input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"60\" maxlength=\"$datidoc[ST_DESCRIZIONE_CT]\"></td>\n";
+            echo "<td align=left colspan=\"4\">\n";
+            echo "<textarea cols=\"60\" rows=\"1\" name=\"descrizione\" value=\"$_descrizione\">$_descrizione</textarea></td>\n";
             echo "<td align=center><input type=\"text\" name=\"unita\" value=\"$_unita\" size=\"2\" maxlength=\"2\"></td>\n";
             echo "<td align=center><input type=\"text\" autofocus name=\"qta\" value=\"$_qta\" size=\"6\" maxlength=\"18\"></td>\n";
         }
@@ -2306,7 +2304,7 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 
             $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
     
-            if ($result->rowCount() > 0)
+            if ($result != "NO")
             {
                 //impossibile cambiare rigo la lasciamo normale
                 
@@ -3399,6 +3397,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
         if ($_disponibilita['errori'] != "OK")
         {
             echo "Nonostante i tentativi il numero risulta occupato.. <br>errore bloccaggio numero<br>Il numero selezionato risulta già occupato..";
+            scrittura_errori("block", $_cosa, $_errori, $query);
             exit;
         }
         
@@ -3418,6 +3417,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
             if($testata == "NO")
             {
                 echo "Inserimento documento Fallito..";
+                scrittura_errori("block", $_cosa, $_errori, $query);
                 exit;
             }  
         }
@@ -3445,6 +3445,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
             if ($testata == "NO")
             {
                 echo "Aggiornamento documento Fallito..";
+                scrittura_errori("block", $_cosa, $_errori, $query);
                 exit;
             }
         }
@@ -3462,6 +3463,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
         if($dettaglio == "NO")
         {
             echo "Eliminazione corpo Fallito..";
+            scrittura_errori("block", $_cosa, $_errori, $query);
             exit;
         }
         
@@ -3492,6 +3494,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
         if($dettaglio == "NO")
         {
             echo "Inserimento riga corpo Fallito..";
+            scrittura_errori("block", $_cosa, $_errori, $query);
             exit;
         }
         
@@ -3514,6 +3517,7 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
                 if ($_magazzino == "NO")
                 {
                     echo "Si &egrave; verificato un errore nella query inserimento in magazzino:<br>\n\"$query\"\n";
+                    scrittura_errori("block", $_cosa, $_errori, $query);
                 }
             }
 
@@ -3535,9 +3539,11 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
 
                 }
 
-                if ($_provvigioni == "NO")
+                
+                if (($_cosa != "aggiorna") AND ($_provvigioni == "NO"))
                 {
-                    echo "Si &egrave; verificato un errore nella query inserimento in provvigioni:<br>\n\"$query\"\n";
+                    echo "Si &egrave; verificato un errore nella query inserimento in provvigioni\n";
+                    scrittura_errori("normale", $_cosa, $_errori, $query);
                 }
             }
 

@@ -28,7 +28,6 @@ if ($_SESSION['user']['magazzino'] > "1")
     require "../../librerie/stampe.inc.php";
     require "../../librerie/motore_anagrafiche.php";
     require $_percorso . "librerie/stampe_doc_pdf.inc.php";
-    require $_percorso . "librerie/invia_posta_allegato.php";
 
 
 //Cambio le variabili e le faccio vedere
@@ -43,12 +42,12 @@ if ($_SESSION['user']['magazzino'] > "1")
 #echo "data di riferimento $_POST[data]";
 // verifico l'anno passato per vedere cosa che archivio prendere
 
-    $query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno LIMIT 1";
+    $query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno asc LIMIT 1";
 
-    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+    $datianno = domanda_db("query", $query, $_cosa, "fetch", "");
 
-    $datianno = $result->fetch(PDO::FETCH_ASSOC);
-
+    //echo $datianno['anno'];
+    
     if ($_anno < $datianno['anno'])
     {
         $_magazzino = "magastorico";
@@ -58,21 +57,25 @@ if ($_SESSION['user']['magazzino'] > "1")
         $_magazzino = "magazzino";
     }
 
+    //echo $_magazzino;
+    //echo $_data;
+    
 
 // per calcolare le rimanenze magazzino creo una tabella temporanea dove mettere i dati prima dell'impaginazione
 // in modo da avere anche le righe qiuste.
 
-    $query = " CREATE TEMPORARY TABLE IF NOT EXISTS `rimanenze` (
-  			`articolo` varchar(15) default '',
-  			`descrizione` varchar(100) default '',
-			`tipart` varchar(100) default '',
-  			`quantita` float(10,2) default '0.00',
-  			`totriga` float(10,2) default '0.00'
+    $query = "CREATE TEMPORARY TABLE IF NOT EXISTS rimanenze (
+  			articolo varchar(15) default '',
+  			descrizione varchar(100) default '',
+			tipart varchar(100) default '',
+  			quantita float(10,2) default '0.00',
+  			totriga float(10,2) default '0.00'
   			)";
 
     domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
     
-    $query = "TRUNCATE TABLE `rimanenze`";
+    //svuotiamolo in caso di vecchie memorie
+    $query = "TRUNCATE TABLE rimanenze";
 
     domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
     
@@ -113,16 +116,9 @@ if ($_SESSION['user']['magazzino'] > "1")
         //echo $queryt;
         $result = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
         
-        $result = $conn->exec($query);
-
-        // se la query �andata a buon fine proseguiamo
     }// fine calcolo muovimento
-// echo $_anno;
-#include "../../../setting/$_tipo.php";
-//
-//
-//
-//------------------------------------------------------------------------------
+
+
 //Fatto questo iniziamo a stampare..
 // a questo punto iniziamo la pagina della stampa..
 

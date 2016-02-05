@@ -255,6 +255,9 @@ if ($_SESSION['user']['vendite'] > "1")
 		echo "</form>\n</td>\n";
 		echo "</td>\n</tr>\n";
 	}
+        
+        //facciamo due spazi sotto..
+    echo "<br>&nbsp;<br>&nbsp;\n";
 	echo "</body></html>";
 }
 else

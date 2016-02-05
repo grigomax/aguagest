@@ -446,15 +446,15 @@ if ($_SESSION['user']['setting'] > "3")
     if (!$fp)
         die("Errore.. Riga non inserita ?");
 
-    
-        $_scrivi = sprintf('$SUFFIX_DDT = "%s";' . "\n", $_POST['SUFFIX_DDT']);
+
+    $_scrivi = sprintf('$SUFFIX_DDT = "%s";' . "\n", $_POST['SUFFIX_DDT']);
     fwrite($fp, $_scrivi);
     if (!$fp)
         die("Errore.. Riga non inserita ?");
-    
-    
-    
-    $_scrivi = sprintf('$SIA = "%s";'."\n", $_POST['SIA']);
+
+
+
+    $_scrivi = sprintf('$SIA = "%s";' . "\n", $_POST['SIA']);
     fwrite($fp, $_scrivi);
     if (!$fp)
         die("Errore.. Riga non inserita ?");
@@ -635,23 +635,28 @@ if ($_SESSION['user']['setting'] > "3")
     if (!$fp)
         die("Errore.. Riga non inserita ?");
 
-    
-        $_scrivi = sprintf('$ERRORMAIL = "%s";' .
+
+    $_scrivi = sprintf('$ERRORMAIL = "%s";' .
             "\n", $_POST['ERRORMAIL']);
     fwrite($fp, $_scrivi);
     if (!$fp)
         die("Errore.. Riga non inserita ?");
-    
-        $_scrivi = sprintf('$REGISTRA = "%s";' .
+
+    $_scrivi = sprintf('$REGISTRA = "%s";' .
             "\n", $_POST['REGISTRA']);
     fwrite($fp, $_scrivi);
     if (!$fp)
         die("Errore.. Riga non inserita ?");
-    
-    
-    
-    
-    
+
+    $_scrivi = sprintf('$EMAILSVILUPPO = "%s";' ."\n", $_POST['EMAILSVILUPPO']);
+    fwrite($fp, $_scrivi);
+    if (!$fp)
+        die("Errore.. Riga non inserita ?");
+
+
+
+
+
 
 // chiudiamo il file php
     $_commento = "?>";
@@ -669,7 +674,7 @@ if ($_SESSION['user']['setting'] > "3")
 
     echo "<center>";
     echo "<h2>Se non appaiono errori a video<br> il file &egrave; stato <br>modificato con successo</h2>";
-       echo "</body></html>";
+    echo "</body></html>";
 }
 else
 {

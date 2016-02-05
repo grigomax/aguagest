@@ -33,38 +33,20 @@ if ($_SESSION['user']['setting'] > "3")
 
     $query = "TRUNCATE TABLE doc_basket";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
+    $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
+    
+    if($result != "NO")
     {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    else
-    {
-        echo "Eseguito, 1";
+        echo "<br>Eseguito, pulizia doc_basket";
     }
 
     $query = "TRUNCATE TABLE prima_nota_basket";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
+    $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
+    
+    if($result != "NO")
     {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    else
-    {
-        echo "Eseguito. <br><br>";
+        echo "<br> Eseguito, Pulizia prima nota basket";
     }
 
 
@@ -73,20 +55,11 @@ if ($_SESSION['user']['setting'] > "3")
     $query = "REPAIR TABLE agenti,aliquota,articoli,banche,banned_ip,barcode,bvfor_dettaglio,bvfor_testacalce,bv_bolle,bv_dettaglio,catmer,causali_contabili,clienti,co_dettaglio,co_testacalce,doc_basket,effetti,fornitori,fv_dettaglio,fv_testacalce,imballi,liquid_iva_periodica,listini,magastorico,magazzino,oc_dettaglio,oc_testacalce,of_dettaglio,of_testacalce,pagamenti,piano_conti,prezzi_cliente,prima_nota,prima_nota_basket,promozioni,provvigioni,pv_dettaglio,pv_testacalce,scadenziario,stampe_layout,tipart,utente_campivari,utenti,version,vettori,zone";
 
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
+    $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
+    
+    if($result != "NO")
     {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    else
-    {
-        echo "Eseguito. <br><br>";
+        echo "<br>Eseguito, Repair";
     }
 
 }

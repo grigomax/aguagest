@@ -9,16 +9,21 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso ."../setting/vars.php";
-session_start(); $_SESSION['keepalive']++;
+session_start();
+$_SESSION['keepalive']++;
 //carichiamo le librerie base
 require $_percorso . "librerie/lib_html.php";
+
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
 
-
 //carichiamo la base delle pagine:
-base_html("chiudi", $_percorso);
+base_html("", $_percorso);
+jquery_datapicker($_cosa, $_percorso);
+
+echo "</head>";
+echo "<body>\n";
 
 //carichiamo la testata del programma.
 testata_html($_cosa, $_percorso);
@@ -39,7 +44,7 @@ if ($_SESSION['user']['magazzino'] > "1")
     	    Questo dipendera' dal tipo di computer oppure la quantita' di dati da elaborare.</td></tr>
 	<?php
 
-	printf("<br><br><form action=\"rimanenze2.php\" target=\"sotto\" method=\"POST\">");
+	printf("<br><form action=\"rimanenze2.php\" target=\"sotto\" method=\"POST\">");
 	$_anno = date("Y");
 	$_annov = $_anno - 1;
 
@@ -57,20 +62,12 @@ if ($_SESSION['user']['magazzino'] > "1")
 	echo "</select>\n";
 	echo "</td></tr>\n";
 
-	echo "<tr><td align=\"center\"><input type=\"text\" name=\"data\" size=\"11\" maxlength=\"10\">Inserisci eventuale data</td></tr>\n";
+	echo "<tr><td align=\"center\"><br>Inserisci eventuale data <br><input type=\"text\" class=\"data\" name=\"data\" size=\"11\" maxlength=\"10\"></td></tr>\n";
 
 	echo "<tr><td align=center><br>";
 	echo "<select name=\"tipo\">\n";
 	echo "<option value=\"catmer\">Per Categoria Merceologica</option>\n";
 	echo "<option value=\"tipart\">Per Tipologia Articolo</option>\n";
-	echo "</select>\n";
-	echo "</td></tr>\n";
-
-	echo "<tr><td align=center><br><br>Scegliere il tipo di stampa<br></td></tr>";
-	echo "<tr><td align=center><br>";
-	echo "<select name=\"stampa\">\n";
-	echo "<option value=\"rep_rimanenze\">Rimanenze in carta comune </option>";
-	#echo "<option value=\"rimanenzepdf\">Rimanenze in formato pdf </option>";
 	echo "</select>\n";
 	echo "</td></tr>\n";
 
@@ -80,6 +77,8 @@ if ($_SESSION['user']['magazzino'] > "1")
 
 
 	echo "</body></html>";
+
+     //   echo mb_convert_encoding("Quantità", "windows-1252", "UTF-8");
     }
     else
     {

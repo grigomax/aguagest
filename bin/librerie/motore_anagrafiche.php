@@ -588,14 +588,14 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
         $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
         
 
-        if ($result->rowCount() > "0")
+        if ($result == "NO")
         {
-            $dati = domanda_db("query", $query, $_cosa, "solo_fetch", $result);
-            $dati['risultato'] = "SI";
+            $dati['risultato'] = "NO";
         }
         else
         {
-            $dati['risultato'] = "NO";
+            $dati = domanda_db("query", $query, $_cosa, "solo_fetch", $result);
+            $dati['risultato'] = "SI";
         }
         
     }
@@ -1474,14 +1474,14 @@ function tabella_barcode($_cosa, $_codbar, $_articolo, $_rigo)
 
         $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
         
-        if($result->rowCount() > 0 )
+        if($result == "NO" )
         {
-            $dati = domanda_db("query", $query, $_cosa, "solo_fetch", $result);
-            $return = $dati['articolo'];
+            $return = "NO";
         }
         else
         {
-            $return = "NO";
+            $dati = domanda_db("query", $query, $_cosa, "solo_fetch", $result);
+            $return = $dati['articolo'];
         }
 
     }
@@ -2047,7 +2047,7 @@ function tabella_clienti($_cosa, $_utente, $_parametri)
 //mi restituisce l'arre singolo
         $query = "select * from clienti where codice='$_utente' limit 1";
         
-        $return = domanda_db("query", $query, $_cosa, "fetch", "");
+        $return = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
     }
     elseif ($_cosa == "partitaiva")
@@ -2882,7 +2882,7 @@ function tabella_fornitori($_cosa, $_utente, $_parametri)
 
         $query = "select * from fornitori where codice='$_utente' limit 1";
         
-        $return = domanda_db("query", $query, $_cosa, "fetch", "");
+        $return = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
         
     }
     elseif ($_cosa == "singola_parametri")//restituisce array con la riga del fornitore..
@@ -3734,6 +3734,14 @@ function tabella_magazzino($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, 
         $return = domanda_db("exec", $query, $_cosa, $_ritorno, "");
         
     }
+    
+    if ($_cosa == "singola")
+    {
+        $query = "SELECT * FROM magazzino WHERE tdoc='$_tdoc' AND anno='$_anno' AND suffix='$_suffix' AND ndoc='$_ndoc'";
+
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, "");
+    }
+    
     
     if($_cosa == "calcola_giacenze")
     {

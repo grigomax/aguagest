@@ -179,6 +179,10 @@ if ($_SESSION['user']['vendite'] > "1")
 //chiudiamo con i pulsanti;
         genera_maschera_stampe($file_stampa, "pulsanti", "");
     }
+    
+    
+    //facciamo due spazi sotto..
+    echo "<br>&nbsp;<br>&nbsp;\n";
 }
 else
 {

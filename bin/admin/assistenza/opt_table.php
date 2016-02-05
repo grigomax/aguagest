@@ -37,39 +37,11 @@ if ($_SESSION['user']['setting'] > "3")
 
     $query = "TRUNCATE TABLE doc_basket";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    else
-    {
-        echo "Eseguito, 1";
-    }
+    domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
     $query = "TRUNCATE TABLE prima_nota_basket";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    else
-    {
-        echo "Eseguito. <br><br>";
-    }
+    domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
     
 
     echo "<center><br><br><br> Inizio Ottimizzzione tabelle..<br><br>";
@@ -79,19 +51,7 @@ if ($_SESSION['user']['setting'] > "3")
 
     $result = $conn->exec($query);
 
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    else
-    {
-        echo "Eseguito. <br><br>";
-    }
+    domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
 }
 else

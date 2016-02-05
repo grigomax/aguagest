@@ -105,8 +105,7 @@ if ($_SESSION['user']['vendite'] > "2")
             echo "Programma interrotto";
             $_errori['descrizione'] = "Errore nella selezione del documento in generafatt2.php";
             $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            exit;
+            scrittura_errori("block", $_cosa, $_errori, $query);
         }
 
         if ($_utente != $_utente_pro)
@@ -150,6 +149,11 @@ if ($_SESSION['user']['vendite'] > "2")
             //prendiamo l'ultimo numero che tocca..
             $_ndoc_end = gestisci_testata("ultimo_numero", $_utente, $_tdoc_end, $_anno_end, $_suffix_end, $_ndoc, $_datareg, $_archivi_end, $_parametri);
 
+            if($_ndoc_end == "NO")
+            {
+                echo "errore ricerca numero\n";
+                scrittura_errori("invio", $_cosa, $_errori, $query);
+            }
             //Query che inserisce solo parte dell'intestazione della fattura
             //blocchiamo il numero..
             $blocca = gestisci_testata("blocca_numero", $_utente, $_tdoc_end, $_anno_end, $_suffix_end, $_ndoc_end, $_datareg, $_archivi_end, $_parametri);
@@ -157,6 +161,7 @@ if ($_SESSION['user']['vendite'] > "2")
             if ($blocca['errori'] != "OK")
             {
                echo "Errore Blocco fattura numero $_ndoc_end <br>\n";
+               scrittura_errori("invio", $_cosa, $_errori, $query);
             }
             else
             {
@@ -167,9 +172,10 @@ if ($_SESSION['user']['vendite'] > "2")
             // Inseriamo nell'anagrafica provvigioni la fattura appena generata
             $_provvigioni = gestione_provvigioni("inserisci", $_tdoc_end, $_anno_end, $_suffix_end, $_ndoc_end, $dati_utente['codagente'], $_datareg, $_utente, $_totdoc, $_totprovv);
 
-            if ($_provvigioni['errori'] != "OK")
+            if ($_provvigioni == "OK")
             {
                 echo "Si &egrave; verificato un errore nell'inserimento provvigiorni";
+                scrittura_errori("invio", $_cosa, $_errori, $query);
             }
             else
             {
@@ -212,10 +218,10 @@ if ($_SESSION['user']['vendite'] > "2")
         
         $corpo = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno_end, $_suffix_end, $_ndoc_end, $_rigo, $_utente, $_codice, $_descrizione, $_ivadesc, $_parametri);
         // Esegue la query...
-        if ($corpo['errori'] != "OK")
+        if ($corpo == "NO")
         {
             echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-            return -1;
+            scrittura_errori("invio", $_cosa, $_errori, $query);
         }
 
         // bisogna modificare lo stato documento
@@ -224,10 +230,10 @@ if ($_SESSION['user']['vendite'] > "2")
         $status = gestisci_testata("aggiorna_chiudi", $_utente, $_tdoc_start, $_anno_start, $_suffix_start, $_ndoc_start, $_datareg, $_archivi_start, array('status' => 'evaso', 't_doc_end' => $_tdoc_end, 'ndoc_end' => $_ndoc_end, 'anno_end' => $_anno_end, 'suffix_end' => $_suffix_end));
 
         // Esegue la query...
-        if ($status['errori'] != "OK")
+        if ($status == "NO")
         {
             echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-            return -1;
+            scrittura_errori("invio", $_cosa, $_errori, $query);
         }
         else
         {
@@ -257,10 +263,10 @@ if ($_SESSION['user']['vendite'] > "2")
             $result = gestisci_dettaglio("inserisci_singola", $_archivi_end, $_tdoc_end, $_anno_end, $_suffix_end, $_ndoc_end, $_rigo, $_utente, $dati_corpo['articolo'], $_descrizione, $_ivariga, $dati_corpo);
 
             // Esegue la query...
-            if ($result['errori'] != "OK")
+            if ($result == "NO")
             {
                 echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-                return -1;
+                scrittura_errori("invio", $_cosa, $_errori, $query);
             }
         }
 
@@ -305,10 +311,10 @@ if ($_SESSION['user']['vendite'] > "2")
         //aggiorniamo la fattura inserendo i dati mancanti appena prelevati dalla anagrafica cliente
         $aggiorna = gestisci_testata("aggiorna_travasa", $_utente, $_tdoc_end, $_anno_end, $_suffix_end, $_ndoc_end, $_datareg, $_archivi_end, $_parametri);
         // Esegue la query...
-        if ($aggiorna['errori'] != "OK")
+        if ($aggiorna == "NO")
         {
             echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-            return -1;
+            scrittura_errori("invio", $_cosa, $_errori, $query);
         }
         else
         {
@@ -317,9 +323,10 @@ if ($_SESSION['user']['vendite'] > "2")
 
         // Inseriamo nell'anagrafica provvigioni la fattura appena generata
         $_provvigioni = gestione_provvigioni("aggiorna", $_tdoc_end, $_anno_end, $_suffix_end, $_ndoc_end, $dati_utente['codagente'], $_datareg, $_utente, $_totdoc, $_totprovv);
-        if ($_provvigioni['errori'] != "OK")
+        if ($_provvigioni == "NO")
         {
             echo "Errore Aggiornamento provvigioni fattura $_ndoc_end\n";
+            scrittura_errori("invio", $_cosa, $_errori, $query);
         }
 
         // setto l'utente nel caso il documento che segua sia dello stesso cliente..

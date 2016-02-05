@@ -49,7 +49,7 @@ if ($_SESSION['user']['setting'] > "3")
 
     foreach ($etichetta AS $dati_eti)
     {
-        echo "<option value=\"$dati_eti[tdoc]\">$dati_eti[ST_NDOC]</option>";
+        echo "<option value=\"$dati_eti[tdoc]\">$dati_eti[ST_NDOC] - $dati_eti[tdoc]</option>";
     }
     echo "</select>\n";
     echo "<br><br><br>\n";

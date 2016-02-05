@@ -142,14 +142,14 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         echo "<td align=\"left\">";
 
 //gestione iva
-        $iva = tabella_aliquota("singola", $dati['iva'], $_percorso);
+        $iva = tabella_aliquota("singola", $dati['iva'], "silent");
 
 // Tutto procede a meraviglia...
         echo "<span class=\"testo_blu\">";
         echo "<select name=\"iva\">\n";
         printf("<option value=\"%s\">%s</option>\n", $iva['codice'], $iva['descrizione']);
 
-        $res = tabella_aliquota("elenca_codice", $_codiva, $_percorso);
+        $res = tabella_aliquota("elenca_codice", $_codiva, "silent");
         // Tutto procede a meraviglia...
         echo "<span class=\"testo_blu\">";
         foreach ($res AS $dati3)
@@ -202,7 +202,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         echo "<tr><td align=\"right\"><span class=\"testo_blu\">* Fornitore:&nbsp;</span></td>\n";
         echo "<td align=\"left\">";
 
-        $datif = tabella_fornitori("singola", $dati['fornitore'], $_parametri);
+        $datif = tabella_fornitori("singola", $dati['fornitore'], "silent");
         echo "<span class=\"testo_blu\">";
 
         echo "<select name=\"fornitore\">\n";
@@ -312,7 +312,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         echo "<tr><td align=\"right\"><span class=\"testo_blu\">Secondo Fornitore:&nbsp;</span></td>\n";
         echo "<td align=\"left\">";
 
-        $datif = tabella_fornitori("singola", $dati['fornitore2'], $_parametri);
+        $datif = tabella_fornitori("singola", $dati['fornitore2'], "silent");
         echo "<span class=\"testo_blu\">";
 
         echo "<select name=\"fornitore2\">\n";
@@ -361,7 +361,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         echo "<tr><td align=\"right\"><span class=\"testo_blu\">Terzo Fornitore:&nbsp;</span></td>\n";
         echo "<td align=\"left\">";
 
-        $datif = tabella_fornitori("singola", $dati['fornitore_3'], $_parametri);
+        $datif = tabella_fornitori("singola", $dati['fornitore_3'], "silent");
         echo "<span class=\"testo_blu\">";
 
         echo "<select name=\"fornitore_3\">\n";

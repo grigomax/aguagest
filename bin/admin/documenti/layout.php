@@ -259,11 +259,12 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\"><br>Tipo di logo aziendale</span></td>\n";
     echo "</tr><tr>\n";
 
-    echo "<td colspan=\"2\" align=\"left\" valign=\"top\"><b>Tipo logo Zero</b> = ovvero nessun logo, lo spazio rimarr&agrave; libero per una eventuale carta stanpata <br>\n";
+    echo "<td colspan=\"2\" align=\"left\" valign=\"top\"><b>Tipo logo Zero</b> = ovvero nessun logo, lo spazio rimarr&agrave; libero per una eventuale carta stampata <br>\n";
     echo "<b>Tipo di logo Uno </b>= ovvero logo completo della ditta riferito al logo grande 193X30mm<br>\n";
     echo "<b>Tipo di logo Due </b> = ovvero nessun logo tutta l'intestazione della ditta viene scritta con i caratteri<br>\n";
     echo "<b>Tipo di logo Tre </b>= ovvero logo medio mis. 150x33 della ditta a sinistra ed tutta la descrizione della ragione sociale a dx<br>\n";
     echo "<b>Tipo di logo Quattro </b>= ovvero logo medio mis. 150x33 della ditta a destra ed tutta la descrizione della ragione sociale a sx<br>\n";
+    echo "<b>Tipo di logo 5</b>= Classico per stampe interne<br>\n";
     echo "<center><select name=\"ST_TLOGO\">\n";
     echo "<option value=\"$dati[ST_TLOGO]\">$dati[ST_TLOGO]</option>\n";
     echo "<option value=\"0\">0 Nessun logo spazio libero</option>\n";
@@ -343,8 +344,9 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
         echo "<center><select name=\"ST_SOTTOTESTATA\">\n";
         echo "<option value=\"$dati[ST_SOTTOTESTATA]\">$dati[ST_SOTTOTESTATA]</option>\n";
         echo "<option value=\"0\">0 Nessuna sotto testata</option>\n";
-        echo "<option value=\"1\">1 Cassica per ddt</option>\n";
+        echo "<option value=\"1\">1 Classica per ddt</option>\n";
         echo "<option value=\"2\">2 Completa e complessa per fatture</option>\n";
+        echo "<option value=\"3\">3 Classica per ddt ma con il pagamento al posto del contatto</option>\n";
         echo "</select>\n";
         echo "</tr><tr>\n";
     }

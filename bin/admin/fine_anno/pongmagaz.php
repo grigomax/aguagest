@@ -44,25 +44,36 @@ if ($_SESSION['user']['setting'] > "3")
 // come le bolle e fatture siano evasi..
     if ($CONTABILITA == "SI")
     {
-        $query = sprintf("(select status, anno, ndoc, utente from bv_bolle where status != 'evaso' and anno=\"%s\") UNION (select status, anno, ndoc, utente from fv_testacalce where status != 'saldato' AND anno=\"%s\")", $_anno, $_anno);
+        $query = "(select status, anno, ndoc, utente from bv_bolle where status != 'evaso' and anno='$_anno' order by ndoc) UNION (select status, anno, ndoc, utente from fv_testacalce where status != 'saldato' AND anno='$_anno' order by ndoc)";
     }
     else
     {
-        $query = sprintf("(select status, anno, ndoc, utente from bv_bolle where status != 'evaso' and anno=\"%s\") UNION (select status, anno, ndoc, utente from fv_testacalce where status != 'evaso' AND anno=\"%s\")", $_anno, $_anno);
+        $query = "(select status, anno, ndoc, utente from bv_bolle where status != 'evaso' and anno='$_anno') UNION (select status, anno, ndoc, utente from fv_testacalce where status != 'evaso' AND anno='$_anno')";
     }
 
-    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, "verbose");
 
 
-    if ($result->rowCount() > "0")
+    if ($result != "NO")
     {
         echo " Impossibile proseguire perch&egrave; risultano muovimentati i seguenti muovimenti. e/o non saldati in contabilità";
         echo " <table border=1><tr>";
         echo " <td>status</td><td>anno</td><td>n. doc.</td><td>utente</td></tr>";
+        $numero = 0;
         foreach ($result AS $dati)
         {
 
-            printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>", $dati['status'], $dati['anno'], $dati['ndoc'], $dati['utente']);
+            if($numero == "0")
+            {
+                echo "<tr><td colspan=\"4\">Questi sono ddt</td></tr>\n";
+            }
+            
+            if($dati[ndoc] < $numero)
+            {
+                echo "<tr><td colspan=\"4\">Questi sono fatture</td></tr>\n";
+            }
+            echo "<tr><td>$dati[status]</td><td>$dati[anno]</td><td>$dati[ndoc]</td><td>$dati[utente]</td></tr>\n";
+            $numero = $dati['ndoc'];
         }
         echo "</table>";
     }
@@ -131,7 +142,7 @@ if ($_SESSION['user']['setting'] > "3")
             // elimino in ogni caso l'anno prima di inserirlo
             $query = sprintf("DELETE FROM magastorico WHERE anno=\"%s\"", $_anno);
 
-            domanda_db("exec", $query, $_cosa, $_ritorno, "block");
+            domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
             echo "Eseguito... <br>";
 
@@ -145,8 +156,7 @@ if ($_SESSION['user']['setting'] > "3")
 
             foreach ($result1 AS $dati1)
             {
-                $query2 = sprintf(" INSERT INTO magastorico (tdoc, anno, ndoc, datareg, tut, rigo, utente, articolo, qtacarico, valoreacq, qtascarico, valorevend, ddtfornitore, fatturacq, protoiva, ts) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\")", $dati1['tdoc'], $dati1['anno'], $dati1['ndoc'], $dati1['datareg'], $dati1['tut'], $dati1['rigo'], $dati1['utente'], $dati1['articolo'], $dati1['qtacarico'], $dati1['valoreacq'], $dati1['qtascarico'], $dati1['valorevend'], $dati1['ddtfornitore'], $dati1['fatturacq'], $dati1['protoiva'], $dati1['ts']);
-
+                $query2 = "INSERT INTO magastorico (tdoc, anno, suffix, ndoc, datareg, tut, rigo, utente, articolo, qtacarico, valoreacq, qtascarico, valorevend, ddtfornitore, fatturacq, protoiva) values ( '$dati1[tdoc]', '$dati1[anno]', '$dati1[suffix]', '$dati1[ndoc]', '$dati1[datareg]', '$dati1[tut]', '$dati1[rigo]', '$dati1[utente]', '$dati1[articolo]', '$dati1[qtacarico]', '$dati1[valoreacq]', '$dati1[qtascarico]', '$dati1[valorevend]', '$dati1[ddtfornitore]', '$dati1[fatturacq]', '$dati1[protoiva]' )";
 
                 domanda_db("exec", $query2, $_cosa, $_ritorno, "block");
             }//3
@@ -170,31 +180,64 @@ if ($_SESSION['user']['setting'] > "3")
             $query = "SELECT articolo FROM articoli ORDER BY articolo";
 
             $result = domanda_db("query", $query, $_cosa, $_ritorno, "verbose");
+            
+            //vediamo quante righe sono..
+            
+            $righe = $result->rowCount();
+            
+            //dividiamole per 4 con con il ceil..
+            
+            $quarti = ceil($righe/4);
 
+            $riga = 0;
             foreach ($result AS $dati4)
             {//3
+                $riga++;
                 // ora che ho tutti gli articoli ordinati procedo a prendermeli dal magastorico
                 $query5 = sprintf("SELECT (SUM(qtacarico) - SUM(qtascarico)) AS qtafinale, (SUM(valoreacq) / SUM(qtacarico)) * (SUM(qtacarico) - SUM(qtascarico)) AS valorefin FROM `magastorico` where articolo=\"%s\" AND anno=\"%s\"", $dati4['articolo'], $_anno);
                 //echo $query5;
 
-                $result5 = domanda_db("query", $query5, $_cosa, $_ritorno, "verbose");
+                $result5 = domanda_db("query", $query5, $_cosa, $_ritorno, "");
+                
                 if ($result5->rowCount() >= 1)
                 {//2
-                    
                     $dati5 = domanda_db("query", $query5, $_cosa, "solo_fetch", $result5);
                     // ora procedo ad inserirli nel magazzino nuovo
                     $_tut = "giain";
                     $_mezzo = "-01.01";
                     $_data = $_annonuovo . $_mezzo;
-                    $query6 = sprintf(" INSERT INTO magazzino (anno, datareg, tut, articolo, qtacarico, valoreacq ) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\")", $_annonuovo, $_data, $_tut, $dati4['articolo'], $dati5['qtafinale'], $dati5['valorefin']);
+                    $query6 = "INSERT INTO magazzino (anno, datareg, tut, articolo, qtacarico, valoreacq ) values ( '$_annonuovo', '$_data', '$_tut', '$dati4[articolo]', '$dati5[qtafinale]', '$dati5[valorefin]')";
                     //echo $query6;
                     domanda_db("exec", $query6, $_cosa, $_ritorno, "block");
                 }//chiusuradomanda magazzino
                 // fine parte lavorativa ora inizia quella visiva
-                echo "Eseguito. <br><br>";
-
-                echo "Se Non appaiono messaggi d'errore tutto il travaso &egrave; stato eseguito con successo";
+                if($riga == "1")
+                {
+                    echo "Progress.. = 0%\n";
+                }
+                
+                if($riga == $quarti)
+                {
+                    echo "----25%\n";
+                }
+                
+                if($riga == $quarti * 2)
+                {
+                    echo "----50%\n";
+                }
+                
+                if($riga == $quarti * 3)
+                {
+                    echo "----75%\n";
+                }
+                
+                if($riga == $righe)
+                {
+                    echo "----100% effettuato\n";
+                }
+                
             }// fine protezione documenti
+            echo "Se Non appaiono messaggi d'errore tutto il travaso &egrave; stato eseguito con successo";
         }
     }
 }

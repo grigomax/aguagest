@@ -264,7 +264,7 @@ if ($_SESSION['user']['vendite'] > "1")
         }
         else
         {
-            $query = "select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo, substring(descrizione,1,'$datidoc[ST_DESCRIZIONE_CT]') AS descrizione from $_docdetta where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
+            $query = "select *, substring(articolo,1,'$datidoc[ST_ARTICOLO_CT]') AS articolo from $_docdetta where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
         }
 
         $result = $conn->query($query);
@@ -317,6 +317,7 @@ if ($_SESSION['user']['vendite'] > "1")
             $_parametri['link'] = $link."?tdoc=$_tdoc&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$_GET[ndoc]&docfine=$_docfine&azione=Spedisci&intesta=$_GET[intesta]&prezzi=$_GET[prezzi]&dataora=$_GET[dataora]&lingua=$_GET[lingua]";
         }
 
+        //$pagina = 5;
 
         for ($_pg = 1; $_pg <= $pagina; $_pg++)
         {
@@ -331,7 +332,17 @@ if ($_SESSION['user']['vendite'] > "1")
 
             //creiamo il corpo del documento
             $corpo_doc = (corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc));
+            
+            if($corpo_doc['pagina'] == "altra")
+            {
+                $_pg--;
+            }
 
+            if($corpo_doc['pagina'] == "chiudi")
+            {
+                $_pg = $pagina;
+            }
+            //$_pg = 2;
             //CREIAMO LA CALCE DEL DOCUMENTO
             calce_doc_pdf($datidoc, $pagina, $_pg, $corpo_doc['netto'], $corpo_doc['iva'], $dati, $LINGUA, $_ivadiversa, $desciva, $_pagamento);
         }

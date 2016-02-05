@@ -205,7 +205,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "<tr><td align=\"left\"><font size=\"4\">Sconto:</td><td align=\"left\"><font size=\"4\">$dati[scontocli] + $dati[scontocli2] + $dati[scontocli3]</td></tr>\n";
 
     echo "<tr><td align=\"left\" >Iva Riferimento .:&nbsp;</td>";
-    $_tabiva = tabella_aliquota("singola", $dati['iva'], "");
+    $_tabiva = tabella_aliquota("singola", $dati['iva'], "silent");
 
     echo "<td align=\"left\" >$_tabiva[descrizione]</td></tr>\n";
 

@@ -14,7 +14,35 @@ Necessita di un server funzionante.
 Ecco le ultime novità delle versioni presenti.
 
 
+-VERSIONE 1.2.5 Rc 4 del 05/02/2016
 
+-Continua la messa in sicurezza del programma..
+-Sistemato un po' di bug qui e li.. 
+-Aggiornata la stampa dei documenti
+-Data la possibilità di scrivere quanto si vuole della descrizione del documento
+
+-----------------------------------------------------------------------------
+
+-VERSIONE 1.2.5 Rc 3 del 02/02/2016
+
+-Continua la messa in sicurezza del programma con aggiornamentii qui e li di bug..
+
+-Sistemato il problema con la riga nei documenti..
+
+-Sistemato il ping pong di magazzino per il travaso all'anno nuovo..
+
+-Nuovo controllo degli errori..
+
+
+--------------------------------------------------------------------------------
+
+-VERSIONE 1.2.5 Rc 2 del 28/01/2016
+
+-Continua la messa in sicurezza del programma con aggiornamentii qui e li di bug..
+
+
+
+----------------------------------------------------------------------------------
 
 VERSIONE 1.2.5 Rc 1 del 26/01/2016
 -1  ADMIN

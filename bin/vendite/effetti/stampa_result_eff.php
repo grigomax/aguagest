@@ -38,6 +38,12 @@ if ($_SESSION['user']['vendite'] > "1")
  
     $result = tabella_effetti("ricerca_eff", $_percorso, $_annoeff, $_numeff, $_parametri);
 
+    $_parametri['intestazione'] = "2";
+    $_parametri['email'] = "3";
+    
+    intestazione_html($_cosa, $_percorso, $_parametri);
+    
+    
     echo "<table class=\"elenco\" align=\"left\" width=\"95\">";
     echo "<tr><td colspan=\"8\">\n";
     echo "<h2 align=\"center\">Stampa scadenziario effetti </h2>\n";

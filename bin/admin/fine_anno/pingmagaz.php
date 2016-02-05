@@ -92,7 +92,7 @@ if ($_SESSION['user']['setting'] > "3")
         
         $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
-        if ($result->rowCount() > 0)
+        if ($result != "NO")
         {
             echo "<tr><td colspan=\"8\" align=\"center\"><h3>Impossibile proseguire in quanto ci sono delle discordanze tra le date presenti negli archivi </h3></td></tr>\n";
             //echo "<tr><td colspan=\"8\" align=\"center\"><h4>Cambiare anno di riferimento per sistemare gli archivi magazzino Prima di procedere</h4><br></td></tr>\n";

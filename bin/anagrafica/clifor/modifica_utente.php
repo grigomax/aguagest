@@ -450,6 +450,17 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     printf("<td align=\"left\"  ><input type=\"text\" name=\"sitocli\" value=\"%s%s\" size=\"75\" maxlength=\"80\"></td></tr>\n", $dati['sitocli'], $dati['sitofor']);
 
 
+    echo "<tr><td align=\"left\">Esenzione Pubblicità / News letter</td>\n";
+    echo "<td align=\"left\"  >";
+    echo "<select name=\"es_pubblicita\">\n";
+    echo "<option value=\"$dati[es_pubblicita]\">$dati[es_pubblicita]</option>\n";
+    echo "<option value=\"NO\">NO</option>";
+    echo "<option value=\"SI\">SI</option>";
+    echo "</select>\n";
+    echo "Se <b>SI</b> In caso di news letter non viene presa in considerazione";
+    echo "</td></tr>";
+    
+    
 
     echo "</table>\n";
     echo "</div>\n";

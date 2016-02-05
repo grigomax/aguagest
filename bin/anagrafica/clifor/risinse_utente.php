@@ -200,31 +200,15 @@ if ($_SESSION['user']['anagrafiche'] > "2")
             $_data_reg = date('Y-m-d');
             if ($_tut == "c")
             {
-                $query = sprintf("INSERT INTO clienti ( codice, data_reg, ragsoc, ragsoc2, indirizzo, cap, citta, prov, codnazione, codfisc, piva, contatto, telefono, telefono2, cell, fax, iva, codpag, banca, abi, cab, cin, cc, iban, swift, scontocli, scontocli2, scontocli3, listino, codagente, zona, dragsoc, dragsoc2, dindirizzo, dcap, dcitta, dprov, dcodnazione, telefonodest, faxdest, email, email2, email3, sitocli, bloccocli, privacy, note, vettore, porto, nintento, nproto, cod_conto, indice_pa, cod_ute_dest, es_selezione ) VALUES ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", $_POST['codcli'], $_data_reg, addslashes($_POST['ragsoc']), addslashes($_POST['ragsoc2']), addslashes($_POST['indirizzo']), $_POST['cap'], addslashes($_POST['citta']), $_POST['prov'], $_POST['codnazione'], $_POST['codfisc'], $_POST['piva'], addslashes($_POST['contatto']), $_POST['telefono'], $_POST['telefono2'], $_POST['cell'], $_POST['fax'], $_POST['iva'], $_POST['codpag'], $_banca, $_abi, $_cab, $_cin, $_cc, $_iban, $_swift, $_POST['scontocli'], $_POST['scontocli2'], $_POST['scontocli3'], $_POST['listino'], $_POST['codagente'], $_POST['zona'], addslashes($_POST['dragsoc']), addslashes($_POST['dragsoc2']), addslashes($_POST['dindirizzo']), $_POST['dcap'], addslashes($_POST['dcitta']), $_POST['dprov'], $_POST['dcodnazione'], $_POST['telefonodest'], $_POST['faxdest'], $_POST['email'], $_POST['email2'], $_POST['email3'], $_POST['sitocli'], $_POST['bloccocli'], $_POST['privacy'], $_note, $_POST['vettore'], $_POST['porto'], $_POST['nintento'], $_POST['nproto'], $_POST['cod_conto'], $_POST['indice_pa'], $_POST['cod_ute_dest'], $_POST['es_selezione']);
+                $query = sprintf("INSERT INTO clienti ( codice, data_reg, ragsoc, ragsoc2, indirizzo, cap, citta, prov, codnazione, codfisc, piva, contatto, telefono, telefono2, cell, fax, iva, codpag, banca, abi, cab, cin, cc, iban, swift, scontocli, scontocli2, scontocli3, listino, codagente, zona, dragsoc, dragsoc2, dindirizzo, dcap, dcitta, dprov, dcodnazione, telefonodest, faxdest, email, email2, email3, sitocli, bloccocli, privacy, note, vettore, porto, nintento, nproto, cod_conto, indice_pa, cod_ute_dest, es_selezione, es_pubblicita ) VALUES ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", $_POST['codcli'], $_data_reg, addslashes($_POST['ragsoc']), addslashes($_POST['ragsoc2']), addslashes($_POST['indirizzo']), $_POST['cap'], addslashes($_POST['citta']), $_POST['prov'], $_POST['codnazione'], $_POST['codfisc'], $_POST['piva'], addslashes($_POST['contatto']), $_POST['telefono'], $_POST['telefono2'], $_POST['cell'], $_POST['fax'], $_POST['iva'], $_POST['codpag'], $_banca, $_abi, $_cab, $_cin, $_cc, $_iban, $_swift, $_POST['scontocli'], $_POST['scontocli2'], $_POST['scontocli3'], $_POST['listino'], $_POST['codagente'], $_POST['zona'], addslashes($_POST['dragsoc']), addslashes($_POST['dragsoc2']), addslashes($_POST['dindirizzo']), $_POST['dcap'], addslashes($_POST['dcitta']), $_POST['dprov'], $_POST['dcodnazione'], $_POST['telefonodest'], $_POST['faxdest'], $_POST['email'], $_POST['email2'], $_POST['email3'], $_POST['sitocli'], $_POST['bloccocli'], $_POST['privacy'], $_note, $_POST['vettore'], $_POST['porto'], $_POST['nintento'], $_POST['nproto'], $_POST['cod_conto'], $_POST['indice_pa'], $_POST['cod_ute_dest'], $_POST['es_selezione'], $_POST['es_pubblicita']);
             }
             else
             {
                 $query = sprintf("INSERT INTO fornitori ( codice, data_reg, ragsoc, ragsoc2, indirizzo, cap, citta, prov, codnazione, codfisc, piva, contatto, telefono, telefono2, cell, fax, iva, codpag, banca, abi, cab, cin, cc, iban, swift, spesometro, zona, dragsoc, dragsoc2, dindirizzo, dcap, dcitta, dprov, dcodnazione, telefonodest, faxdest, email, email2, email3, sitofor, privacy, note, vettore, porto, cod_conto, indice_pa, cod_ute_dest, es_selezione ) VALUES ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")", $_POST['codcli'], $_data_reg, addslashes($_POST['ragsoc']), addslashes($_POST['ragsoc2']), addslashes($_POST['indirizzo']), $_POST['cap'], addslashes($_POST['citta']), $_POST['prov'], $_POST['codnazione'], $_POST['codfisc'], $_POST['piva'], addslashes($_POST['contatto']), $_POST['telefono'], $_POST['telefono2'], $_POST['cell'], $_POST['fax'], $_POST['iva'], $_POST['codpag'], $_banca, $_abi, $_cab, $_cin, $_cc, $_iban, $_swift, $_POST['spesometro'], $_POST['zona'], addslashes($_POST['dragsoc']), addslashes($_POST['dragsoc2']), addslashes($_POST['dindirizzo']), $_POST['dcap'], addslashes($_POST['dcitta']), $_POST['dprov'], $_POST['dcodnazione'], $_POST['telefonodest'], $_POST['faxdest'], $_POST['email'], $_POST['email2'], $_POST['email3'], $_POST['sitocli'], $_POST['privacy'], $_note, $_POST['vettore'], $_POST['porto'], $_POST['cod_conto'], $_POST['indice_pa'], $_POST['cod_ute_dest'], $_POST['es_selezione']);
             }
 
-            $result = $conn->exec($query);
-
-            if ($conn->errorCode() != "00000")
-            {
-                $_errore = $conn->errorInfo();
-                echo $_errore['2'];
-                //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-                $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-                scrittura_errori($_cosa, $_percorso, $_errori);
-
-                echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-            }
-
-            //mysql_query( $query, $conn );
-            //}
-
-
+            $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
+            
             echo "<tr><td> Utente $_POST[codcli] inserito correttamente</td></tr>\n";
         }// fine graffa else
     }// fine graffa funzione
@@ -272,30 +256,15 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         if ($_tut == "c")
         {
             
-            $query = sprintf("UPDATE clienti SET ragsoc=\"%s\" , ragsoc2=\"%s\", indirizzo=\"%s\", cap=\"%s\", citta=\"%s\", prov=\"%s\", codnazione=\"%s\", codfisc=\"%s\", piva=\"%s\", contatto=\"%s\", telefono=\"%s\", telefono2=\"%s\",cell=\"%s\", fax=\"%s\", iva=\"%s\", codpag=\"%s\", banca=\"%s\", abi=\"%s\", cab=\"%s\", cin=\"%s\", cc=\"%s\", iban=\"%s\", swift=\"%s\", scontocli=\"%s\", scontocli2=\"%s\", scontocli3=\"%s\", listino=\"%s\", codagente=\"%s\", zona=\"%s\", dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", dcodnazione=\"%s\", telefonodest=\"%s\", faxdest=\"%s\", email=\"%s\", email2=\"%s\", email3=\"%s\", sitocli=\"%s\", bloccocli=\"%s\", privacy=\"%s\", note=\"%s\", vettore=\"%s\", porto=\"%s\", nintento=\"%s\", nproto=\"%s\", cod_conto=\"%s\", indice_pa='$_POST[indice_pa]', cod_ute_dest='$_POST[cod_ute_dest]', es_selezione='$_POST[es_selezione]' WHERE codice=\"%s\"", addslashes($_POST['ragsoc']), addslashes($_POST['ragsoc2']), addslashes($_POST['indirizzo']), $_POST['cap'], addslashes($_POST['citta']), $_POST['prov'], $_POST['codnazione'], $_POST['codfisc'], $_POST['piva'], addslashes($_POST['contatto']), $_POST['telefono'], $_POST['telefono2'], $_POST['cell'], $_POST['fax'], $_POST['iva'], $_POST['codpag'], $_banca, $_abi, $_cab, $_cin, $_cc, $_iban, $_swift, $_POST['scontocli'], $_POST['scontocli2'], $_POST['scontocli3'], $_POST['listino'], $_POST['codagente'], $_POST['zona'], addslashes($_POST['dragsoc']), addslashes($_POST['dragsoc2']), addslashes($_POST['dindirizzo']), $_POST['dcap'], addslashes($_POST['dcitta']), $_POST['dprov'], $_POST['dcodnazione'], $_POST['telefonodest'], $_POST['faxdest'], $_POST['email'], $_POST['email2'], $_POST['email3'], $_POST['sitocli'], $_POST['bloccocli'], $_POST['privacy'], $_note, $_POST['vettore'], $_POST['porto'], $_POST['nintento'], $_POST['nproto'], $_POST['cod_conto'], $_POST['codcli']);
+            $query = sprintf("UPDATE clienti SET ragsoc=\"%s\" , ragsoc2=\"%s\", indirizzo=\"%s\", cap=\"%s\", citta=\"%s\", prov=\"%s\", codnazione=\"%s\", codfisc=\"%s\", piva=\"%s\", contatto=\"%s\", telefono=\"%s\", telefono2=\"%s\",cell=\"%s\", fax=\"%s\", iva=\"%s\", codpag=\"%s\", banca=\"%s\", abi=\"%s\", cab=\"%s\", cin=\"%s\", cc=\"%s\", iban=\"%s\", swift=\"%s\", scontocli=\"%s\", scontocli2=\"%s\", scontocli3=\"%s\", listino=\"%s\", codagente=\"%s\", zona=\"%s\", dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", dcodnazione=\"%s\", telefonodest=\"%s\", faxdest=\"%s\", email=\"%s\", email2=\"%s\", email3=\"%s\", sitocli=\"%s\", bloccocli=\"%s\", privacy=\"%s\", note=\"%s\", vettore=\"%s\", porto=\"%s\", nintento=\"%s\", nproto=\"%s\", cod_conto=\"%s\", indice_pa='$_POST[indice_pa]', cod_ute_dest='$_POST[cod_ute_dest]', es_selezione='$_POST[es_selezione]', es_pubblicita='$_POST[es_pubblicta]' WHERE codice=\"%s\"", addslashes($_POST['ragsoc']), addslashes($_POST['ragsoc2']), addslashes($_POST['indirizzo']), $_POST['cap'], addslashes($_POST['citta']), $_POST['prov'], $_POST['codnazione'], $_POST['codfisc'], $_POST['piva'], addslashes($_POST['contatto']), $_POST['telefono'], $_POST['telefono2'], $_POST['cell'], $_POST['fax'], $_POST['iva'], $_POST['codpag'], $_banca, $_abi, $_cab, $_cin, $_cc, $_iban, $_swift, $_POST['scontocli'], $_POST['scontocli2'], $_POST['scontocli3'], $_POST['listino'], $_POST['codagente'], $_POST['zona'], addslashes($_POST['dragsoc']), addslashes($_POST['dragsoc2']), addslashes($_POST['dindirizzo']), $_POST['dcap'], addslashes($_POST['dcitta']), $_POST['dprov'], $_POST['dcodnazione'], $_POST['telefonodest'], $_POST['faxdest'], $_POST['email'], $_POST['email2'], $_POST['email3'], $_POST['sitocli'], $_POST['bloccocli'], $_POST['privacy'], $_note, $_POST['vettore'], $_POST['porto'], $_POST['nintento'], $_POST['nproto'], $_POST['cod_conto'], $_POST['codcli']);
         }
         else
         {
             $query = sprintf("UPDATE fornitori SET ragsoc=\"%s\" , ragsoc2=\"%s\", indirizzo=\"%s\", cap=\"%s\", citta=\"%s\", prov=\"%s\", codnazione=\"%s\", codfisc=\"%s\", piva=\"%s\", contatto=\"%s\", telefono=\"%s\", telefono2=\"%s\", cell=\"%s\",fax=\"%s\",iva=\"%s\", codpag=\"%s\", banca=\"%s\", abi=\"%s\", cab=\"%s\", cin=\"%s\", cc=\"%s\", iban=\"%s\", swift=\"%s\", spesometro=\"%s\", zona=\"%s\", dragsoc=\"%s\", dragsoc2=\"%s\", dindirizzo=\"%s\", dcap=\"%s\", dcitta=\"%s\", dprov=\"%s\", dcodnazione=\"%s\", telefonodest=\"%s\", faxdest=\"%s\", email=\"%s\", email2=\"%s\", email3=\"%s\", sitofor=\"%s\", privacy=\"%s\", note=\"%s\", vettore=\"%s\", porto=\"%s\" , cod_conto=\"%s\", indice_pa='$_POST[indice_pa]', cod_ute_dest='$_POST[cod_ute_dest]', es_selezione='$_POST[es_selezione]' WHERE codice=\"%s\"", addslashes($_POST['ragsoc']), addslashes($_POST['ragsoc2']), addslashes($_POST['indirizzo']), $_POST['cap'], addslashes($_POST['citta']), $_POST['prov'], $_POST['codnazione'], $_POST['codfisc'], $_POST['piva'], addslashes($_POST['contatto']), $_POST['telefono'], $_POST['telefono2'], $_POST['cell'], $_POST['fax'], $_POST['iva'], $_POST['codpag'], $_banca, $_abi, $_cab, $_cin, $_cc, $_iban, $_swift, $_POST['spesometro'], $_POST['zona'], addslashes($_POST['dragsoc']), addslashes($_POST['dragsoc2']), addslashes($_POST['dindirizzo']), $_POST['dcap'], addslashes($_POST['dcitta']), $_POST['dprov'], $_POST['dcodnazione'], $_POST['telefonodest'], $_POST['faxdest'], $_POST['email'], $_POST['email2'], $_POST['email3'], $_POST['sitocli'], $_POST['privacy'], $_note, $_POST['vettore'], $_POST['porto'], $_POST['cod_conto'], $_POST['codcli']);
         }
-        $result = $conn->exec($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-
-            echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
-        }
-
-
-
-
-
+        
+        $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
+        
         echo "<tr><td> Utente $_POST[codcli] modificato con successo</td></tr></table>\n";
 
 // graffa di fine funzione aggiornamento
@@ -354,16 +323,10 @@ if ($_SESSION['user']['anagrafiche'] > "2")
                 $query = sprintf("DELETE FROM fornitori WHERE codice=\"%s\" limit 1", $_utente);
             }
 
-            $result = $conn->query($query);
+            $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
-            if ($conn->errorCode() != "00000")
+            if ($result == "NO")
             {
-                $_errore = $conn->errorInfo();
-                echo $_errore['2'];
-                //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-                $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-                scrittura_errori($_cosa, $_percorso, $_errori);
                 echo "Eliminazione Utente $_utente riuscita";
             }
             else

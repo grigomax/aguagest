@@ -192,7 +192,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
     //prendiamo il fornitore 1
 
-    $dati2 = tabella_fornitori("singola", $dati['fornitore'], $_parametri);
+    $dati2 = tabella_fornitori("singola", $dati['fornitore'], "silent");
 
     echo "<span class=\"testo_blu\">";
 
@@ -233,7 +233,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "<tr><td align=\"left\"><span class=\"testo_blu\">* Fornitore Secondario:&nbsp;</span></td>\n";
     echo "<td align=\"left\">";
 
-    $dati2 = tabella_fornitori("singola", $dati['fornitore2'], $_parametri);
+    $dati2 = tabella_fornitori("singola", $dati['fornitore2'], "silent");
 
     echo "<span class=\"testo_blu\">";
 
@@ -273,7 +273,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "<tr><td align=\"left\"><span class=\"testo_blu\">* Fornitore Terziario:&nbsp;</span></td>\n";
     echo "<td align=\"left\">";
 
-    $dati2 = tabella_fornitori("singola", $dati['fornitore_3'], $_parametri);
+    $dati2 = tabella_fornitori("singola", $dati['fornitore_3'], "silent");
 
     echo "<span class=\"testo_blu\">";
     printf("%s", $dati2['ragsoc']);

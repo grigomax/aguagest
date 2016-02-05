@@ -66,6 +66,13 @@ if ($_SESSION['user']['vendite'] > "2")
         $_cosa = "vuota";
     }
 
+    if(($_POST['codice'] == "ordine") OR ($_POST['codice'] == "ORDINE"))
+    {
+        $_cosa = "vuota";
+        $_descrizione = "A seguito Vostro Ordine";
+    }
+    
+    
     echo "<html><body>";
 //VISULIZZO LA PAGINA:
 // ricerco ilcliente...

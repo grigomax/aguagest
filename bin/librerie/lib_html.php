@@ -40,24 +40,11 @@ $dati = $result->fetch(PDO::FETCH_ASSOC);
 
  */
 
-//define("gestione_errori", "gestione_errori");
+set_error_handler("gestione_errori");
 
-if(isset($DEBUG))
-{
-    //modalità debug
-    if ($DEBUG == "SI")
-    {
-        set_error_handler("gestione_errori");
-    }
-    else
-    {
-        set_error_handler("gestione_errori", E_ALL & ~E_DEPRECATED & ~E_STRICT);
-    }
-}
-else
-{
-    set_error_handler("gestione_errori", E_ALL & ~E_DEPRECATED & ~E_STRICT);
-}
+
+
+
 
 
 //funzione sperimentale che mi consente di verificare una sessione aperta..
@@ -564,10 +551,11 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
             //aggiungiamo la gestione scitta dell'errore..
             $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
             $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
+            scrittura_errori("normale", $_cosa, $_errori, $query);
             $return['descrizione'] = $_errori['descrizione'];
             $return['query'] = $query;
             $return['result'] = "NO";
+            $solo_error = "NO";
         }
 
         if ($_tipo == "exec")
@@ -631,9 +619,16 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
                 $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
                 $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
                 //scriviamo gli errori per i posteri
-                scrittura_errori($_cosa, $_percorso, $_errori);
+                scrittura_errori("block", $_cosa, $_errori, $query);
                 exit;
             }
+            
+            
+            if(($_parametri == "silent") AND ($return == "NO"))
+            {
+                    $return = "";
+            }
+            
         }
         else
         {
@@ -667,6 +662,7 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
             if ($_ritorno == "fetch")
             {
                 $return = $result->fetch(PDO::FETCH_ASSOC);
+                                
             }
             else
             {
@@ -684,7 +680,11 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
         $return['messaggio'] = $_messaggio;
     }
 
-    //echo $return;
+    if($_ritorno == "solo_error")
+    {
+        $return = $solo_error;
+    }
+    
     return $return;
 }
 
@@ -701,44 +701,44 @@ function gestione_errori($in_errno, $in_errstr, $in_errfile, $in_errline, $in_er
 {
     global $sito;
     global $_percorso;
+    global $DEBUG;
 
     //elenco errori..
     //echo $in_errno."<br>";
     //echo $in_errstr."<br>";
     //echo $in_errfile."<br>";
     //echo $in_errline."<br>";
+    //echo $in_errcontext."<br>";
 
     $errs = array(
+        1 => 'E_ERROR',
         2 => 'AVVERTIMENTO',
+        4 => 'PARSE',
         8 => 'Avviso non pericoloso',
+        16 => 'Errore PHP',
+        32 => 'Avviso PHP',
+        64 => 'Errore Compilazione',
+        128 => 'E_COMPILE_WARNING',
         256 => 'E_USER_ERROR',
         512 => 'E_USER_WARNING',
         1024 => 'E_USER_NOTICE',
         2048 => 'Errore settaggio variabili',
+        4096 => 'Errore Recoverabile',
         8192 => 'Errore Funzione vecchia',
+        16384 => 'Utente funzione vecchia',
+        32767 => 'E_ALL tutti gli errori'
     );
 
-    $err_type = '';
-    foreach ($errs as $val => $errstr)
+    
+    if (($DEBUG == "SI") AND ($in_errno != "8"))
     {
-        if (($in_errno & $val) != 0)
-        {
-            $err_type .= "$errstr ";
-        }
+        echo "<br>Errore Nr. $in_errno, <b>Tipo</b> $in_errstr, <b>File </b>$in_errfile, Linea $in_errline, Display $in_errcontext\n";
     }
-
-    //qui decidiamo se vederle noi
-    #if (($in_errno != "8") AND ($in_errstr != "Division by zero"))
-    if (($in_errno != "8") AND ( $in_errno != "2"))
-    {
-        echo "$in_errno - \n";
-        echo "$in_errstr - \n";
-        echo "$in_errfile <br>\n";
-    }
+    
+    
 
     //qui decidiamo se farle vedere all'utente
     //escludiamo dal riporto degli errori la funzione ereg le notizie e anche il settagggio variabili
-    #if (($in_errno != "8") AND ($in_errno != "2048") AND ($in_errno != "8192") AND ($in_errstr != "Division by zero"))
     if (($in_errno != "8") AND ( $in_errno != "2048") AND ( $in_errno != "8192") AND ( $in_errno != "2"))
     {
         $_immagine = $_percorso . "images/kaboom.png";
@@ -763,18 +763,15 @@ EOTABLE;
 
     //qui decidiamo se registrarle
 
-    if (($in_errno != "8") AND ( $in_errno != "2048") AND ( $in_errno != "8192") AND ( $in_errstr != 'Division by zero'))
+    if (($in_errno != "2") AND ($in_errno != "8") AND ( $in_errno != "2048") AND ( $in_errno != "8192") AND ( $in_errstr != 'Division by zero'))
     {
 
-        $_operazione = "|$err_type:|($in_errfile, line $in_errline)| $in_errstr |";
+        $_operazione = "Tipo $in_errno |($in_errfile, line $in_errline)| $in_errstr | $in_errcontext";
 
+        error_log(date('d-m-Y/H:m') . "|utente " . $_SESSION['user']['user'] . " |Errore PHP $_operazione\n", 3, $_percorso . "../spool/agua_php.log");
 
-        error_log(date('d-m-Y/H:m') . "|utente " . $_SESSION['user']['user'] . " |fallita operazione $_operazione\n", 3, $_percorso . "../spool/agua_php.log");
-
-        // exit on errors, continue otherwise.
-        if ($in_errno == E_USER_ERROR)
-            exit;
     }
+    
 }
 
 /* * Questa funzione mi permette di scrivere tutti gli errori in cosa ad un file sito in spool
@@ -787,7 +784,7 @@ EOTABLE;
  * @return type dice se ha fatto oppure no..
  */
 
-function scrittura_errori($_cosa, $_percorso, $_errori)
+function scrittura_errori($_tipo, $_cosa, $_errori, $query)
 {
     global $conn;
     global $_percorso;
@@ -799,7 +796,7 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
     }
 
 
-    if($_cosa == "block")
+    if($_tipo == "block")
     {
         echo "<h2 align=\"center\">Errore Generale</h2>\n";
         echo "<br>$_errori[descrizione]\n";
@@ -808,8 +805,6 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
         $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
         $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
         //scriviamo gli errori per i posteri
-        scrittura_errori($_cosa, $_percorso, $_errori);
-        exit;
         echo "errore Generale";
     }
     
@@ -818,8 +813,8 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
     date_default_timezone_set('Europe/Rome');
     //tipologia di errori
 
-    $_file = "agua_gest.log";
-    $nfile = $_percorso . "../spool/agua_gest.log";
+    $_file = "agua_log.txt";
+    $nfile = $_percorso . "../spool/agua_log.txt";
     // creo il files e nascondo la soluzione
     $fp = fopen($nfile, "a");
 //controllo l'esito
@@ -843,11 +838,11 @@ function scrittura_errori($_cosa, $_percorso, $_errori)
     {
         $_oggetto = "Invio errori $azienda";
         //qui richiamiamo la funzione del file invia posta allegato.
-        $_invio = invio_posta("invio_errori", $_file, $email1, "grigomax@mcetechnik.it", $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $_commento, $_ricevuta, $_tdoc, $_anno, "", "", $_allegato, $_allegato2, $_parametri);
+        $_invio = invio_posta("invio_errori", $_file, $email1, $EMAILSVILUPPO, $_emaildestinoCC, $_emaildestinoBCC, $_oggetto, $_commento, $_ricevuta, $_tdoc, $_anno, "", "", $_allegato, $_allegato2, $_parametri);
     }
 
 
-    if($_cosa == "block")
+    if($_tipo == "block")
     {
         exit;
     }
@@ -928,12 +923,16 @@ function base_html($_cosa, $_percorso)
 
     include $_percorso."../setting/vars_aspetto.php";
 
+    Header( "Cache-Control: no-store, no-cache, must-revalidate" ); // HTTP/1.1
+    Header( "Cache-Control: post-check=0, pre-check=0", FALSE );
+    Header( "Pragma: no-cache" ); // HTTP/1.0
+    
     echo "<!DOCTYPE html>\n";
     echo "<html lang=\"it\">\n";
     echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
-    echo "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\n";
-    echo "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n";
-    echo "<meta http-equiv=\"Expires\" content=\"0\" />\n";
+    //echo "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\n";
+    //echo "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\n";
+    //echo "<meta http-equiv=\"Expires\" content=\"0\" />\n";
 
     echo "<LINK REL=\"shortcut icon\" HREF=\"" . $_percorso . "images/favicon.ico\">\n";
     echo "<title>$title</title>\n";
@@ -989,6 +988,22 @@ function base_html($_cosa, $_percorso)
     }
     
     \n";
+    
+    echo "
+    
+    textarea { /* Stili specifici per la teaxtarea */
+    #background: #1C1C1C url('images/social_balloon.png') no-repeat 235px 95px; /* Sfondo con immagine */
+    font-size: ".$SCREEN_INPUT_SIZE."em;
+    font-family: $SCREEN_FONT_TYPE;
+    #height: 100px;
+    #width: 320px;
+    overflow: hidden; /* disabilitare la scrollbar in IE */
+}
+    
+    
+    \n";
+    
+    
     
     //iniziamo a spostare man mano i vari css..
     echo "span.testo_blu {font-family: $SCREEN_FONT_TYPE; font-size: ".($SCREEN_FONT_SIZE-0.2)."em; color: #053487; }\n";
@@ -1571,7 +1586,7 @@ function menu_tendina($_cosa, $_percorso)
 
         echo "<li class=\"menu\"><a href=\"#\">Errori e Blocchi IP</a><span class=\"dropRight\"></span>\n";
         echo "<ul class=\"menu\">\n";
-        echo "<li class=\"menu\"><a href=\"$sito/bin/admin/errori/log_errori.php?files=agua_gest.log\" target=\"_blank\">Log AguaGest</a></li>\n";
+        echo "<li class=\"menu\"><a href=\"$sito/bin/admin/errori/log_errori.php?files=agua_log.txt\" target=\"_blank\">Log AguaGest</a></li>\n";
         echo "<li class=\"menu\"><a href=\"$sito/bin/admin/errori/log_errori.php?files=agua_php.log\" target=\"_blank\">Log PHP</a></li>\n";
         echo "<li class=\"menu\"><a href=\"$sito/bin/admin/errori/visualizza_ip.php\">Elenco Accessi IP</a></li>\n";
 

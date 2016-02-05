@@ -58,22 +58,22 @@ if ($_SESSION['user']['magazzino'] > "1")
 	{
 		if ($_POST['magazzino'] == "magastorico")
 		{
-			$query = "select tdoc, anno, ndoc, datareg, ragsoc, utente, datareg, articolo, qtascarico AS quantita from magastorico INNER JOIN clienti ON magastorico.utente=clienti.codice where tut='c' AND $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
+			$query = "select tdoc, anno, suffix, ndoc, datareg, ragsoc, utente, datareg, articolo, qtascarico AS quantita from magastorico INNER JOIN clienti ON magastorico.utente=clienti.codice where tut='c' AND $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
 		}
 		else
 		{
-			$query = "select tdoc, anno, ndoc, datareg, ragsoc, utente, datareg, articolo, qtascarico AS quantita from magazzino INNER JOIN clienti ON magazzino.utente=clienti.codice where tut='c' AND $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
+			$query = "select tdoc, anno, suffix, ndoc, datareg, ragsoc, utente, datareg, articolo, qtascarico AS quantita from magazzino INNER JOIN clienti ON magazzino.utente=clienti.codice where tut='c' AND $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
 		}
 	}
 	else
 	{
 		if ($_POST['magazzino'] == "magastorico")
 		{
-			$query = "select tdoc, anno, ndoc, datareg, ragsoc, utente, ddtfornitore, fatturacq, datareg, protoiva, articolo, qtacarico AS quantita from magastorico INNER JOIN fornitori ON magastorico.utente=fornitori.codice where tdoc='ddtacq' and $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
+			$query = "select tdoc, anno, suffix, ndoc, datareg, ragsoc, utente, ddtfornitore, fatturacq, datareg, protoiva, articolo, qtacarico AS quantita from magastorico INNER JOIN fornitori ON magastorico.utente=fornitori.codice where tdoc='ddtacq' and $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
 		}
 		else
 		{
-			$query = "select tdoc, anno, ndoc, datareg, ragsoc, utente, ddtfornitore, fatturacq, datareg, protoiva, articolo, qtascarico AS quantita from magazzino INNER JOIN fornitori ON magazzino.utente=fornitori.codice where tdoc='ddtacq' and $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
+			$query = "select tdoc, anno, suffix, ndoc, datareg, ragsoc, utente, ddtfornitore, fatturacq, datareg, protoiva, articolo, qtascarico AS quantita from magazzino INNER JOIN fornitori ON magazzino.utente=fornitori.codice where tdoc='ddtacq' and $_campi like '$_descrizione' order by anno DESC, ndoc ASC";
 		}
 	}
 
@@ -84,22 +84,10 @@ if ($_SESSION['user']['magazzino'] > "1")
 	//$query = "select anno, ndoc, ragsoc, utente, ddtfornitore, fatturacq, datareg from magazzino INNER JOIN fornitori ON magazzino.utente=fornitori.codice where tdoc='ddtacq' and $_campi like '$_descrizione' order by ndoc ";
 	// Esegue la query...
 
-	$result = $conn->query($query);
-
-	if ($conn->errorCode() != "00000")
-	{
-		$_errore = $conn->errorInfo();
-		echo $_errore['2'];
-		//aggiungiamo la gestione scitta dell'errore..
-		$_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-		$_errori['files'] = "elencodoc2.php";
-		scrittura_errori($_cosa, $_percorso, $_errori);
-	}
-
-
+        $result = domanda_db("query", $query, $_cosa, $_ritorno, "verbose");
 
 	// Tutto procede a meraviglia...
-	echo "<table align=\"center\">";
+	echo "<table align=\"center\" width=\"90%\">";
 	echo "<tr>";
 
 	echo "<td width=\"80\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Anno</span></td>";
@@ -122,9 +110,9 @@ if ($_SESSION['user']['magazzino'] > "1")
 		{
 			$_ndoc = $dati['ndoc'];
 			echo "<tr>";
-			printf("<form action=\"visualizzadoc.php?magazzino=$_POST[magazzino]&tdoc=%s&anno=%s\" method=\"POST\">", $dati['tdoc'], $dati['anno']);
+			printf("<form action=\"visualizzadoc.php?magazzino=$_POST[magazzino]&tdoc=%s&anno=%s&suffix=$dati[suffix]\" method=\"POST\">", $dati['tdoc'], $dati['anno']);
 			printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['anno']);
-			printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s</b></span></td>", $_ndoc);
+			printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\"><b>%s/$dati[suffix]</b></span></td>", $_ndoc);
 			printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['datareg']);
 			printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">%s</span></td>", $dati['ragsoc']);
 			printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['fatturacq']);
