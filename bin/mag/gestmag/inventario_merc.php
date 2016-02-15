@@ -37,7 +37,6 @@ if ($_SESSION['user']['magazzino'] > "1")
     $_tipo = $_POST['stampa'];
     $_cvalore = $_POST['cvalore'];
     $_cgiac = $_POST['cgiac'];
-    $_datareg = cambio_data("us", $_POST['datareg']);
 
     if ($_GET['tipo'] == "merce")
     {
@@ -61,22 +60,7 @@ if ($_SESSION['user']['magazzino'] > "1")
     
     $query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno LIMIT 1";
 
-    $result = $conn->query($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 1= $query - $_errore[2]";
-        $_errori['files'] = "inventario_merc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-
-    foreach ($result AS $datianno)
-        ;
-
-
+    $datianno = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
     if ($_anno < $datianno['anno'])
     {
@@ -103,70 +87,29 @@ if ($_SESSION['user']['magazzino'] > "1")
   			`totriga` float(10,2) default '0.00'
 			)";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 2= $query - $_errore[2]";
-        $_errori['files'] = "inventario_merc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
+ 
 // se la query �andata a buon fine proseguiamo.
 // se piena la svuoto prima di proseguire
 
     $query = "TRUNCATE TABLE `inventario`";
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 3= $query - $_errore[2]";
-        $_errori['files'] = "inventario_merc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
 // se la query �andata a buon fine proseguiamo.
 // proseguiamo per fare i conti
 //Ora procedo a selezionare gli articoli che mi interessano dall'anagrafica.
 
     $query = sprintf("SELECT articolo, substring(descrizione,1,40), fornitore, preacqnetto, ultacq, $_database FROM articoli WHERE $_database=\"%s\" order by articolo", $_catmer);
     
-    $result = $conn->query($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 4= $query - $_errore[2]";
-        $_errori['files'] = "inventario_merc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
     //divido il numero per 100..
     foreach ($result AS $datia)
     {//5
         // effettuata la prima cernita passo con la seconda
         // ora per ogni articolo cerco nel magazzino le giacenze iniziali
-        $query = sprintf("SELECT qtacarico, valoreacq FROM %s WHERE articolo=\"%s\" and tut='giain' AND anno=\"%s\"", $_magazzino, $datia['articolo'], $_anno);
+        $query = "SELECT qtacarico, valoreacq FROM $_magazzino WHERE articolo='$datia[articolo]' and tut='giain' AND anno='$_anno'";
 
-        $result2 = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query 5= $query - $_errore[2]";
-            $_errori['files'] = "inventario_merc.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-        foreach ($result2 AS $datimi)
-            ;
+        $datimi = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
         $_qtaini = $datimi['qtacarico'];
         $_valoreini = $datimi['valoreacq'];
@@ -174,20 +117,8 @@ if ($_SESSION['user']['magazzino'] > "1")
 
         // presa la giacenza iniziale, prendiamo le somme del venduto e l'acquistato senza la giacenza iniziale
 
-        $query = sprintf("SELECT SUM(qtacarico) AS qtacarico, SUM(valoreacq) AS valoreacq, SUM(qtascarico) AS qtascarico, SUM(valorevend) AS valorevend FROM %s WHERE articolo=\"%s\" and tut != 'giain' AND datareg <=\"%s\" order by articolo", $_magazzino, $datia['articolo'], $_datareg);
-        $result3 = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query 6= $query - $_errore[2]";
-            $_errori['files'] = "inventario_merc.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-        foreach ($result3 AS $datim)
-            ;
+        $query = sprintf("SELECT SUM(qtacarico) AS qtacarico, SUM(valoreacq) AS valoreacq, SUM(qtascarico) AS qtascarico, SUM(valorevend) AS valorevend FROM %s WHERE articolo=\"%s\" and tut != 'giain' order by articolo", $_magazzino, $datia['articolo']);
+        $datim = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
         if ($_cgiac == "MUOVI")
         {
@@ -212,19 +143,7 @@ if ($_SESSION['user']['magazzino'] > "1")
                 }
                 // iserisco i dati nel database provvisorio
                 $query = sprintf(" INSERT INTO inventario (articolo, descrizione, forn, quantita, qtaevasa, qtaestratta, qtasaldo, netto, totriga) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $datia['articolo'], $datia['substring(descrizione,1,40)'], $datia['fornitore'], $datimi['qtacarico'], $datim['qtacarico'], $datim['qtascarico'], $_giacfin, $_prezzoacq, $_valore);
-
-                //echo $queryt;
-                $conn->exec($query);
-
-                if ($conn->errorCode() != "00000")
-                {
-                    $_errore = $conn->errorInfo();
-                    echo $_errore['2'];
-                    //aggiungiamo la gestione scitta dell'errore..
-                    $_errori['descrizione'] = "Errore Query 6bis= $query - $_errore[2]";
-                    $_errori['files'] = "inventario_merc.php";
-                    scrittura_errori($_cosa, $_percorso, $_errori);
-                }
+                domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
                 
                                
                 // se la query �andata a buon fine proseguiamo
@@ -255,19 +174,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 
                 // iserisco i dati nel database provvisorio
                 $query = sprintf(" INSERT INTO inventario (articolo, descrizione, forn, quantita, qtaevasa, qtaestratta, qtasaldo, netto, totriga) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $datia['articolo'], $datia['substring(descrizione,1,40)'], $datia['fornitore'], $datimi['qtacarico'], $datim['qtacarico'], $datim['qtascarico'], $_giacfin, $_prezzoacq, $_valore);
-
-                //echo $queryt;
-                $conn->exec($query);
-
-                if ($conn->errorCode() != "00000")
-                {
-                    $_errore = $conn->errorInfo();
-                    echo $_errore['2'];
-                    //aggiungiamo la gestione scitta dell'errore..
-                    $_errori['descrizione'] = "Errore Query 7= $query - $_errore[2]";
-                    $_errori['files'] = "inventario_merc.php";
-                    scrittura_errori($_cosa, $_percorso, $_errori);
-                }
+                domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
 
                 // se la query �andata a buon fine proseguiamo
             }// fine calcolo muovimento
@@ -319,17 +226,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 //effettuo la prima selezione in ordine di codice e di gruppo merceologico
 // Esegue la query...
 
-    $result = $conn->query($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query 8= $query - $_errore[2]";
-        $_errori['files'] = "inventario_merc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
     // questa selezione mi permette di avere il numero di pagine ed il numero di
     //righe in anticipo
@@ -360,7 +257,7 @@ if ($_SESSION['user']['magazzino'] > "1")
         $pdf->AddPage();
 
         //funzione del logo..
-        intestazione_doc_pdf($datidoc, $LINGUA);
+        intestazione_doc_pdf($_cosa, $datidoc, $LINGUA, $_anno, $_titolo, $_pg, $pagina, $_parametri);
         
         
         //testata_doc($datidoc, $dati, $dati2, $_POST['datareg'], $_pg, $pagina, $_pagamento, $LINGUA, $_percorso);
@@ -371,6 +268,16 @@ if ($_SESSION['user']['magazzino'] > "1")
         //$corpo_doc = (corpo_doc($datidoc, $result, $LINGUA, $corpo_doc, $_percorso));
         //creiamo il corpo del documento
         $corpo_doc = (corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc));
+        
+        if($corpo_doc['pagina'] == "altra")
+        {
+            $_pg--;
+        }
+
+        if($corpo_doc['pagina'] == "chiudi")
+        {
+            $_pg = $pagina;
+        }
             
         //CREIAMO LA CALCE DEL DOCUMENTO
         //calce_doc($datidoc, $pagina, $_pg, $corpo_doc, $_iva, $dati, $LINGUA, $_ivadiversa, $desciva, $_pagamento, $_percorso);

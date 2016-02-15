@@ -108,7 +108,7 @@ if ($_SESSION['user']['vendite'] > "2")
             elseif ($_tdoc == "ddtacq")
             {
                 $_SESSION['programma'] = "DDT_ACQ";
-                $dati = tabella_fornitori("singola", $_codutente, $_parametri);
+                $dati = tabella_fornitori("singola", $_codutente, "silent");
             }
             else
             {
@@ -123,7 +123,7 @@ if ($_SESSION['user']['vendite'] > "2")
 
             //visualizzo il corpo documento..
 
-
+            
 
             intesta_html($_tdoc, "", $dati, "");
             //richiamo la funzione che mi mostra compilato il carrello

@@ -18,6 +18,35 @@ $MARGINE_SUPERIORE = "5";
 /* Funzioni di creazione documenti l'estenzione pdf sarà per gli stessi.
  */
 
+/**
+ * La prima funzione mi crea un file pdf con dimensioni, titolo grandezz ecc..
+ * @param <type> $_cosa
+ * @param <type> $_orientamento Esprimere se orizzontale o verticale
+ * @param <type> $_titolo titolo della stampa
+ */
+function crea_file_pdf($_cosa, $_orientamento, $_titolo, $_nomelist)
+{
+    global $pdf;
+    global $azienda;
+    global $_percorso;
+
+    // setto le variabili standard creazione pdf
+    $pdf = new FPDF('P', 'mm', 'A4');
+    $pdf->AliasNbPages();
+    $pdf->SetAutoPageBreak('Off', 2);
+    $pdf->SetTitle($_titolo, true);
+    $pdf->SetAuthor($azienda, true);
+    $pdf->SetCreator('Agua Gest - FPDF');
+    $pdf->SetSubject($_nomelist);
+}
+
+function crea_pagina_pdf()
+{
+    global $pdf;
+
+    $pdf->AddPage();
+}
+
 //funzione che mi genera il castelletto d'iva
 function castello_iva_pdf($_ivadiversa, $_castiva, $pagina, $_pg, $_x_iva, $_y_iva, $datidoc, $LINGUA, $desciva, $dati)
 {
@@ -111,7 +140,7 @@ function castello_iva_pdf($_ivadiversa, $_castiva, $pagina, $_pg, $_x_iva, $_y_i
  *
  */
 
-function intestazione_doc_pdf($datidoc, $LINGUA)
+function intestazione_doc_pdf($_cosa, $datidoc, $LINGUA, $_anno, $_titolo, $_pg, $pagina, $_parametri)
 {//inizio funzioni testata documenti
 //
     global $conn;
@@ -135,27 +164,35 @@ function intestazione_doc_pdf($datidoc, $LINGUA)
     }
     else
     {
+        //logo =0 ovvero carta intestata
+        if ($datidoc[ST_TLOGO] == "0")
+	{
+	    //provo a lasciare il puntatore
+	    $pdf->SetXY($MARGINE_SINISTRO, 45);
+	}
 
+        //logo 1 con logo azienda
 	if ($datidoc[ST_TLOGO] == "1")
 	{
 	    // inserisco l'immagine con l'intestazione
-	    $pdf->Image("../../setting/loghiazienda/$datidoc[ST_LOGOG]", $MARGINE_SINISTRO, $MARGINE_SUPERIORE, 193, 30, jpg);
+	    $pdf->Image($_percorso ."../setting/loghiazienda/$datidoc[ST_LOGOG]", $MARGINE_SINISTRO, $MARGINE_SUPERIORE, 193, 30);
 
 	    //provo a lasciare il puntatore
 	    $pdf->SetXY($MARGINE_SINISTRO, 45);
 	}
 
+        //logo azienda completo
 	if ($datidoc[ST_TLOGO] == "2")
 	{
 	    //provo a lasciare il puntatore
 	    $pdf->SetXY($MARGINE_SINISTRO, 9);
-	    $pdf->SetFont('Arial', 'B', 12);
+	    $pdf->SetFont($datidoc[ST_FONTOLOGO], 'B', $datidoc[ST_FONTLOGOSIZE]);
 	    $pdf->SetX($MARGINE_SINISTRO);
 	    $pdf->Cell(80, 5, $azienda, 0, 1, 'L');
-	    $pdf->SetFont('Arial', '', 12);
+	    $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-1);
 	    $pdf->SetX($MARGINE_SINISTRO);
 	    $pdf->Cell(80, 4, $azienda2, 0, 1, 'L');
-	    $pdf->SetFont('Arial', '', 10);
+	    $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
 	    $pdf->SetX($MARGINE_SINISTRO);
 	    $pdf->Cell(80, 4, $indirizzo, 0, 1, 'L');
 	    $pdf->SetX($MARGINE_SINISTRO);
@@ -173,66 +210,87 @@ function intestazione_doc_pdf($datidoc, $LINGUA)
 	    $pdf->Cell(50, 4, $LG006 . "   " . $email1, 0, 1, 'L');
 
 	    //provo a lasciare il puntatore
-	    $pdf->SetXY($MARGINE_SINISTRO, 40);
+	    $pdf->SetXY($MARGINE_SINISTRO, 45);
 	}
 
+        //logo 3 minimale tipo contabilita
 	if ($datidoc[ST_TLOGO] == "3")
 	{
 	    //logo aziendale a sinistra e intestazione a destra
 	    // inserisco l'immagine con l'intestazione
 	    $pdf->SetXY($MARGINE_SINISTRO, 9);
-	    $pdf->Image("../../setting/loghiazienda/$datidoc[ST_LOGOM]", 100, 35, 100, 30, jpg);
-
-
-	    $pdf->SetXY(110, 9);
-	    $pdf->SetFont('Arial', 'B', 12);
-	    $pdf->SetX(110);
-	    $pdf->Cell(80, 5, $azienda, 0, 1, 'L');
-	    $pdf->SetFont('Arial', '', 12);
-	    $pdf->SetX(110);
-	    $pdf->Cell(80, 4, $azienda2, 0, 1, 'L');
-	    $pdf->SetFont('Arial', '', 10);
-	    $pdf->SetX(110);
-	    $pdf->Cell(80, 4, $indirizzo, 0, 1, 'L');
-	    $pdf->SetX(110);
-	    $pdf->Cell(15, 4, $cap, 0, 0, 'L');
-	    $pdf->Cell(60, 4, $citta, 0, 0, 'L');
-	    $pdf->Cell(10, 4, $prov, 0, 1, 'L');
-	    $pdf->SetX(110);
-	    $pdf->Cell(40, 4, $LG001 . "  " . $piva, 0, 0, 'L');
-	    $pdf->Cell(40, 4, $LG002 . "  " . $codfisc, 0, 1, 'L');
-	    $pdf->SetX(110);
-	    $pdf->Cell(40, 4, $LG003 . "  " . $telefono, 0, 0, 'L');
-	    $pdf->Cell(40, 4, $LG004 . "  " . $fax, 0, 1, 'L');
-	    $pdf->SetX(110);
-	    $pdf->Cell(50, 4, $LG005 . "   " . $sitointernet, 0, 0, 'L');
-	    $pdf->Cell(50, 4, $LG006 . "   " . $email1, 0, 1, 'L');
+	    $pdf->SetFont($datidoc[ST_FONTOLOGO], 'B', $datidoc[ST_FONTLOGOSIZE]);
+	    $pdf->SetX($MARGINE_SINISTRO);
+	    $pdf->Cell(80,5,$azienda,0,1,'L');
+	    $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
+	    $pdf->SetX($MARGINE_SINISTRO);
+	    $pdf->Cell(80,4,$indirizzo,0,1,'L');
+            $pdf->SetX($MARGINE_SINISTRO);
+	    $pdf->Cell(11,4,$cap,0,0,'L');
+	    $pdf->Cell(50,4,$citta,0,0,'L');
+	    $pdf->Cell(10,4,$prov,0,1,'L');
+	    $pdf->SetX($MARGINE_SINISTRO);
+	    $pdf->Cell(40,4,"P.I. ".$piva,0,0,'L');
+	    $pdf->Cell(40,4,"C.F. ".$codfisc,0,1,'L');
 
 	    //provo a lasciare il puntatore
-	    $pdf->SetXY($MARGINE_SINISTRO, 40);
+	    $pdf->SetXY(87,5);
+            $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
+	    $pdf->Cell(75,5,$_title,0,0,'L');
+            $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
+            $pdf->Cell(10,5,'Pag.',0,0,'L');
+	    $pdf->Cell(10,5,$_POST['anno'],0,0,'C');
+            $pdf->Cell(3,5,'/',0,0,'C');
+            $pdf->Cell(15,5,$_pg,0,1,'L');
+            
+            $pdf->SetXY($MARGINE_SINISTRO, 30);
+            
+            
 	}
+        
+        //logo minimale ,a completo
+        if ($datidoc[ST_TLOGO] == "4")
+	{
+            //logo super minimale
+	    $pdf->SetXY($MARGINE_SINISTRO, 9);
+	    $pdf->SetFont($datidoc[ST_FONTOLOGO], 'B', $datidoc[ST_FONTLOGOSIZE]);
+	    $pdf->SetX($MARGINE_SINISTRO);
+	    $pdf->Cell(80,5,$azienda,0,0,'L');
+	    $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
+	    $pdf->Cell(70,5,$_titolo,0,0,'L');
+            $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
+            $pdf->Cell(10,5,'Pag.',0,0,'L');
+	    $pdf->Cell(10,5,$_pg,0,0,'C');
+            $pdf->Cell(3,5,'/',0,0,'C');
+            $pdf->Cell(10,5,$pagina,0,0,'L');
+            $pdf->Cell(10,5,$_anno,0,1,'L');
+            
+            $pdf->SetXY($MARGINE_SINISTRO, 15);
+
+        }
+        
         
         if ($datidoc[ST_TLOGO] == "5")
 	{
                 //provo a lasciare il puntatore
-            $pdf->SetXY(10, 9);
-            $pdf->SetFont('Arial', 'B', 12);
-            $pdf->SetX(10);
+            $pdf->SetXY($MARGINE_SINISTRO, 9);
+            $pdf->SetFont($datidoc[ST_FONTOLOGO], 'B', $datidoc[ST_FONTLOGOSIZE]);
+            $pdf->SetX($MARGINE_SINISTRO);
             $pdf->Cell(80, 5, $azienda, 0, 1, 'L');
-            $pdf->SetFont('Arial', '', 10);
-            $pdf->SetX(10);
+            $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
+            $pdf->SetX($MARGINE_SINISTRO);
             $pdf->Cell(80, 4, $indirizzo, 0, 1, 'L');
-            $pdf->SetX(10);
+            $pdf->SetX($MARGINE_SINISTRO);
             $pdf->Cell(15, 4, $cap, 0, 0, 'L');
             $pdf->Cell(60, 4, $citta, 0, 0, 'L');
             $pdf->Cell(10, 4, $prov, 0, 1, 'L');
-            $pdf->SetX(10);
+            $pdf->SetX($MARGINE_SINISTRO);
             $pdf->Cell(40, 4, "P.I. " . $piva, 0, 0, 'L');
             $pdf->Cell(40, 4, "Cod.Fisc " . $codfisc, 0, 1, 'L');
-            $pdf->SetX(10);
+            $pdf->SetX($MARGINE_SINISTRO);
             $pdf->Cell(40, 4, "Tel. " . $telefono, 0, 0, 'L');
             $pdf->Cell(40, 4, "Tel. / Fax " . $fax, 0, 1, 'L');
-            $pdf->SetX(10);
+            $pdf->SetX($MARGINE_SINISTRO);
 
             if ($_parametri['email'] == "3")
             {
@@ -248,7 +306,7 @@ function intestazione_doc_pdf($datidoc, $LINGUA)
             }
 
             //provo a lasciare il puntatore
-            $pdf->SetXY(10, 30);
+            $pdf->SetXY($MARGINE_SINISTRO, 30);
         }
         
         
@@ -400,7 +458,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->SetXY($MARGINE_SINISTRO, 70);
 	$pdf->Cell(10, 5, $TC005, 0, 0, 'L');
 	$pdf->SetX(50);
-	$pdf->Cell(10, 5, $_look, 0, 0, 'L');
+	$pdf->Cell(10, 5, $dati['porto'], 0, 0, 'L');
 	// inizio riquadro basso
 	$pdf->SetXY($MARGINE_SINISTRO, 80);
 	$pdf->Cell(99, 30, '', 1, 0, 'L');
@@ -1946,28 +2004,42 @@ function calce_doc_pdf($datidoc, $pagina, $_pg, $_nettovendita, $_castiva, $dati
 
     if ($datidoc[ST_TIPOCALCE] == "5")
     {
-        $pdf->Cell(200, 8, "Q.ta Iniziale = $_nettovendita[iniziale] / acquistata = $_nettovendita[acquisto] / Venduta = $_nettovendita[venduta] / Valore tot. = ".number_format(($_nettovendita[netto]), 2, '.', ''), 1, 1, 'L');
+        $pdf->Cell(200, 8, "Q.ta Iniziale = $_nettovendita[iniziale] / acquistata = $_nettovendita[acquisto] / Venduta = $_nettovendita[venduta] / Finale = ".($_nettovendita['iniziale'] + $_nettovendita['acquisto'] - $_nettovendita['venduta']) ." / Valore tot. = ".number_format(($_nettovendita[netto]), 2, '.', ''), 1, 1, 'L');
     }
-    elseif ($datidoc[ST_TIPOCALCE] == "6")
+    
+    if ($datidoc[ST_TIPOCALCE] == "6")
     {
         $pdf->Cell(200, 8, mb_convert_encoding("Rimanenze quantità = $_nettovendita[iniziale]  / Valore tot. = ".number_format(($_nettovendita[netto]), 2, '.', ''), "windows-1252", "UTF-8"), 1, 1, 'L');
 	
     }
+    
+    if ($datidoc[ST_TIPOCALCE] == "7")
+    {
+        $pdf->SetX($MARGINE_SINISTRO); //256
+        $pdf->SetFont($datidoc[ST_FONTESTACALCE], '', $datidoc[ST_FONTESTACALCESIZE]);
+        $pdf->Cell(40, 4, $_pg, '1', 0, 'L');
+        $_vale = "Data emissione listino figurato $data ";
+        $pdf->Cell(113, 4, $_vale, '1', 0, 'C');
+        $pdf->Cell(40, 4, $_pg, '1', 1, 'R');
+	
+    }
+    
+    if ($_pagamento == "OMAGGIO CON RIVALSA IVA")
+    {
+            $_condi = "OMAGGIO CON RIVALSA IVA TOTALE DA PAGARE euro 0.00</b>";
+    }
     else
     {
-        if ($_pagamento == "OMAGGIO CON RIVALSA IVA")
-        {
-            $_condi = "OMAGGIO CON RIVALSA IVA TOTALE DA PAGARE euro 0.00</b>";
-        }
-        else
+        if (($datidoc[ST_TIPOCALCE] > 0) AND ($datidoc[ST_TIPOCALCE] < 6))
         {
             if ($CGV == "SI")
             {
                 $_condi = "$TC050 $sitointernet $TC051 $fax";
             }
         }
+        
     }
-    
+        
 
     $pdf->SetX($MARGINE_SINISTRO);
     $pdf->SetFont('Arial', '', 8);
@@ -1977,4 +2049,20 @@ function calce_doc_pdf($datidoc, $pagina, $_pg, $_nettovendita, $_castiva, $dati
 }
 
 //fine funzione calce doc html
+
+function chiudi_files($_files, $_modalita)
+{
+    global $pdf;
+    global $_percorso;
+    //generazione del files..
+    $_pdf = "$_files.pdf";
+    $pdf->Output($_percorso."spool/$_pdf", $_modalita);
+
+    return $_pdf;
+}
+
+
+
+
+
 ?>

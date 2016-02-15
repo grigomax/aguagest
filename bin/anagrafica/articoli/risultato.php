@@ -94,7 +94,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 // Esegue la query...
 
 		
-	if ($result->rowCount() < "1")
+	if ($result == "NO")
 	{
 		echo "<tr><td colspan=6 align=center><h2>Nessun articolo Trovato</h2><br>
 		<A HREF=\"#\" onClick=\"history.back()\">Riprova</A></td></tr>";
@@ -122,6 +122,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 		echo "<td width=\"280\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Descrizione</span></td>";
 		echo "<td width=\"30\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Un</span></td>";
 		echo "<td width=\"60\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Prezzo</span></td>";
+                echo "<td width=\"60\" align=\"center\" class=\"logo\"><span class=\"testo_bianco\">Giacenza</span></td>";
 		echo "</tr>";
 
 		foreach ($result AS $dati)
@@ -129,35 +130,41 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			echo "<tr>";
 			if (($_campi == "articolo") OR ($_campi == "descrizione"))
 			{
-				printf("<td width=\"60\" align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
-				printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['articolo']);
-				printf("<td width=\"70\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['artfor']);
+				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
+				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['articolo']);
+				printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['artfor']);
 			}
 			else
 			{
-				printf("<td width=\"60\" align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
-				printf("<td width=\"50\" align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['articolo']);
+				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
+				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['articolo']);
 				if($_campi == "codbar")
 				{
-					printf("<td width=\"140\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $_descrizione);
+					printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $_descrizione);
 				}
 				else
 				{
-					printf("<td width=\"140\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati[$_campi]);
+					printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati[$_campi]);
 				}
 				
 			}
-			printf("<td width=\"280\" align=\"left\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['descrizione']);
-			printf("<td width=\"30\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['unita']);
-			printf("<td width=\"60\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['listino']);
+			printf("<td align=\"left\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['descrizione']);
+			printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['unita']);
+			echo "<td align=\"center\"><span class=\"testo_blu\"><b>$dati[listino]</b></span></td>\n";
+                        $_impegno = impegni_articolo("solo_giacenza", $dati['articolo'], date('Y'));
+                        
+                        
+                        echo "<td align=\"center\"><span class=\"testo_blu\">$_impegno[giacenza]</span></td>\n";
+                        
 			echo "</tr>";
 			echo "<tr>";
-			echo "<td width=\"60\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-			echo "<td width=\"50\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-			echo "<td width=\"70\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-			echo "<td width=\"280\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-			echo "<td width=\"30\" height=\"1\" align=\"center\" class=\"logo\"></td>";
-			echo "<td width=\"60\" height=\"1\" align=\"center\" class=\"logo\"></td>";
+			echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+			echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+			echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+			echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+			echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+			echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
+                        echo "<td height=\"1\" align=\"center\" class=\"logo\"></td>";
 			echo "</tr>";
 		}
 	}

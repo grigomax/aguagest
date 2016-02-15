@@ -678,6 +678,7 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
         $return = "";
         $return['result'] = $result;
         $return['messaggio'] = $_messaggio;
+        $return['query'] = $query;
     }
 
     if($_ritorno == "solo_error")
@@ -3699,60 +3700,41 @@ function impegni_articolo($_cosa, $_articolo, $_anno)
 
     $query = "select sum(qtacarico) AS qtacarico, sum(qtascarico) AS qtascarico from magazzino where articolo='$_articolo'";
 
-    $result = $conn->query($query);
-    if ($conn->errorCode() != "00000")
+    if ($_cosa == "solo_giacenza")
     {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "stampa_pianoc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
+        $dati = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        $_qtacarico = $dati['qtacarico'];
+        $_qtascarico = $dati['qtascarico'];
+
+        //primo array con la giacenza
+        $_impegni['giacenza'] = ($_qtacarico - $_qtascarico);
     }
-    $dati = $result->fetch(PDO::FETCH_ASSOC);
-    $_qtacarico = $dati['qtacarico'];
-    $_qtascarico = $dati['qtascarico'];
-
-    //primo array con la giacenza
-    $_impegni['giacenza'] = ($_qtacarico - $_qtascarico);
-
-    //seconda query..
-    $query = sprintf("select sum(qtasaldo) AS quantita from co_dettaglio INNER JOIN co_testacalce ON co_dettaglio.ndoc=co_testacalce.ndoc AND co_dettaglio.anno=co_testacalce.anno where articolo=\"%s\" AND rsaldo != 'SI' AND status != 'evaso' ", $_articolo);
-#echo $query;
-    $result = $conn->query($query);
-    if ($conn->errorCode() != "00000")
+    else
     {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "stampa_pianoc.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
+        $dati = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        $_qtacarico = $dati['qtacarico'];
+        $_qtascarico = $dati['qtascarico'];
+
+        //primo array con la giacenza
+        $_impegni['giacenza'] = ($_qtacarico - $_qtascarico);
+
+        //seconda query..
+        $query = sprintf("select sum(qtasaldo) AS quantita from co_dettaglio INNER JOIN co_testacalce ON co_dettaglio.ndoc=co_testacalce.ndoc AND co_dettaglio.anno=co_testacalce.anno where articolo=\"%s\" AND rsaldo != 'SI' AND status != 'evaso' ", $_articolo);
+
+        $dati = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        //secondo arrray con l'impegnato
+        $_impegni['impegnato'] = $dati['quantita'];
+
+        $query = sprintf("select sum(qtasaldo) AS quantita from of_dettaglio INNER JOIN of_testacalce ON of_dettaglio.ndoc=of_testacalce.ndoc AND of_dettaglio.anno=of_testacalce.anno where articolo=\"%s\" AND rsaldo != 'SI' and status != 'evaso' ", $_articolo);
+
+        $dati = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+
+        //terzo arrray con l'impegnato
+        $_impegni['ordinato'] = $dati['quantita'];
+
+        //ritorno un array completo con le tre variabili
     }
-    $dati = "";
-    $dati = $result->fetch(PDO::FETCH_ASSOC);
-    //secondo arrray con l'impegnato
-    $_impegni['impegnato'] = $dati['quantita'];
 
-
-    $query = sprintf("select sum(qtasaldo) AS quantita from of_dettaglio INNER JOIN of_testacalce ON of_dettaglio.ndoc=of_testacalce.ndoc AND of_dettaglio.anno=of_testacalce.anno where articolo=\"%s\" AND rsaldo != 'SI' and status != 'evaso' ", $_articolo);
-
-    $result = $conn->query($query);
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-        $_errori['files'] = "lib_html.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
-    $dati = "";
-    $dati = $result->fetch(PDO::FETCH_ASSOC);
-    //terzo arrray con l'impegnato
-    $_impegni['ordinato'] = $dati['quantita'];
-
-    //ritorno un array completo con le tre variabili
 
     return $_impegni;
 }

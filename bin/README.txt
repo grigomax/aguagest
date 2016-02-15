@@ -13,6 +13,12 @@ Necessita di un server funzionante.
 
 Ecco le ultime novità delle versioni presenti.
 
+-VERSIONE 1.2.5 Rc 5 del 07/02/2016
+
+-Continua la messa in sicurezza del programma..
+-Sistemato un po' di bug qui e li.. 
+
+-----------------------------------------------------------------------------
 
 -VERSIONE 1.2.5 Rc 4 del 05/02/2016
 

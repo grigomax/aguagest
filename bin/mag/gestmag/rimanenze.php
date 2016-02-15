@@ -62,7 +62,7 @@ if ($_SESSION['user']['magazzino'] > "1")
 	echo "</select>\n";
 	echo "</td></tr>\n";
 
-	echo "<tr><td align=\"center\"><br>Inserisci eventuale data <br><input type=\"text\" class=\"data\" name=\"data\" size=\"11\" maxlength=\"10\"></td></tr>\n";
+	//echo "<tr><td align=\"center\"><br>Inserisci eventuale data <br><input type=\"text\" class=\"data\" name=\"data\" size=\"11\" maxlength=\"10\"></td></tr>\n";
 
 	echo "<tr><td align=center><br>";
 	echo "<select name=\"tipo\">\n";

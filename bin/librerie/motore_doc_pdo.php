@@ -2405,7 +2405,7 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
 
         //echo $query;
 
-        $return = domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
+        $return = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose2");
         
     }
     elseif ($_cosa == "update")
@@ -2648,9 +2648,9 @@ function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_suffix, $
             $errori = tabella_doc_basket("travasa", $id, $dati2['rigo'], $_anno, $_suffix, $_ndoc, $dati2['utente'], $dati2['articolo'], $dati2);
 
             // Esegue la query...
-            if ($errori['errori'] != "OK")
+            if ($errori['result'] == "NO")
             {
-                echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
+                echo "Si &egrave; verificato un errore nel travaso $errori[query]";
                 $_return = "errore inserimento bascket";
             }
             else
@@ -2704,9 +2704,9 @@ function modifica_documento($_cosa, $id, $_archivio, $_tdoc, $_anno, $_suffix, $
 
             $errori = tabella_doc_basket("travasa", $id, $dati2['rigo'], $dati2['anno'], $dati2['suffix'], $dati2['ndoc'], $dati2['utente'], $dati2['articolo'], $dati2);
 
-            if ($errori== "NO")
+            if ($errori['result'] == "NO")
             {
-                echo "Si &egrave; verificato un errore nella query:<br>\n\"$query\"\n";
+                echo "Si &egrave; verificato un errore nel travaso $errori[query]";
                 $_return = "errore inserimento bascket";
             }
             else

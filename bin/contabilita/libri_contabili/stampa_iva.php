@@ -207,7 +207,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         // per poter procedere a stampare l'iva.. dobbiamo selezionare tutte le vendite e gli acquisti..
         //Prtiamo con gli acquisti..
         //selezioniamo dal database i muovimeni inerenti..
-        $query = "select *, date_format(data_cont,'%d-%m-%Y') AS data_cont_2 from prima_nota where causale = 'FA' AND data_cont like '$_periodo%' order by nproto, rigo";
+        $query = "select *, date_format(data_cont,'%d-%m-%Y') AS data_cont_2 from prima_nota where causale = 'FA' AND data_cont like '$_periodo%' order by suffix_proto, nproto, data_cont, rigo";
 
         $result = $conn->query($query);
         if ($conn->errorCode() != "00000")
@@ -273,7 +273,7 @@ if ($_SESSION['user']['contabilita'] > "1")
         // per poter procedere a stampare l'iva.. dobbiamo selezionare tutte le vendite e gli acquisti..
         //Prtiamo con gli acquisti..
         //selezioniamo dal database i muovimeni inerenti..
-        $query = "select *, date_format(data_cont,'%d-%m-%Y') AS data_cont_2 from prima_nota where causale = 'FV' AND data_cont like '$_periodo%' order by data_doc, CAST( ndoc AS SIGNED ) ASC";
+        $query = "select *, date_format(data_cont,'%d-%m-%Y') AS data_cont_2 from prima_nota where causale = 'FV' AND data_cont like '$_periodo%' order by suffix_doc, data_doc, CAST( ndoc AS SIGNED ) ASC";
 
         $result = $conn->query($query);
         if ($conn->errorCode() != "00000")

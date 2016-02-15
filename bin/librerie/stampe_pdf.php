@@ -241,14 +241,14 @@ function intesta_pagina($_cosa, $_titolo, $_parametri)
     if ($_cosa == "sotto_titolo")
     {
         // inserisco l'immagine con l'intestazione
-        $pdf->Image("../../../imm-art/$dati[immagine]", 20, 45, 60, 60);
+        $pdf->Image("../../../imm-art/$dati[immagine]", 20, 50, 60, 60);
         if ($dati['immagine2'] != "")
         {
-            $pdf->Image("../../../imm-art/disegni/$dati[immagine2]", 110, 45, 60, 60);
+            $pdf->Image("../../../imm-art/disegni/$dati[immagine2]", 110, 50, 60, 60);
         }
 
         //provo a lasciare il puntatore
-        $pdf->SetXY(10, 45);
+        $pdf->SetXY(10, 50);
     }
 
     if ($_cosa == "effetti_tabella")
@@ -422,7 +422,11 @@ function corpo_pagina($_cosa, $dati, $_parametri)
         $pdf->Cell(20, 5, 'Peso Articolo  ' . $dati['pesoart'], 0, 1, 'L');
 
         $pdf->SetFont('Arial', '', 8);
-        $pdf->MultiCell(193, 5, strip_tags($dati['descsito']), 0, 'L', 0);
+        $pdf->MultiCell(193, 5, strip_tags($dati['descsito'],'<table>, <tr>, <td>, colspan'), 0, 'L', 0);
+        //$pdf->MultiCell(193, 5, $dati['descsito'], 0, 'L', 0);
+        //$pdf->WriteHTML($dati['descsito']);
+        //$pdf->Write(5,strip_tags($dati['descsito'],'<table>, <tr>, <td>'));
+        
     }
 
 

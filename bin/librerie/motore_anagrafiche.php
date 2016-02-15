@@ -4579,19 +4579,8 @@ function tabella_stampe_layout($_cosa, $_percorso, $_tdoc)
 
         $query = "SELECT * from stampe_layout WHERE tdoc LIKE 'lis%' ORDER BY tdoc";
 
-        $result = $conn->query($query);
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        $return = $result;
     }//fine else
     else
     {

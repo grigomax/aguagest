@@ -116,10 +116,10 @@ function layout_menu_tendina($_cosa, $_campo_sx, $_campo_ALL, $_campo_CT, $_camp
     {
         if ($_nomecampo == "AVVISO")
         {
-            //echo "<tr>\n";
-            //echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Testo<br>\n";
+            echo "<tr>\n";
+            echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Testo<br>\n";
             echo "<input type=\"text\" size=\"65\" maxlenght = \"60\" name=\"$_nome_LC\" value=\"$dati[$_nome_LC]\"></td>\n";
-            //echo "</tr><tr>\n";
+            echo "</tr><tr>\n";
         }
         else
         {
@@ -258,21 +258,15 @@ if ($_SESSION['user']['setting'] > "3")
     echo "</tr><tr>\n";
     echo "<td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\"><br>Tipo di logo aziendale</span></td>\n";
     echo "</tr><tr>\n";
-
-    echo "<td colspan=\"2\" align=\"left\" valign=\"top\"><b>Tipo logo Zero</b> = ovvero nessun logo, lo spazio rimarr&agrave; libero per una eventuale carta stampata <br>\n";
-    echo "<b>Tipo di logo Uno </b>= ovvero logo completo della ditta riferito al logo grande 193X30mm<br>\n";
-    echo "<b>Tipo di logo Due </b> = ovvero nessun logo tutta l'intestazione della ditta viene scritta con i caratteri<br>\n";
-    echo "<b>Tipo di logo Tre </b>= ovvero logo medio mis. 150x33 della ditta a sinistra ed tutta la descrizione della ragione sociale a dx<br>\n";
-    echo "<b>Tipo di logo Quattro </b>= ovvero logo medio mis. 150x33 della ditta a destra ed tutta la descrizione della ragione sociale a sx<br>\n";
-    echo "<b>Tipo di logo 5</b>= Classico per stampe interne<br>\n";
+    echo "<td colspan=\"2\" align=\"left\" valign=\"top\">\n";
     echo "<center><select name=\"ST_TLOGO\">\n";
     echo "<option value=\"$dati[ST_TLOGO]\">$dati[ST_TLOGO]</option>\n";
     echo "<option value=\"0\">0 Nessun logo spazio libero</option>\n";
     echo "<option value=\"1\">1 Logo immagine grande</option>\n";
-    echo "<option value=\"2\">2 Logo Scritto con caratteri</option>\n";
-    echo "<option value=\"3\">3 Logo Medio ovvero a sinistra il logo ed a destra scritto con caratteri</option>\n";
-    echo "<option value=\"4\">4 Logo Medio ovvero a destra il logo ed a sinistra scritto con caratteri</option>\n";
-    echo "<option value=\"5\">Logo per inventario/rimanenze</option>\n";
+    echo "<option value=\"2\">2 Logo Scritto con caratteri completo</option>\n";
+    echo "<option value=\"3\">3 Logo Scritto ma minimale</option>\n";
+    echo "<option value=\"4\">4 Logo super minimale, una riga sola con titolo e pagina</option>\n";
+    echo "<option value=\"5\">5 Logo per inventario/rimanenze</option>\n";
     echo "</select>\n";
 
     echo "</td>\n";
@@ -282,8 +276,8 @@ if ($_SESSION['user']['setting'] > "3")
     echo "</tr><tr>\n";
     echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\">Font Intestazione ditta</td>\n";
     echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\">\n";
-    echo "<select name=\"ST_FONTLOGO\">\n";
-    echo "<option value=\"$dati[ST_FONTLOGO]\">$dati[ST_FONTLOGO]</option>\n";
+    echo "<select name=\"ST_FONTOLOGO\">\n";
+    echo "<option value=\"$dati[ST_FONTOLOGO]\">$dati[ST_FONTOLOGO]</option>\n";
     echo "<option value=\"Arial\">Arial, Helvetica sans serif</option>\n";
     echo "<option value=\"Times\">Times serif</option>\n";
     echo "<option value=\"Courier\">Courier spazi larghi</option>\n";
@@ -313,25 +307,22 @@ if ($_SESSION['user']['setting'] > "3")
 
 //--------------------------------------------------------------TESTATA-------------------------------------------------------------------------
     echo "<div id=\"tabs-2\">\n";
-    echo "<table class=\"tabs\">";
+    echo "<table class=\"tabs\" align=\"center\">";
 
 
     if ($_eti != SI)
     {
-        echo "<tr><td colspan=\"2\"><br><hr><br></td></tr>\n";
+        echo "<tr>\n";
 // scelta del tipo di intestazione
         echo "<td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\">Tipo di intestazione</span></td>\n";
         echo "</tr><tr>\n";
-        echo "<td colspan=\"2\" align=\"left\" valign=\"top\"><b>Tipo uno </b>= Semplice classico per ddt e fatture immediate, ovvero sede legale sulla sinistra
-e distinazione sulla destra. necessita di sottotestata. <br>\n";
-        echo "<b>Tipo Due </b>= tipo di testata complessa e completa.. ottima per tipo conferme preventivi ecc.. non necessita di sotto testata.<br>\n";
-        echo "<b>Tipo Tre </b>= Semplice con solo la sede legale a destra tipico delle fatture differite. Necessita di sottotestata.<br>\n";
+        echo "<td colspan=\"2\" align=\"left\" valign=\"top\">\n";
         echo "<center><select name=\"ST_TIPOTESTATA\">\n";
         echo "<option value=\"$dati[ST_TIPOTESTATA]\">$dati[ST_TIPOTESTATA]</option>\n";
         echo "<option value=\"1\">1 Cassica per ddt</option>\n";
         echo "<option value=\"2\">2 Completa e complessa</option>\n";
         echo "<option value=\"3\">3 Tipica per fatture</option>\n";
-        echo "<option value=\"4\">4 Sspeciale per fatture</option>\n";
+        echo "<option value=\"4\">4 Speciale per fatture</option>\n";
         echo "<option value=\"5\">5 Logo in caratteri classico per stampe di magazzino</option>\n";
         echo "</select>\n";
         echo "</tr><tr>\n";
@@ -339,8 +330,7 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
 // scelta del tipo di intestazione
         echo "<td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\"><br>Scelta della sotto testata. per testate dipo 1-3-4</span></td>\n";
         echo "</tr><tr>\n";
-        echo "<td colspan=\"2\" align=\"left\" valign=\"top\"><b>Tipo 1 </b>= Semplice classico per ddt con il numero doc. <br>\n";
-        echo "<b>Tipo Due </b>= Complessa e completa.. con banca ecc. per tutti i tipi di fatture.<br>\n";
+        echo "<td colspan=\"2\" align=\"left\" valign=\"top\">\n";
         echo "<center><select name=\"ST_SOTTOTESTATA\">\n";
         echo "<option value=\"$dati[ST_SOTTOTESTATA]\">$dati[ST_SOTTOTESTATA]</option>\n";
         echo "<option value=\"0\">0 Nessuna sotto testata</option>\n";
@@ -585,30 +575,34 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
     {
         
 //scelta della calce
-        echo "<td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\"><br>Tipo di calce documento</span></td>\n";
+        echo "<tr><td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\"><br>Tipo di calce documento</span></td>\n";
         echo "</tr><tr>\n";
-        echo "<td colspan=\"2\" align=\"left\" valign=\"top\">Tipo uno = Classico per i d.d.t. con colli, peso e lo spazio per firmare<br>\n";
-        echo "Tipo Due = Semplice con i totali a destra ed un ampio spazio per le annotazioni ottimo per conferme, ordini ecc.<br>\n";
-        echo "Tipo Tre = Semplice e completo classico delle fatture normali<br>\n";
-        echo "Tipo Quattro = Completo di tutto ottimo per le fatture immediate, ci sono colli peso e lo spazio per firmare<br>\n";
+        echo "<td colspan=\"2\" align=\"left\" valign=\"top\">\n";
         echo "<select name=\"ST_TIPOCALCE\">\n";
         echo "<option value=\"$dati[ST_TIPOCALCE]\">$dati[ST_TIPOCALCE]</option>\n";
+        echo "<option value=\"0\">0 VUOTO</option>\n";
         echo "<option value=\"1\">1 Classico DDT</option>\n";
         echo "<option value=\"2\">2 Ottimo per conferme ordini</option>\n";
         echo "<option value=\"3\">3 Classico per fatture</option>\n";
         echo "<option value=\"4\">4 Perfetto per le fatture immediate</option>\n";
         echo "<option value=\"5\">5 Tipo calce per inventario Magazzino</option>\n";
-        echo "<option value=\"6\">6 Somma della pagina quantità e valore</option>\n";
+        echo "<option value=\"6\">6 Tipico delle rimamenze Somma della pagina quantità e valore</option>\n";
+        echo "<option value=\"7\">7 Tipico dei listini, numero pagina ed data</option>\n";
         echo "</select>\n";
         echo "</tr><tr>\n";
     }
+    
+    echo "<tr>\n";
 
     layout_menu_tendina(($_cosa = ['CT' => 'NO']), $CD020, $_campo_ALL, $_campo_CT, $_campo_LC, "AVVISO", "50", "100");
+    
+    
+    echo "</tr>\n";
     echo "</table></div>\n";
 
 //--------------------------------------------------------------AUTOMATISMI-------------------------------------------------------------------------
     echo "<div id=\"tabs-5\">\n";
-    echo "<table class=\"tabs\">";
+    echo "<table width=\"60%\" align=\"center\" class=\"tabs\">";
 
 
     if ($_eti != SI)
@@ -617,8 +611,8 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
         echo "<tr><td colspan=\"2\" rowspan=\"1\" style=\"width: 100%;\" align=\"center\" valign=\"top\"><h3>Impostazioni predefinite per la stampa</h3></td>\n";
         echo "</tr><tr>\n";
 
-        echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\"><B>Stampa Logo nel documento ?</B></td>\n";
-        echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\">\n";
+        echo "<td align=\"left\" valign=\"top\"><B>Stampa Logo nel documento ?</B></td>\n";
+        echo "<td valign=\"top\">\n";
         echo "<select name=\"ST_LOGOP\">\n";
         if($dati[ST_LOGOP] == "")
         {
@@ -630,8 +624,8 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
         echo "</select></td>\n";
         echo "</tr><tr>\n";
         
-        echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\"><B>Stampa prezzi nel documento ?</B></td>\n";
-        echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\">\n";
+        echo "<td valign=\"top\"><B>Stampa prezzi nel documento ?</B></td>\n";
+        echo "<td valign=\"top\">\n";
         echo "<select name=\"ST_PREZZI\">\n";
         if($dati[ST_PREZZI] == "")
         {
@@ -644,8 +638,8 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
         echo "</tr><tr>\n";
 
         
-        echo "<td style=\"width: 60%;\" align=\"left\" valign=\"top\"><B>Stampa data e ora consegna ?</B></td>\n";
-        echo "<td style=\"width: 40%; text-align: left;\" valign=\"top\"><select name=\"ST_DATA\">\n";
+        echo "<td align=\"left\" valign=\"top\"><B>Stampa data e ora consegna ?</B></td>\n";
+        echo "<td valign=\"top\"><select name=\"ST_DATA\">\n";
         if($dati[ST_DATA] == "")
         {
             $dati[ST_DATA] = "NO";
@@ -657,7 +651,7 @@ e distinazione sulla destra. necessita di sottotestata. <br>\n";
         echo "</tr><tr>\n";
 
         echo "<td colspan=\"2\"><br><hr></td><br></tr><tr>\n";
-        echo "<td colspan=\"2\" rowspan=\"1\" style=\"width: 100%;\" align=\"center\" valign=\"top\">Messaggio predefinito per invio documenti</td>\n";
+        echo "<td colspan=\"2\" rowspan=\"1\" align=\"center\" valign=\"top\">Messaggio predefinito per invio documenti</td>\n";
         echo "</tr><tr>\n";
 
         echo "<td colspan =\"2\" align=\"center\" valign=\"top\"><B>Messaggio da includere</B><br>\n";

@@ -73,13 +73,12 @@ if ($_SESSION['user']['stampe'] > "1")
 
 
         tabella_articoli("elenca_select", "codini", $_parametri);
-        
+
         echo "</td></tr>\n";
 
         echo "<tr><td align=center><br>";
 
         tabella_articoli("elenca_select", "codfin", $_parametri);
-        
     }
     else
     {
@@ -99,11 +98,26 @@ if ($_SESSION['user']['stampe'] > "1")
 
     echo "<tr><td align=\"center\" height=\"60\">Selezionare il tipo di listino da stampare<br>";
     echo "<select name=\"tdoc\">\n";
-
-    foreach ($etichetta AS $dati_eti)
+    if ($etichetta == "NO")
     {
-        echo "<option value=\"$dati_eti[tdoc]\">$dati_eti[ST_NDOC]</option>";
+        echo "<option value=\"\">Nessun Listino presente</option>";
+        echo "</select>\n";
+
+
+        echo "<h3>Impossibile proseguire nessun listino</h3>\n";
+        echo "<h3>presente nel database layout</h3>\n";
+        echo "</td></tr>\n";
+        exit;
     }
+    else
+    {
+        foreach ($etichetta AS $dati_eti)
+        {
+            echo "<option value=\"$dati_eti[tdoc]\">$dati_eti[ST_NDOC]</option>";
+        }
+    }
+
+
     echo "</select>\n";
     echo "</td></tr>\n";
 

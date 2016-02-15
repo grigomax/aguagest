@@ -325,7 +325,7 @@ if ($_SESSION['user']['vendite'] > "1")
             $pdf->AddPage();
 
             //funzione del logo..
-            intestazione_doc_pdf($datidoc, $LINGUA);
+            intestazione_doc_pdf($_cosa, $datidoc, $LINGUA, $_anno, $_titolo, $_pg, $pagina, $_parametri);
 
             //creiamo la testata
             testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pagamento, $LINGUA, $_parametri);

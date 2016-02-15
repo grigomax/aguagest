@@ -68,7 +68,7 @@ if ($_SESSION['user']['magazzino'] > "1")
     echo "</select>\n";
     echo "</td></tr>\n";
 
-    echo "<tr><td align=\"center\"><br>Prendi in cosiderazione i muovimenti fino alla data.. <input type=\"text\" name=\"datareg\" class=\"data\" value=\"$_hoy\" size=\"11\" maxlength=\"10\"></td></tr>\n";
+    //echo "<tr><td align=\"center\"><br>Prendi in cosiderazione i muovimenti fino alla data.. <input type=\"text\" name=\"datareg\" class=\"data\" value=\"$_hoy\" size=\"11\" maxlength=\"10\"></td></tr>\n";
 
     echo "<tr><td align=center><br>";
 
