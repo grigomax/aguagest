@@ -47,12 +47,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
     $datidoc = tabella_stampe_layout("singola", $_percorso, $_POST['tdoc']);
 
-
-
     //$dati = testata del documento
-
-
-
 
     if ($_tipo == "catmer")
     {
@@ -107,14 +102,14 @@ if ($_SESSION['user']['vendite'] > "1")
     $pagina = ceil($_pagine);
 
     //creiamo il pdf..
-    crea_file_pdf($_cosa, $_orientamento, "listino prezzi $_listino", $_nomelist);
+    crea_doc_file_pdf($_cosa, $_orientamento, "listino prezzi $_listino", $_nomelist);
 
     $_title = "LISTINO PREZZI";
 
     for ($_pg = 1; $_pg <= $pagina; $_pg++)
     {
 
-        crea_pagina_pdf();
+        crea_doc_pagina_pdf();
 
         //funzione del logo..
         intestazione_doc_pdf($_cosa, $datidoc, $LINGUA, date('Y'), "listino prezzi $_listino", $_pg, $pagina, $_parametri);
@@ -141,7 +136,7 @@ if ($_SESSION['user']['vendite'] > "1")
 
     //salviamo il discorso..
 
-    chiudi_files("listino", "I");
+    chiudi_doc_files("listino", "I");
 
     //azzeriamo eventuali residui..
 

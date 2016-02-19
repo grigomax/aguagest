@@ -24,7 +24,7 @@ $MARGINE_SUPERIORE = "5";
  * @param <type> $_orientamento Esprimere se orizzontale o verticale
  * @param <type> $_titolo titolo della stampa
  */
-function crea_file_pdf($_cosa, $_orientamento, $_titolo, $_nomelist)
+function crea_doc_file_pdf($_cosa, $_orientamento, $_titolo, $_nomelist)
 {
     global $pdf;
     global $azienda;
@@ -40,7 +40,7 @@ function crea_file_pdf($_cosa, $_orientamento, $_titolo, $_nomelist)
     $pdf->SetSubject($_nomelist);
 }
 
-function crea_pagina_pdf()
+function crea_doc_pagina_pdf()
 {
     global $pdf;
 
@@ -260,7 +260,7 @@ function intestazione_doc_pdf($_cosa, $datidoc, $LINGUA, $_anno, $_titolo, $_pg,
 	    $pdf->Cell(70,5,$_titolo,0,0,'L');
             $pdf->SetFont($datidoc[ST_FONTOLOGO], '', $datidoc[ST_FONTLOGOSIZE]-2);
             $pdf->Cell(10,5,'Pag.',0,0,'L');
-	    $pdf->Cell(10,5,$_pg,0,0,'C');
+	    $pdf->Cell(10,5,$pdf->PageNo(),0,0,'C');
             $pdf->Cell(3,5,'/',0,0,'C');
             $pdf->Cell(10,5,$pagina,0,0,'L');
             $pdf->Cell(10,5,$_anno,0,1,'L');
@@ -491,7 +491,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->SetXY(($MARGINE_SINISTRO + 99), 45);
 	$pdf->Cell(97, 35, '', 1, 0, 'L');
 	$pdf->SetXY(($MARGINE_SINISTRO + 99), 45);
-	$pdf->Cell(30, 5, $ID001, 0, 1, 'L');
+	$pdf->Cell(30, 5, $ID001 . "  $dati2[codice]", 0, 1, 'L');
 	$pdf->SetX(($MARGINE_SINISTRO + 100));
 	$pdf->Cell(85, 5, $dati2['ragsoc'], 0, 1, 'L');
 	$pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]);
@@ -637,8 +637,10 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$_y = $pdf->GetY();
 
 	$pdf->SetXY($MARGINE_SINISTRO, $_y); //90
-	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'B', 10);
-	$pdf->Cell(70, 10, $datidoc['ST_NDOC'], 1, 0, 'L');
+	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
+	$pdf->Cell(35, 10, $datidoc['ST_NDOC'], 1, 0, 'L');
+        $pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
+	$pdf->Cell(38, 10, $dati2['codice'], 1, 0, 'C');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
 	$pdf->Cell(70, 10, $_causale, 1, 0, 'C');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
@@ -662,7 +664,9 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	// righe inserimento tabella contabilita
 	$pdf->SetXY($MARGINE_SINISTRO, $_y); //90
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'I', 7);
-	$pdf->Cell(70, 4, $TC001, '0', 0, 'L');
+	$pdf->Cell(35, 4, $TC001, '0', 0, 'L');
+        $pdf->SetFont($datidoc[ST_FONTESTACALCE], 'I', 7);
+	$pdf->Cell(38, 4, $TC010, '0', 0, 'L');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'I', 7);
 	$pdf->Cell(70, 4, $TC002, '0', 0, 'L');
 	$pdf->Cell(19, 4, $TC003, '0', 0, 'C');
@@ -829,8 +833,10 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$_y = $pdf->GetY();
 
 	$pdf->SetXY($MARGINE_SINISTRO, $_y); //90
-	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'B', 10);
-	$pdf->Cell(70, 10, $datidoc['ST_NDOC'], 1, 0, 'L');
+	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
+	$pdf->Cell(35, 10, $datidoc['ST_NDOC'], 1, 0, 'L');
+        $pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
+	$pdf->Cell(38, 10, $dati2['codice'], 1, 0, 'C');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
 	$pdf->Cell(70, 10, $_causale, 1, 0, 'C');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], '', 10);
@@ -854,7 +860,9 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	// righe inserimento tabella contabilita
 	$pdf->SetXY($MARGINE_SINISTRO, $_y); //90
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'I', 7);
-	$pdf->Cell(70, 4, $TC001, '0', 0, 'L');
+	$pdf->Cell(35, 4, $TC001, '0', 0, 'L');
+        $pdf->SetFont($datidoc[ST_FONTESTACALCE], 'I', 7);
+	$pdf->Cell(38, 4, $TC010, '0', 0, 'L');
 	$pdf->SetFont($datidoc[ST_FONTESTACALCE], 'I', 7);
 	$pdf->Cell(70, 4, $TC002, '0', 0, 'L');
 	$pdf->Cell(19, 4, $TC003, '0', 0, 'C');
@@ -916,6 +924,16 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         
     }// fine seconda sottotestata.
 
+    
+    //stampe listini con il tipo di gruppo
+    if ($datidoc[ST_SOTTOTESTATA] == "4")
+    {
+        $pdf->SetFont($datidoc[ST_FONTINTEST], 'B', $datidoc['ST_FONTINTESTSIZE']);
+        $pdf->Cell(190,10, $_parametri['tabella'], 0,1,'C');
+    }
+    
+    
+    
     
     
 }
@@ -2016,11 +2034,11 @@ function calce_doc_pdf($datidoc, $pagina, $_pg, $_nettovendita, $_castiva, $dati
     if ($datidoc[ST_TIPOCALCE] == "7")
     {
         $pdf->SetX($MARGINE_SINISTRO); //256
-        $pdf->SetFont($datidoc[ST_FONTESTACALCE], '', $datidoc[ST_FONTESTACALCESIZE]);
-        $pdf->Cell(40, 4, $_pg, '1', 0, 'L');
-        $_vale = "Data emissione listino figurato $data ";
+        $pdf->SetFont($datidoc['ST_FONTESTACALCE'], '', $datidoc['ST_FONTESTASIZE']);
+        $pdf->Cell(40, 4, $pdf->PageNo(), '1', 0, 'L');
+        $_vale = "Data emissione listino $data ";
         $pdf->Cell(113, 4, $_vale, '1', 0, 'C');
-        $pdf->Cell(40, 4, $_pg, '1', 1, 'R');
+        $pdf->Cell(40, 4, $pdf->PageNo(), '1', 1, 'R');
 	
     }
     
@@ -2050,7 +2068,7 @@ function calce_doc_pdf($datidoc, $pagina, $_pg, $_nettovendita, $_castiva, $dati
 
 //fine funzione calce doc html
 
-function chiudi_files($_files, $_modalita)
+function chiudi_doc_files($_files, $_modalita)
 {
     global $pdf;
     global $_percorso;

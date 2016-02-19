@@ -448,24 +448,24 @@ if ($_SESSION['user']['vendite'] > "2")
                 {
                     $dati_corr = tabella_articoli("singola", $dati2['artcorr'], $_parametri);
                     echo "<tr><td colspan=\"7\" align=\"left\">Trovato Articolo correlato:<br>";
-                    echo "<font size=\"2\" face=\"arial\">$dati_corr[articolo] $dati_corr[descrizione]</td>\n";
-                    echo "</span><td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia => <input type=\"checkbox\" name=\"aggancia\" value=\"$dati_corr[articolo]\"></td></tr>";
+                    echo "<font size=\"2\" face=\"arial\">$dati_corr[articolo] $dati_corr[descrizione]</font></td>\n";
+                    echo "<td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia =></font> <input type=\"checkbox\" name=\"aggancia\" value=\"$dati_corr[articolo]\"></td></tr>";
                 }
                 
                 if($dati2[artcorr_2] != "")
                 {
                     $dati_corr = tabella_articoli("singola", $dati2['artcorr_2'], $_parametri);
                     echo "<tr><td colspan=\"7\" align=\"left\">Trovato Articolo correlato:<br>";
-                    echo "<font size=\"2\" face=\"arial\">$dati_corr[articolo] $dati_corr[descrizione]</td>\n";
-                    echo "<td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia => <input type=\"checkbox\" name=\"aggancia_2\" value=\"$dati_corr[articolo]\"></td></tr>";
+                    echo "<font size=\"2\" face=\"arial\">$dati_corr[articolo] $dati_corr[descrizione]</font></td>\n";
+                    echo "<td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia => </font><input type=\"checkbox\" name=\"aggancia_2\" value=\"$dati_corr[articolo]\"></td></tr>";
                 }
                 
                 if($dati2[artcorr_3] != "")
                 {
                     $dati_corr = tabella_articoli("singola", $dati2['artcorr_3'], $_parametri);
                     echo "<tr><td colspan=\"7\" align=\"left\">Trovato Articolo correlato:<br>";
-                    echo "<font size=\"2\" face=\"arial\">$dati_corr[articolo] $dati_corr[descrizione]</td>\n";
-                    echo "<td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia => <input type=\"checkbox\" name=\"aggancia_3\" value=\"$dati_corr[articolo]\"></td></tr>";
+                    echo "<font size=\"2\" face=\"arial\">$dati_corr[articolo] $dati_corr[descrizione]</font></td>\n";
+                    echo "<td align=\"CENTER\" colspan=\"2\"><font size=\"2\" face=\"arial\">Aggancia => </font><input type=\"checkbox\" name=\"aggancia_3\" value=\"$dati_corr[articolo]\"></td></tr>";
                 }
 
                 

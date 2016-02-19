@@ -236,20 +236,33 @@ function blocco_utente($dati)
 
 //---------------------------------------------------------
 //funzione causale vendita:
-function causale_trasporto($_causale)
+function causale_trasporto($_cosa, $_causale)
 {
+    global $CAUSALE_BASE;
+    global $_percorso;
+    
+    
     if ($_causale != "")
     {
         $_option = $_causale;
     }
     else
     {
-        $_option = "VENDITA";
+        if($CAUSALE_BASE != "")
+        {
+            $_option = $CAUSALE_BASE;
+        }
+        else
+        {
+            $_option = "VENDITA";
+        }
+        
     }
+    
     echo "<td align=\"left\" valign=\"top\">";
     echo "<span class=\"tabella_elenco\"><b>Causale del trasporto </b>&nbsp;<br></span>";
     echo "<select name=\"causale\">\n";
-    printf("<option value=\"%s\">%s</option>", $_option, $_option);
+    echo "<option value=\"$_option\">$_option</option>\n";
     echo "<option value=\"CONTO DEPOSITO\">CONTO DEPOSITO</option>";
     echo "<option value=\"CONTO LAVORO\">CONTO LAVORO</option>";
     echo "<option value=\"CONTO MANUTENZ. ORD.\">CONTO MANUTENZIONE ORDINARIA</option>";
@@ -1702,16 +1715,16 @@ function mostra_carrello($_dove, $id, $_tdoc, $IVAMULTI, $ivasis)
     $_colspan ++;
     echo "<td width=\"30\" align=\"center\" class=\"tabella\">Um</span></td>";
     $_colspan ++;
-    echo "<td width=\"70\" align=\"center\" class=\"tabella\">Q.t&agrave;</span></td>";
+    echo "<td width=\"70\" align=\"center\" class=\"tabella\">Q.t&agrave; <br>Ordinata</span></td>";
 
     if (($_tdoc == "conferma") OR ( $_tdoc == "fornitore"))
     {
         $_colspan ++;
-        echo "<td width=\"70\" align=\"center\" class=\"tabella\">Q.ta cons.</span></td>";
+        echo "<td width=\"70\" align=\"center\" class=\"tabella\">Q.ta <br>Saldo</span></td>";
         $_colspan ++;
-        echo "<td width=\"70\" align=\"center\" class=\"tabella\">Q.ta Prep.</span></td>";
+        echo "<td width=\"70\" align=\"center\" class=\"tabella\">Q.ta <br>Prep.</span></td>";
         $_colspan ++;
-        echo "<td width=\"20\" align=\"center\" class=\"tabella\">Re</span></td>";
+        echo "<td width=\"20\" align=\"center\" class=\"tabella\">Riga<br>chiusa</span></td>";
     }
 
 
@@ -1778,9 +1791,9 @@ function mostra_carrello($_dove, $id, $_tdoc, $IVAMULTI, $ivasis)
         if (($_tdoc == "conferma") OR ( $_tdoc == "fornitore"))
         {
             echo "<td width=\"50\" bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><font color=green>\n";
-            if ($dati_carr['qtaevasa'] != "0.00")
+            if ($dati_carr['qtasaldo'] != "0.00")
             {
-                echo $dati_carr['qtaevasa'];
+                echo $dati_carr['qtasaldo'];
             }
 
             echo " </td>\n";
@@ -1953,12 +1966,13 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
 
         echo "<td align=\"left\" colspan=\"6\" class=\"tabella\">Descrizione</span></td>";
         echo "<td align=\"center\" class=\"tabella\">Um</span></td>";
-        echo "<td align=\"center\" class=\"tabella\">Q.t&agrave;</span></td>";
+        echo "<td align=\"center\" class=\"tabella\">Q.t&agrave; <br>Ordinata</span></td>";
         if ($_calce == "calce2")
         {
-            echo "<td align=\"center\" class=\"tabella\">Q.tà Evasa</span></td>";
-            echo "<td align=\"center\" class=\"tabella\">Q.tà Prep.</span></td>";
-            echo "<td align=\"center\" class=\"tabella\">Riga chiusa</span></td>";
+            echo "<td align=\"center\" class=\"tabella\">Q.tà<br>Rimanente</span></td>";
+            echo "<td align=\"center\" class=\"tabella\">Q.tà<br> Estratta</span></td>";
+            echo "<td align=\"center\" class=\"tabella\">Evadi<br>Riga</span></td>";
+            echo "<td align=\"center\" class=\"tabella\">Riga<br> chiusa</span></td>";
         }
         echo "</tr>";
         echo "<tr>";
@@ -1983,9 +1997,11 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
 
         if ($_calce == "calce2")
         {
-            echo "<td align=center><input type=\"radio\" name=\"qtaevasa\" value=\"$_qtaevasa\" checked>$_qtaevasa</td>\n";
+            echo "<td align=center><input type=\"radio\" name=\"qtasaldo\" value=\"$_qtasaldo\" checked>$_qtasaldo</td>\n";
             echo "<td align=center><input type=\"text\" name=\"qtaestratta\" value=\"$_qtaestratta\" size=\"6\" maxlength=\"18\"></td>\n";
 
+            echo "<td align=center><input type=\"checkbox\" name=\"evadiriga\" value=\"SI\"></td>\n";
+            
             if ($_rsaldo == "SI")
             {
                 echo "<td align=center><input type=\"checkbox\" name=\"rsaldo\" value=\"SI\" checked></td>\n";
@@ -1997,7 +2013,7 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
         }
 
         echo "</tr>\n";
-        echo "<tr><td colspan=\"11\">&nbsp;</td></tr>\n";
+        echo "<tr><td colspan=\"12\">&nbsp;</td></tr>\n";
         echo "<tr>\n";
         echo "<td align=\"center\" colspan=\"1\" class=\"tabella\">Listino</span></td>";
         echo "<td align=\"center\" class=\"tabella\">Sc A</span></td>";
@@ -2009,8 +2025,8 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
         echo "<td align=\"center\" class=\"tabella\">IVA</span></td>";
         
         
-        echo "<td align=\"center\" colspan=\"2\" class=\"tabella\">Consegna</span></td>";
-        echo "<td align=\"center\" colspan=\"3\" class=\"tabella\">Pos.</span></td>";
+        echo "<td align=\"center\" colspan=\"3\" class=\"tabella\">Consegna</span></td>";
+        echo "<td align=\"center\" colspan=\"4\" class=\"tabella\">Pos.</span></td>";
 
         echo "</tr><tr>\n";
         echo "<td align=\"center\" colspan=\"1\"><input type=\"text\" name=\"listino\" value=\"$_listino\" size=\"10\" maxlength=\"18\"></td>\n";
@@ -2023,11 +2039,11 @@ function schermata_quantita($_tdoc, $_cosa, $_messaggio, $_rigo, $_articolo, $_a
         tabella_aliquota("elenca_select_numeri", $_iva, "iva");
         
         echo "</td>\n";
-        echo "<td align=center colspan=\"2\" ><input type=\"text\" name=\"consegna\" value=\"$_consegna\" size=\"10\" maxlength=\"10\"></td>\n";
+        echo "<td align=center colspan=\"3\" ><input type=\"text\" name=\"consegna\" value=\"$_consegna\" size=\"10\" maxlength=\"10\"></td>\n";
         // apriamo una varibile, nel caso sia una riga vuota oppure una modifica che si voglia cambiare riga..
         if ($_cosa == "modifica")
         {
-            echo "<td align=\"center\" colspan=\"3\">Da: <input type=\"radio\" name=\"rigo\" value=\"$_rigo\" checked>$_rigo - A: <input type=\"text\" name=\"rigo_dest\" size=\"4\" maxlenght=\"6\" value=\"$_rigo\"></td>";
+            echo "<td align=\"center\" colspan=\"4\">Da: <input type=\"radio\" name=\"rigo\" value=\"$_rigo\" checked>$_rigo - A: <input type=\"text\" name=\"rigo_dest\" size=\"4\" maxlenght=\"6\" value=\"$_rigo\"></td>";
         }
         elseif ($_cosa == "vuota")
         {
@@ -2415,8 +2431,10 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
         $_rigo_dest = $_parametri['rigo_dest'];
         $_qta = $_parametri['qta'];
         $_qtaestratta = $_parametri['qtaestratta'];
+        $_qtasaldo = $_parametri['qtasaldo'];
         $_qtaevasa = $_parametri['qtaevasa'];
         $_rsaldo = $_parametri['rsaldo'];
+        $_evadiriga = $_parametri['evadiriga'];
         $_tdoc = $_SESSION['tdoc'];
 
         if ($_qtaestratta != "0.00")
@@ -2500,23 +2518,33 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
         //facciamo prima la quantità e poi i prezzi..
         #Qui iniziamo a evadere parzialmente l'ordine..
         //  calcolo la quantit�
-        $_qtasaldo = $_qta - $_qtaevasa;
+        
 
-
-        if ($_rsaldo == "SI")
-        {
-            $_qtasaldo = "0.00";
-        }
-        elseif (($_qtasaldo - $_qtaestratta) <= "0.00")
+        if($_evadiriga == "SI")
         {
             $_rsaldo = "SI";
-            #$_qtasaldo = "0.00";
+            $_qtaestratta = $_qtasaldo;
+            $_qtasaldo = "0.00";
         }
         else
         {
-            $_rsaldo = "NO";
-        }
+            $_qtasaldo = $_qta - $_qtaevasa;
 
+            if ($_rsaldo == "SI")
+            {
+                $_qtasaldo = "0.00";
+            }
+            elseif (($_qtasaldo - $_qtaestratta) <= "0.00")
+            {
+                $_rsaldo = "SI";
+            }
+            else
+            {
+                $_rsaldo = "NO";
+            }
+        }
+        
+        
         if ($_articolo != "vuoto")
         {
             //calcolo le provvigioni
@@ -3024,6 +3052,34 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
             echo "</tr>\n";
             $query = "select * from magazzino INNER JOIN articoli ON magazzino.articolo=articoli.articolo where tdoc='ddtacq' AND anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
         }
+        elseif($dati_doc['tdoc'] == "fornitore")
+        {
+            
+            echo "<table <table class=\"classic\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
+            echo "<tr>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Codice</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Fornitore</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"400\" align=\"left\">Descrizione</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"30\">U.M.</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Quantit&agrave;</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Rimanente</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"30\">Riga Chiusa</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Qta. Preparata</th>\n";
+
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Listino</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"50\" >Sconti</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Netto</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Tot. Riga</th>\n";
+            echo "</tr>\n";
+            echo "<tr><td bgcolor=\"#FFFFFF\" colspan=\"12\" align=\"left\"><hr></td>\n";
+            echo "</tr><tr>\n";
+
+
+
+            $query = "select * from $_archivio[dettaglio] where anno='$_anno' AND suffix='$_suffix' and ndoc='$_ndoc' order by rigo";
+
+        
+        }
         else
         {
             echo "<table <table class=\"classic\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" align=\"center\">\n";
@@ -3032,7 +3088,7 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
             echo "<th bgcolor=\"#FFFFFF\" width=\"400\" align=\"left\">Descrizione</th>\n";
             echo "<th bgcolor=\"#FFFFFF\" width=\"30\">U.M.</th>\n";
             echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Quantit&agrave;</th>\n";
-            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Conseg.</th>\n";
+            echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Q.ta <br>Rimamente</th>\n";
             echo "<th bgcolor=\"#FFFFFF\" width=\"30\">Riga Chiusa</th>\n";
             echo "<th bgcolor=\"#FFFFFF\" width=\"70\">Qta. Preparata</th>\n";
 
@@ -3045,7 +3101,7 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
             }
             echo "<th bgcolor=\"#FFFFFF\" width=\"50\">Consegna</th>\n";
             echo "</tr>\n";
-            echo "<tr><td bgcolor=\"#FFFFFF\" colspan=\"11\" align=\"left\"><hr></td>\n";
+            echo "<tr><td bgcolor=\"#FFFFFF\" colspan=\"12\" align=\"left\"><hr></td>\n";
             echo "</tr><tr>\n";
 
 
@@ -3098,6 +3154,86 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
                 printf("</tr>");
                 $_imponibile = $_imponibile + $dati3['valoreacq'];
             }
+            elseif($dati_doc['tdoc'] == "fornitore")
+            {
+                printf("<tr><td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><a href=\"../../anagrafica/articoli/visualizzacod.php?codice=%s\">%s&nbsp;</a></td>", $_articolo, $_articolo);
+                printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $dati3['artfor']);
+                printf("<td style=\"font-size: 0.8em;\" bgcolor=\"$_colorbg\" height=\"1\" align=\"left\" class=\"tabella_elenco\">%s</td>", stripslashes($dati3['descrizione']));
+                printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $dati3['unita']);
+
+                if ($dati3['quantita'] != "0.00")
+                {
+                    $_quantita = $dati3['quantita'];
+                }
+                else
+                {
+                    $_quantita = "";
+                }
+
+                printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $_quantita);
+
+                if ($dati3['qtasaldo'] != "0.00")
+                {
+                    $_qtaevasa = $dati3['qtasaldo'];
+                }
+                else
+                {
+                    $_qtaevasa = "";
+                }
+
+                printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><font color=\"blue\"><b>%s</b></font></td>", $_qtaevasa);
+
+                if ($dati3['rsaldo'] == "SI")
+                {
+                    $_rsaldo = "SI";
+                }
+                else
+                {
+                    $_rsaldo = "";
+                }
+                printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $_rsaldo);
+
+                if ($dati3['qtaestratta'] != "0.00")
+                {
+
+                    $_qtaestratta = $dati3['qtaestratta'];
+                }
+                else
+                {
+                    $_qtaestratta = "";
+                }
+
+                printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $_qtaestratta);
+
+                if ($dati3['listino'] == "0.00")
+                {
+                    $dati3['listino'] = "";
+                }
+
+                printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"right\" class=\"tabella_elenco\">%s</td>", $dati3['listino']);
+
+                    if (($dati3['scaa'] == "0") AND ( $dati3['scac'] == "0") AND ( $dati3['scac'] == "0"))
+                    {
+                        echo "<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\">&nbsp</td>";
+                    }
+                    else
+                    {
+                        printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s+%s+%s</td>", $dati3['scaa'], $dati3['scab'], $dati3['scac']);
+                    }
+
+
+                    if ($dati3['nettoacq'] == "0.00")
+                    {
+                        $dati3['nettoacq'] = "";
+                    }
+
+                    printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"right\" class=\"tabella_elenco\">%s</td>", $dati3['nettoacq']);
+               
+                    printf("<td bgcolor=\"$_colorbg\" height=\"1\" align=\"right\" class=\"tabella_elenco\">%s</td>", $dati3['totriga']);
+               
+                printf("</tr>");
+                
+            }
             else
             {
                 printf("<tr><td bgcolor=\"$_colorbg\" width=\"70\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><a href=\"../../anagrafica/articoli/visualizzacod.php?codice=%s\">%s&nbsp;</a></td>", $_articolo, $_articolo);
@@ -3115,16 +3251,16 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
 
                 printf("<td bgcolor=\"$_colorbg\" width=\"70\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $_quantita);
 
-                if ($dati3['qtaevasa'] != "0.00")
+                if ($dati3['qtasaldo'] != "0.00")
                 {
-                    $_qtaevasa = $dati3['qtaevasa'];
+                    $_qtasaldo = $dati3['qtasaldo'];
                 }
                 else
                 {
-                    $_qtaevasa = "";
+                    $_qtasaldo = "";
                 }
 
-                printf("<td bgcolor=\"$_colorbg\" width=\"70\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><font color=\"blue\"><b>%s</b></font></td>", $_qtaevasa);
+                printf("<td bgcolor=\"$_colorbg\" width=\"70\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><font color=\"blue\"><b>%s</b></font></td>", $_qtasaldo);
 
                 if ($dati3['rsaldo'] == "SI")
                 {
@@ -3134,7 +3270,7 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
                 {
                     $_rsaldo = "";
                 }
-                printf("<td bgcolor=\"$_colorbg\" width=\"30\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $_rsaldo);
+                echo "<td bgcolor=\"$_colorbg\" width=\"30\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><font color=\"red\">$_rsaldo</font></td>\n";
 
                 if ($dati3['qtaestratta'] != "0.00")
                 {
@@ -3146,7 +3282,7 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
                     $_qtaestratta = "";
                 }
 
-                printf("<td bgcolor=\"$_colorbg\" width=\"70\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $_qtaestratta);
+                echo "<td bgcolor=\"$_colorbg\" width=\"70\" height=\"1\" align=\"center\" class=\"tabella_elenco\"><font color=\"green\">$_qtaestratta</font></td>\n";
 
                 if ($dati3['listino'] == "0.00")
                 {
@@ -3204,8 +3340,9 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
                 printf("<td bgcolor=\"$_colorbg\" width=\"50\" height=\"1\" align=\"center\" class=\"tabella_elenco\">%s</td>", $dati3['consegna']);
                 printf("</tr>");
             }
+            
         }
-        echo "<tr><td bgcolor=\"#FFFFFF\" colspan=\"11\" align=\"left\">&nbsp;</td>\n";
+        echo "<tr><td bgcolor=\"#FFFFFF\" colspan=\"12\" align=\"left\">&nbsp;</td>\n";
         echo "</tr><tr>\n";
         echo "</table>\n";
     }

@@ -10,6 +10,7 @@ require $_percorso . "librerie/lib_html.php";
 //carichiamo le sessioni correnti
 $conn = permessi_sessione("verifica_PDO", $_percorso);
 require "../../librerie/motore_anagrafiche.php";
+require "../../librerie/motore_doc_pdo.php";
 if ($CONTABILITA == "SI")
 {
     include "../../../setting/par_conta.inc.php";
@@ -144,12 +145,6 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<div id=\"tabs-2\">\n";
     echo "<table class=\"tabs\">";
     echo "<tr>\n";
-    echo "<td>Nome del documento fattura con gestione del magazzino</td>\n";
-    echo "<td><input type=\"text\" size=\"70\" name=\"nomedoc\" value=\"$nomedoc\"></td>\n";
-    echo "</tr><tr>\n";
-    echo "<td>Lettera suffisso standard per i documenti</td>\n";
-    echo "<td><input type=\"text\" size=\"2\" maxlenght=\"2\" name=\"SUFFIX_DDT\" value=\"$SUFFIX_DDT\"> Lettera Maiuscola dalla A alla Z</td>\n";
-    echo "</tr><tr>\n";
     echo "<td>Codice SIA assegnato per riba elettroniche</td>\n";
     echo "<td><input type=\"text\" size=\"6\" maxlength=\"5\" name=\"SIA\" value=\"$SIA\"></td>\n";
     echo "</tr><tr>\n";
@@ -158,10 +153,13 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<option value=\"$TIPOSOC\">$TIPOSOC</option>\n";
     echo "<option value=\"S.N.C.\">S.N.C.</option>\n";
     echo "<option value=\"S.R.L.\">S.R.L.</option>\n";
+    echo "<option value=\"S.R.L.S.\">S.R.L.S.</option>\n";
     echo "<option value=\"S.P.A.\">S.P.A.</option>\n";
     echo "<option value=\"S.A.S.\">S.A.S.</option>\n";
     echo "<option value=\"S.D.F.\">S.D.F.</option>\n";
     echo "<option value=\"S.N.C.\">S.N.C.</option>\n";
+    echo "<option value=\"S.D.F.\">S.D.F.</option>\n";
+    echo "<option value=\"INDI\">Individuale</option>\n";
     echo "</select></td></tr>\n";
     echo "
                 <tr>
@@ -200,11 +198,28 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<div id=\"tabs-3\">\n";
     echo "<table class=\"tabs\">";
 
+    echo "<tr><td colspan=\"2\" rowspan=\"1\" style=\"width: 350px;\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\">Paramentri funzionamento</span></td>\n";
+    echo "</tr>\n";
+    
+    echo "<tr><td colspan=\"2\" align=\"center\"><b>Documenti di vendita</b></td></tr>\n";
+    echo "<tr>\n";
+    echo "<td>Nome del documento fattura con gestione del magazzino</td>\n";
+    echo "<td><input type=\"text\" size=\"70\" name=\"nomedoc\" value=\"$nomedoc\"></td>\n";
+    echo "</tr><tr>\n";
+    echo "<td>Lettera suffisso standard per i documenti</td>\n";
+    echo "<td><input type=\"text\" size=\"2\" maxlenght=\"2\" name=\"SUFFIX_DDT\" value=\"$SUFFIX_DDT\"> Lettera Maiuscola dalla A alla Z</td>\n";
+    echo "</tr><tr>\n";
+    echo "<td>Causale base per i ddt</td>\n";
+    causale_trasporto($_cosa, $_causale);
+    
+    
+    echo "</tr>\n";
+    echo "<tr><td colspan=\"2\" align=\"center\"><hr></td></tr>\n";
+    echo "<tr><td colspan=\"2\" align=\"center\"><b>Decimali</b></td></tr>\n";
+    
     echo "
     
-                <tr>
-                    <td colspan=\"2\" rowspan=\"1\" style=\"width: 350px;\" align=\"center\" valign=\"top\"><span style=\"font-weight: bold;\">Paramentri funzionamento</span></td>
-                </tr>
+                
                 <tr>
                     <td>Numero di decimali usati per tutte le applicazioni</td>
                     <td><input type=\"number\" size=\"6\" maxlenght=\"5\" name=\"dec\" value=\"$dec\"></td>
@@ -219,6 +234,11 @@ if ($_SESSION['user']['setting'] > "3")
                 </tr>
                 \n";
 
+    
+    echo "<tr><td colspan=\"2\" align=\"center\"><hr></td></tr>\n";
+    echo "<tr><td colspan=\"2\" align=\"center\"><b>Gestione IVA</b></td></tr>\n";
+    
+    
     if (($_GET['azione'] != "install") AND ( $_GET['azione'] != "recovery"))
     {
         $DESCRIZIONE_CAMPO = "";

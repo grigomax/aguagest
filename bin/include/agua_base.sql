@@ -495,7 +495,7 @@ INSERT INTO `utenti` (`id`, `user`, `pwd`, `perm`, `anagrafiche`, `vendite`, `ma
 --
 
 INSERT INTO `version` (`id`, `aguagest`, `aguabase`, `notegest`, `notebase`) VALUES
-(1, '1254', '51', '1_2_5 Rc 4 - 05/02/2016', '');
+(1, '1261', '51', '1_2_6 Rc 1 - 19/02/2016', '');
 
 --
 -- Dump dei dati per la tabella `vettori`

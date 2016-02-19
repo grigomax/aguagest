@@ -79,8 +79,8 @@ if ($result->rowCount() > 0)
     echo "<tr>";
 
     echo "<td width=\"80\" colspan=\"2\" align=\"center\"><font size=\"2\">Num.<br>Data</td>";
-    echo "<td colspan=\"4\" width=\"600\" align=\"left\"><font size=\"2\">Ragione Sociale</td>";
-    echo "<td colspan=\"3\" width=\"150\" align=\"center\"><font size=\"2\">barcode</td>";
+    echo "<td colspan=\"1\" width=\"600\" align=\"left\"><font size=\"2\">Ragione Sociale</td>";
+    echo "<td colspan=\"6\" width=\"150\" align=\"center\"><font size=\"2\">barcode</td>";
     echo "</tr>";
 
     foreach ($result as $dati)
@@ -92,9 +92,9 @@ if ($result->rowCount() > 0)
 
         echo "<tr>";
         printf("<td width=\"80\" align=\"center\" colspan=\"2\"><font size=\"2\"><b>%s/$dati[suffix]</b><br>%s </td>", $dati['ndoc'], $dati['datareg']);
-        printf("<td colspan=\"3\" width=\"550\" align=\"left\"><font size=\"2\"><b>%s</b><br>status %s | Inoltrato  %s | <b>VALORE = %s</b></td>", $dati['ragsoc'], $dati['status'], $dati['invio'], $dati['totimpo']);
+        printf("<td colspan=\"1\" width=\"550\" align=\"left\"><font size=\"2\"><b>%s</b><br>status %s | Inoltrato  %s | <b>VALORE = %s</b></td>", $dati['ragsoc'], $dati['status'], $dati['invio'], $dati['totimpo']);
         //printf("<td width=\"50\" align=\"center\"><font size=\"2\">%s<br><b>%s</b></td>", );
-        echo "<td colspan=\"4\" width=\"150\" align=\"right\"><img src=$_percorso/tools/barcode/barcode.php?barcode=$_barcode&width=260&height=30&text=0></td>\n";
+        echo "<td colspan=\"6\" width=\"150\" align=\"right\"><img src=$_percorso/tools/barcode/barcode.php?barcode=$_barcode&width=260&height=30&text=0></td>\n";
         echo "</tr>";
 
 //ora per ogni orndine facciamo apparire le righe con lo status..
@@ -102,9 +102,9 @@ if ($result->rowCount() > 0)
         echo "<td width=\"30\" align=\"center\"><font size=\"2\">Rigo </td>";
         echo "<td width=\"50\" align=\"center\"><font size=\"2\">Codice </td>";
         echo "<td width=\"500\" align=\"left\" ><font size=\"2\">Descrizione </td>";
-        echo "<td width=\"50\" align=\"right\"><font size=\"2\">Q.ta Ord.</td>";
-        echo "<td width=\"50\" align=\"right\"><font size=\"2\"><b>Q.ta cons.</b></td>";
-        echo "<td width=\"50\" align=\"right\"><font size=\"2\"><b>Q.ta Prep.</b></td>";
+        echo "<td width=\"50\" align=\"center\"><font size=\"2\">Q.ta<br> Ord.</td>";
+        echo "<td width=\"50\" align=\"center\"><font size=\"2\"><b>Q.ta <br>Rim.</b></td>";
+        echo "<td width=\"50\" align=\"center\"><font size=\"2\"><b>Q.ta <br>Prep.</b></td>";
         echo "<td width=\"50\" align=\"center\"><font size=\"2\">Data</td>";
         echo "<td width=\"30\" align=\"right\"><font size=\"2\">Giac.</td>";
         echo "<td width=\"30\" align=\"right\"><font size=\"2\">Ordinati</td>";
@@ -155,15 +155,15 @@ if ($result->rowCount() > 0)
 
                     //ora per ogni orndine facciamo apparire le righe con lo status..
                     echo "<tr>";
-                    echo "<td width=\"30\" align=\"center\"><font size=\"1\">$dati_dett[rigo] </td>";
-                    echo "<td width=\"50\" align=\"center\"><font size=\"1\">$dati_dett[articolo] </td>";
-                    echo "<td width=\"450\" align=\"left\"><font size=\"1\">" . substr($dati_dett[descrizione], 0, 50) . " </td>";
-                    echo "<td width=\"50\" align=\"right\"><font size=\"1\">$dati_dett[quantita] </td>";
-                    echo "<td width=\"50\" align=\"right\"><font size=\"1\"><b>$dati_dett[qtaevasa]</b> </td>";
-                    echo "<td width=\"50\" align=\"right\"><font size=\"1\"><B>$dati_dett[qtaestratta]</b> </td>";
-                    echo "<td width=\"50\" align=\"center\"><font size=\"1\">" . substr($dati_dett[consegna], 0, 5) . "</td>";
-                    echo "<td width=\"30\" align=\"right\"><font size=\"1\">$_impegni[giacenza] </td>";
-                    echo "<td width=\"30\" align=\"right\"><font size=\"1\">$_impegni[ordinato] </td>";
+                    echo "<td align=\"center\"><font size=\"1\">|$dati_dett[rigo]</td>";
+                    echo "<td align=\"center\"><font size=\"1\">|$dati_dett[articolo]</td>";
+                    echo "<td align=\"left\"><font size=\"1\">|" . substr($dati_dett[descrizione], 0, 50) . "</td>";
+                    echo "<td align=\"right\"><font size=\"1\">$dati_dett[quantita]|</td>";
+                    echo "<td align=\"right\"><font size=\"1\"><b>$dati_dett[qtasaldo]</b>|</td>";
+                    echo "<td align=\"right\"><font size=\"1\"><B>$dati_dett[qtaestratta]</b>|</td>";
+                    echo "<td align=\"center\"><font size=\"1\">" . substr($dati_dett[consegna], 0, 5) ."</td>";
+                    echo "<td align=\"right\"><font size=\"1\">$_impegni[giacenza]|</td>";
+                    echo "<td align=\"right\"><font size=\"1\">$_impegni[ordinato]|</td>";
                     echo "</tr>";
                 }
             }

@@ -653,7 +653,10 @@ if ($_SESSION['user']['setting'] > "3")
     if (!$fp)
         die("Errore.. Riga non inserita ?");
 
-
+    $_scrivi = sprintf('$CAUSALE_BASE = "%s";' ."\n", $_POST['causale']);
+    fwrite($fp, $_scrivi);
+    if (!$fp)
+        die("Errore.. Riga non inserita ?");
 
 
 

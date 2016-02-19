@@ -24,15 +24,15 @@ require "../../librerie/motore_doc_pdo.php";
 require "../../librerie/motore_anagrafiche.php";
 
 /*
-if ($_POST['codconto'] == "")
-{
-    if ($_POST['tipo_cf'] != "")
-    {
-        echo Show_ultimo_numero();
-        die;
-    }
-}
-*/
+  if ($_POST['codconto'] == "")
+  {
+  if ($_POST['tipo_cf'] != "")
+  {
+  echo Show_ultimo_numero();
+  die;
+  }
+  }
+ */
 //carichiamo la base delle pagine:
 base_html("", $_percorso);
 
@@ -78,7 +78,7 @@ if ($_SESSION['user']['vendite'] > "2")
 //seleziono il documento in caso di calce2
 
     $_archivio = archivio_tdoc($_tdoc);
-    
+
     $_SESSION['archivi'] = $_archivio;
 
     //restituisce
@@ -89,7 +89,7 @@ if ($_SESSION['user']['vendite'] > "2")
     // cerco nel database testacalce
 
 
-   
+
     if ($_calce == "calce2")
     {
         //prendo il resto delle varibili
@@ -98,7 +98,7 @@ if ($_SESSION['user']['vendite'] > "2")
         $_ndoc = $_SESSION['ndoc'];
         $_tdoc = $_SESSION['tdoc'];
 
-        
+
         //prendiamoci il documento..
 
         $dati_doc = seleziona_documento("leggi_riga_testata", $_tdoc, $_anno, $_suffix, $_ndoc, $_archivio, $_parametri);
@@ -188,10 +188,12 @@ if ($_SESSION['user']['vendite'] > "2")
         echo "<tr><td colspan=\"3\" align=\"left\" valign=\"top\"><span class=\"intestazione\"><b>Note Contabili</b></span><br></td></tr>\n";
         echo "<tr>";
 
-        if (($_tdoc == "ddt") OR ( $_tdoc == "ddt_diretto"))
+        if ($_tdoc == "ddt")
         {
-            causale_trasporto($_causale);
+            causale_trasporto($_cosa, $_causale);
         }
+        
+        
 
 //selezioniamo i pagamenti
         echo "<td align=\"left\" valign=\"top\" colspan=\"2\">";
@@ -333,10 +335,10 @@ if ($_SESSION['user']['vendite'] > "2")
         //echo "<select id=\"codconto\" name=\"codconto\"><option>Scegli...</option>\n";
         //passiamo il suffisso;
         $_ndoc = seleziona_documento("ultimo_numero", $_tdoc, $_anno, $_suffix, $_ndoc, $_archivio, $_parametri);
-        
+
         $_datareg = date("d-m-Y");
 
-        
+
         echo "<input type=\"number\" name=\"ndoc\" value=\"$_ndoc\" required></td>\n";
         printf("<td align=\"left\" valign=\"center\">Anno doc. </span><input type=\"number\" name=\"annodoc\" value=\"%s\" required ></td>", $_anno);
         printf("<td align=\"left\" valign=\"center\">Data reg. </span><input type=\"text\" class=\"data\"  size=\"12\" name=\"datareg\" value=\"%s\" required></td></tr>", $_datareg);
@@ -353,7 +355,7 @@ if ($_SESSION['user']['vendite'] > "2")
         printf("<td align=\"left\" valign=\"center\">Data reg. <input type=\"radio\" name=\"datareg\" value=\"%s\" checked>%s</td></tr>", $_datareg, $_datareg);
         if ($_tdoc == "preventivo")
         {
-            printf("<tr><td>&nbsp;</td><td>&nbsp;</td><td align=\"left\" >Data Scad<input type=\"text\" class=\"data\"  size=\"12\" name=\"data_scad\" value=\"%s\" ></td></tr>", $_data_scad);
+            echo "<tr><td>&nbsp;</td><td>&nbsp;</td><td align=\"left\" >Data Scad<input type=\"text\" class=\"data\"  size=\"12\" name=\"data_scad\" value=\"$_data_scad\" ></td></tr>\n";
         }
     }
 

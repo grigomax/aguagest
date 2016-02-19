@@ -319,6 +319,7 @@ if ($_SESSION['user']['setting'] > "3")
         echo "<td colspan=\"2\" align=\"left\" valign=\"top\">\n";
         echo "<center><select name=\"ST_TIPOTESTATA\">\n";
         echo "<option value=\"$dati[ST_TIPOTESTATA]\">$dati[ST_TIPOTESTATA]</option>\n";
+        echo "<option value=\"0\">0 Vuota o si rimanda alla sotto testate per i listini</option>\n";
         echo "<option value=\"1\">1 Cassica per ddt</option>\n";
         echo "<option value=\"2\">2 Completa e complessa</option>\n";
         echo "<option value=\"3\">3 Tipica per fatture</option>\n";
@@ -337,6 +338,7 @@ if ($_SESSION['user']['setting'] > "3")
         echo "<option value=\"1\">1 Classica per ddt</option>\n";
         echo "<option value=\"2\">2 Completa e complessa per fatture</option>\n";
         echo "<option value=\"3\">3 Classica per ddt ma con il pagamento al posto del contatto</option>\n";
+        echo "<option value=\"4\">4 Adatta ai listini con in centro la scritta del titolo</option>\n";
         echo "</select>\n";
         echo "</tr><tr>\n";
     }
