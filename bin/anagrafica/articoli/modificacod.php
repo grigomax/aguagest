@@ -133,6 +133,14 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         echo "<tr><td align=\"right\"><span class=\"testo_blu\">Descr. ridotta :&nbsp;</span></td>\n";
         printf("<td align=\"left\"><input type=\"text\" name=\"desrid\" value=\"%s\" size=\"20\" maxlength=\"20\"></td></tr>", $dati['desrid']);
 
+        if($_azione == "inserisci")
+        {
+            echo "<tr><td align=\"right\"><span class=\"testo_blu\">Barcode :&nbsp;</span></td>\n";
+            echo "<td align=\"left\"><input type=\"text\" name=\"barcode\" size=\"20\" maxlength=\"20\"></td></tr>\n";
+        }
+        
+        
+        
 // CAMPO Unita' di misura ---------------------------------------------------------------------------------------
         echo "<tr><td align=\"right\"><span class=\"testo_blu\">* U.M.:&nbsp;</span></td>";
         printf("<td align=\"left\"><input type=\"text\" name=\"unita\" value=\"%s\" size=\"3\" maxlength=\"2\"></td></tr>", $dati['unita']);

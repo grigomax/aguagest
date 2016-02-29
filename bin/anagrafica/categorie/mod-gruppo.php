@@ -110,6 +110,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     if ($_POST['azione'] == "Modifica")
     {
         $_codice = $_POST['codice'];
+        $_oldcod = $_POST['oldcod'];
         $_parametri['id'] = $_POST['id'];
         $_parametri['descrizione'] = addslashes($_POST['descrizione']);
         $_parametri['imballo'] = $_POST['imballo'];
@@ -134,27 +135,17 @@ if ($_SESSION['user']['anagrafiche'] > "2")
             //aggiorniamo gli articoli..
             if ($_tipo == "tipart")
             {
-                $query = "UPDATE articoli SET tipart='$_codice' where tipart='$_codice'";
+                $query = "UPDATE articoli SET tipart='$_codice' where tipart='$_oldcod'";
             }
             else
             {
-                $query = "UPDATE articoli SET catmer='$_codice' where catmer='$_codice'";
+                $query = "UPDATE articoli SET catmer='$_codice' where catmer='$_oldcod'";
             }
 
-
-            $result = $conn->exec($query);
-            if ($conn->errorCode() != "00000")
-            {
-                $_errore = $conn->errorInfo();
-                echo $_errore['2'];
-                //aggiungiamo la gestione scitta dell'errore..
-                $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-                $_errori['files'] = "motore_anagrafiche.php";
-                scrittura_errori($_cosa, $_percorso, $_errori);
-            }
+            domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
         }
 
-        echo "<tr><td><font color=\"green\">$_selezione modificato correttamente</font></td></td>";
+        echo "<tr><td><font color=\"green\">$_tipo modificato correttamente</font></td></td>";
 
         return;
     }// parentesi fine funzione inserimento

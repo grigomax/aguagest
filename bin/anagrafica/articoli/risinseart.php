@@ -141,6 +141,29 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 				echo "<tr><td align=\"left\"> Articolo $_articolo inserito in codice a barre..</td></tr>\n";
 			}
 			
+                        
+                        if($_POST['barcode'] != "")
+                        {
+                            $_errori = tabella_barcode($_azione, $_POST['barcode'], $_articolo, '2');
+                            if ($_errori['errori'] != "OK")
+                            {
+                                    // Inizio tabella pagina principale ----------------------------------------------------------
+                                    echo "<table width=\"95%\" cellspacing=\"0\" border=\"1\" align=\"left\" cellpadding=\"4\">\n";
+                                    // includo la barra di navigazione
+
+                                    echo "<span class=\"testo_blu\"><h3>Trovato un Errore.. = $_errori[descrizione]</h3></span>";
+                                    echo "<center><h2><br> Errore inserimento prezzi articolo si prega di Verificare</h2>\n";
+                                    echo "<center><h2><br> Errore errore Registrato</h2>\n";
+                                    exit;
+                            }
+                            else
+                            {
+                                    echo "<tr><td align=\"left\"> Articolo $_articolo inserito in codice a barre..</td></tr>\n";
+                            }
+                        }
+                        
+                        
+                        
 			
 			
 		}

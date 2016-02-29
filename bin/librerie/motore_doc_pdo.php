@@ -2524,7 +2524,7 @@ function tabella_doc_basket($_cosa, $id, $_rigo, $_anno, $_suffix, $_ndoc, $_ute
         {
             $_rsaldo = "SI";
             $_qtaestratta = $_qtasaldo;
-            $_qtasaldo = "0.00";
+            
         }
         else
         {
@@ -4137,24 +4137,9 @@ function status_documento($_cosa, $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, 
             $query = sprintf("update %s set status='$_status' WHERE status != \"evaso\" AND anno=\"%s\" AND suffix=\"%s\" and ndoc=\"%s\"", $_archivio['testacalce'], $_anno, $_suffix, $_ndoc);
         }
 
-        $result = $conn->exec($query);
+        //echo $query;
+        $_return = domanda_db("query", $query, $_cosa, $_ritorno, "");
 
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore $_cosa Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-            $_errori['errori'] = "NO";
-        }
-        else
-        {
-            $_errori['errori'] = "OK";
-        }
-
-        $_return = $_errori;
     }
     else
     {

@@ -29,13 +29,20 @@ require "../librerie/stampe_pdf.php";
 if ($_SESSION['user']['contabilita'] > "1")
 {
 //recupero tutti POST.
+    //separiamo i valori.. :-D
 
-    $_start = $_GET['start'];
-    $_end = $_GET['end'];
+    $_start = substr($_GET['azione'], "0", "10");
+    $_end = substr($_GET['azione'], "10", "10");
+    $_tipo_cf = substr($_GET['azione'], "20", "1");
+    $_codconto = substr($_GET['azione'], "21", "10");
 
-    $_tipo_cf = $_GET['tipo_cf'];
-    $_codconto = $_GET['codconto'];
-    $_tipo = $_GET['tipo'];
+    /*
+      echo "<br>$_start\n";
+      echo "<br>$_end\n";
+      echo "<br>$_tipo_cf\n";
+      echo "<br>$_codconto\n";
+     */
+
 
 
 //componiamo il conto completo
@@ -73,7 +80,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
 
 //Fissiamo il numero di righe per pagina...
-    $rpp = "44";
+    $rpp = "50";
 
     //mi prendo l'anno..
 
@@ -122,170 +129,42 @@ if ($_SESSION['user']['contabilita'] > "1")
     $data['day_start'] = $_start;
     $data['day_end'] = $_end;
     
-    if ($_tipo == "pdf")
+    $_return['saldo'] = $_saldo;
+
+    if ($_saldo > "0.00")
     {
-
-        //includiamo le librerie pdf..
-        //
-	
-	//creaimo il file
-        crea_file_pdf($_cosa, $_orientamento, "scheda contabili");
-
-        for ($_pg = 1; $_pg <= $pagina; $_pg++)
-        {
-
-            crea_pagina_pdf();
-
-            //intestazione
-            crea_intestazione_ditta_pdf("schede_contabili", "", $_anno, $_pg, $pagina, $_parametri);
-
-
-            intesta_tabella($_cosa, $_codconto, $_descrizione, $data);
-
-            $_return = corpo_tabella($_cosa, $result, $rpp, $_return);
-
-            calce_tabella($_cosa, $_return['dare'], $_return['avere'], $_return['saldo'], "");
-        }
-
-
-        //chiudiamo il files..
-
-        chiudi_files("scheda_contabile", "../..", "I");
+        $_return['scritta_p'] = "D";
     }
     else
     {
-
-        //INIZIO PARTE VISIVA..
-        //carichiamo la base delle pagine:
-        base_html_stampa("chiudi", $_parametri);
-
-//carichiamo la testata del programma.
-#testata_html($_cosa, $_percorso);
-//carichiamo il menu a tendina..
-#menu_tendina($_cosa, $_percorso);
-
-        for ($_pg = 1; $_pg <= $pagina; $_pg++)
-        {
-
-//selezioniamo il singolo per sapere cosa è ed apriamo una tabella..
-            $_parametri['tabella'] = " $_codconto - $_descrizione";
-            $_parametri['email'] = "3";
-            $_parametri['stampa'] = "Estratto conto contabile";
-            $_parametri['data'] = "DA $_start A $_end";
-            $_parametri['pg'] = $_pg;
-            $_parametri['pagina'] = $pagina;
-            
-            intestazione_html($_cosa, $_percorso, $_parametri);
-
-            echo "<table align=\"center\" width=\"100%\" border=\"0\ class=\"table\" style=\"page-break-inside: avoid;\">\n";
-            //echo "<tr><td align=\"left\" colspan=\"6\"><h3>$azienda</h3></td></tr>\n";
-            //echo "<tr><td align=\"left\" colspan=\"3\">$cap $citta $prov</td>\n";
-            //echo "<td align=\"right\" colspan=\"3\">Pag. $_pg / $pagina</td></tr>\n";
-
-            //echo "<tr><td align=\"center\" colspan=\"6\"><h3>Estratto conto contabile</h3></td></tr>\n";
-            //echo "<tr><td align=\"center\" colspan=\"6\"><h3></h3></td></tr>\n";
-            //echo "<tr><td align=\"center\" colspan=\"6\"><br>Dalla Data $_start  Alla data $_end</td></tr>\n";
-
-
-            echo "<tr>";
-            echo "<td width=\"30\" align=\"center\" class=\"tabella\">N. Reg</span></td>\n";
-            echo "<td width=\"80\" align=\"center\" class=\"tabella\">Data cont.</span></td>\n";
-            echo "<td width=\"30\" align=\"center\" class=\"tabella\">N. proto</span></td>\n";
-            echo "<td width=\"380\" align=\"CENTER\" class=\"tabella\">Descrizione</span></td>\n";
-            echo "<td width=\"60\" align=\"center\" class=\"tabella\">Dare</span></td>\n";
-            echo "<td width=\"60\" align=\"center\" class=\"tabella\">Avere</span></td>\n";
-            echo "<td width=\"90\" align=\"center\" class=\"tabella\">Saldo</span></td>\n";
-            echo "</tr>";
-            if ($_saldo > "0.00")
-            {
-                $_scritta_p = "D";
-            }
-            else
-            {
-                $_scritta_p = "A";
-            }
-            echo "<tr><td class=\"tabella_elenco\"></td><td class=\"tabella_elenco\"></td><td class=\"tabella_elenco\"></td><td class=\"tabella_elenco\">Saldo a riporto</td><td class=\"tabella_elenco\"></td><td class=\"tabella_elenco\"></td><td class=\"tabella_elenco\" align=\"right\">$_saldo $_scritta_p</td></tr>\n";
-
-
-
-            for ($_nr = 1; $_nr <= $rpp; $_nr++)
-            {
-                $dati = $result->fetch(PDO::FETCH_ASSOC);
-
-                if (($dati['dare'] == "") AND ( $dati['avere'] == ""))
-                {
-                    echo "<tr>";
-                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td align=\"CENTER\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "<td align=\"center\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-                    echo "</tr>";
-                }
-                else
-                {
-                    echo "<tr>";
-                    printf("<td align=\"center\" class=\"tabella_elenco\"><b>%s</b></span></td>\n", $dati['nreg']);
-                    printf("<td align=\"center\" class=\"tabella_elenco\">%s</span></td>\n", $dati['data_cont']);
-                    printf("<td align=\"center\" class=\"tabella_elenco\"><b>%s/$dati[suffix_proto]</b></span></td>\n", $dati['nproto']);
-                    printf("<td align=\"left\" class=\"tabella_elenco\">%s</span></td>\n", $dati['descrizione']);
-
-                    if ($dati['dare'] == "0.00")
-                    {
-                        $dati['dare'] = "&nbsp;";
-                    }
-                    if ($dati['avere'] == "0.00")
-                    {
-                        $dati['avere'] = "&nbsp;";
-                    }
-
-                    printf("<td align=\"right\" class=\"tabella_elenco\">%s</span></td>\n", $dati['dare']);
-                    printf("<td align=\"right\"class=\"tabella_elenco\" >%s</span></td>\n", $dati['avere']);
-
-                    $_dare = $_dare + $dati['dare'];
-                    $_avere = $_avere + $dati['avere'];
-                    $_saldo = $_saldo + $dati['dare'] - $dati['avere'];
-
-                    if ($_saldo > "0.00")
-                    {
-                        $_scritta_p = "D";
-                    }
-                    else
-                    {
-                        $_scritta_p = "A";
-                    }
-
-                    echo "<td align=\"right\"class=\"tabella_elenco\">" . number_format($_saldo, '2') . " $_scritta_p</span></td>\n";
-
-                    echo "</tr></form>";
-                }
-            }
-            if ($_saldo > "0.00")
-            {
-                $_scritta = "Dare";
-            }
-            else
-            {
-                $_scritta = "Avere";
-            }
-
-            echo "<tr><td colspan=\"7\"><hr></td></tr>\n";
-            echo "<tr>\n";
-            echo "<td colspan=\"4\" align=\"right\" class=\"tabella_elenco\">&nbsp;</span></td>\n";
-            echo "<td align=\"right\" class=\"tabella_elenco\">$_dare</span></td>\n";
-            echo "<td align=\"right\" class=\"tabella_elenco\">$_avere</span></td>\n";
-            echo "<td align=\"right\" class=\"tabella_elenco\">&nbsp;</span></td></tr>\n";
-            echo "<tr><td colspan=\"7\"><hr></td></tr>\n";
-            printf("<tr><td colspan=\"7\" align=\"right\" sclass=\"tabella_elenco\">Totale Saldo = %s %s</span></td></tr>", number_format($_saldo, '2'), $_scritta);
-
-            echo "</table>\n";
-        }
-
-
-        echo "</body></html>";
+        $_return['scritta_p'] = "A";
     }
+
+
+
+    //creaimo il file
+    crea_file_pdf($_cosa, $_orientamento, "scheda contabili");
+
+    for ($_pg = 1; $_pg <= $pagina; $_pg++)
+    {
+
+        crea_pagina_pdf();
+
+        //intestazione
+        crea_intestazione_ditta_pdf("schede_contabili", "", $_anno, $_pg, $pagina, $_parametri);
+
+
+        intesta_tabella($_cosa, $_codconto, $_descrizione, $data);
+
+        $_return = corpo_tabella($_cosa, $result, $rpp, $_return);
+
+        calce_tabella($_cosa, $_return['dare'], $_return['avere'], $_return['saldo'], $_return['width']);
+    }
+
+
+    //chiudiamo il files..
+
+    chiudi_files("scheda_contabile", "../..", "I");
 }
 else
 {

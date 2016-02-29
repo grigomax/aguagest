@@ -10,7 +10,6 @@
 //carichiamo la base del programma includendo i file minimi
 $_percorso = "../../";
 require $_percorso . "../setting/vars.php";
-ini_set('session.gc_maxlifetime', $SESSIONTIME);
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
@@ -42,6 +41,7 @@ $_cosa = $_GET['cosa'];
 $_tdoc = $_GET['tdoc'];
 $_anno = $_GET['anno'];
 $_ndoc = $_GET['ndoc'];
+$_suffix = $_GET['suffix'];
 $id = session_id();
 
 
@@ -54,7 +54,7 @@ if ($_POST['azione'] == "")
 
 if ($_azione == "annulla")
 {
-	printf("<form action=\"annulladoc.php?cosa=$_cosa&tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc\" method=\"POST\">");
+	printf("<form action=\"annulladoc.php?cosa=$_cosa&tdoc=$_tdoc&anno=$_anno&ndoc=$_ndoc&suffix=$_suffix\" method=\"POST\">");
 	printf("<p align=\"center\" class=\"testo_blu\">Sei sicuro di Abbandonare il documento ? <BR> $_tdoc NR. $_ndoc del $_anno<br>
             <input type=\"submit\" name=\"azione\" value=\"Abbandona\"> - <A HREF=\"#\" onClick=\"history.back()\">Torna</A> </form>");
 
@@ -68,8 +68,6 @@ if ($_azione == "Abbandona")
 
 
 	$_archivio = archivio_tdoc($_tdoc);
-
-
 
 	//svuotiamo il cestino
 	//
@@ -91,10 +89,14 @@ if ($_azione == "Abbandona")
 				$_errori = status_documento("cambia", $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc_start, $_form_action, $_azione, $_SESSION['status'][$_ndoc_start]);
 				//funzione che mi permette di modificare il documento e mi inserisce il tutto nel carrello
 
-				if ($_errori != "OK")
-				{
-					echo $_errori['descrizione'];
-				}
+				if ($_errori == "NO")
+                                {
+                                        echo "<h2 align=\"center\">Errore Modifica Documento</h2>\n";
+                                }
+                                else
+                                {
+                                    echo "<center><h2>Operazione Annullata con successo</h2></center>";
+                                }
 			}
 		}
 		else
@@ -110,10 +112,14 @@ if ($_azione == "Abbandona")
 			$_errori = status_documento("cambia", $_archivio, $_tdoc, $_anno, $_suffix, $_ndoc, $_form_action, $_azione, $_status);
 			//funzione che mi permette di modificare il documento e mi inserisce il tutto nel carrello
 
-			if ($_errori != "OK")
+			if ($_errori == "NO")
 			{
-				echo $_errori['descrizione'];
+				echo "<h2 align=\"center\">Errore Modifica Documento</h2>\n";
 			}
+                        else
+                        {
+                            echo "<center><h2>Operazione Annullata con successo</h2></center>";
+                        }
 		}
 	}
 
@@ -121,7 +127,7 @@ if ($_azione == "Abbandona")
 
 	chiudi_sessioni();
 
-	echo "<center><h2>Operazione Annullata con successo</h2></center>";
+	
 	echo "<center><h3><a href=\"../../index.php\">Premere qui! ritornare alla pagina principale</a></h3></center>";
 }
 ?>

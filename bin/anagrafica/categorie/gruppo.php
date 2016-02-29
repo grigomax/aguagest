@@ -92,6 +92,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
             }
     
 	echo "<input type=\"radio\" name=\"id\" value=\"$dati[id]\" checked >ID = $dati[id]<br>\n";
+        echo "<input type=\"radio\" name=\"oldcod\" value=\"$dati[codice]\" checked ><br>\n";
 	echo "Codice = <input type=\"text\" name=\"codice\" value=\"$dati[codice]\" size=\"20\" maxleght=\"18\">\n";
         echo "<br>Descrizione = <input type=\"text\" name=\"descrizione\" value=\"$_descrizione\" size=\"50\" maxleght=\"70\">\n";
         

@@ -86,17 +86,19 @@ if ($_SESSION['user']['contabilita'] > "1")
     }
     else
     {
-        if ($_GET['tipo_cf'] != "")
+        if ($_GET['azione'] != "")
         {
-            $_start = "01-01-" . $_GET['start'];
-            $_start_sql = $_GET['start'] . "-01-01";
+            
+            $_tipo_cf = substr($_GET['azione'], "0", "1");
+            $_start_anno = substr($_GET['azione'], "1", "4");
+            $_codconto = substr($_GET['azione'], "5", "10");
+            
+            $_start = "01-01-" . $_start_anno;
+            $_start_sql = $_start_anno . "-01-01";
 
-            $_end_sql = $_GET['start'] . "-12-31";
-            $_end = "31-12-" . $_GET['start'];
-
-            $_tipo_cf = $_GET['tipo_cf'];
-            $_codconto = $_GET['codconto'];
-            $_start_anno = $_GET['start'];
+            $_end_sql = $_start_anno . "-12-31";
+            $_end = "31-12-" . $_start_anno;
+    
         }
         else
         {
@@ -140,19 +142,23 @@ if ($_SESSION['user']['contabilita'] > "1")
     $_start_dopo = $_start_sql + 1;
 
 
+    //proviamo ad inserire i pulsanti..
+    echo "<form action=\"\" id=\"pulsanti\" method=\"GET\">";
+    
+    echo "<center>\n";
+    pulsanti("home", "submit", "", "get", "../index.php", "40px", "40px", "Indice", "", "", "Cerca", $_id);
+    pulsanti("cerca", "submit", "", "get", "ricerca_scheda.php", "40px", "40px", "Cerca", "", "", "Cerca", $_id);
+    pulsanti("indietro", "submit", "", "get", "result_scheda.php", "40px", "40px", "Anno precedente", "azione", "$_tipo_cf$_start_prima$_codconto", "Annopre", $_id);
+    pulsanti("avanti", "submit", "", "get", "result_scheda.php", "40px", "40px", "Anno successivo", "azione", "$_tipo_cf$_start_dopo$_codconto", "Annodopo", $_id);
+    pulsanti("stampa", "submit", "_blank", "get", "result_scheda_stampa.php", "40px", "40px", "Stampa", "azione", "$_start_sql$_end_sql$_tipo_cf$_codconto", "Stampa", $_id);
+    pulsanti("aiuto", "submit", "_blank", "get", "../manuale/visualizza_guida.php?file=M0701.html", "40px", "40px", "Aiuto", "file", "M0701.html", "Aiuto", $_id);
+    echo "</form>\n";
+    
+    
+    //echo "<button type=\"submit\" formmethod=\"get\" formaction=\"result_scheda_stampa.php\" formtarget=\"_blank\" name=\"start\" value=\"start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\">Clicca</button>\n";
+    
     echo "<span class=\"tabella\"><center><b>Scheda Contabile</b><br>\n";
-    echo "<table border=\"0\" width=\"40%\">\n";
-    echo "<tr><td align=\"center\">\n";
-    echo "<a href=\"result_scheda_stampa.php?start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\">    <img src=\"../images/printer.png\" weigth=\"35\" height=\"35\" border=\"0\"></a></img><br>\n";
-    echo "<a href=\"result_scheda_stampa.php?start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\">Stampa</a>";
-    echo "</td><td align=\"center\">\n";
-    echo "<a href=\"result_scheda_stampa.php?tipo=pdf&start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\"><img src=\"../images/pdf.png\" weigth=\"35\" height=\"35\" border=\"0\"></a></img><br>\n";
-    echo "<a href=\"result_scheda_stampa.php?tipo=pdf&start=$_start_sql&end=$_end_sql&tipo_cf=$_tipo_cf&codconto=$_codconto\" target=\"_blank\">PDF</a></center></span>";
-    echo "</td></tr></table>\n";
-
-
-    echo "<center><br><a href=\"result_scheda.php?tipo_cf=$_tipo_cf&codconto=$_codconto&start=$_start_prima\">Vai a Anno Precedente</a>  --  --  <a href=\"result_scheda.php?tipo_cf=$_tipo_cf&codconto=$_codconto&start=$_start_dopo\">Vai a Anno Successivo</a></center></span>";
-//selezioniamo il singolo per sapere cosa è ed apriamo una tabella..
+    //selezioniamo il singolo per sapere cosa è ed apriamo una tabella..
 
     echo "<table align=\"center\" width=\"85%\" border=\"0\>\n";
     echo "<tr><td align=\"left\" colspan=\"6\"><br><h3>$_codconto - $_descrizione</h3></td></tr>\n";

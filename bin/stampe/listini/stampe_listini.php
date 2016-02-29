@@ -59,7 +59,15 @@ if ($_SESSION['user']['vendite'] > "1")
 
         $_parametri['tabella'] = $_nomelist['catmer'];
 
-        $query = "SELECT articolo, descrizione, catmer, tipart, unita, listino from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where rigo='$_listino' AND catmer='$_catmer' ORDER BY articolo";
+        if($_POST['pubblica'] == "SI")
+        {
+            $query = "SELECT articolo, descrizione, catmer, tipart, unita, listino from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where rigo='$_listino' AND catmer='$_catmer' and pubblica='SI' ORDER BY articolo";
+        }
+        else
+        {
+            $query = "SELECT articolo, descrizione, catmer, tipart, unita, listino from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where rigo='$_listino' AND catmer='$_catmer' ORDER BY articolo";
+        }
+        
     }
 
 
@@ -83,7 +91,15 @@ if ($_SESSION['user']['vendite'] > "1")
         $_parametri['tabella'] = "Listino Prezzi N. $_listino";
 
 
-        $query = sprintf("select articolo, descrizione, unita, listino from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where rigo=\"%s\" and articolo >= \"%s\" and articolo <= \"%s\" order by articolo", $_listino, $_codini, $_codfin);
+        if($_POST['pubblica'] == "SI")
+        {
+            $query = sprintf("select articolo, descrizione, unita, listino from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where rigo=\"%s\" and articolo >= \"%s\" and articolo <= \"%s\" AND pubblica = 'SI' order by articolo", $_listino, $_codini, $_codfin);
+        }
+        else
+        {
+            $query = sprintf("select articolo, descrizione, unita, listino from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where rigo=\"%s\" and articolo >= \"%s\" and articolo <= \"%s\" order by articolo", $_listino, $_codini, $_codfin);
+        }
+        
     }
 
     $result = domanda_db("query", $query, $_cosa, $_ritorno, "block");

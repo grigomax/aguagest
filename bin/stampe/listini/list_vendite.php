@@ -86,6 +86,7 @@ if ($_SESSION['user']['stampe'] > "1")
     }
 
 
+    
 
 
     echo "</td></tr>\n";
@@ -121,6 +122,8 @@ if ($_SESSION['user']['stampe'] > "1")
     echo "</select>\n";
     echo "</td></tr>\n";
 
+    echo "<tr><td align=\"center\"><br>Stampa anche articoli con pubblica  <input type=\"checkbox\" name=\"pubblica\" value=\"SI\"></td></tr>\n";
+    
     echo "</table>\n";
     echo "<center><br><input type=\"reset\" value=\"Cancella\">&nbsp;<input type=\"submit\" value=\"Stampa\">\n";
     echo "</form>\n";

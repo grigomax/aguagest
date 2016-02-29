@@ -106,21 +106,26 @@ function castello_iva_pdf($_ivadiversa, $_castiva, $pagina, $_pg, $_x_iva, $_y_i
 	}
 	else
 	{
-	    // Visualizzo tatali iva diverse
+	    // Visualizzo toali iva diverse
 	    while (@list($indice, $valore) = each($_castiva))
 	    {
-		$_aliquota = tabella_aliquota("singola_aliquota", $indice, $_percorso);
+                
+                if($indice != "")
+                {
+                    $_aliquota = tabella_aliquota("singola_aliquota", $indice, $_percorso);
 
-		$_ivasep = number_format((($valore * $_aliquota) / 100), $dec, '.', '');
-		if ($indice != "")
-		{
-		    $_ycast = $_ycast + 5;
-		    $pdf->SetFont($datidoc[ST_FONTESTACALCE], '', $datidoc[ST_FONTESTASIZE]);
-		    $pdf->SetXY($_x_iva, $_ycast);
-		    $pdf->Cell(35, 4, $valore, 0, 0, 'R');
-		    $pdf->Cell(19, 4, $indice . '%', 0, 0, 'C');
-		    $pdf->Cell(21, 4, $_ivasep, 0, 0, 'R');
-		}
+                    $_ivasep = number_format((($valore * $_aliquota) / 100), $dec, '.', '');
+                    if ($indice != "")
+                    {
+                        $_ycast = $_ycast + 5;
+                        $pdf->SetFont($datidoc[ST_FONTESTACALCE], '', $datidoc[ST_FONTESTASIZE]);
+                        $pdf->SetXY($_x_iva, $_ycast);
+                        $pdf->Cell(35, 4, $valore, 0, 0, 'R');
+                        $pdf->Cell(19, 4, $indice . '%', 0, 0, 'C');
+                        $pdf->Cell(21, 4, $_ivasep, 0, 0, 'R');
+                    }
+                }
+		
 	    }
 	}
     }
@@ -1398,6 +1403,12 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
 
                     if ($datidoc[ST_TOTRIGA] == "SI")
                     {
+                        
+                        if (($datidoc['tdoc'] == "ddt" ) AND ( $_GET['prezzi'] == "no"))
+                        {
+                            $dati3['totriga'] = "";
+                        }
+                        
                         $_totriga = $dati3['totriga'];
                         if ($_totriga == 0)
                         {

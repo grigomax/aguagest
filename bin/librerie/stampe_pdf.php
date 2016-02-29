@@ -212,7 +212,7 @@ function intesta_tabella($_cosa, $_codconto, $_descrizione, $data)
         $pdf->Cell(80, 7, 'Estratto conto contabile', 0, 0, 'C');
         $pdf->SetFont('Arial', '', 12);
 
-        $_printdata = "Dalla Data $data[day_start]-$data[mese_start]-$data[anno_start]  Alla data $data[day_end]-$data[mese_end]-$data[anno_end]";
+        $_printdata = "Dalla Data $data[day_start]  Alla data $data[day_end]";
         $pdf->Cell(80, 7, $_printdata, 0, 1, 'C');
 
         $pdf->Cell(30, 7, 'Codice conto ', 0, 0, 'L');
@@ -240,12 +240,16 @@ function intesta_pagina($_cosa, $_titolo, $_parametri)
 
     if ($_cosa == "sotto_titolo")
     {
-        // inserisco l'immagine con l'intestazione
-        $pdf->Image("../../../imm-art/$dati[immagine]", 20, 50, 60, 60);
-        if ($dati['immagine2'] != "")
+        if($dati[immagine] != "")
         {
-            $pdf->Image("../../../imm-art/disegni/$dati[immagine2]", 110, 50, 60, 60);
+            // inserisco l'immagine con l'intestazione
+            $pdf->Image("../../../imm-art/$dati[immagine]", 20, 50, 60, 60);
+            if ($dati['immagine2'] != "")
+            {
+                $pdf->Image("../../../imm-art/disegni/$dati[immagine2]", 110, 50, 60, 60);
+            }
         }
+        
 
         //provo a lasciare il puntatore
         $pdf->SetXY(10, 50);
@@ -478,9 +482,11 @@ function corpo_tabella($_cosa, $res2, $rpp, $_return)
 {
     global $pdf;
 
+
     $_dare = $_return['dare'];
     $_avere = $_return['avere'];
     $_saldo = $_return['saldo'];
+    $_scritta_p = $_return['scritta_p'];
 
     //intestiamo le colonne...
     //e poi il corpo..
@@ -553,44 +559,57 @@ function corpo_tabella($_cosa, $res2, $rpp, $_return)
                 $pdf->Cell(21, 4, number_format($_saldo, '2') . $_scritta_p, R, 1, 'R');
             }
         }
+        
+        $_width = "193";
     }
     else
     {
         $pdf->SetXY(10, 50);
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->Cell(13, 5, 'N.Reg.', 1, 0, 'L');
-        $pdf->Cell(20, 5, 'Data Cont.', 1, 0, 'L');
-        $pdf->Cell(10, 5, 'Proto', 1, 0, 'L');
-        $pdf->Cell(80, 5, 'Descrizione', 1, 0, 'L');
-        $pdf->Cell(23, 5, 'Dare', 1, 0, 'C');
-        $pdf->Cell(23, 5, 'Avere', 1, 0, 'C');
-        $pdf->Cell(25, 5, 'Saldo', 1, 1, 'C');
+        $pdf->SetFillColor(0,0,255);
+        $pdf->SetTextColor(255,255,255);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(13, 5, 'N.Reg.', 1, 0, 'L', true);
+        $pdf->Cell(20, 5, 'Data Cont.', 1, 0, 'L', true);
+        $pdf->Cell(10, 5, 'Proto', 1, 0, 'L', true);
+        $pdf->Cell(80, 5, 'Descrizione', 1, 0, 'L', true);
+        $pdf->Cell(23, 5, 'Dare', 1, 0, 'C', true);
+        $pdf->Cell(23, 5, 'Avere', 1, 0, 'C', true);
+        $pdf->Cell(23, 5, 'Saldo', 1, 1, 'C', true);
 
+        $pdf->SetTextColor(0,0,0);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Cell(13, 4, '', RL, 0, 'L');
+        $pdf->Cell(20, 4, '', R, 0, 'L');
+        $pdf->Cell(10, 4, '', R, 0, 'L');
+        $pdf->Cell(80, 4, 'Saldo a Riporto', R, 0, 'L');
+        $pdf->Cell(23, 4, '', R, 0, 'L');
+        $pdf->Cell(23, 4, '', R, 0, 'L');
+        $pdf->Cell(23, 4, $_saldo ." ". $_scritta_p, R, 1, 'R');
 
+        
         for ($_nr = 1; $_nr <= $rpp; $_nr++)
         {
             $dati = $res2->fetch(PDO::FETCH_ASSOC);
 
             if (($dati['dare'] == "") AND ( $dati['avere'] == ""))
             {
-
                 #$pdf->SetXY(10,60);
-                $pdf->SetFont('Arial', '', 9);
+                $pdf->SetFont('Arial', '', 8);
                 $pdf->Cell(13, 4, '', RL, 0, 'L');
                 $pdf->Cell(20, 4, '', R, 0, 'L');
                 $pdf->Cell(10, 4, '', R, 0, 'L');
                 $pdf->Cell(80, 4, '', R, 0, 'L');
                 $pdf->Cell(23, 4, '', R, 0, 'L');
                 $pdf->Cell(23, 4, '', R, 0, 'L');
-                $pdf->Cell(25, 4, '', R, 1, 'L');
+                $pdf->Cell(23, 4, '', R, 1, 'L');
             }
             else
             {
                 #$pdf->SetXY(10,60);
-                $pdf->SetFont('Arial', '', 9);
+                $pdf->SetFont('Arial', '', 8);
                 $pdf->Cell(13, 4, $dati[nreg], LR, 0, 'L');
                 $pdf->Cell(20, 4, $dati[data_cont], R, 0, 'L');
-                $pdf->Cell(10, 4, $dati[nproto], R, 0, 'L');
+                $pdf->Cell(10, 4, $dati[nproto]."/".$dati[suffix_proto], R, 0, 'L');
                 $pdf->Cell(80, 4, $dati[descrizione], R, 0, 'L');
 
                 if ($dati['dare'] == "0.00")
@@ -619,14 +638,17 @@ function corpo_tabella($_cosa, $res2, $rpp, $_return)
                 }
 
                 #echo "<td width=\"70\" align=\"right\"class=\"tabella_elenco\">" . number_format($_saldo, '2') . " $_scritta_p</span></td>\n";
-                $pdf->Cell(25, 4, number_format($_saldo, '2') . $_scritta_p, R, 1, 'R');
+                $pdf->Cell(23, 4, number_format($_saldo, '2') ." ". $_scritta_p, R, 1, 'R');
             }
         }
+        
+        $_width = "192";
     }
 
     $_return['dare'] = $_dare;
     $_return['avere'] = $_avere;
     $_return['saldo'] = $_saldo;
+    $_return['width'] = $_width;
     return $_return;
 }
 
@@ -673,7 +695,7 @@ function calce_tabella($_cosa, $_dare, $_avere, $_saldo, $_width)
         $pdf->Cell(80, 5, '', 1, 0, 'L');
         $pdf->Cell(23, 5, $_dare, 1, 0, 'R');
         $pdf->Cell(23, 5, $_avere, 1, 0, 'R');
-        $pdf->Cell(25, 5, '', 1, 1, 'L');
+        $pdf->Cell(23, 5, '', 1, 1, 'L');
 
         $_print = "Totale Saldo = " . number_format($_saldo, '2') . " $_scritta";
 

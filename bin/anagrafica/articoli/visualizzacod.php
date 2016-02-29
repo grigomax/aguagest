@@ -54,7 +54,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
     if ($_SESSION['user']['anagrafiche'] >= "2")
     {
-        pulsanti("ritorna", "submit", "", "get", "ricerca.php", "40px", "40px", "Indietro", "", "", "Indietro", $_id);
+        pulsanti("ritorna", "submit", "", "get", "../../index.php", "40px", "40px", "Indietro", "", "", "Indietro", $_id);
         pulsanti("cerca", "submit", "", "get", "ricerca.php", "40px", "40px", "Cerca", "", "", "Cerca", $_id);
     }
 
@@ -66,8 +66,8 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         pulsanti("duplica", "submit", "", "get", "duplica_cod.php", "40px", "40px", "Duplica", "", "", "Duplica", $_id);
     }
 
-    pulsanti("stampa", "submit", "", "get", "scheda_art.php", "40px", "40px", "Stampa", "", "", "Stampa", $_id);
-    pulsanti("help", "submit", "", "get", "http://aguagest.sourceforge.net/?q=node/55", "40px", "40px", "Aiuto", "", "", "Aiuto", $_id);
+    pulsanti("stampa", "submit", "_blank", "get", "scheda_art.php", "40px", "40px", "Stampa", "", "", "Stampa", $_id);
+    pulsanti("aiuto", "submit", "_blank", "get", "$_percorso/manuale/visualizza_guida.php", "40px", "40px", "Aiuto", "file", "M0402.html", "Aiuto", $_id);
 
 
 
@@ -354,7 +354,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
 // ---------------------------------------------------------------------------------------
     echo "<tr><td align=\"left\"><span class=\"testo_blu\">Sito internet .:&nbsp;</span></td>";
-    printf("<td align=\"left\"><a href=\"http://%s\">%s</td></tr>", $dati['sitoart'], $dati['sitoart']);
+    printf("<td align=\"left\"><a href=\"http://%s\" target=\"_blank\">%s</td></tr>", $dati['sitoart'], $dati['sitoart']);
 
     echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
 

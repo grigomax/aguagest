@@ -153,8 +153,14 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			echo "<td align=\"center\"><span class=\"testo_blu\"><b>$dati[listino]</b></span></td>\n";
                         $_impegno = impegni_articolo("solo_giacenza", $dati['articolo'], date('Y'));
                         
-                        
-                        echo "<td align=\"center\"><span class=\"testo_blu\">$_impegno[giacenza]</span></td>\n";
+                        if($_impegno['giacenza'] > 0)
+                        {
+                            echo "<td align=\"center\"><font color=\"#a80994\"><b>$_impegno[giacenza]</b></font></td>\n";
+                        }
+                        else
+                        {
+                            echo "<td align=\"center\"><span class=\"testo_blu\"></span></td>\n";
+                        }
                         
 			echo "</tr>";
 			echo "<tr>";

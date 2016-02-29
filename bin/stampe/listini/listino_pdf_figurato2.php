@@ -13,7 +13,8 @@ require_once $_percorso . "../setting/vars.php";
 session_start();
 $_SESSION['keepalive'] ++;
 //carichiamo le librerie base
-require_once $_percorso . "librerie/lib_html.php";
+require $_percorso . "librerie/lib_html.php";
+require $_percorso . "librerie/motore_anagrafiche.php";
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
@@ -60,6 +61,52 @@ class RPDF extends FPDF
 
 }
 
+//creiamo una directory se non esistente dove mettere i pdf
+
+if (!file_exists($_percorso . "../spool/listino"))
+{
+	if (mkdir($_percorso . "../spool/listino", 0755))
+	{
+		echo("<br>Directory creata!<br>");
+		$fine = "1";
+	}
+	else
+	{
+		echo("<br>Non posso creare la directory! $_percorso.../spool/listino<br>Contattare l'amministratore");
+		$fine = "0";
+		exit;
+	}
+}
+//Cambio le variabili e le faccio vedere
+
+$_catmer = $_POST['catmer'];
+
+foreach ($_catmer as $value)
+{
+	$_catmer1 = " OR catmer='$value'";
+	$_catmer2 = "$_catmer2 $_catmer1";
+}
+
+$_catmer = ltrim($_catmer2, " OR ");
+
+$_listino = $_POST['listino'];
+$_tipo = $_POST['stampa'];
+$_listino = $_POST['listino'];
+$_aggpagina = $_POST['aggpagina'];
+$_aggarticolo = $_POST['aggarticolo'];
+$_doppia = $_POST['doppia'];
+$_ordine_cat = $_POST['ordine_cat'];
+$logom = $_POST['ST_LOGOG'];
+
+$_nomelist = "Listino Prezzi N. $_listino";
+
+
+//dobbiamo passare i gruppi mercerologici in array, ed anche le tipologie.. :-D
+
+$merceologico = tabella_catmer("Array", $_codice, $_parametri);
+
+$tipologia = tabella_tipart("Array", $_codice, $_parametri);
+
 $_catmerindice = $_catmer;
 $_listinoindice = $_listino;
 // variabili di impaginazione..
@@ -78,6 +125,7 @@ $_barra_font = "20";
 $data = date("d - m - Y");
 
 //variabili comuni..
+
 $MARGINE_SINISTRO = "13";
 $FONT_INTESTACELLE = "Arial";
 $FONTSIZE_INTESTACELLE = "10";
@@ -94,19 +142,9 @@ $LARGHEZZA_PAGINA = $LARG_CODICE + $LARG_DESCRIZIONE + $LARG_LISTINO + $LARG_UM;
 
 // DA QUI INIZIO IL LISTINO ARTICOLI
 
-$query = sprintf("select articolo, descrizione, catmer, tipart, unita, listino, immagine from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where (%s) AND pubblica='SI' and rigo=\"%s\" order by catmer, tipart, immagine, descrizione", $_catmer, $_listino);
+$query = "select articolo, descrizione, catmer, tipart, unita, listino, immagine, immagine2 from articoli INNER JOIN listini ON articoli.articolo = listini.codarticolo where ($_catmer) AND pubblica='SI' and rigo='$_listino' order by catmer, tipart, immagine, descrizione";
 
-// esuguo la query
-$result = $conn->query($query);
-if ($conn->errorCode() != "00000")
-{
-    $_errore = $conn->errorInfo();
-    echo $_errore['2'];
-    //aggiungiamo la gestione scitta dell'errore..
-    $_errori['descrizione'] = "Errore Query prima = $query - $_errore[2]";
-    $_errori['files'] = "listino_figurato_2.php";
-    scrittura_errori($_cosa, $_percorso, $_errori);
-}
+$result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
 // variabili varie
 $_immagine1 = "inizio";
@@ -289,19 +327,21 @@ function titolo($_y, $_barra_font, $_H_barra_int, $_catmer)
     global $pdf;
     global $LARGHEZZA_PAGINA;
     global $_doppia;
+    global $merceologico;
 
     #$pdf->SetXY(13, $_y);
     #$pdf->SetFillColor('210');
     $pdf->SetFont('Arial', 'BI', $_barra_font);
-    $pdf->TextWithDirection(3, 80, $_catmer, 'D');
-    $pdf->TextWithDirection(205, 220, $_catmer, 'U');
+    
+    $pdf->TextWithDirection(3, 80, $merceologico[$_catmer], 'D');
+    $pdf->TextWithDirection(205, 220, $merceologico[$_catmer], 'U');
 
     //facciamo la seconda pagina
     if ($_doppia == "SI")
     {
         $pdf->SetFont('Arial', 'BI', $_barra_font);
-        $pdf->TextWithDirection(213, 80, $_catmer, 'D');
-        $pdf->TextWithDirection(415, 220, $_catmer, 'U');
+        $pdf->TextWithDirection(213, 80, $merceologico[$_catmer], 'D');
+        $pdf->TextWithDirection(415, 220, $merceologico[$_catmer], 'U');
     }
 
     #$pdf->Cell($LARGHEZZA_PAGINA, $_H_barra_int, $_catmer, '0', '1', 'C', '1');
@@ -534,14 +574,14 @@ foreach ($result AS $dati3)
             if ($_immagine != "")
             {
                 $pdf->SetX($MARGINE_SINISTRO);
-                $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $_tipart, '0', 1, 'L');
+                $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $tipologia[$_tipart], '0', 1, 'L');
                 if ($_doppia == "SI")
                 {
                     $_Y = $pdf->GetY();
                     $pdf->SetY($_Y - $_H_cella);
 
                     $pdf->SetX($MARGINE_SINISTRO + 210);
-                    $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $_tipart, '0', 1, 'L');
+                    $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $tipologia[$_tipart], '0', 1, 'L');
                 }
                 // devo verificare se la tipologia articolo è gia stata letta per le pagine
                 $_ver = $merda[$_catmer][$_tipart];
@@ -556,7 +596,13 @@ foreach ($result AS $dati3)
                 $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                 #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
                 $_pathimg = $_percorso . "../imm-art/$_immagine";
-                $pdf->Image($_pathimg, 50, $_y_img, 0, $_H_immagine);
+                $pdf->Image($_pathimg, 40, $_y_img, 0, $_H_immagine);
+                
+                if($dati3['immagine2'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110, $_y_img, 0, $_H_immagine);
+                }
 
                 if ($_doppia == "SI")
                 {
@@ -568,7 +614,15 @@ foreach ($result AS $dati3)
                     $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                     #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
                     $_pathimg = $_percorso . "../imm-art/$_immagine";
-                    $pdf->Image($_pathimg, 50 + 210, $_y_img, 0, $_H_immagine);
+                    $pdf->Image($_pathimg, 40 + 210, $_y_img, 0, $_H_immagine);
+                    
+                    if($dati3['immagine2'] != "")
+                    {
+                        //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                        $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110 + 210, $_y_img, 0, $_H_immagine);
+                    }
+                    
+                    
                 }
 
 
@@ -641,7 +695,7 @@ foreach ($result AS $dati3)
                 #$pdf->Cell($LARGHEZZA_PAGINA, $_spazio_art, 'spazio', '1', 1, 'L');
                 $pdf->SetFont('Arial', 'BI', 14);
                 $pdf->SetX($MARGINE_SINISTRO);
-                $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $_tipart, 0, 1, 'L');
+                $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $tipologia[$_tipart], 0, 1, 'L');
 
                 if ($_doppia == "SI")
                 {
@@ -649,7 +703,7 @@ foreach ($result AS $dati3)
                     $pdf->SetY($_Y - $_H_cella);
 
                     $pdf->SetX($MARGINE_SINISTRO + 210);
-                    $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $_tipart, '0', 1, 'L');
+                    $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella, $tipologia[$_tipart], '0', 1, 'L');
                 }
 
                 // devo verificare se la tipologia articolo è gia stata letta per le pagine
@@ -665,7 +719,14 @@ foreach ($result AS $dati3)
                 $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                 #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
                 $_pathimg = $_percorso . "../imm-art/$_immagine";
-                $pdf->Image($_pathimg, 50, $_y_img, 0, $_H_immagine);
+                $pdf->Image($_pathimg, 40, $_y_img, 0, $_H_immagine);
+                
+                if($dati3['immagine2'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110, $_y_img, 0, $_H_immagine);
+                }
+                
 
                 if ($_doppia == "SI")
                 {
@@ -677,7 +738,15 @@ foreach ($result AS $dati3)
                     $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                     #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
                     $_pathimg = $_percorso . "../imm-art/$_immagine";
-                    $pdf->Image($_pathimg, 50 + 210, $_y_img, 0, $_H_immagine);
+                    $pdf->Image($_pathimg, 40 + 210, $_y_img, 0, $_H_immagine);
+                    
+                    if($dati3['immagine2'] != "")
+                    {
+                        //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                        $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110 + 210, $_y_img, 0, $_H_immagine);
+                    }
+                    
+                    
                 }
             }
             // inizio inserimento corpo documento
@@ -726,7 +795,7 @@ foreach ($result AS $dati3)
                 $pdf->Cell($LARGHEZZA_PAGINA, $_spazio_art, '', 'T', 1, 'L');
                 $pdf->SetFont('Arial', 'BI', 14);
                 $pdf->SetX($MARGINE_SINISTRO);
-                $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_pos_3, $_tipart, 0, 1, 'L');
+                $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_pos_3, $tipologia[$_tipart], 0, 1, 'L');
 
                 if ($_doppia == "SI")
                 {
@@ -738,7 +807,7 @@ foreach ($result AS $dati3)
                     //$pdf->SetY($_Y - $_H_cella_pos_3);
                     $pdf->SetFont('Arial', 'BI', 14);
                     $pdf->SetX($MARGINE_SINISTRO + 210);
-                    $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_pos_3, $_tipart, '0', 1, 'L');
+                    $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_pos_3, $tipologia[$_tipart], '0', 1, 'L');
                 }
 
                 // devo verificare se la tipologia articolo è gia stata letta per le pagine
@@ -754,7 +823,13 @@ foreach ($result AS $dati3)
                 $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                 #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
                 $_pathimg = $_percorso . "../imm-art/$_immagine";
-                $pdf->Image($_pathimg, 50, $_y_img, 0, $_H_immagine);
+                $pdf->Image($_pathimg, 40, $_y_img, 0, $_H_immagine);
+                
+                if($dati3['immagine2'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110, $_y_img, 0, $_H_immagine);
+                }
 
                 if ($_doppia == "SI")
                 {
@@ -766,7 +841,14 @@ foreach ($result AS $dati3)
                     $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                     #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
                     $_pathimg = $_percorso . "../imm-art/$_immagine";
-                    $pdf->Image($_pathimg, 50 + 210, $_y_img, 0, $_H_immagine);
+                    $pdf->Image($_pathimg, 40 + 210, $_y_img, 0, $_H_immagine);
+                    
+                    if($dati3['immagine2'] != "")
+                    {
+                        //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                        $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110 + 210, $_y_img, 0, $_H_immagine);
+                    }
+                    
                 }
 
 
@@ -893,7 +975,7 @@ while (@list($catmer, $valore) = each($merda))
         $pdf->SetFillColor('200');
         $pdf->SetFont('Arial', 'BI', 20);
         $pdf->SetTextColor('255');
-        $pdf->Cell($LARGHEZZA_PAGINA, 10, $catmer, '0', '1', 'C', '1');
+        $pdf->Cell($LARGHEZZA_PAGINA, 10, $merceologico[$_catmer], '0', '1', 'C', '1');
         $pdf->SetTextColor('0');
 
         if ($_doppia == "SI")
@@ -905,7 +987,7 @@ while (@list($catmer, $valore) = each($merda))
             $pdf->SetFillColor('200');
             $pdf->SetFont('Arial', 'BI', 20);
             $pdf->SetTextColor('255');
-            $pdf->Cell($LARGHEZZA_PAGINA, 10, $catmer, '0', '1', 'C', '1');
+            $pdf->Cell($LARGHEZZA_PAGINA, 10, $merceologico[$_catmer], '0', '1', 'C', '1');
             $pdf->SetTextColor('0');
         }
 
@@ -932,7 +1014,7 @@ while (@list($catmer, $valore) = each($merda))
                     $pdf->SetFillColor('200');
                     $pdf->SetFont('Arial', 'BI', 20);
                     $pdf->SetTextColor('255');
-                    $pdf->Cell($LARGHEZZA_PAGINA, 10, $catmer, '0', '1', 'C', '1');
+                    $pdf->Cell($LARGHEZZA_PAGINA, 10, $merceologico[$_catmer], '0', '1', 'C', '1');
                     $pdf->SetTextColor('0');
 
                     if ($_doppia == "SI")
@@ -944,7 +1026,7 @@ while (@list($catmer, $valore) = each($merda))
                         $pdf->SetFillColor('200');
                         $pdf->SetFont('Arial', 'BI', 20);
                         $pdf->SetTextColor('255');
-                        $pdf->Cell($LARGHEZZA_PAGINA, 10, $catmer, '0', '1', 'C', '1');
+                        $pdf->Cell($LARGHEZZA_PAGINA, 10, $merceologico[$_catmer], '0', '1', 'C', '1');
                         $pdf->SetTextColor('0');
                     }
                 }
@@ -978,7 +1060,7 @@ while (@list($catmer, $valore) = each($merda))
                 $_newy = $_y + $_imgy;
                 $pdf->SetXY($_x, $_newy);
                 $pdf->SetFont('Arial', 'B', 10);
-                $pdf->Cell(64, 5, $tipart, '0', '1', 'L');
+                $pdf->Cell(64, 5, $tipologia[$tipart], '0', '1', 'L');
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->SetX($_x);
                 $pdf->Cell(64, 5, 'Da pagina ' . $pagina, 'B', 0, 'L');
@@ -998,7 +1080,7 @@ while (@list($catmer, $valore) = each($merda))
                     $_newy = $_y + $_imgy;
                     $pdf->SetXY($_x + 210, $_newy);
                     $pdf->SetFont('Arial', 'B', 10);
-                    $pdf->Cell(64, 5, $tipart, '0', '1', 'L');
+                    $pdf->Cell(64, 5, $tipologia[$tipart], '0', '1', 'L');
                     $pdf->SetFont('Arial', '', 10);
                     $pdf->SetX($_x + 210);
                     $pdf->Cell(64, 5, 'Da pagina ' . $pagina, 'B', 0, 'L');
@@ -1046,14 +1128,14 @@ while (@list($catmer, $valore) = each($merda))
 
         $pdf->SetX(20);
         $pdf->SetFont('Arial', 'BI', 12);
-        $pdf->Cell(110, 6, $catmer, 0, 1, 'L');
+        $pdf->Cell(110, 6, $merceologico[$catmer], 0, 1, 'L');
         if ($_doppia == "SI")
         {
             $_Y = $pdf->GetY();
             $pdf->SetY($_Y - 6);
             $pdf->SetX(20 + 210);
             $pdf->SetFont('Arial', 'BI', 12);
-            $pdf->Cell(110, 6, $catmer, 0, 1, 'L');
+            $pdf->Cell(110, 6, $merceologico[$catmer], 0, 1, 'L');
         }
 
 
@@ -1074,7 +1156,7 @@ while (@list($catmer, $valore) = each($merda))
                     indice_intesta("alfa");
                     $pdf->SetX(20);
                     $pdf->SetFont('Arial', 'BI', 12);
-                    $pdf->Cell(110, 6, $catmer, 0, 1, 'L');
+                    $pdf->Cell(110, 6, $merceologico[$catmer], 0, 1, 'L');
 
                     if ($_doppia == "SI")
                     {
@@ -1085,12 +1167,12 @@ while (@list($catmer, $valore) = each($merda))
                         indice_intesta("alfa");
                         $pdf->SetX(20 + 210);
                         $pdf->SetFont('Arial', 'BI', 12);
-                        $pdf->Cell(110, 6, $catmer, 0, 1, 'L');
+                        $pdf->Cell(110, 6, $merceologico[$catmer], 0, 1, 'L');
                     }
                 }
                 $pdf->SetX(20);
                 $pdf->SetFont('Arial', '', 10);
-                $pdf->Cell(110, 5, $tipart, 'B', 0, 'L');
+                $pdf->Cell(110, 5, $tipologia[$tipart], 'B', 0, 'L');
                 $pdf->Cell(50, 5, $pagina, 'B', 1, 'C');
 
                 if ($_doppia == "SI")
@@ -1102,7 +1184,7 @@ while (@list($catmer, $valore) = each($merda))
 
                     $pdf->SetX(20 + 210);
                     $pdf->SetFont('Arial', '', 10);
-                    $pdf->Cell(110, 5, $tipart, 'B', 0, 'L');
+                    $pdf->Cell(110, 5, $tipologia[$tipart], 'B', 0, 'L');
                     $pdf->Cell(50, 5, $pagina, 'B', 1, 'C');
                 }
             }

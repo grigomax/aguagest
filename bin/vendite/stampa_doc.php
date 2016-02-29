@@ -21,8 +21,8 @@ $conn = permessi_sessione("verifica_PDO", $_percorso);
 
 
 //includo file per generazione pdf
-define('FPDF_FONTPATH', '../tools/fpdf/font/');
-require('../tools/fpdf/fpdf.php');
+define('FPDF_FONTPATH', $_percorso .'tools/fpdf/font/');
+require $_percorso . "tools/fpdf/fpdf.php";
 
 require $_percorso . "librerie/stampe.inc.php";
 require $_percorso . "librerie/stampe_doc_pdf.inc.php";
@@ -319,6 +319,8 @@ if ($_SESSION['user']['vendite'] > "1")
 
         //$pagina = 5;
 
+        //imposto ina variabile pagina che chiamero'.. altrimenti il programma da' errore..
+        $corpo_doc['pagina'] = "";
         for ($_pg = 1; $_pg <= $pagina; $_pg++)
         {
             // utility per inserire la pagina o creare la pagina.

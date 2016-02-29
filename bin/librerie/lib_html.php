@@ -10,41 +10,37 @@
  * 
  *  */
 
-/*ISTRUZIONI  VELOCI PER IL COLLEGAMENTO AL DATABASE PDO
+/* ISTRUZIONI  VELOCI PER IL COLLEGAMENTO AL DATABASE PDO
  * 
  * $query;
-$result = $conn->query($query);
-if ($conn->errorCode() != "00000")
-{
-    $_errore = $conn->errorInfo();
-    echo $_errore['2'];
-    //aggiungiamo la gestione scitta dell'errore..
-    $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
-    $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-    scrittura_errori($_cosa, $_percorso, $_errori);
-    $return['descrizione'] = $_errori['descrizione'];
-    $return['query'] = $query;
-    $return['result'] = "NO";
-}
+  $result = $conn->query($query);
+  if ($conn->errorCode() != "00000")
+  {
+  $_errore = $conn->errorInfo();
+  echo $_errore['2'];
+  //aggiungiamo la gestione scitta dell'errore..
+  $_errori['descrizione'] = "Errore Query $_cosa = $query - $_errore[2]";
+  $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
+  scrittura_errori($_cosa, $_percorso, $_errori);
+  $return['descrizione'] = $_errori['descrizione'];
+  $return['query'] = $query;
+  $return['result'] = "NO";
+  }
  * Poi qui o la multipla con un forearc
-foreach ($result as $return)
+  foreach ($result as $return)
  * 
  * oppure la singola con 
-$dati = $result->fetch(PDO::FETCH_ASSOC);
+  $dati = $result->fetch(PDO::FETCH_ASSOC);
 
 
-//cerca numero righe
+  //cerca numero righe
  * if ($result->num_rows > 0)
-        
+
 
 
  */
 
 set_error_handler("gestione_errori");
-
-
-
-
 
 
 //funzione sperimentale che mi consente di verificare una sessione aperta..
@@ -118,16 +114,15 @@ function primo_ingresso($_user, $_password, $_parametri)
 
     if ($check == "SI")
     {
-        if($_user == "admin")
+        if ($_user == "admin")
         {
             echo "<h2>Controllo Credenziali ADMIN</h2>\n";
         }
         else
         {
             header("Location: http://aguagest.sourceforge.net/");
-            exit(); 
+            exit();
         }
-        
     }
 
 
@@ -206,10 +201,6 @@ function primo_ingresso($_user, $_password, $_parametri)
     //qui inseriamo il tipo nel database di riconoscimento..
     return $_return;
 }
-
-
-
-
 
 function verifica_installazione($user, $password)
 {
@@ -482,7 +473,6 @@ function connessione_mysql($_cosa, $query, $_parametri)
     elseif ($_cosa == "mysqli")
     {
         
-        
     }
     else
     {
@@ -509,14 +499,14 @@ function connessione_mysql($_cosa, $query, $_parametri)
     return $conn;
 }
 
-
-/**Funzione che mi connette al database e mi da risposte
+/* * Funzione che mi connette al database e mi da risposte
  * 
  * @param type $_cosa indica se query o exec
  * @param type $query
  * @param type $_parametri verbose mi ma apparire a video i messaggi
  * @return string
  */
+
 function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
 {
     global $conn;
@@ -533,6 +523,7 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
     else
     {
 
+        //echo "$_cosa <br>$query<br>\n";
         registra_operazioni($_cosa, $query, $_parametri);
 
         if ($_tipo == "exec")
@@ -569,6 +560,7 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
         }
         else
         {
+            //echo $result->rowCount();
             if ($result->rowCount() < 1)
             {
                 //echo "ciao";
@@ -583,7 +575,7 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
         {
             if ($_parametri == "verbose")
             {
-                if($_tipo == "query")
+                if ($_tipo == "query")
                 {
                     echo "<h4 align=\"center\"><font color=\"green\">Nessuna Corrispondenza trovata nella ricerca</font></h4>\n";
                 }
@@ -591,12 +583,11 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
                 {
                     echo "<h4 align=\"center\"><font color=\"green\">Nessuna Variazione Effettuata</font></h4>\n";
                 }
-                
             }
-            
+
             if ($_parametri == "verbose2")
             {
-                if($_tipo == "query")
+                if ($_tipo == "query")
                 {
                     $_messaggio = "Nessuna Corrispondenza trovata nella ricerca\n";
                 }
@@ -604,11 +595,10 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
                 {
                     $_messaggio = "Nessuna Variazione Effettuata\n";
                 }
-                
             }
-            
-            
-            
+
+
+
 
             if ($_parametri == "block")
             {
@@ -622,47 +612,43 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
                 scrittura_errori("block", $_cosa, $_errori, $query);
                 exit;
             }
-            
-            
-            if(($_parametri == "silent") AND ($return == "NO"))
+
+
+            if (($_parametri == "silent") AND ( $return == "NO"))
             {
-                    $return = "";
+                $return = "";
             }
-            
         }
         else
         {
-            
+
             if ($_parametri == "verbose")
             {
-                if($_tipo == "query")
+                if ($_tipo == "query")
                 {
-                    echo "<h4 align=\"center\"><font color=\"green\">Trovate Nr. ".$result->rowCount()."</font></h4>\n";
+                    echo "<h4 align=\"center\"><font color=\"green\">Trovate Nr. " . $result->rowCount() . "</font></h4>\n";
                 }
                 else
                 {
                     echo "<h4 align=\"center\"><font color=\"green\">Variazione Effettuata su NR $result riga/e</font></h4>\n";
                 }
-                
             }
-            
+
             if ($_parametri == "verbose2")
             {
-                if($_tipo == "query")
+                if ($_tipo == "query")
                 {
-                    $_messaggio = "Trovate Nr. ".$result->rowCount()."\n";
+                    $_messaggio = "Trovate Nr. " . $result->rowCount() . "\n";
                 }
                 else
                 {
                     $_messaggio = "Variazione Effettuata su NR $result riga/e\n";
                 }
-                
             }
-            
+
             if ($_ritorno == "fetch")
             {
                 $return = $result->fetch(PDO::FETCH_ASSOC);
-                                
             }
             else
             {
@@ -670,10 +656,10 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
             }
         }
     }
-    
+
     //echo $result;
-    
-    if($_parametri == "verbose2")
+
+    if ($_parametri == "verbose2")
     {
         $return = "";
         $return['result'] = $result;
@@ -681,11 +667,11 @@ function domanda_db($_tipo, $query, $_cosa, $_ritorno, $_parametri)
         $return['query'] = $query;
     }
 
-    if($_ritorno == "solo_error")
+    if ($_ritorno == "solo_error")
     {
         $return = $solo_error;
     }
-    
+
     return $return;
 }
 
@@ -730,13 +716,24 @@ function gestione_errori($in_errno, $in_errstr, $in_errfile, $in_errline, $in_er
         32767 => 'E_ALL tutti gli errori'
     );
 
-    
-    if (($DEBUG == "SI") AND ($in_errno != "8"))
+    if($DEBUG == "SI")
     {
-        echo "<br>Errore Nr. $in_errno, <b>Tipo</b> $in_errstr, <b>File </b>$in_errfile, Linea $in_errline, Display $in_errcontext\n";
+        ini_set('display_errors',1);  
+        ini_set('display_startup_errors',1);  
+        ini_set('log_errors',1);  
+        ini_set('log_errors_max_len',0);  
+        ini_set('ignore_repeated_errors',0);  
+        ini_set('ignore_repeated_source',0);  
+        ini_set('report_memleaks',1);  
+        ini_set('track_errors',1); 
     }
     
-    
+    if (($DEBUG == "SI") AND ( $in_errno != "8"))
+    {
+        echo "<br>Errore Nr. $in_errno, <b>Tipo</b> $in_errstr,Display $in_errcontext, <b>File $in_errfile - Linea $in_errline</b> | \n";
+    }
+
+
 
     //qui decidiamo se farle vedere all'utente
     //escludiamo dal riporto degli errori la funzione ereg le notizie e anche il settagggio variabili
@@ -764,15 +761,13 @@ EOTABLE;
 
     //qui decidiamo se registrarle
 
-    if (($in_errno != "2") AND ($in_errno != "8") AND ( $in_errno != "2048") AND ( $in_errno != "8192") AND ( $in_errstr != 'Division by zero'))
+    if (($in_errno != "2") AND ( $in_errno != "8") AND ( $in_errno != "2048") AND ( $in_errno != "8192") AND ( $in_errstr != 'Division by zero'))
     {
 
         $_operazione = "Tipo $in_errno |($in_errfile, line $in_errline)| $in_errstr | $in_errcontext";
 
         error_log(date('d-m-Y/H:m') . "|utente " . $_SESSION['user']['user'] . " |Errore PHP $_operazione\n", 3, $_percorso . "../spool/agua_php.log");
-
     }
-    
 }
 
 /* * Questa funzione mi permette di scrivere tutti gli errori in cosa ad un file sito in spool
@@ -797,7 +792,7 @@ function scrittura_errori($_tipo, $_cosa, $_errori, $query)
     }
 
 
-    if($_tipo == "block")
+    if ($_tipo == "block")
     {
         echo "<h2 align=\"center\">Errore Generale</h2>\n";
         echo "<br>$_errori[descrizione]\n";
@@ -808,9 +803,9 @@ function scrittura_errori($_tipo, $_cosa, $_errori, $query)
         //scriviamo gli errori per i posteri
         echo "errore Generale";
     }
-    
-    
-    
+
+
+
     date_default_timezone_set('Europe/Rome');
     //tipologia di errori
 
@@ -843,12 +838,12 @@ function scrittura_errori($_tipo, $_cosa, $_errori, $query)
     }
 
 
-    if($_tipo == "block")
+    if ($_tipo == "block")
     {
         exit;
     }
-    
-    
+
+
     return $_return;
 }
 
@@ -879,12 +874,12 @@ function registra_operazioni($_cosa, $query, $_parametri)
 
         //la variabile $_errori è un array contente ò'errore
 
-        fwrite($fp, "Inizio query ". date('d-m-Y/H:m'). " $_SERVER[SCRIPT_FILENAME]\n");
+        fwrite($fp, "Inizio query " . date('d-m-Y/H:m') . " $_SERVER[SCRIPT_FILENAME]\n");
         if (!$fp)
             die("Errore.. Riga non inserita ?");
 
 
-        $_commento =  "| $query\n";
+        $_commento = "| $query\n";
 
         fwrite($fp, $_commento);
         if (!$fp)
@@ -922,12 +917,12 @@ function base_html($_cosa, $_percorso)
     global $azienda;
     global $sito;
 
-    include $_percorso."../setting/vars_aspetto.php";
+    include $_percorso . "../setting/vars_aspetto.php";
 
-    Header( "Cache-Control: no-store, no-cache, must-revalidate" ); // HTTP/1.1
-    Header( "Cache-Control: post-check=0, pre-check=0", FALSE );
-    Header( "Pragma: no-cache" ); // HTTP/1.0
-    
+    Header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
+    Header("Cache-Control: post-check=0, pre-check=0", FALSE);
+    Header("Pragma: no-cache"); // HTTP/1.0
+
     echo "<!DOCTYPE html>\n";
     echo "<html lang=\"it\">\n";
     echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n";
@@ -947,16 +942,16 @@ function base_html($_cosa, $_percorso)
     session_keepalive($_cosa, $_percorso);
 
     echo "<style>\n";
-    
+
     //essendo i dati a cascata leggiamo i parametri utente se disponibili
-    
+
     $SCREEN_FONT_SIZE = $_SESSION['user']['USER_SCREEN_FONT_SIZE'];
     $SCREEN_COLOR_BACKGROUND = $_SESSION['user']['USER_SCREEN_COLOR_BACKGROUND'];
     $SCREEN_WIDTH = $_SESSION['user']['USER_SCREEN_WIDTH'];
     $SCREEN_FONT_TYPE = $_SESSION['user']['USER_SCREEN_FONT_TYPE'];
-    
+
     echo "BODY { 
-        font-size: ".$SCREEN_FONT_SIZE."em;
+        font-size: " . $SCREEN_FONT_SIZE . "em;
         width: $SCREEN_WIDTH%;
         font-family: $SCREEN_FONT_TYPE;
         margin: auto; 
@@ -964,37 +959,37 @@ function base_html($_cosa, $_percorso)
             
         
         }\n";
-    
+
     //impostiamo la proporzione degli elementi:
     $SCREEN_INPUT_SIZE = "0.9";
     $SCREEN_SELECT_SIZE = "0.9";
-    
+
     echo "select {
-          font-size: ".$SCREEN_SELECT_SIZE."em;
+          font-size: " . $SCREEN_SELECT_SIZE . "em;
                 
     }
     
     input {
-    font-size: ".$SCREEN_INPUT_SIZE."em;
+    font-size: " . $SCREEN_INPUT_SIZE . "em;
     }
     
     input[type=\"checkbox\"]{
-    width: ".$SCREEN_INPUT_SIZE."em; /*Desired width*/
-    height: ".$SCREEN_INPUT_SIZE."em; /*Desired height*/
+    width: " . $SCREEN_INPUT_SIZE . "em; /*Desired width*/
+    height: " . $SCREEN_INPUT_SIZE . "em; /*Desired height*/
     }
     
     input[type=\"radio\"]{
-    width: ".$SCREEN_INPUT_SIZE."em; /*Desired width*/
-    height: ".$SCREEN_INPUT_SIZE."em; /*Desired height*/
+    width: " . $SCREEN_INPUT_SIZE . "em; /*Desired width*/
+    height: " . $SCREEN_INPUT_SIZE . "em; /*Desired height*/
     }
     
     \n";
-    
+
     echo "
     
     textarea { /* Stili specifici per la teaxtarea */
     #background: #1C1C1C url('images/social_balloon.png') no-repeat 235px 95px; /* Sfondo con immagine */
-    font-size: ".$SCREEN_INPUT_SIZE."em;
+    font-size: " . $SCREEN_INPUT_SIZE . "em;
     font-family: $SCREEN_FONT_TYPE;
     #height: 100px;
     #width: 320px;
@@ -1003,13 +998,13 @@ function base_html($_cosa, $_percorso)
     
     
     \n";
-    
-    
-    
+
+
+
     //iniziamo a spostare man mano i vari css..
-    echo "span.testo_blu {font-family: $SCREEN_FONT_TYPE; font-size: ".($SCREEN_FONT_SIZE-0.2)."em; color: #053487; }\n";
-    
-    
+    echo "span.testo_blu {font-family: $SCREEN_FONT_TYPE; font-size: " . ($SCREEN_FONT_SIZE - 0.2) . "em; color: #053487; }\n";
+
+
     echo "</style>\n";
 
     if ($_cosa == "chiudi")
@@ -1488,7 +1483,6 @@ function session_timeout($_cosa, $_percorso)
     $_SESSION["timeout"] = time();
 }
 
-
 function menu_tendina($_cosa, $_percorso)
 {
     global $sito;
@@ -1694,7 +1688,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "</ul>\n";
     echo "</li>\n";
     //fine anagrafiche destinazioni
-    
+
     echo "<li class=\"menu\"><a href=\"#\">Vettori</a><span class=\"dropRight\"></span>\n";
     echo "<ul class=\"menu\">\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/vettori/ricerca.php\">Cerca</a></li>\n";
@@ -1871,7 +1865,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/elenco_eff.php\">Elenco Disponibili</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/stampa_scad.php\">Scadenziario</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/vendite/effetti/importa_fv.php\">Salda Fatture singole</a></li>\n";
-    
+
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -1940,7 +1934,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<li class=\"menu\"><a href=\"$sito/bin/mag/gestmag/rimanenze.php\">Rimanenze Finali</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/mag/gestmag/invemerce.php?tipo=merce\">Inventario</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/mag/gestmag/invemerce.php?tipo=tipo\">Inventario per tip.</a></li>\n";
-    
+
 
     echo "</ul>\n";
     echo "</li>\n";
@@ -2110,9 +2104,9 @@ function base_html_stampa($_cosa, $_parametri)
     global $title;
     global $azienda;
     global $_percorso;
-    
+
     require $_percorso . "../setting/vars_aspetto.php";
-    
+
     echo "<!DOCTYPE html>\n";
     echo "<html lang=\"it\">\n";
     echo "<head>\n";
@@ -2124,20 +2118,19 @@ function base_html_stampa($_cosa, $_parametri)
     echo "<link rel=\"stylesheet\" href=\"" . $_percorso . "css/globalest.css\" type=\"text/css\">\n";
     //fissiamo i margini del parametro body qui dopo aver caricaro il foglio di stile, in in modo da poter
     //modificare trammite ptrogravva l'ampiezza della pagina ecc.
-
     //echo $PRINT_WIDTH;
     echo "<style>\n";
-    
-    if($_parametri['PRINT_FONT_SIZE'] != "")
+
+    if ($_parametri['PRINT_FONT_SIZE'] != "")
     {
         $PRINT_FONT_SIZE = $_parametri['PRINT_FONT_SIZE'];
     }
-    
+
     echo "BODY {
 
             position: relative;
-	    font-size: ".$PRINT_FONT_SIZE."pt;
-	    width: ".$PRINT_WIDTH."px;
+	    font-size: " . $PRINT_FONT_SIZE . "pt;
+	    width: " . $PRINT_WIDTH . "px;
             margin-left: 0px;
             margin: $_parametri[MARGINI] auto; 
             padding: $_parametri[PADDING];
@@ -2149,8 +2142,8 @@ function base_html_stampa($_cosa, $_parametri)
     echo "a:visited  { color: #053487; text-decoration: none; }\n";
     echo "a:hover    { color: #053487; text-decoration: none; }\n";
 
-    
-    
+
+
 
     if ($_cosa == "chiudi")
     {
@@ -2255,7 +2248,7 @@ function jquery_menu_cascata($_cosa, $_percorso)
         </script>
         <?php
     }
-    elseif($_cosa == "base")
+    elseif ($_cosa == "base")
     {
         ?>
 
@@ -2337,7 +2330,7 @@ function jquery_datapicker($_cosa, $_percorso)
                 fixedChars: '-',
                 dateFormat: 'dd-mm-yy'
             },
-            $.datepicker.regional['it']
+                    $.datepicker.regional['it']
                     );
 
 
@@ -2375,16 +2368,16 @@ function jquery_tabs($_cosa, $_percorso)
 
     <style type="text/css">
         .ui-tabs {
-	position: inherit;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
-	padding: .2em;
+            position: inherit;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+            padding: .2em;
         }
-        
+
         .ui-tabs .ui-tabs-nav li {
-	position: inherit;
+            position: inherit;
         }
-        
+
         .ui-tabs .ui-tabs-nav li a {
-        font-size: 70%;
+            font-size: 70%;
         }
 
     </style>
@@ -2593,11 +2586,12 @@ function tiny_mce($_cosa, $_percorso)
  *   $_parametri[pagina] = $pagina;
  *   $_parametri[tabella] = "Differenza";
  */
+
 function intestazione_html($_cosa, $_percorso, $_parametri)
 {
     require $_percorso . "../setting/vars.php";
-    
-    if($_parametri['WIDTH'] != "")
+
+    if ($_parametri['WIDTH'] != "")
     {
         $PRINT_WIDTH = $_parametri['WIDTH'];
     }
@@ -2605,38 +2599,37 @@ function intestazione_html($_cosa, $_percorso, $_parametri)
     {
         $PRINT_WIDTH = "95%";
     }
-    
-    if($_parametri['intestazione'] == "0")
+
+    if ($_parametri['intestazione'] == "0")
     {
         echo "<table border=\"0\" height=\"135px\" align=\"left\" width=\"$PRINT_WIDTH\">\n";
         echo "<tr>\n";
-	echo "<td width=\"100%\" align=\"center\">\n";
+        echo "<td width=\"100%\" align=\"center\">\n";
         echo "&nbsp;\n";
         echo "</td>\n";
         echo "</tr></table>\n";
-        
     }
-    elseif($_parametri['intestazione'] == "1")
+    elseif ($_parametri['intestazione'] == "1")
     {
         echo "<table border=\"0\" height=\"135px\" align=\"left\" width=\"$PRINT_WIDTH\">\n";
         echo "<tr>\n";
-	echo "<td align=\"center\">\n";
+        echo "<td align=\"center\">\n";
         echo "<img src=\"" . $_percorso . "../setting/loghiazienda/$_parametri[intesta_immagine]\" width=\"$PRINT_WIDTH\">\n";
         echo "</td>\n";
         echo "</tr></table>\n";
     }
-    elseif($_parametri['intestazione'] == "2")
+    elseif ($_parametri['intestazione'] == "2")
     {
         echo "<table border=\"0\" height=\"135px\" align=\"left\" width=\"$PRINT_WIDTH\">\n";
         echo "<tr>\n";
         echo "<td colspan=\"2\" valign=\"top\" align=\"left\"><b>$azienda</b><br>$indirizzo<br>$cap $citta ($prov)<br>P.I. $piva<br>
           Tel. $telefono - Tel/Fax $fax <br>\n";
-        
-        if($_parametri['email'] == "3")
+
+        if ($_parametri['email'] == "3")
         {
             echo "e-mail : $email3\n";
         }
-        elseif($_parametri['email'] == "2")
+        elseif ($_parametri['email'] == "2")
         {
             echo "e-mail : $email2\n";
         }
@@ -2644,10 +2637,10 @@ function intestazione_html($_cosa, $_percorso, $_parametri)
         {
             echo "e-mail : $email1\n";
         }
-        
+
         echo "</td></tr> </table>\n";
     }
-    elseif($_parametri['intestazione'] == "3")
+    elseif ($_parametri['intestazione'] == "3")
     {
         echo "<table border=\"0\" height=\"135px\" align=\"left\" width=\"$PRINT_WIDTH\">\n";
         echo "<tr><td align=\"left\"><h3>$azienda</h3></td></tr>\n";
@@ -2663,11 +2656,11 @@ function intestazione_html($_cosa, $_percorso, $_parametri)
         echo "<td width=\"50%\" valign=\"top\" align=\"left\">\n";
         echo "$azienda<br>$sitointernet <br>Telefono : $telefono Fax : $fax <br>\n";
 
-        if($_parametri['email'] == "3")
+        if ($_parametri['email'] == "3")
         {
             echo "e-mail : $email3\n";
         }
-        elseif($_parametri['email'] == "2")
+        elseif ($_parametri['email'] == "2")
         {
             echo "e-mail : $email2\n";
         }
@@ -2675,7 +2668,7 @@ function intestazione_html($_cosa, $_percorso, $_parametri)
         {
             echo "e-mail : $email1\n";
         }
-        echo  "</td>\n";
+        echo "</td>\n";
         echo "<td width=\"50%\" valign=\"top\" align=\"right\">\n";
         echo "Data $_parametri[data]<br>\n";
         echo "Stampa $_parametri[stampa] : $_parametri[anno]<br>\n";
@@ -2683,7 +2676,7 @@ function intestazione_html($_cosa, $_percorso, $_parametri)
         echo "</td>\n";
         echo "</tr></table>\n";
     }
-    
+
     echo "<table border=\"0\" align=\"left\" width=\"$PRINT_WIDTH\">
 	        <tr>
 	            <td colspan=\"2\" valign=\"top\" align=\"center\">
@@ -2691,8 +2684,6 @@ function intestazione_html($_cosa, $_percorso, $_parametri)
 	            </td>
 	        </tr>
 	    </table>\n";
-    
-    
 }
 
 function maschera_invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $_emaildestino, $_oggetto, $_parametri)
@@ -2753,12 +2744,12 @@ function maschera_invio_posta($_cosa, $_percorso, $_nomefile, $_emailmittente, $
     echo "<tr>\n";
     echo "<td>File eventuale file da allegare: </td>\n";
     echo "<td><input name=\"file\" type=\"file\"></td></tr>\n";
-  
+
     echo "<tr>\n";
     echo "<td>File eventuale file da allegare: </td>\n";
     echo "<td><input name=\"file2\" type=\"file\"></td></tr>\n";
-    
-    
+
+
 
     #<!--campo per la scelta del file-->
     if ($_parametri[BODY] == "")
@@ -2811,127 +2802,15 @@ function pulsanti($_cosa, $_type, $_form, $_formmethod, $_formaction, $_height, 
     $FONTPULSANTISIZE = "8";
 
 
-
-    if ($_cosa == "annulla")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_annulla.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "index")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_home.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "conferma")
-    {
-        if ($_form == "conferma_get")
+        if ($_formmethod == "get")
         {
-            echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_conferma.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
+            echo "<button type=\"$_type\" formtarget=\"$_form\" formmethod=\"$_formmethod\" formaction=\"$_formaction\" value=\"$_value\" name=\"$_name\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_$_cosa.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
         }
         else
         {
-            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_conferma.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
+            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_$_cosa.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
         }
-    }
-
-    if ($_cosa == "elimina")
-    {
-        if ($_form == "elimina_get")
-        {
-            echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_elimina.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
-        }
-        else
-        {
-            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_elimina.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
-        }
-    }
-
-    if ($_cosa == "lista")
-    {
-        if ($_form == "lista_get")
-        {
-            echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_lista.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
-        }
-        else
-        {
-            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_lista.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
-        }
-    }
-
-
-    if ($_cosa == "nuovo")
-    {
-        if ($_form == "nuovo_get")
-        {
-            echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\" ><img src=\"" . $_percorso . "images/pulsanti/pulsante_nuovo.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-        }
-        else
-        {
-            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_nuovo.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-        }
-    }
-
-    if ($_cosa == "modifica")
-    {
-        if ($_form == "modifica_get")
-        {
-            echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_modifica.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
-        }
-        else
-        {
-            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_modifica.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
-        }
-    }
-
-    if ($_cosa == "duplica")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_duplica.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "cerca")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\" value=\"$_value\" name=\"$_name\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_cerca.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "sostituisci")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_sostituisci.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "immagini")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_immagini.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "barcode")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_barcode.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "prezzi_fornitore")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_prezzi_fornitore.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "ritorna")
-    {
-        echo "<button type=\"$_type\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_ritorna.png\" height=\"$_height\" width=\"$_width\"><br><font color=\"red\"><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "stampa")
-    {
-        echo "<button type=\"$_type\" formtarget=\"_blank\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_stampa.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
-
-    if ($_cosa == "salva")
-    {
-        echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_salva.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
-    }
-
-    if ($_cosa == "help")
-    {
-        echo "<button type=\"$_type\" formtarget=\"_blank\" formmethod=\"$_formmethod\" formaction=\"$_formaction\"><img src=\"" . $_percorso . "images/pulsanti/pulsante_aiuto.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button>\n";
-    }
+    
 }
 
 function crea_file_calendar($_cosa, $_nomefile, $_uid, $_parametri)

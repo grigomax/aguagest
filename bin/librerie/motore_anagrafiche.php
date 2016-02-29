@@ -320,7 +320,8 @@ function tabella_aliquota($_cosa, $_codiva, $_parametri)
 //mi restituisce l'arre singolo
         $query = "select * from aliquota where codice='$_codiva' limit 1";
 
-        $array = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+        $array = domanda_db("query", $query, $_cosa, "fetch", "");
+        
         
         $dati = $array['aliquota'];
     }
@@ -1973,37 +1974,13 @@ function tabella_catmer($_cosa, $_codice, $_parametri)
     {
         $query = sprintf("select * from catmer order by catmer");
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        $return = $result;
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
     }
     elseif ($_cosa == "elenca_codice")
     {
         $query = sprintf("select * from catmer order by codice");
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        $return = $result;
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
     }
     else
     {
@@ -4754,9 +4731,9 @@ function tabella_tipart($_cosa, $_codice, $_parametri)
         $tipart = tabella_tipart("elenca", $_codice, $_parametri);
         
         //inserisco i dati in un array..
-        foreach ($catmer AS $dati2)
+        foreach ($tipart AS $dati2)
         {
-            $categoria[$dati2['codice']] = $dati2['tipart'];
+            $categoria[$dati2['codice']] = $dati2['tipoart'];
         }
         
         if($_codice != "")
@@ -4918,19 +4895,7 @@ function tabella_tipart($_cosa, $_codice, $_parametri)
         // Stringa contenente la query di ricerca... solo dei fornitori
         $query = "select * from tipart order by tipoart";
 
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "motore_anagrafiche.php";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-
-        $return = $result;
+        $return = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
     }
     elseif ($_cosa == "elenca_select")
     {
