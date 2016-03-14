@@ -23,21 +23,12 @@ $conn = permessi_sessione("verifica_PDO", $_percorso);
 require "../../librerie/motore_doc_pdo.php";
 require "../../librerie/motore_anagrafiche.php";
 
-/*
-  if ($_POST['codconto'] == "")
-  {
-  if ($_POST['tipo_cf'] != "")
-  {
-  echo Show_ultimo_numero();
-  die;
-  }
-  }
- */
 //carichiamo la base delle pagine:
 base_html("", $_percorso);
 
 java_script($_cosa, $_percorso);
 jquery_datapicker($_cosa, $_percorso);
+java_script("no_invio", $_percorso);
 
 //jquery_menu_cascata("base", "calce.php");
 

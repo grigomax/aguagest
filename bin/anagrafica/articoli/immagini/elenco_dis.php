@@ -40,13 +40,13 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     while (list($key, $val) = each($resrAr))
     {
 	echo "<tr>\n";
-	echo "<td align=\"center\"><a href=\"visualizza_imm.php?azione=visual&file=$val\"><img src=\"../../../../imm-art/disegni/$val\" width=\"50px\" height=\"50px\"><br><font size=\"1\">$val</a></td>\n";
+	echo "<td align=\"center\"><a href=\"visualizza_dis.php?azione=visual&file=$val\"><img src=\"../../../../imm-art/disegni/$val\" width=\"50px\" height=\"50px\"><br><font size=\"1\">$val</a></td>\n";
 
 	for ($a = 1; $a <= 3; $a++)
 	{
 	    list($key, $val) = each($resrAr);
 	    
-	    echo "<td align=\"center\"><a href=\"visualizza_imm.php?azione=visual&file=$val\"><img src=\"../../../../imm-art/disegni/$val\" width=\"50px\" height=\"50px\"><br><font size=\"1\">$val</a></td>\n";
+	    echo "<td align=\"center\"><a href=\"visualizza_dis.php?azione=visual&file=$val\"><img src=\"../../../../imm-art/disegni/$val\" width=\"50px\" height=\"50px\"><br><font size=\"1\">$val</a></td>\n";
 	}
 	echo "</tr>";
     }

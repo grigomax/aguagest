@@ -475,8 +475,7 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<table class=\"tabs\">";
     echo "
     <tr>
-                    <td>Nome Host<br>
-                        nome del server locale</td>
+                    <td>Nome Host<br>nome del server locale</td>
                     <td style=\"width: 350px; text-align: left;\" valign=\"top\"><input type=\"text\" size=\"70\" name=\"host\" value=\"$host\"></td>
                 </tr>
                 <tr>

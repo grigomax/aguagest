@@ -99,25 +99,33 @@ if ($_SESSION['user']['magazzino'] > "1")
 // proseguiamo per fare i conti
 //Ora procedo a selezionare gli articoli che mi interessano dall'anagrafica.
 
-    $query = sprintf("SELECT articolo, substring(descrizione,1,40), fornitore, preacqnetto, ultacq, $_database FROM articoli WHERE $_database=\"%s\" order by articolo", $_catmer);
+    $query = "SELECT articolo, substring(descrizione,1,40), fornitore, preacqnetto, ultacq, $_database FROM articoli WHERE $_database='$_catmer' order by articolo";
     
     $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
     //divido il numero per 100..
     foreach ($result AS $datia)
     {//5
+        
         // effettuata la prima cernita passo con la seconda
         // ora per ogni articolo cerco nel magazzino le giacenze iniziali
         $query = "SELECT qtacarico, valoreacq FROM $_magazzino WHERE articolo='$datia[articolo]' and tut='giain' AND anno='$_anno'";
 
         $datimi = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
-        $_qtaini = $datimi['qtacarico'];
-        $_valoreini = $datimi['valoreacq'];
-
-
+        if($datimi != "NO")
+        {
+            $_qtaini = $datimi['qtacarico'];
+            $_valoreini = $datimi['valoreacq'];  
+        }
+        else
+        {
+            $datimi = null;
+            $datimi['qtacarico'] = "";
+        }
+ 
         // presa la giacenza iniziale, prendiamo le somme del venduto e l'acquistato senza la giacenza iniziale
 
-        $query = sprintf("SELECT SUM(qtacarico) AS qtacarico, SUM(valoreacq) AS valoreacq, SUM(qtascarico) AS qtascarico, SUM(valorevend) AS valorevend FROM %s WHERE articolo=\"%s\" and tut != 'giain' order by articolo", $_magazzino, $datia['articolo']);
+        $query = "SELECT SUM(qtacarico) AS qtacarico, SUM(valoreacq) AS valoreacq, SUM(qtascarico) AS qtascarico, SUM(valorevend) AS valorevend FROM $_magazzino WHERE anno='$_anno' AND articolo='$datia[articolo]' and tut != 'giain' order by articolo";
         $datim = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
         if ($_cgiac == "MUOVI")
@@ -142,7 +150,7 @@ if ($_SESSION['user']['magazzino'] > "1")
                     $_valore = $_giacfin * $_prezzoacq;
                 }
                 // iserisco i dati nel database provvisorio
-                $query = sprintf(" INSERT INTO inventario (articolo, descrizione, forn, quantita, qtaevasa, qtaestratta, qtasaldo, netto, totriga) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $datia['articolo'], $datia['substring(descrizione,1,40)'], $datia['fornitore'], $datimi['qtacarico'], $datim['qtacarico'], $datim['qtascarico'], $_giacfin, $_prezzoacq, $_valore);
+                $query = sprintf("INSERT INTO inventario (articolo, descrizione, forn, quantita, qtaevasa, qtaestratta, qtasaldo, netto, totriga) values ( \"%s\", \"%s\", \"%s\", \"%s\", \"%s\",\"%s\", \"%s\", \"%s\", \"%s\")", $datia['articolo'], $datia['substring(descrizione,1,40)'], $datia['fornitore'], $datimi['qtacarico'], $datim['qtacarico'], $datim['qtascarico'], $_giacfin, $_prezzoacq, $_valore);
                 domanda_db("exec", $query, $_cosa, $_ritorno, $_parametri);
                 
                                
@@ -167,7 +175,19 @@ if ($_SESSION['user']['magazzino'] > "1")
                 }
                 else
                 {
-                    @$_prezzoacq = number_format((($datimi['valoreacq'] + $datim['valoreacq']) / ($datimi['qtacarico'] + $datim['qtacarico'])), $dec, '.', '');
+                    $valoreacq = $datimi['valoreacq'] + $datim['valoreacq'];
+                    $qtacarico = $datimi['qtacarico'] + $datim['qtacarico'];
+                    
+                    if(($valoreacq != "") AND ($qtacarico != ""))
+                    {
+                        @$_prezzoacq = number_format(($valoreacq / $qtacarico), $dec, '.', '');
+                    }
+                    else
+                    {
+                        $_prezzoacq = "0.00";
+                    }
+                    
+                    
                     $_valore = $_giacfin * $_prezzoacq;
                 }
 
@@ -249,7 +269,23 @@ if ($_SESSION['user']['magazzino'] > "1")
     $pdf->SetCreator('Gestionale AGUA GEST - aguagest.sourceforge.net');
     $pdf->SetAuthor($azienda);
     $corpo_doc = "";
+    
+    if($_POST['data'] != "NO")
+    {
+        if($_POST['data'] == "SI")
+        {
+            $_parametri['data'] = "data ".date('d-m-Y');
+        }
+        else
+        {
+            $_parametri['data'] = "data 31-12-$_anno";
+        }
+        
+    }
+    $_parametri['tabella'] = "Inventario Magazzino $categoria Anno $_anno";
+    
 
+    $corpo_doc['pagina'] = "";
     for ($_pg = 1; $_pg <= $pagina; $_pg++)
     {
 

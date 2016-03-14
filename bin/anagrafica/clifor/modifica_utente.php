@@ -76,6 +76,7 @@ base_html($_cosa, $_percorso);
 java_script($_cosa, $_percorso);
 jquery_tabs($_cosa, $_percorso);
 tiny_mce($_cosa, $_percorso);
+java_script("no_invio", $_percorso);
 
 echo "</head>\n";
 echo "</body>\n";

@@ -31,6 +31,8 @@ jquery_tabs($_cosa, $_percorso);
 
 tiny_mce($_cosa, $_percorso);
 
+java_script("no_invio", $_percorso);
+
 echo "</head>\n";
 
 echo "<body>\n";
@@ -90,8 +92,6 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     if ($_SESSION['user']['anagrafiche'] > "1")
     {
 
-
-
         echo "<form action=\"risinseart.php\" id=\"inserisci\" method=\"POST\">";
 
        
@@ -136,7 +136,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         if($_azione == "inserisci")
         {
             echo "<tr><td align=\"right\"><span class=\"testo_blu\">Barcode :&nbsp;</span></td>\n";
-            echo "<td align=\"left\"><input type=\"text\" name=\"barcode\" size=\"20\" maxlength=\"20\"></td></tr>\n";
+            echo "<td align=\"left\"><input type=\"text\" id=\"barcode\" name=\"barcode\" size=\"20\" maxlength=\"20\"></td></tr>\n";
         }
         
         
@@ -570,7 +570,8 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         
          //inseriamo la barra di navigazione
 
-        pulsanti("annulla", "submit", "annulla_get", "get", "../../index.php", "40px", "40px", "Annulla", $_name, $_value, $_alt, $_id);
+        //pulsanti($_cosa, $_type, $_form, $_formmethod, $_formaction, $_height, $_width, $_testo, $_name, $_value, $_alt, $_id);
+        pulsanti("annulla", "submit", "", "get", "../../index.php", "40px", "40px", "Annulla", $_name, $_value, $_alt, $_id);
 
 
         if ($_SESSION['user']['anagrafiche'] == "4")

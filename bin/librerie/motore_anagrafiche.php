@@ -3687,7 +3687,23 @@ function tabella_magazzino($_cosa, $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, 
         
             $maga = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
-            @$return = $maga['valorevend'] / $maga['qtascarico'];
+            
+            if($maga == "NO")
+            {
+                $query = "select * from magastorico where tut='c' AND utente='$_parametri' and articolo='$_codice' order by anno, datareg ASC limit 1";
+        
+                $maga = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
+                
+                if($maga != "NO")
+                {
+                    @$return = $maga['valorevend'] / $maga['qtascarico'];
+                }
+            }
+            else
+            {
+                @$return = $maga['valorevend'] / $maga['qtascarico'];
+            }
+            
         }
         
     }

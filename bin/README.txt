@@ -11,6 +11,50 @@ La Versione ZIP è per tutti gli altri sistemi operativi.
 
 Necessita di un server funzionante.
 
+VERSIONE 1.2.6 Rc 4 del 14/03/2016
+-1  ANAGRAFICHE
+-   1   Disabilitazione del tasto enter(invio) dei form sensibili, come le
+-       anagrafiche ed la calce dei documenti
+-   2   Nuova Anagrafica articoli con la nuova scheda "scheda articolo", dove c'è
+-       la possibilità di visualizzare meglio l'articolo con tutti i suoi dati.
+-   3   Nuova stampa articolo ora le tabelle vengono interpretate..
+
+-2  CONTABILITA
+-   1   Sistemazione collegamento del cliente alle schede contabili, dai vari 
+-       link esterni..
+
+-3  MAGAZZINO
+-   1   Sistemato le stampe di magazzino, sulla rimanenza di magazzino e inventario
+-       Ora tutti i conti sono giusti, anche con i vari riporti, data la possibiltà
+-       di stampare le varie date in base all'esigenza del momento.
+
+-4  ADMIN
+-   1   Nuovo motore parser, per leggere eventuali tabelle html all'interno della
+-       variabile passata.. basilare, ma da ampliare.
+-   2   Nuovo motore parser per poter leggere i file formato ODS, per inserire ed 
+-       aggiornare l'anagrafica articoli.
+
+
+
+------------------------------------------------------
+-VERSIONE 1.2.6 Rc 3 del 07/03/2016
+-1  MAGAZZINO
+-   1   Sistemato bug sui riporti dell'inventario.
+-   2   Sistemato bug sui saldi delle rimanenze..
+
+-2  CONTABILITA
+-   1   Sistemata impaginazione del bilancio aziendale
+
+-3  ANAGRAFICHE
+-   1   Sistemato bug gestione disegni e foto articoli
+
+-4  VENDITE
+-   1   Aggiornato la schermata quantità, ora visualizza l'ultima vendita
+-       dell'articolo al cliente anche se molto vecchio
+
+
+
+------------------------------------------------------------------
 -VERSIONE 1.2.6 Rc 2 del 29/02/2016
 -1  VENDITE
 -   1   Sistemato Bug sull'evasione della riga

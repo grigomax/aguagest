@@ -15,7 +15,7 @@ session_start(); $_SESSION['keepalive']++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 //carichiamo la base delle pagine:
 base_html("chiudi", $_percorso);
@@ -58,7 +58,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 		$query = "UPDATE articoli SET immagine2='' where immagine2='$_file'";
 
 		//eseguiamo
-		mysql_query($query, $conn) or mysql_error();
+		domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
 		echo "Aggiornamento dabase eseguito<br>";
 	}
@@ -78,7 +78,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			$query = "UPDATE articoli SET immagine2='$_file' where immagine2='$_orfile'";
 
 			//eseguiamo
-			mysql_query($query, $conn) or mysql_error();
+			domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
 			echo "<h3>Aggiornamento dabase eseguito</h3>";
 		}

@@ -264,9 +264,9 @@ if ($_SESSION['user']['setting'] > "3")
     echo "<option value=\"0\">0 Nessun logo spazio libero</option>\n";
     echo "<option value=\"1\">1 Logo immagine grande</option>\n";
     echo "<option value=\"2\">2 Logo Scritto con caratteri completo</option>\n";
-    echo "<option value=\"3\">3 Logo Scritto ma minimale</option>\n";
+    echo "<option value=\"3\">3 Logo Scritto ma minimale con anno e numero di pagina</option>\n";
     echo "<option value=\"4\">4 Logo super minimale, una riga sola con titolo e pagina</option>\n";
-    echo "<option value=\"5\">5 Logo per inventario/rimanenze</option>\n";
+    echo "<option value=\"5\">5 Logo per inventario/rimanenze necessita di sottotestata</option>\n";
     echo "</select>\n";
 
     echo "</td>\n";
@@ -324,7 +324,7 @@ if ($_SESSION['user']['setting'] > "3")
         echo "<option value=\"2\">2 Completa e complessa</option>\n";
         echo "<option value=\"3\">3 Tipica per fatture</option>\n";
         echo "<option value=\"4\">4 Speciale per fatture</option>\n";
-        echo "<option value=\"5\">5 Logo in caratteri classico per stampe di magazzino</option>\n";
+        //echo "<option value=\"5\">5 Logo in caratteri classico per stampe di magazzino</option>\n";
         echo "</select>\n";
         echo "</tr><tr>\n";
 
@@ -339,6 +339,7 @@ if ($_SESSION['user']['setting'] > "3")
         echo "<option value=\"2\">2 Completa e complessa per fatture</option>\n";
         echo "<option value=\"3\">3 Classica per ddt ma con il pagamento al posto del contatto</option>\n";
         echo "<option value=\"4\">4 Adatta ai listini con in centro la scritta del titolo</option>\n";
+        echo "<option value=\"5\">5 Adatta a inventario rimanenze con titolo e data con pagina</option>\n";
         echo "</select>\n";
         echo "</tr><tr>\n";
     }

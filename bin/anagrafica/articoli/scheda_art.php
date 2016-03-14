@@ -16,6 +16,7 @@ $_SESSION['keepalive'] ++;
 require $_percorso . "librerie/lib_html.php";
 require_once $_percorso . "librerie/motore_anagrafiche.php";
 require_once $_percorso . "librerie/stampe_pdf.php";
+//require_once($_percorso . 'tools/fpdf/html_table.php');
 
 //carico la sessione con la connessione al database..
 $conn = permessi_sessione("verifica_PDO", $_percorso);
@@ -59,7 +60,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     
     //qui iniziamo a costruire la pagina direttamente in pdf..
     //creaiamo il file
-    crea_file_pdf($_cosa, $_orientamento, "Scheda Articolo " . $dati['articolo']);
+    crea_file_pdf("pdf_table", $_orientamento, "Scheda Articolo " . $dati['articolo']);
 
     crea_pagina_pdf();
 

@@ -31,6 +31,7 @@ base_html($_cosa, $_percorso);
 java_script($_cosa, $_percorso);
 
 jquery_tabs($_cosa, $_percorso);
+fancybox($_cosa);
 
 //carichiamo la testata del programma.
 testata_html($_cosa, $_percorso);
@@ -97,9 +98,10 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "<div id=\"tabs\" style=\"z-index: 1;\">\n";
     echo "<ul>\n";
     echo "<li><a href=\"#tabs-1\">Generale</a></li>\n";
-    echo "<li><a href=\"#tabs-2\">Acquisti</a></li>\n";
-    echo "<li><a href=\"#tabs-3\">Dettagli articolo</a></li>\n";
-    echo "<li><a href=\"#tabs-4\">Ultimi Muovimenti</a></li>\n";
+    echo "<li><a href=\"#tabs-2\">Scheda Articolo</a></li>\n";
+    echo "<li><a href=\"#tabs-3\">Acquisti</a></li>\n";
+    echo "<li><a href=\"#tabs-4\">Dettagli articolo</a></li>\n";
+    echo "<li><a href=\"#tabs-5\">Ultimi Muovimenti</a></li>\n";
     echo "</ul>\n";
 
 
@@ -164,12 +166,41 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         echo "<img src=\"../../../imm-art/disegni/$dati[immagine2]\" height=\"250\" width=\"250\"></td></tr>\n";
     }
 
+    echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
+
+
+    echo "</table>\n";
+    echo "</div>\n";
+#fine generale
+#
+
+    echo "<div id=\"tabs-2\">\n";
+
+    echo "<table class=\"classic_bordo\">";
+
+// CAMPO Articolo ---------------------------------------------------------------------------------------
+    echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Codice:&nbsp;</b></span></td>\n";
+    echo "<td align=\"left\"><b>$dati[articolo]</b></td><tr>\n";
+
+// CAMPO Descrizione ---------------------------------------------------------------------------------------
+    echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Descrizione:&nbsp;</b></span></td>";
+    printf("<td align=\"left\"><b>%s</b></td></tr>\n", $dati['descrizione']);
+
+// immagine articolo
+    echo "<tr><td align=\"left\"><span class=\"testo_blu\">Immagine :&nbsp;</span></td>\n";
+    echo "<td align=\"left\">";
+    echo"<a id=\"example2\" href=\"../../../imm-art/$dati[immagine]\" title=\"$dati[descrizione]\"><img alt=\"example2\" src=\"../../../imm-art/$dati[immagine]\" height=\"250\" width=\"250\" border=\"0\"></a>\n";
+    if ($dati[immagine2] != "")
+    {
+        echo"<a id=\"example2\" href=\"../../../imm-art/disegni/$dati[immagine2]\" title=\"$dati[descrizione]\"><img alt=\"example2\" src=\"../../../imm-art/disegni/$dati[immagine2]\" height=\"250\" width=\"250\" border=\"0\"></a>\n";
+    }
+
 
     // descrizione articolo estesa
 // CAMPO note articolo -----------------------------------------------------------------------------------------
     echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
-    echo "<tr><td align=\"left\"><span class=\"testo_blu\">Desc. estesa:&nbsp;</span></td>\n";
-    echo "<td align=\"left\" width=\"70%\"> $dati[descsito]</td></tr>\n";
+    echo "<tr>\n";
+    echo "<td align=\"left\" colspan=\"2\"> $dati[descsito]</td></tr>\n";
 
     echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
 
@@ -177,8 +208,9 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "</table>\n";
     echo "</div>\n";
 #fine generale
+#
 #inizio sezione acquisti..
-    echo "<div id=\"tabs-2\">\n";
+    echo "<div id=\"tabs-3\">\n";
 
     echo "<table class=\"classic_bordo\">";
 
@@ -325,7 +357,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
 
 #inizio sezione dettagli
-    echo "<div id=\"tabs-3\">\n";
+    echo "<div id=\"tabs-4\">\n";
     echo "<table class=\"classic_bordo\">";
 // CAMPO selezione categoria merceologica -------------------------------------------
     echo "<tr><td align=\"left\"><span class=\"testo_blu\">Categoria Merceologica:&nbsp;</span></td>\n";
@@ -389,7 +421,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
     //----------------------------------------------------------------tabella 4
 
-    echo "<div id=\"tabs-4\">\n";
+    echo "<div id=\"tabs-5\">\n";
     echo "<table class=\"classic_bordo\">";
 
     //prendiamo l'anno aperto negli archivi

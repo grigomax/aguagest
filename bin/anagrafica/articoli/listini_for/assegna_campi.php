@@ -114,8 +114,8 @@ if ($_SESSION['user']['anagrafiche'] > "3")
             //controllo se il file esiste già sul server
             //sposto il file caricato dalla cartella temporanea alla destinazione finale
 
-            if (($_FILES["file"]["type"] != "text/plain") AND ( $_FILES["file"]["type"] != "text/comma-separated-values"))
-            {
+            if (($_FILES["file"]["type"] != "text/plain") AND ( $_FILES["file"]["type"] != "text/comma-separated-values") AND ( $_FILES["file"]["type"] != "application/vnd.oasis.opendocument.spreadsheet"))
+                {
                 echo "<h3> " . $_FILES["file"]["type"] . "</h3>";
                 echo "<h3>Il file caricato non è conforme alle richieste tipo file errato</h3>";
                 echo "<h3>Errore Registrato</h3>";
@@ -260,6 +260,60 @@ if ($_SESSION['user']['anagrafiche'] > "3")
                 $utente = tabella_fornitori("singola_parametri", $iva_utente, "piva LIKE");
             }
         }
+        elseif($separatore == "ODS")
+        {
+            include $_percorso."tools/ods/ods.php"; //include the class and wrappers
+            
+            $object=parseOds($_percorso . "../spool/" . $_FILES["file"]["name"]); //load the ods file
+
+            $foglio = "0";
+            echo "numero righe ". $object->readSheet("numero",$foglio). " foglio nr. $foglio<br>\n";
+
+            $righe = $object->readSheet("numero",$foglio);
+
+            echo "Elenco prime tre righe<BR></center>";
+            echo "<h4>Assegnare i campi letti ai rispettivi database articoli <font color=\"red\">Attenzione il primo campo è la ricerca ed assegnazione</font></h4>\n";
+            
+            for ($b = 0; $b < 3; $b++)
+            {
+              $value = $object->readRow($foglio,$b,"");
+              //echo "numero colonne ".count($value) ."<br>\n";
+              $colonne = count($value);
+
+              for ($a = 0; $a < $colonne; $a++)
+              {
+                echo "|".$value[$a]['value'] ."\n";
+                
+              }
+              
+              echo "</br>\n";
+              
+            }
+            
+            $_nr = 0;
+            echo "<table border=\"1\" cellspacing=\"0\" cellpadding=\"1\">\n";
+            echo "<tr>\n";
+            $value = $object->readRow($foglio, 4, "");
+            //echo "numero colonne ".count($value) ."<br>\n";
+            $colonne = count($value);
+
+            for ($a = 0; $a < $colonne; $a++)
+            {
+                echo "<td>Campo NR $_nr <br>\n";
+
+                echo $value[$a]['value'] . "<br />";
+                colonna_articolo("campo$_nr");
+                echo "</td>\n";
+                $_nr++;
+            }
+
+
+            echo "</tr></table>\n";
+            
+            
+            
+
+        }
         else
         {
             echo "Elenco prime tre righe<BR></center>";
@@ -330,13 +384,18 @@ if ($_SESSION['user']['anagrafiche'] > "3")
 
         echo "<tr>\n";
 
+        //-------------------------------------
         echo "<td><h3>Genera listini<input type=\"checkbox\" name=\"vendita\" value=\"SI\"></h3></tr>\n";
-        echo "<tr><td colspan=\"2\">Inserisci il fattore di moltiplicazione<input type=\"text\" size=\"4\" name=\"moltiplica\" value=\"0\">\n";
+        echo "<tr>\n";
+        echo "<td colspan=\"2\">Inserisci un nuovo listino <input type=\"radio\" name=\"listino\" value=\"new\" checked> Oppura Aggiorna Attuale <input type=\"radio\" name=\"listino\" value=\"update\"></td></tr>\n";
+        echo "<tr>\n";
+        echo "<td colspan=\"2\">Inserisci il fattore di moltiplicazione<input type=\"text\" size=\"4\" name=\"moltiplica\" value=\"0\">\n";
         echo "Se percentuale =><input type=\"checkbox\" name=\"percento\" value=\"SI\">%</td>\n";
         echo "<td>Inserisci il numero del listino<br><input type=\"text\" size=\"4\" name=\"nlv\" value=\"1\"></td>\n";
 
         echo "</tr>\n";
 
+        //--------------------------------------
 
         echo "<tr><td colspan=\"4\"><hr/></td></tr>\n";
 
@@ -392,8 +451,8 @@ if ($_SESSION['user']['anagrafiche'] > "3")
 
 
 
-        echo "<tr><td align=\"right\" colspan=\"4\">Descrizione estesa :&nbsp;<br/>";
-        echo "<textarea id=\"elm2\" name=\"descsito\" style=\"width:60%; height:350px;\" >$dati[descsito]</textarea></td></tr>\n";
+        echo "<tr><td align=\"right\" colspan=\"4\" width=\"500\">Descrizione estesa :&nbsp;<br/>";
+        echo "<textarea id=\"elm2\" name=\"descsito\" cols=\"30\" rows=\"25\">$dati[descsito]</textarea></td></tr>\n";
     }
 
     echo "<tr><td colspan=\"4\"><hr/></td></tr>\n";

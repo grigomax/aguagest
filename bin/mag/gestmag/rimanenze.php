@@ -71,6 +71,11 @@ if ($_SESSION['user']['magazzino'] > "1")
 	echo "</select>\n";
 	echo "</td></tr>\n";
 
+        echo "<tr><td align=center><br>Stampare la data di stampa.. ? <br>\n";
+        echo "NO <input type=\"radio\" value=\"SI\" name=\"data\" checked> - Data del Giorno <input type=\"radio\" value=\"SI\" name=\"data\"> - Ultimo giorno dell'anno <input type=\"radio\" value=\"mese\" name=\"data\">\n";
+	echo "</td></tr>\n";
+        
+        
 	echo "</table><center><br><input type=\"reset\" value=\"Cancella\">&nbsp;<input type=\"submit\" value=\"Stampa\");>\n";
 	echo "</form>\n</td>\n";
 	echo "</td>\n</tr>\n";

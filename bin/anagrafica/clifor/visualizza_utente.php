@@ -499,7 +499,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
            // pulsanti("nuovo", "submit", "nuovo_get", "get", "modifica_utente.php?tut", "40px", "40px", "Nuovo", "azione", "nuovo", "Nuovo", $_id);
 
             pulsanti("modifica", "submit", "modifica", $_formmethod, $_formaction, "40px", "40px", "Modifica", "codice", $_codice, "Modifica", $_id);
-            pulsanti("help", "submit", "", "get", "http://aguagest.sourceforge.net/?q=node/55", "40px", "40px", "Aiuto", "", "", "Aiuto", $_id);
+            pulsanti("aiuto", "submit", "_blank", "get", $_percorso."manuale/visualizza_guida.php", "40px", "40px", "Aiuto", "file", "M0403.html", "Aiuto", $_id);
         }
 
     if ($_SESSION['user']['anagrafiche'] > "3")
@@ -508,7 +508,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         echo "</form>";
 
         echo "<br><BR>";
-        echo "<a href=\"../../vendite/docubase/stampa_inevaso.php?tdoc=$_tdoc&tut=$_numero&anno=2011&utente=$_codice\" target=\"_blank\">Stampa Inevaso di questo cliente</a>\n";
+        echo "<a href=\"../../vendite/docubase/stampa_inevaso.php?tdoc=$_tdoc&tut=$_numero&utente=$_codice\" target=\"_blank\">Stampa Inevaso di questo cliente</a>\n";
 
         echo "<br><BR>";
         echo "<a href=\"../../vendite/docubase/nuovodoc.php?tipo=$_tipo&codice=$_codice\">Inizia Un nuovo documento con questo cliente.. </a><br>\n";
@@ -516,7 +516,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         if ($CONTABILITA == "SI")
         {
             $_anno = date('Y');
-            echo "<br><BR>Visualizza la situazione cliente contabile == ><a href=\"../../contabilita/result_scheda.php?tipo_cf=$tipo_cf&codconto=$_codice&start=$_anno\">Clicca QUI !</a>\n";
+            echo "<br><BR>Visualizza la situazione cliente contabile == ><a href=\"../../contabilita/result_scheda.php?azione=$tipo_cf$_anno$_codice\">Clicca QUI !</a>\n";
             echo "<br>\n";
         }
     }
@@ -571,6 +571,6 @@ echo "</tr></table>"; // chiusura tabelle interna
 
 
 
-echo "</td></tr></table>"; //chiusura seconda tabella
+echo "</td></tr></table><br><br></body></html>\n"; //chiusura seconda tabella
 // Fine tabella pagina principale -----------------------------------------------------------
 ?>

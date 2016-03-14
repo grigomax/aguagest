@@ -14,7 +14,7 @@ session_start(); $_SESSION['keepalive']++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 //carichiamo la base delle pagine:
 base_html("chiudi", $_percorso);

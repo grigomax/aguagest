@@ -496,7 +496,16 @@ if ($_SESSION['user']['vendite'] > "2")
         $_qtascarico = $dati_mag['qtascarico'];
         $_valoreacq = $dati_mag['valoreacq'];
         $_giacenza = ($_qtacarico - $_qtascarico);
-        @$_mediaacq = $_valoreacq / $_qtacarico;
+        
+        if(($_valoreacq != "") AND ($_qtacarico != ""))
+        {
+            @$_mediaacq = $_valoreacq / $_qtacarico;
+        }
+        else
+        {
+            $_mediaacq = "0.00";
+        }
+        
 
 
         $_ultimavend = tabella_magazzino("ultima_vendita", $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_tut, $_rigo, $_utente, $_articolo, $dati['codice']);
@@ -507,7 +516,7 @@ if ($_SESSION['user']['vendite'] > "2")
         echo "<tr><td colspan=\"10\"><hr></td></tr>\n";
         echo "<tr><td colspan=\"2\" align=\"center\"><span class=\"testo_blu\">Giacenza articolo in magazzino ==>&nbsp;</span> <b>$_giacenza</b></td>";
         echo "<td colspan=\"3\" align=\"CENTER\"><span class=\"testo_blu\">  Valore medio acquisto ==>&nbsp;</span> <b>$_mediaacq</b></td>";
-        echo "<td colspan=\"3\" align=\"center\"><span class=\"testo_blu\">  Ultimo valore articolo ==>&nbsp;</span><b>$_ultimavend</b></td></tr>";
+        echo "<td colspan=\"3\" align=\"center\"><span class=\"testo_blu\">  Ultimo Vendita articolo ==>&nbsp;</span><b>$_ultimavend</b></td></tr>";
 
 
         annulla_doc_vendite($_dove, $_tdoc, $_anno, $_suffix, $_ndoc);

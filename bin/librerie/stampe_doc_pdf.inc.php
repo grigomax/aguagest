@@ -377,16 +377,16 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->Cell(30, 5, $ID001, 0, 1, 'L');
 	$pdf->SetFont($datidoc[ST_FONTINTEST], 'B', $datidoc[ST_FONTINTESTSIZE]);
 	$pdf->SetX($MARGINE_SINISTRO);
-	$pdf->Cell(80, 5, $dati2['ragsoc'], 0, 1, 'L');
+	$pdf->Cell(80, 5, substr($dati2['ragsoc'],0,37), 0, 1, 'L');
 	$pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]);
 	$pdf->SetX($MARGINE_SINISTRO);
-	$pdf->Cell(80, 5, $dati2['ragsoc2'], 0, 1, 'L');
+	$pdf->Cell(80, 5, substr($dati2['ragsoc2'],0,37), 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(80, 5, $dati2['indirizzo'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(13, 5, $dati2['cap'], 0, 0, 'L');
-	$pdf->Cell(70, 5, $dati2['citta'], 0, 0, 'L');
+	$pdf->Cell(70, 5, substr($dati2['citta'],0,30), 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(70, 5, $dati2['codnazione'], 0, 1, 'L');
@@ -551,16 +551,16 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->Cell(30, 5, $ID001, 0, 1, 'L');
 	$pdf->SetFont($datidoc[ST_FONTINTEST], 'B', $datidoc[ST_FONTINTESTSIZE]);
 	$pdf->SetX(110);
-	$pdf->Cell(80, 5, $dati2['ragsoc'], 0, 1, 'L');
+	$pdf->Cell(80, 5, substr($dati2['ragsoc'],0,35), 0, 1, 'L');
 	$pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]);
 	$pdf->SetX(110);
-	$pdf->Cell(80, 5, $dati2['ragsoc2'], 0, 1, 'L');
+	$pdf->Cell(80, 5, substr($dati2['ragsoc2'],0,35), 0, 1, 'L');
 	$pdf->SetX(110);
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(80, 5, $dati2['indirizzo'], 0, 1, 'L');
 	$pdf->SetX(110);
 	$pdf->Cell(12, 5, $dati2['cap'], 0, 0, 'L');
-	$pdf->Cell(70, 5, $dati2['citta'], 0, 0, 'L');
+	$pdf->Cell(70, 5, substr($dati2['citta'],0,30), 0, 0, 'L');
 	$pdf->Cell(11, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX(110);
 	$pdf->Cell(70, 5, $dati2['codnazione'], 0, 1, 'L');
@@ -583,16 +583,16 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->Cell(30, 5, $ID001, 0, 1, 'L');
 	$pdf->SetFont($datidoc[ST_FONTINTEST], 'B', $datidoc[ST_FONTINTESTSIZE]);
 	$pdf->SetX($MARGINE_SINISTRO);
-	$pdf->Cell(80, 5, $dati2['ragsoc'], 0, 1, 'L');
+	$pdf->Cell(80, 5, substr($dati2['ragsoc'],0,37), 0, 1, 'L');
 	$pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]);
 	$pdf->SetX($MARGINE_SINISTRO);
-	$pdf->Cell(80, 5, $dati2['ragsoc2'], 0, 1, 'L');
+	$pdf->Cell(80, 5, substr($dati2['ragsoc2'],0,37), 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(80, 5, $dati2['indirizzo'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(13, 5, $dati2['cap'], 0, 0, 'L');
-	$pdf->Cell(70, 5, $dati2['citta'], 0, 0, 'L');
+	$pdf->Cell(70, 5, substr($dati2['citta'],0,30), 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(70, 5, $dati2['codnazione'], 0, 1, 'L');
@@ -630,11 +630,6 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->SetXY($MARGINE_SINISTRO, $_y);
     }//fine testata n. 4
     
-    if ($datidoc[ST_TIPOTESTATA] == "5")
-    {
-        $pdf->Cell(190,10, "$datidoc[ST_NDOC] $datidoc[tipo]  Pagina $_pg di $pagina", 0,1,'C');
-    }
-
     if ($datidoc[ST_SOTTOTESTATA] == "1")
     {// ottima per le bolle..
 	//intestazione delle celle..
@@ -937,8 +932,17 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         $pdf->Cell(190,10, $_parametri['tabella'], 0,1,'C');
     }
     
-    
-    
+    if ($datidoc[ST_SOTTOTESTATA] == "5")
+    {
+        $pdf->SetX($MARGINE_SINISTRO);
+        $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc['ST_FONTINTESTSIZE']-2);
+        $pdf->SetX(150);
+        $pdf->Cell(50,5, "$_parametri[data] Pagina $_pg di $pagina", 0,1,'R');
+        $pdf->SetX($MARGINE_SINISTRO);
+        $pdf->SetFont($datidoc[ST_FONTINTEST], 'B', $datidoc['ST_FONTINTESTSIZE']);
+        $pdf->Cell(200,10, "$_parametri[tabella]", 0,1,'C');
+        
+    }
     
     
 }
@@ -977,6 +981,10 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
     {
         $_nettovendita = $corpo_doc['netto'];
         $_castiva = $corpo_doc['iva'];
+        $_totini = $corpo_doc['iniziale'];
+        $_totacq = $corpo_doc['iniziale'];
+        $_totvend = $corpo_doc['iniziale'];
+        
     }
 
 
@@ -2059,7 +2067,7 @@ function calce_doc_pdf($datidoc, $pagina, $_pg, $_nettovendita, $_castiva, $dati
     }
     else
     {
-        if (($datidoc[ST_TIPOCALCE] > 0) AND ($datidoc[ST_TIPOCALCE] < 6))
+        if (($datidoc[ST_TIPOCALCE] > 0) AND ($datidoc[ST_TIPOCALCE] < 5))
         {
             if ($CGV == "SI")
             {

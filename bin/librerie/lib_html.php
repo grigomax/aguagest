@@ -2153,17 +2153,36 @@ function base_html_stampa($_cosa, $_parametri)
 
 function java_script($_cosa, $_percorso)
 {
-    echo "<link type=\"text/css\" href=\"" . $_percorso . "tools/jquery/themes/cupertino/jquery-ui.css\" rel=\"stylesheet\" />\n";
-    echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery-1.9.1.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery-migrate-1.2.1.min.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/ui/jquery-ui.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/autoNumeric.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery.maskedinput-1.3.min.js\"></script>\n";
-    #echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery.ui.datepicker-it.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/tinymce/tinymce.min.js\"></script>\n";
-    #echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery_vc.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/fancybox/jquery.fancybox.pack.js\"></script>\n";
-    //<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+    if($_cosa == "no_invio")
+    {
+        ?>
+        <script type="text/javascript">
+            function stopRKey(evt) { 
+            var evt = (evt) ? evt : ((event) ? event : null); 
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+            if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+            } 
+
+            document.onkeypress = stopRKey; 
+
+         </script>
+         <?php
+    }
+    else
+    {
+        echo "<link type=\"text/css\" href=\"" . $_percorso . "tools/jquery/themes/cupertino/jquery-ui.css\" rel=\"stylesheet\" />\n";
+        echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery-1.9.1.js\"></script>\n";
+        echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery-migrate-1.2.1.min.js\"></script>\n";
+        echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/ui/jquery-ui.js\"></script>\n";
+        echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/autoNumeric.js\"></script>\n";
+        echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery.maskedinput-1.3.min.js\"></script>\n";
+        #echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery/jquery.ui.datepicker-it.js\"></script>\n";
+        echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/tinymce/tinymce.min.js\"></script>\n";
+        #echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/jquery_vc.js\"></script>\n";
+        echo "<script type=\"text/javascript\" src=\"" . $_percorso . "tools/fancybox/jquery.fancybox.pack.js\"></script>\n";
+        //<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+    }
+    
 }
 
 /* Funzione menu a cascata
@@ -2390,19 +2409,38 @@ function jquery_tabs($_cosa, $_percorso)
 function fancybox($_cosa)
 {
     global $_percorso;
+    /*
+    <script type="text/javascript" src="tools/fancybox/jquery-1.4.3.min.js"></script>
+        <script type="text/javascript" src="tools/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+        <script type="text/javascript" src="tools/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+        <link rel="stylesheet" type="text/css" href="tools/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
 
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("a#example2").fancybox({
+                    'transitionIn': 'elastic',
+                    'transitionOut': 'elastic',
+                    'titlePosition': 'inside'
+                });
+            });
+        </script>
+*/
     echo "<link rel=\"stylesheet\" href=\"" . $_percorso . "tools/fancybox/jquery.fancybox.css\" type=\"text/css\" media=\"screen\" />\n";
 
     //echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $_percorso . "tools/fancybox/jquery.fancybox-1.3.4.css\" media=\"screen\" />\n";
     ?>
-    <script>
-        $(document).ready(function () {
-            $('.fancybox').fancybox({
-                padding: 0,
-                openEffect: 'elastic'
+    <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("a#example2").fancybox({
+                    'transitionIn': 'elastic',
+                    'transitionOut': 'elastic',
+                    'titlePosition': 'inside'
+                });
             });
-        });
-    </script>
+        </script>
 
 
     <?php
@@ -2804,11 +2842,11 @@ function pulsanti($_cosa, $_type, $_form, $_formmethod, $_formaction, $_height, 
 
         if ($_formmethod == "get")
         {
-            echo "<button type=\"$_type\" formtarget=\"$_form\" formmethod=\"$_formmethod\" formaction=\"$_formaction\" value=\"$_value\" name=\"$_name\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_$_cosa.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
+            echo "<button type=\"$_type\" formtarget=\"$_form\" formmethod=\"$_formmethod\" formaction=\"$_formaction\" value=\"$_value\" name=\"$_name\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_$_cosa.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\" >$_testo</font></button> \n";
         }
         else
         {
-            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_$_cosa.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\">$_testo</font></button> \n";
+            echo "<button type=\"$_type\" form=\"$_form\" name=\"$_name\" value=\"$_value\" alt=\"$_alt\"> <img src=\"" . $_percorso . "images/pulsanti/pulsante_$_cosa.png\" height=\"$_height\" width=\"$_width\"><br><font face=\"$FONT_PULSANTI\" style=\"font-size: $FONTPULSANTISIZE" . "pt;\" >$_testo</font></button> \n";
         }
     
 }

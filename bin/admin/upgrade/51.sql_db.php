@@ -23,6 +23,7 @@ echo "<h4>Inizio aggiornamento archivi versione 51</h4>\n";
 $_versione = "51";
 $_punto = "0";
 
+$_sovrascrivi = "NO";
 
 //cambiamo tutti i valori dei documenti..
 
@@ -61,12 +62,20 @@ else
     echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
     $_errori['descrizione'] = $errorinfo[2];
     $_errori['files'] = "$_versione.sql.db.php";
-    scrittura_errori($_cosa, $_percorso, $_errori);
+    scrittura_errori($_tipo, $_cosa, $_errori, $query);
     echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
     echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
     echo "</body></html>";
-    $fine = 0;
-    exit;
+    if($_sovrascrivi == "SI")
+    {
+        $fine = 1;
+        $_num++;
+    }
+    else
+    {
+        $fine = 0;
+        exit;
+    }
 }
 
 
@@ -90,12 +99,20 @@ else
     echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
     $_errori['descrizione'] = $errorinfo[2];
     $_errori['files'] = "$_versione.sql.db.php";
-    scrittura_errori($_cosa, $_percorso, $_errori);
+    scrittura_errori($_tipo, $_cosa, $_errori, $query);
     echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
     echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
     echo "</body></html>";
-    $fine = 0;
-    exit;
+    if($_sovrascrivi == "SI")
+    {
+        $fine = 1;
+        $_num++;
+    }
+    else
+    {
+        $fine = 0;
+        exit;
+    }
 }
 
 
@@ -119,12 +136,20 @@ else
     echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
     $_errori['descrizione'] = $errorinfo[2];
     $_errori['files'] = "$_versione.sql.db.php";
-    scrittura_errori($_cosa, $_percorso, $_errori);
+    scrittura_errori($_tipo, $_cosa, $_errori, $query);
     echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
     echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
     echo "</body></html>";
-    $fine = 0;
-    exit;
+    if($_sovrascrivi == "SI")
+    {
+        $fine = 1;
+        $_num++;
+    }
+    else
+    {
+        $fine = 0;
+        exit;
+    }
 }
 
 
@@ -146,12 +171,20 @@ else
     echo "Errore numero $errorinfo[1] tipo $errorinfo[2] <br/>"; // stringa con l' errore
     $_errori['descrizione'] = $errorinfo[2];
     $_errori['files'] = "$_versione.sql.db.php";
-    scrittura_errori($_cosa, $_percorso, $_errori);
+    scrittura_errori($_tipo, $_cosa, $_errori, $query);
     echo "<br>Si prega di contattale l'amministratore con comunicare l'errore qui sopra con un copia incolla<br>\n";
     echo "Oppure comunicare il file agua_log presente nella directory spool<br>Impossibile continuare Errore Registrato";
     echo "</body></html>";
-    $fine = 0;
-    exit;
+    if($_sovrascrivi == "SI")
+    {
+        $fine = 1;
+        $_num++;
+    }
+    else
+    {
+        $fine = 0;
+        exit;
+    }
 }
 
 
@@ -187,7 +220,7 @@ else
         $errorinfo = $conn->errorInfo();
         $_errori['descrizione'] = $errorinfo[2];
         $_errori['files'] = "aggiorna.php";
-        scrittura_errori($_cosa, $_percorso, $_errori);
+        scrittura_errori($_tipo, $_cosa, $_errori, $query);
 
         $fine = 0;
     }

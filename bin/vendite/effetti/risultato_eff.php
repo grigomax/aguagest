@@ -101,7 +101,7 @@ if ($_SESSION['user']['vendite'] > "1")
         if ($CONTABILITA == "SI")
         {
             printf("<td width=\"400\" align=\"left\"><span class=\"testo_blu\">
-		<a href=\"../../contabilita/result_scheda.php?tipo_cf=C&codconto=%s&start=%s\">%s</span></td>", $dati['codice'], $dati['annoeff'], $dati['ragsoc']);
+		<a href=\"../../contabilita/result_scheda.php?azione=C%s%s\">%s</span></td>", $dati['annoeff'], $dati['codice'], $dati['ragsoc']);
         }
         else
         {
@@ -111,9 +111,6 @@ if ($_SESSION['user']['vendite'] > "1")
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['scadeff']);
         printf("<td width=\"80\" align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['status']);
         printf("<td width=\"70\" height=\"1\" align=\"center\" class=\"testo_blu\"><input type=\"submit\" name=\"ndoc\" value=\"%s\"></td>", $dati['numeff']);
-
-
-        #http://localhost/agua/bin/contabilita/result_scheda.php?tipo_cf=C&codconto=867&start=2012
 
 
         echo "</form></tr>";

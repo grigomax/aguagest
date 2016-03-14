@@ -12,6 +12,7 @@
 //includo file per generazione pdf
 define('FPDF_FONTPATH', $_percorso . 'tools/fpdf/font/');
 require_once($_percorso . 'tools/fpdf/fpdf.php');
+require_once($_percorso . 'tools/fpdf/html_table.php');
 
 /**
  * La prima funzione mi crea un file pdf con dimensioni, titolo grandezz ecc..
@@ -24,8 +25,16 @@ function crea_file_pdf($_cosa, $_orientamento, $_titolo)
     global $pdf;
     global $azienda;
 
+    if($_cosa == "pdf_table")
+    {
+        $pdf=new PDF_table();
+    }
+    else
+    {
+        $pdf = new FPDF('P', 'mm', 'A4');
+    }
     // setto le variabili standard creazione pdf
-    $pdf = new FPDF('P', 'mm', 'A4');
+    
     $pdf->AliasNbPages();
     $pdf->SetAutoPageBreak('Off', 2);
     $pdf->SetTitle($_titolo, true);
@@ -426,7 +435,12 @@ function corpo_pagina($_cosa, $dati, $_parametri)
         $pdf->Cell(20, 5, 'Peso Articolo  ' . $dati['pesoart'], 0, 1, 'L');
 
         $pdf->SetFont('Arial', '', 8);
-        $pdf->MultiCell(193, 5, strip_tags($dati['descsito'],'<table>, <tr>, <td>, colspan'), 0, 'L', 0);
+        //$_note = strip_tags($dati['descsito'],'<table>, <tr>, <td>, colspan');
+        $_note = mb_convert_encoding($dati['descsito'], "windows-1252", "UTF-8");
+        
+        $pdf->WriteHTML($_note);
+        
+        //$pdf->MultiCell(193, 5, strip_tags($dati['descsito'],'<table>, <tr>, <td>, colspan'), 0, 'L', 0);
         //$pdf->MultiCell(193, 5, $dati['descsito'], 0, 'L', 0);
         //$pdf->WriteHTML($dati['descsito']);
         //$pdf->Write(5,strip_tags($dati['descsito'],'<table>, <tr>, <td>'));

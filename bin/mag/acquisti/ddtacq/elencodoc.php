@@ -38,17 +38,7 @@ if ($_SESSION['user']['magazzino'] > "1")
    $query = "select anno, suffix, ndoc, ragsoc, utente, ddtfornitore, fatturacq, datareg, SUM(valoreacq) AS valoreacq, status from magazzino INNER JOIN fornitori ON magazzino.utente=fornitori.codice where tdoc='ddtacq' and (fatturacq = '' OR valoreacq = '' OR protoiva = '') GROUP BY ndoc, anno ORDER BY ragsoc, ndoc";
 // Esegue la query...
 
-    $result = $conn->query($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
 
     // Tutto procede a meraviglia...
     echo "<table align=\"center\">";

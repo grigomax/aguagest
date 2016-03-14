@@ -39,12 +39,23 @@ if ($_SESSION['user']['contabilita'] > "1")
 	$_end = cambio_data("us", $_POST['data_end']);
 
 	echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"left\">";
-	echo "<tr>";
 
+        echo "<tr><td align=\"center\">\n";
+        
+         echo "<form action=\"\" id=\"pulsanti\" method=\"GET\">";
+    
+        pulsanti("home", "submit", "", "get", "../../index.php", "40px", "40px", "Indice", "", "", "Cerca", $_id);
+        pulsanti("cerca", "submit", "", "get", "bilancio.php", "40px", "40px", "Cerca", "", "", "Cerca", $_id);
+        pulsanti("stampa", "submit", "_blank", "get", "bilancio_verifica.php", "40px", "40px", "Stampa Verifica", "azione", "$_start$_end", "Stampa", $_id);
+        pulsanti("stampa", "submit", "_blank", "get", "bilancio_stampa.php", "40px", "40px", "Stampa Bilancio", "azione", "$_start$_end", "Stampa", $_id);
+        pulsanti("aiuto", "submit", "_blank", "get", "../../manuale/visualizza_guida.php?file=M0701.html", "40px", "40px", "Aiuto", "file", "M0701.html", "Aiuto", $_id);
+        echo "</form>\n";
+        
+        echo "</td></tr>\n";
+        
+        echo "<tr>";
 	echo "<td width=\"85%\" align=\"center\" valign=\"top\">\n";
 	echo "<h3>Bilancio al $_POST[data_end]</h3>";
-	echo "<h3>Stampa Bilancio di Verifica<a href=\"bilancio_verifica.php?data_start=$_POST[data_start]&data_end=$_POST[data_end]\" target=\"_blanck\">Stampa Qui!</a></h3>";
-	echo "<h3>Stampa Bilancio <a href=\"bilancio_stampa.php?data_start=$_POST[data_start]&data_end=$_POST[data_end]\" target=\"_blanck\">Stampa Qui!</a></h3>";
 
 #echo "<h4>La stampa in formato pdf verr&agrave; inviata in linea al Browser</h4>\n";
 	/* devo fare un query per i clienti

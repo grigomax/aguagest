@@ -47,6 +47,7 @@ if ($_SESSION['user']['anagrafiche'] > "3")
     echo "<select name=\"separatore\">\n";
     echo "<option value=\"\">Seleziona separatore  </option>\n";
     echo "<option value=\"METEL\">Listino METEL</option>\n";
+    echo "<option value=\"ODS\">File ods</option>\n";
     echo "<option value=\"|\"> |  </option>\n";
     echo "<option value=\":\"> : </option>\n";
     echo "<option value=\";\"> ; </option>\n";

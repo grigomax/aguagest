@@ -33,7 +33,6 @@ if ($_SESSION['user']['magazzino'] > "1")
 //Cambio le variabili e le faccio vedere
     $_anno = $_POST['anno'];
     $_tipo = $_POST['tipo'];
-    $_stampa = $_POST['stampa'];
     $_annoi = date('Y');
 //recuperiamo la data.. e la giriamo
 #echo "data di riferimento $_POST[data]";
@@ -146,14 +145,29 @@ if ($_SESSION['user']['magazzino'] > "1")
 
 
     //qui creiamo già la base della pagina globale..
-    $_title = "Inventario Magazzino";
+    $_title = "Rimanenza di Magazzino";
     $pdf = new FPDF('P', 'mm', 'A4');
     $pdf->SetAutoPageBreak('off', 5);
     $pdf->SetTitle($_title);
     $pdf->SetCreator('Gestionale AGUA GEST - aguagest.sourceforge.net');
     $pdf->SetAuthor($azienda);
-    $corpo_doc = "";
+    //$corpo_doc = "";
+    $corpo_doc['pagina'] = "";
 
+    if($_POST['data'] != "NO")
+    {
+        if($_POST['data'] == "SI")
+        {
+            $_parametri['data'] = "data ".date('d-m-Y');
+        }
+        else
+        {
+            $_parametri['data'] = "data 31-12-$_anno";
+        }
+        
+    }
+    $_parametri['tabella'] = "Rimanenze Magazzino Anno $_anno";
+    
 
 
     for ($_pg = 1; $_pg <= $pagina; $_pg++)
@@ -181,7 +195,7 @@ if ($_SESSION['user']['magazzino'] > "1")
     }
 
     //finito il ciclo inviamo il file..
-    $_pdf = "inventario.pdf";
+    $_pdf = "Rimanenze.pdf";
     $pdf->Output("../../../spool/$_pdf", "I");
 }
 else

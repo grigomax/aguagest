@@ -14,14 +14,14 @@ session_start(); $_SESSION['keepalive']++;
 require $_percorso . "librerie/lib_html.php";
 
 //carico la sessione con la connessione al database..
-$conn = permessi_sessione("verifica", $_percorso);
+$conn = permessi_sessione("verifica_PDO", $_percorso);
 
 require "../../../setting/par_conta.inc.php";
 
 //prendiamo i post dalla pagina precedente..
 
-$_start = cambio_data("us", $_GET['data_start']);
-$_end = cambio_data("us", $_GET['data_end']);
+$_start = substr($_GET['azione'], "0", "10");
+$_end = substr($_GET['azione'], "10", "10");
 
 function intest($_end, $_pg, $pagina)
 {
@@ -59,10 +59,9 @@ $rpp = "45";
 
 $query = "SELECT data_cont, desc_conto, conto, SUM( dare ) - SUM( avere ) AS saldo FROM prima_nota WHERE data_cont >= '$_start' AND data_cont <= '$_end' GROUP BY conto ORDER BY conto";
 
-$result = mysql_query($query, $conn) or mysql_error();
-//vedo quante righe sono per pagina..
-//cerco il numero di righe
-$righe = mysql_num_rows($result);
+$result = domanda_db("query", $query, $_cosa, $_ritorno, $_parametri);
+
+$righe = $result->rowCount();
 
 //inserisco il numero di righe per pagina
 $_pagine = $righe / $rpp;
@@ -80,7 +79,7 @@ for ($_pg = 1; $_pg <= $pagina; $_pg++)
 
     for ($_nr = 1; $_nr <= $rpp; $_nr++)
     {
-        $row = mysql_fetch_array($result);
+        $row = domanda_db("query", $query, $_cosa, "solo_fetch", $result);
 
         if ($row['saldo'] > "0.00")
         {

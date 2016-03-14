@@ -11,7 +11,7 @@ service httpd stop
 #prendiamo l'iserimento di dove è la cartella mysql
 echo "inserisci il percorso della cartella contenente i file di agua "
 echo "Partendo dalla radice.. / inclusa"
-echo "Per esempio.. : /sito/http/agua"
+echo "Per esempio.. : /var/www/html/"
 
 read directory
 
@@ -26,20 +26,22 @@ echo "Verifica directory..."
   if [ -d $directory ]; then
     echo "Fatto. !"
     echo "La directory esiste"
+    echo "Spegnamo il server.. "
+    service httpd stop
     echo "procedo a cambiare tutti i permessi...."
     echo "Cambio nome..."
-    chown mysql -R $directory
+    chown apache -R $directory
     echo ".. Fatto. !"
     echo "Procedo a cambiare il gruppo"
-    chgrp mysql -R $directory
+    chgrp apache -R $directory
     echo ".. Fatto.. !"
     echo "Procedo a cambiare i permessi"
     chmod 755 -R $directory
     echo "... Fatto. !"
-    echo "se Tutto ok riavvio il server mysql"
-    service mysqld restart
+    echo "se Tutto ok riavvio il server httpd"
+    service httpd restart
     echo "ed ora varifichiamo se è status ok"
-    service mysqld status
+    service httpd status
     echo "Speriamo sia tutto ok"
   else
     echo "la directory non esiste"

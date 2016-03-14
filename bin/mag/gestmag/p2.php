@@ -76,35 +76,35 @@ if ($_SESSION['user']['magazzino'] > "2")
     $_anno = $_POST['anno'];
 
 
-    $query = "select * from articoli where articolo='$_articolo'";
+    //vediamo se il magazzino è ancora aperto..
+    $query = "SELECT anno FROM magazzino WHERE tut = 'giain' ORDER BY anno LIMIT 1";
 
-// Esegue la query...
-    $result = $conn->query($query);
+    $datianno = domanda_db("query", $query, $_cosa, "fetch", $_parametri);
 
-    if ($conn->errorCode() != "00000")
+    if ($_anno < $datianno['anno'])
     {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
+        $_magazzino = "magastorico";
+    }
+    else
+    {
+        $_magazzino = "magazzino";
     }
 
 
+
+    $query = "select * from articoli where articolo='$_articolo'";
+
+    $dati = domanda_db("query", $query, $_cosa, "fetch", "verbose");
+
 // La query ?stata eseguita con successo...
 // MA ANCORA NON SAPPIAMO SE L'UTENTE ESISTA O MENO...
-    if ($result->rowCount() == 0)
+    if ($dati == "NO")
     {
         echo "<h2><center>Nessun articolo Trovato</h2></center>";
         return;
     }
     else
     {
-        // Tutto procede a meraviglia...
-        foreach ($result AS $dati)
-            ;
-
 
         printf("<span style=\"color: rgb(51, 204, 0); font-weight: bold;\">Codice :</span> %s", $_articolo);
         echo "<span style=\"font-weight: bold;\">&nbsp;</span>";
@@ -120,7 +120,7 @@ if ($_SESSION['user']['magazzino'] > "2")
 
         echo "<hr style=\"width: 100%; height: 2px;\">\n";
 
-        echo "<center><h4> SITUAZIONE ARTICOLO anno in corso $_anno</h4></center>\n";
+        echo "<center><h4> SITUAZIONE ARTICOLO $_magazzino anno in corso $_anno</h4></center>\n";
 
         echo "<table border=\"0\" align=\"center\" cellspacing=\"2\" cellpadding=\"2\">\n";
 
@@ -143,26 +143,11 @@ if ($_SESSION['user']['magazzino'] > "2")
 //inizio a prendere i dati dal magazzino
         $_tut = "giain";
 
-        $query = sprintf("select qtacarico, valoreacq from magazzino where anno=\"%s\" and tut=\"%s\" and articolo=\"%s\"", $_anno, $_tut, $_articolo);
+        $query = "select qtacarico, valoreacq from $_magazzino where anno='$_anno' and tut='$_tut' and articolo='$_articolo'";
+        echo $query;
 
 // Esegue la query...
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-        else
-        {
-            foreach ($result AS $dati2)
-                ;
-        }
-
+        $dati2 = domanda_db("query", $query, $_cosa, "fetch", "verbose");
 
 //Mi prendo le veriabili
 
@@ -187,28 +172,13 @@ if ($_SESSION['user']['magazzino'] > "2")
 //inizio a prendere i dati dal magazzino carico
 // faccio le somme dei valori per ogni articolo
 
-        $query = sprintf("select sum(qtacarico) AS qtacarico, sum(valoreacq) AS valoreacq from magazzino where anno=\"%s\" and tut != 'giain' and articolo=\"%s\"", $_anno, $_articolo);
+        $query = sprintf("select sum(qtacarico) AS qtacarico, sum(valoreacq) AS valoreacq from $_magazzino where anno=\"%s\" and tut != 'giain' and articolo=\"%s\"", $_anno, $_articolo);
 
+        echo $query;
 // Esegue la query...
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-        else
-        {
-            foreach ($result AS $dati3)
-                ;
-            $_qtacarico = $dati3['qtacarico'];
-            $_valoreacq = $dati3['valoreacq'];
-        }
-
+        $dati3 = domanda_db("query", $query, $_cosa, "fetch", "verbose");
+        $_qtacarico = $dati3['qtacarico'];
+        $_valoreacq = $dati3['valoreacq'];
 
         if ($_qtacarico == "")
         {
@@ -248,27 +218,12 @@ if ($_SESSION['user']['magazzino'] > "2")
 
 //inizio a prendere i dati dal magazzino scarico
 
-        $query = sprintf("select sum(qtascarico) AS qtascarico, sum(valorevend) AS valven from magazzino where anno=\"%s\" and articolo=\"%s\"", $_anno, $_articolo);
+        $query = sprintf("select sum(qtascarico) AS qtascarico, sum(valorevend) AS valven from $_magazzino where anno=\"%s\" and articolo=\"%s\"", $_anno, $_articolo);
+        echo $query;
+        $dati4 = domanda_db("query", $query, $_cosa, "fetch", "verbose");
+        $_qtascarico = $dati4['qtascarico'];
+        $_valven = $dati4['valven'];
 
-// Esegue la query...
-        $result = $conn->query($query);
-
-        if ($conn->errorCode() != "00000")
-        {
-            $_errore = $conn->errorInfo();
-            echo $_errore['2'];
-            //aggiungiamo la gestione scitta dell'errore..
-            $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-            $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-            scrittura_errori($_cosa, $_percorso, $_errori);
-        }
-        else
-        {
-            foreach ($result AS $dati4)
-                ;
-            $_qtascarico = $dati4['qtascarico'];
-            $_valven = $dati4['valven'];
-        }
 
 
 
