@@ -98,10 +98,10 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "<div id=\"tabs\" style=\"z-index: 1;\">\n";
     echo "<ul>\n";
     echo "<li><a href=\"#tabs-1\">Generale</a></li>\n";
-    echo "<li><a href=\"#tabs-2\">Scheda Articolo</a></li>\n";
     echo "<li><a href=\"#tabs-3\">Acquisti</a></li>\n";
     echo "<li><a href=\"#tabs-4\">Dettagli articolo</a></li>\n";
     echo "<li><a href=\"#tabs-5\">Ultimi Muovimenti</a></li>\n";
+    echo "<li><a href=\"#tabs-6\">Scheda Articolo</a></li>\n";
     echo "</ul>\n";
 
 
@@ -160,12 +160,18 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 // immagine articolo
     echo "<tr><td align=\"left\"><span class=\"testo_blu\">Immagine :&nbsp;</span></td>\n";
     echo "<td align=\"left\ width=\"600\">";
-    printf("<img src=\"../../../imm-art/%s\" height=\"250\" width=\"250\">", $dati['immagine']);
+    printf("<img src=\"../../../setting/imm-art/%s\" height=\"250\" width=\"250\">", $dati['immagine']);
     if ($dati[immagine2] != "")
     {
-        echo "<img src=\"../../../imm-art/disegni/$dati[immagine2]\" height=\"250\" width=\"250\"></td></tr>\n";
+        echo "<img src=\"../../../setting/imm-art/disegni/$dati[immagine2]\" height=\"250\" width=\"250\">\n";
+    }
+    
+    if ($dati[immagine3] != "")
+    {
+        echo "<img src=\"../../../setting/imm-art/prestazioni/$dati[immagine3]\" height=\"250\" width=\"250\">\n";
     }
 
+    echo "</td></tr>\n";
     echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
 
 
@@ -174,40 +180,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 #fine generale
 #
 
-    echo "<div id=\"tabs-2\">\n";
-
-    echo "<table class=\"classic_bordo\">";
-
-// CAMPO Articolo ---------------------------------------------------------------------------------------
-    echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Codice:&nbsp;</b></span></td>\n";
-    echo "<td align=\"left\"><b>$dati[articolo]</b></td><tr>\n";
-
-// CAMPO Descrizione ---------------------------------------------------------------------------------------
-    echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Descrizione:&nbsp;</b></span></td>";
-    printf("<td align=\"left\"><b>%s</b></td></tr>\n", $dati['descrizione']);
-
-// immagine articolo
-    echo "<tr><td align=\"left\"><span class=\"testo_blu\">Immagine :&nbsp;</span></td>\n";
-    echo "<td align=\"left\">";
-    echo"<a id=\"example2\" href=\"../../../imm-art/$dati[immagine]\" title=\"$dati[descrizione]\"><img alt=\"example2\" src=\"../../../imm-art/$dati[immagine]\" height=\"250\" width=\"250\" border=\"0\"></a>\n";
-    if ($dati[immagine2] != "")
-    {
-        echo"<a id=\"example2\" href=\"../../../imm-art/disegni/$dati[immagine2]\" title=\"$dati[descrizione]\"><img alt=\"example2\" src=\"../../../imm-art/disegni/$dati[immagine2]\" height=\"250\" width=\"250\" border=\"0\"></a>\n";
-    }
-
-
-    // descrizione articolo estesa
-// CAMPO note articolo -----------------------------------------------------------------------------------------
-    echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
-    echo "<tr>\n";
-    echo "<td align=\"left\" colspan=\"2\"> $dati[descsito]</td></tr>\n";
-
-    echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
-
-
-    echo "</table>\n";
-    echo "</div>\n";
-#fine generale
+    
 #
 #inizio sezione acquisti..
     echo "<div id=\"tabs-3\">\n";
@@ -403,11 +376,10 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     $result = tabella_barcode("elenco_codice", "", $_articolo, $_rigo);
 
     #echo "Rigo 1 codice $_articolo <br>\n";
-    foreach ($result AS
-            $dati)
+    foreach ($result AS $dati2)
     {
 
-        echo "Rigo $dati[rigo] codice $dati[codbar] <br>\n";
+        echo "Rigo $dati2[rigo] codice $dati2[codbar] <br>\n";
     }
 
     echo "</td></tr>\n";
@@ -437,14 +409,13 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     // Tutto procede a meraviglia...
     echo "<span class=\"testo_blu\">";
 
-    foreach ($res AS
-            $dati)
+    foreach ($res AS $dati2)
     {
-        @$_nettoacq = $dati['valoreacq'] / $dati['qtacarico'];
+        @$_nettoacq = $dati2['valoreacq'] / $dati2['qtacarico'];
 
-        $_annodoc = substr($dati['anno'], 0, 4);
+        $_annodoc = substr($dati2['anno'], 0, 4);
 
-        echo "<tr><td align=\"left\">$dati[datareg]</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddtacq&anno=$_annodoc&suffix=$dati[suffix]&ndoc=$dati[ndoc]\">$dati[ndoc]/$dati[suffix]</a></td><td colspan=\"2\" align=\"left\">$dati[ragsoc]</td><td align=\"center\">$dati[qtacarico]</td><td>$dati[valoreacq]</td><td>".number_format(($_nettoacq), 2)."</td></tr>\n";
+        echo "<tr><td align=\"left\">$dati2[datareg]</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=ddtacq&anno=$_annodoc&suffix=$dati2[suffix]&ndoc=$dati2[ndoc]\">$dati2[ndoc]/$dati2[suffix]</a></td><td colspan=\"2\" align=\"left\">$dati2[ragsoc]</td><td align=\"center\">$dati2[qtacarico]</td><td>$dati2[valoreacq]</td><td>".number_format(($_nettoacq), 2)."</td></tr>\n";
     }
 
     echo "</tr>";
@@ -456,11 +427,10 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
     $res = tabella_magazzino("muov_vendita", $_tdoc, $_anno, $_suffix, $_ndoc, $_datareg, $_tut, $_rigo, $_utente, $_articolo, "10");
     echo "<span class=\"testo_blu\">";
-    foreach ($res AS
-            $dati)
+    foreach ($res AS $dati2)
     {
-        @$_nettovend = $dati['valorevend'] / $dati['qtascarico'];
-        echo "<tr><td align=\"left\">$dati[tdoc]</td><td align=\"left\">$dati[datareg]</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=$dati[tdoc]&anno=$dati[anno]&suffix=$dati[suffix]&ndoc=$dati[ndoc]\">$dati[ndoc]/$dati[suffix]</a></td><td align=\"left\">$dati[ragsoc]</td><td>$dati[qtascarico]</td><td>$dati[valorevend]</td><td>".number_format(($_nettovend), 2)."</td></tr>\n";
+        @$_nettovend = $dati2['valorevend'] / $dati2['qtascarico'];
+        echo "<tr><td align=\"left\">$dati2[tdoc]</td><td align=\"left\">$dati2[datareg]</td><td><a href=\"../../vendite/docubase/visualizzadoc.php?tdoc=$dati2[tdoc]&anno=$dati2[anno]&suffix=$dati2[suffix]&ndoc=$dati2[ndoc]\">$dati2[ndoc]/$dati2[suffix]</a></td><td align=\"left\">$dati2[ragsoc]</td><td>$dati2[qtascarico]</td><td>$dati2[valorevend]</td><td>".number_format(($_nettovend), 2)."</td></tr>\n";
     }
 
     echo "</tr></table>"; // chiusura tabelle interna
@@ -476,6 +446,51 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "</tr></table>"; // chiusura tabelle interna
     echo "</div>\n";
 
+    
+    echo "<div id=\"tabs-6\">\n";
+
+    echo "<table class=\"classic_bordo\">";
+
+// CAMPO Articolo ---------------------------------------------------------------------------------------
+    echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Codice:&nbsp;</b></span></td>\n";
+    echo "<td align=\"left\"><b>$dati[articolo]</b></td><tr>\n";
+
+// CAMPO Descrizione ---------------------------------------------------------------------------------------
+    echo "<tr><td align=\"left\"><span class=\"testo_blu\"><b>Descrizione:&nbsp;</b></span></td>";
+    printf("<td align=\"left\"><b>%s</b></td></tr>\n", $dati['descrizione']);
+
+// immagine articolo
+    echo "<tr><td align=\"left\"><span class=\"testo_blu\">Immagine :&nbsp;</span></td>\n";
+    echo "<td align=\"left\">";
+    
+    echo "<a id=\"example2\" href=\"../../../setting/imm-art/$dati[immagine]\" title=\"$dati[descrizione]\"><img alt=\"example2\" src=\"../../../setting/imm-art/$dati[immagine]\" height=\"250\" width=\"250\" border=\"0\"></a>\n";
+    if ($dati[immagine2] != "")
+    {
+        echo "<a id=\"example2\" href=\"../../../setting/imm-art/disegni/$dati[immagine2]\" title=\"$dati[descrizione]\"><img alt=\"example2\" src=\"../../../setting/imm-art/disegni/$dati[immagine2]\" height=\"250\" width=\"250\" border=\"0\"></a>\n";
+    }
+
+    if ($dati[immagine3] != "")
+    {
+        echo "<a id=\"example2\" href=\"../../../setting/imm-art/prestazioni/$dati[immagine3]\" title=\"$dati[descrizione]\"><img alt=\"example2\" src=\"../../../setting/imm-art/prestazioni/$dati[immagine3]\" height=\"250\" width=\"250\" border=\"0\"></a>\n";
+    }
+
+    // descrizione articolo estesa
+// CAMPO note articolo -----------------------------------------------------------------------------------------
+    echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
+    echo "<tr>\n";
+    echo "<td align=\"left\" colspan=\"2\"> $dati[descsito]</td></tr>\n";
+
+    echo "<tr><td colspan=\"2\"><hr></td></tr>\n";
+
+
+    echo "</table>\n";
+    echo "</div>\n";
+#fine generale
+    
+    
+    
+    
+    //fine tabella...
     echo "</div>\n";
 
 

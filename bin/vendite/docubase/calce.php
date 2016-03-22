@@ -132,6 +132,8 @@ if ($_SESSION['user']['vendite'] > "2")
         $_fatturacq = $dati_doc['fatturacq'];
         $_datareg = $dati_doc['datareg'];
         $_protoiva = $dati_doc['protoiva'];
+        $_suffix_proto = $dati_doc['suffix_proto'];
+        $_anno_proto = $dati_doc['anno_proto'];
         $_id_collo = $dati_doc['id_collo'];
         $_data_scad = cambio_data("it", $dati_doc['data_scad']);
 
@@ -250,7 +252,9 @@ if ($_SESSION['user']['vendite'] > "2")
         echo "<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" align=\"center\">\n";
         printf("<tr><td align=\"left\" valign=\"top\"><br>N. ddt Fornitore: <input type=\"text\" name=\"ddtfornitore\" value=\"%s\" size=\"20\" maxlength=\"20\"></td>", $_ddtacq);
         printf("<td align=\"left\" valign=\"top\"><br>Fattura fornitore: <input type=\"text\" name=\"fatturacq\" value=\"%s\" size=\"20\" maxlength=\"20\"></td>", $_fatturacq);
-        printf("<td align=\"left\" valign=\"top\"><br>N. protocollo iva: <input type=\"text\" name=\"protoiva\" value=\"%s\" size=\"5\" maxlength=\"4\"></td></tr>", $_protoiva);
+        echo "<td align=\"left\" valign=\"top\"><br>N. protocollo iva: <input type=\"text\" name=\"protoiva\" value=\"$_protoiva\" size=\"5\" maxlength=\"4\">\n";
+        echo "Suffix :<input type=\"text\" name=\"suffix_proto\" value=\"$_suffix_proto\" size=\"2\" maxlength=\"1\">\n";
+        echo "Anno: <input type=\"text\" name=\"anno_proto\" value=\"$_anno_proto\" size=\"5\" maxlength=\"4\"></td></tr>\n";
 
         echo "</table>\n";
         echo "<hr><br>\n";

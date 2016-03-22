@@ -28,10 +28,12 @@ menu_tendina($_cosa, $_percorso);
 
 if ($_SESSION['user']['anagrafiche'] > "1")
 {
+    
+    $_tipo = $_GET['tipo'];
 // Inizio tabella pagina principale ----------------------------------------------------------
 
     echo "<table border=\"0\" width=\"80%\" align=\"center\"><tr><td align=\"center\">";
-    echo "<h4> Selezionare il file immagine da caricare nella cartella imm-art</h4>\n";
+    echo "<h2> Selezionare il file <font color=\"green\">$_tipo </font>da caricare nella cartella imm-art</h2>\n";
     echo "<h4>Massima grandezza del file 16 MB 16777216 byte</h4>\n";
     echo "<h4>Tutte le immagini saranno in jpg e convertite in automatico a 500px per 500px</h4>\n";
     echo "<h4>In caso dello tesso nome il file verr&agrave; sovrascritto senza preavvisi.</h4>\n";
@@ -40,6 +42,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     echo "<form action=\"carica_imm.php\" enctype=\"multipart/form-data\" method=\"post\">\n";
 #<!--settiamo la dimensione massima dei file in byte, nel nostro caso 1MB=1024000byte-->
     echo "<input name=\"MAX_FILE_SIZE\" type=\"hidden\" value=\"16777216\" />\n";
+    echo "<input name=\"tipo\" type=\"hidden\" value=\"$_tipo\" />\n";
     echo "File da caricare: <br>\n";
 #<!--campo per la scelta del file-->
     echo "<input size=\"50\" id=\"file\" name=\"file\" type=\"file\"  />\n";

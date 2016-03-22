@@ -28,11 +28,7 @@ if ($_SESSION['user']['setting'] > "3")
     $filename = "AGIMA_aguagest_imm_articoli_" . date("Ymd") . ".zip";
     
     //rimuoviamo il vecchio se cè
-    
-    if (file_exists("../../../spool/$filename"))
-    {
-        unlink("../../../spool/$filename");
-    }
+    array_map('unlink', glob("../../../spool/*.zip"));
 
 
     header("Cache-Control: no-store, no-cache, must-revalidate");
@@ -48,20 +44,23 @@ if ($_SESSION['user']['setting'] > "3")
     }
 
     $options = array('add_path' => '/', 'remove_all_path' => TRUE);
-    $zip->addGlob("../../../imm-art/*.*", GLOB_BRACE, $options);
+    $zip->addGlob("../../../setting/imm-art/*.*", GLOB_BRACE, $options);
     
     $options = array('add_path' => '/disegni/', 'remove_all_path' => TRUE);
-    $zip->addGlob("../../../imm-art/disegni/*.*", GLOB_BRACE, $options);
+    $zip->addGlob("../../../setting/imm-art/disegni/*.*", GLOB_BRACE, $options);
+    
+    $options = array('add_path' => '/prestazioni/', 'remove_all_path' => TRUE);
+    $zip->addGlob("../../../setting/imm-art/prestazioni/*.*", GLOB_BRACE, $options);
     
 //    echo "numfiles: " . $zip->numFiles . "\n";
 //    echo "status:" . $zip->status . "\n";
     $zip->close();
-    header("Content-Length: " . filesize("../../../spool/$backupFile"));
+    //header("Content-Length: " . filesize("../../../spool/$backupFile"));
     readfile("../../../spool/$filename");
 
 
 
-    echo "<h1 align=\"center\"> Copie eseguite si può chiuedere la finestra.. </h1>\n";
+    //echo "<h1 align=\"center\"> Copie eseguite si può chiuedere la finestra.. </h1>\n";
 }
 else
 {

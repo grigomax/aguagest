@@ -688,7 +688,7 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
             fornitore2, preacqnetto2, prelisacq_2, scaa_2, scab_2, scac_2, artfor2, qta_cartone_2, qta_multi_ord_2, qtaminord_2, lead_time_2, prod_composto_2, stato_prod_2, data_var_2,
             fornitore_3, artfor_3, prelisacq_3, scaa_3, scab_3, scac_3, preacqnetto_3,
             qta_cartone_3, qta_multi_ord_3, qtaminord_3, lead_time_3, prod_composto_3, stato_prod_3, data_var_3, sitoart, data_reg, esco,
-	    esma, scorta, immagine, pagcat, catalogo, pubblica, descsito, artcorr, artcorr_2, artcorr_3, a_settore, a_scaffale, a_ripiano, a_cassetto, art_alternativo, ordine_cat, egpz, immagine2, es_selezione)
+	    esma, scorta, immagine, pagcat, catalogo, pubblica, descsito, artcorr, artcorr_2, artcorr_3, a_settore, a_scaffale, a_ripiano, a_cassetto, art_alternativo, ordine_cat, egpz, immagine2, es_selezione, immagine3)
 	    values( '$_codice', '$_descrizione', '$_parametri[desrid]', '$_parametri[unita]', '$_parametri[codbar]', '$_parametri[fornitore]',
                 '$_parametri[artfor]', '$_parametri[preacqnetto]', '$_parametri[prelisacq]', '$_parametri[scaa]', '$_parametri[scab]',
                 '$_parametri[scac]', '$_parametri[qta_cartone]', '$_parametri[qta_multi_ord]', '$_parametri[qtaminord]', '$_parametri[pesoart]', '$_parametri[lead_time]', '$_parametri[prod_composto]', '$_parametri[stato_prod]',
@@ -699,7 +699,7 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
                 '$_parametri[qta_cartone_3]', '$_parametri[qta_multi_ord_3]', '$_parametri[qtaminord_3]', '$_parametri[lead_time_3]', '$_parametri[prod_composto_3]', '$_parametri[stato_prod_3]', '$_parametri[data_var_3]',
                 '$_parametri[sitoart]', '$_datareg', '$_parametri[esco]', '$_parametri[esma]', '$_parametri[scorta]', '$_parametri[immagine]', '$_parametri[pagcat]', '$_parametri[catalogo]',
                 '$_parametri[pubblica]', '$_descsito', '$_parametri[artcorr]', '$_parametri[artcorr_2]', '$_parametri[artcorr_3]', '$_parametri[a_settore]', '$_parametri[a_scaffale]', '$_parametri[a_ripiano]',
-                '$_parametri[a_cassetto]', '$_parametri[art_alternativo]', '$_ordine_cat', '$_parametri[egpz]', '$_parametri[immagine2]', '$_parametri[es_selezione]')";
+                '$_parametri[a_cassetto]', '$_parametri[art_alternativo]', '$_ordine_cat', '$_parametri[egpz]', '$_parametri[immagine2]', '$_parametri[es_selezione]', '$_parametri[immagine3]')";
 
 
         $result = $conn->exec($query);
@@ -740,7 +740,7 @@ function tabella_articoli($_cosa, $_codice, $_parametri)
     lead_time_3='$_parametri[lead_time_3]', prod_composto_3='$_parametri[prod_composto_3]', stato_prod_3='$_parametri[stato_prod_3]', data_var_3='$_parametri[data_var_3]', esco='$_parametri[esco]',
     esma='$_parametri[esma]', scorta='$_parametri[scorta]', immagine='$_parametri[immagine]', pagcat='$_parametri[pagcat]', catalogo='$_parametri[catalogo]', pubblica='$_parametri[pubblica]',
     descsito='$_descsito', artcorr='$_parametri[artcorr]', artcorr_2='$_parametri[artcorr_2]', artcorr_3='$_parametri[artcorr_3]', a_settore='$_parametri[a_settore]', a_scaffale='$_parametri[a_scaffale]',
-    a_ripiano='$_parametri[a_ripiano]', a_cassetto='$_parametri[a_cassetto]', art_alternativo='$_parametri[art_alternativo]', ordine_cat='$_ordine_cat', egpz='$_parametri[egpz]', immagine2='$_parametri[immagine2]', es_selezione='$_parametri[es_selezione]' WHERE articolo='$_codice' LIMIT 1";
+    a_ripiano='$_parametri[a_ripiano]', a_cassetto='$_parametri[a_cassetto]', art_alternativo='$_parametri[art_alternativo]', ordine_cat='$_ordine_cat', egpz='$_parametri[egpz]', immagine2='$_parametri[immagine2]', es_selezione='$_parametri[es_selezione]', immagine3='$_parametri[immagine3]' WHERE articolo='$_codice' LIMIT 1";
 
 
         $result = $conn->query($query);
@@ -4191,6 +4191,10 @@ function tabella_scadenziario($_cosa, $_percorso, $_parametri)
     if ($_cosa == "inserisci")
     {
 //funzione che mi inserisci i dati nello scadenziario..
+        if($_parametri['anno'] == "")
+        {
+            $_parametri['anno'] = date('Y');
+        }
 
         $query = "INSERT INTO scadenziario (anno, `data_scad`, `descrizione`, `importo`, `utente`, `anno_doc`, `ndoc`, `data_doc`, `anno_proto`, suffix_proto, 
             `nproto`, `codpag`, `banca`, `impeff`, status, data_pag, note) VALUES

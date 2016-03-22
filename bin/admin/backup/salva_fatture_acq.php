@@ -25,7 +25,7 @@ if ($_SESSION['user']['setting'] > "3")
 {
     
     $zip = new ZipArchive();
-    $filename = "AGSET_aguagest_setting_" . date("Ymd") . ".zip";
+    $filename = "AGFACQ_aguagest_fatture_acq_" . date("Ymd") . ".zip";
     
     //rimuoviamo il vecchio se cè
     array_map('unlink', glob("../../../spool/*.zip"));
@@ -42,16 +42,14 @@ if ($_SESSION['user']['setting'] > "3")
     {
         exit("cannot open <$filename>\n");
     }
-
-
+    
     $options = array('add_path' => '/', 'remove_all_path' => TRUE);
-    $zip->addGlob("../../../setting/*.*", GLOB_BRACE, $options);
+    $zip->addGlob("../../../setting/fatture_acq/*.*", GLOB_BRACE, $options);
     
-    $options = array('add_path' => '/loghiazienda/', 'remove_all_path' => TRUE);
-    $zip->addGlob("../../../setting/loghiazienda/*.*", GLOB_BRACE, $options);
-    
+//    echo "numfiles: " . $zip->numFiles . "\n";
+//    echo "status:" . $zip->status . "\n";
     $zip->close();
-    //header("Content-Length: " . filesize("../../../spool/$filename"));
+    //header("Content-Length: " . filesize("../../../spool/$backupFile"));
     readfile("../../../spool/$filename");
 
 

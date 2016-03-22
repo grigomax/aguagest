@@ -141,7 +141,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
 
 // CAMPO Cap ---------------------------------------------------------------------------------------
     echo "<tr><td align=\"left\"  >Cap :&nbsp;</td>";
-    printf("<td align=\"left\" ><input type=\"text\" name=\"cap\" value=\"%s\" size=\"6\" maxlength=\"5\"></td></tr>", $dati['cap']);
+    printf("<td align=\"left\" ><input type=\"text\" name=\"cap\" value=\"%s\" size=\"9\" maxlength=\"8\"></td></tr>", $dati['cap']);
 
 // CAMPO citt�---------------------------------------------------------------------------------------
     echo "<tr><td align=\"left\"  >Citt&agrave;</td>";
@@ -210,7 +210,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
 
 // CAMPO Cap ---------------------------------------------------------------------------------------
     echo "<tr><td align=\"left\"  >Cap :&nbsp;</td>";
-    printf("<td align=\"left\" ><input type=\"text\" name=\"dcap\" value=\"%s\" size=\"6\" maxlength=\"6\"></td></tr>", $dati['dcap']);
+    printf("<td align=\"left\" ><input type=\"text\" name=\"dcap\" value=\"%s\" size=\"9\" maxlength=\"8\"></td></tr>", $dati['dcap']);
 
 // CAMPO citt�---------------------------------------------------------------------------------------
     echo "<tr><td align=\"left\"  >Citt&agrave; :&nbsp;</td>";
@@ -445,6 +445,11 @@ if ($_SESSION['user']['anagrafiche'] > "2")
     echo "<tr><td align=\"left\"  >E-mail 3 contabilita:&nbsp;</td>";
     printf("<td align=\"left\"  ><input type=\"text\" name=\"email3\" value=\"%s\" size=\"75\" maxlength=\"80\"></td></tr>\n", $dati['email3']);
 
+    
+    echo "<tr><td align=\"left\"  >Email Certificata:&nbsp;</td>";
+    printf("<td align=\"left\"  ><input type=\"text\" name=\"email_certi\" value=\"%s\" size=\"75\" maxlength=\"80\"></td></tr>\n", $dati['email_certi']);
+    
+    
 
 // CAMPO sito internet ---------------------------------------------------------------------------------------
     echo "<tr><td align=\"left\"  >Sito internet:&nbsp;</td>";

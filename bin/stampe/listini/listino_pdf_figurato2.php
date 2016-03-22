@@ -595,13 +595,19 @@ foreach ($result AS $dati3)
                 $pdf->SetX($MARGINE_SINISTRO);
                 $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                 #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
-                $_pathimg = $_percorso . "../imm-art/$_immagine";
-                $pdf->Image($_pathimg, 40, $_y_img, 0, $_H_immagine);
+                $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
+                $pdf->Image($_pathimg, 15, $_y_img, 0, $_H_immagine);
                 
                 if($dati3['immagine2'] != "")
                 {
                     //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
-                    $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110, $_y_img, 0, $_H_immagine);
+                    $pdf->Image($_percorso . "../setting/imm-art/disegni/".$dati3[immagine2], 85, $_y_img, 0, $_H_immagine);
+                }
+                
+                if($dati3['immagine3'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/prestazioni/".$dati3[immagine3], 140, $_y_img, 0, $_H_immagine);
                 }
 
                 if ($_doppia == "SI")
@@ -613,14 +619,20 @@ foreach ($result AS $dati3)
                     $pdf->SetX($MARGINE_SINISTRO + 210);
                     $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                     #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
-                    $_pathimg = $_percorso . "../imm-art/$_immagine";
-                    $pdf->Image($_pathimg, 40 + 210, $_y_img, 0, $_H_immagine);
-                    
-                    if($dati3['immagine2'] != "")
-                    {
-                        //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
-                        $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110 + 210, $_y_img, 0, $_H_immagine);
-                    }
+                    $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
+                    $pdf->Image($_pathimg, 15+210, $_y_img, 0, $_H_immagine);
+                
+                if($dati3['immagine2'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/disegni/".$dati3[immagine2], 85+210, $_y_img, 0, $_H_immagine);
+                }
+                
+                if($dati3['immagine3'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/prestazioni/".$dati3[immagine3], 140+210, $_y_img, 0, $_H_immagine);
+                }
                     
                     
                 }
@@ -718,13 +730,19 @@ foreach ($result AS $dati3)
                 $pdf->SetX($MARGINE_SINISTRO);
                 $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                 #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
-                $_pathimg = $_percorso . "../imm-art/$_immagine";
-                $pdf->Image($_pathimg, 40, $_y_img, 0, $_H_immagine);
+                $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
+                $pdf->Image($_pathimg, 15, $_y_img, 0, $_H_immagine);
                 
                 if($dati3['immagine2'] != "")
                 {
                     //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
-                    $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110, $_y_img, 0, $_H_immagine);
+                    $pdf->Image($_percorso . "../setting/imm-art/disegni/".$dati3[immagine2], 85, $_y_img, 0, $_H_immagine);
+                }
+                
+                if($dati3['immagine3'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/prestazioni/".$dati3[immagine3], 140, $_y_img, 0, $_H_immagine);
                 }
                 
 
@@ -737,14 +755,20 @@ foreach ($result AS $dati3)
                     $pdf->SetX($MARGINE_SINISTRO + 210);
                     $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                     #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
-                    $_pathimg = $_percorso . "../imm-art/$_immagine";
-                    $pdf->Image($_pathimg, 40 + 210, $_y_img, 0, $_H_immagine);
-                    
-                    if($dati3['immagine2'] != "")
-                    {
-                        //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
-                        $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110 + 210, $_y_img, 0, $_H_immagine);
-                    }
+                    $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
+                $pdf->Image($_pathimg, 15+210, $_y_img, 0, $_H_immagine);
+                
+                if($dati3['immagine2'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/disegni/".$dati3[immagine2], 85+210, $_y_img, 0, $_H_immagine);
+                }
+                
+                if($dati3['immagine3'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/prestazioni/".$dati3[immagine3], 140+210, $_y_img, 0, $_H_immagine);
+                }
                     
                     
                 }
@@ -822,13 +846,19 @@ foreach ($result AS $dati3)
                 $pdf->SetX($MARGINE_SINISTRO);
                 $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                 #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
-                $_pathimg = $_percorso . "../imm-art/$_immagine";
-                $pdf->Image($_pathimg, 40, $_y_img, 0, $_H_immagine);
+                $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
+                $pdf->Image($_pathimg, 15, $_y_img, 0, $_H_immagine);
                 
                 if($dati3['immagine2'] != "")
                 {
                     //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
-                    $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110, $_y_img, 0, $_H_immagine);
+                    $pdf->Image($_percorso . "../setting/imm-art/disegni/".$dati3[immagine2], 85, $_y_img, 0, $_H_immagine);
+                }
+                
+                if($dati3['immagine3'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/prestazioni/".$dati3[immagine3], 140, $_y_img, 0, $_H_immagine);
                 }
 
                 if ($_doppia == "SI")
@@ -840,14 +870,20 @@ foreach ($result AS $dati3)
                     $pdf->SetX($MARGINE_SINISTRO + 210);
                     $pdf->Cell($LARGHEZZA_PAGINA, $_H_cella_immagine, '', '0', '1', 'L');
                     #$pdf->Cell(115, $_H_cella, '', '0', 1, 'C');
-                    $_pathimg = $_percorso . "../imm-art/$_immagine";
-                    $pdf->Image($_pathimg, 40 + 210, $_y_img, 0, $_H_immagine);
-                    
-                    if($dati3['immagine2'] != "")
-                    {
-                        //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
-                        $pdf->Image($_percorso . "../imm-art/disegni/".$dati3[immagine2], 110 + 210, $_y_img, 0, $_H_immagine);
-                    }
+                    $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
+                $pdf->Image($_pathimg, 15+210, $_y_img, 0, $_H_immagine);
+                
+                if($dati3['immagine2'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/disegni/".$dati3[immagine2], 85+210, $_y_img, 0, $_H_immagine);
+                }
+                
+                if($dati3['immagine3'] != "")
+                {
+                    //$_pathimg = $_percorso . "../imm-art/$dati3[immagine2]";
+                    $pdf->Image($_percorso . "../setting/imm-art/prestazioni/".$dati3[immagine3], 140+210, $_y_img, 0, $_H_immagine);
+                }
                     
                 }
 
@@ -1054,7 +1090,7 @@ while (@list($catmer, $valore) = each($merda))
 
                 $pdf->SetFont('Arial', '', 10);
                 $_immagine = $cazzo[$catmer][$tipart];
-                $_pathimg = $_percorso . "../imm-art/$_immagine";
+                $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
                 $pdf->Image($_pathimg, $_x, $_y, $_imgx, $_imgy);
                 $_immagine = $dati1['immagine'];
                 $_newy = $_y + $_imgy;
@@ -1074,7 +1110,7 @@ while (@list($catmer, $valore) = each($merda))
 
                     $pdf->SetFont('Arial', '', 10);
                     $_immagine = $cazzo[$catmer][$tipart];
-                    $_pathimg = $_percorso . "../imm-art/$_immagine";
+                    $_pathimg = $_percorso . "../setting/imm-art/$_immagine";
                     $pdf->Image($_pathimg, $_x + 210, $_y, $_imgx, $_imgy);
                     $_immagine = $dati1['immagine'];
                     $_newy = $_y + $_imgy;

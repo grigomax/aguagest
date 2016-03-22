@@ -151,7 +151,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                 foreach ($res AS $dati)
                 {
-                    echo "<td><a href=\"../../scadenziario/scadenza.php?azione=visualizza&anno=$dati[anno]&nscad=$dati[nscad]\">$dati[nscad]<td>$dati[data_scad]</td><td>$dati[impeff]</td></tr>\n";
+                    echo "<td><a href=\"../../scadenziario/scadenza.php?azione=vis$dati[anno]$dati[nscad]\">$dati[nscad]<td>$dati[data_scad]</td><td>$dati[impeff]</td></tr>\n";
                 }
 
                 echo "</table>\n";
@@ -166,6 +166,23 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             carrello_primanota("svuota", $_anno, $_rigo, $_tipo_cf, $_codconto, $_dare, $_avere, $_segno, $_iva);
         }
+        
+        
+        //gestione file pdf carico fatture..
+        //vediamo se c'è da caricare un files..
+        
+        if($_FILES['file'] != "")
+        {
+            //c'è il file..
+            carica_file($_cosa, $_FILES, "pdf", "../../../setting/fatture_acq/", "FA_".$_parametri[anno_proto].$_parametri[suffix_proto].$_return[nproto], ".pdf");
+            
+            
+        }
+        
+        
+        
+        
+        
     }
     elseif ($_azione == "Salda")
     {
@@ -259,7 +276,7 @@ if ($_SESSION['user']['contabilita'] > "1")
 
                 foreach ($res AS $dati)
                 {
-                    echo "<td><a href=\"../../scadenziario/scadenza.php?azione=visualizza&anno=$dati[anno]&nscad=$dati[nscad]\">$dati[nscad]<td>$dati[data_scad]</td><td>$dati[impeff]</td></tr>\n";
+                    echo "<td><a href=\"../../scadenziario/scadenza.php?azione=vis$dati[anno]$dati[nscad]\">$dati[nscad]<td>$dati[data_scad]</td><td>$dati[impeff]</td></tr>\n";
                 }
 
                 echo "</table>\n";
@@ -274,6 +291,21 @@ if ($_SESSION['user']['contabilita'] > "1")
 
             carrello_primanota("svuota", $_anno, $_rigo, $_tipo_cf, $_codconto, $_dare, $_avere, $_segno, $_iva);
         }
+        
+        
+        //gestione file pdf carico fatture..
+        //vediamo se c'è da caricare un files..
+        
+        if($_FILES['file'] != "")
+        {
+            //c'è il file..
+            carica_file($_cosa, $_FILES, "pdf", "../../../setting/fatture_acq/", "FA_".$_parametri[anno_proto].$_parametri[suffix_proto].$_parametri[nproto], ".pdf");
+            
+            
+        }
+        
+        
+        
     }
 
 //visto che è tutto ok eliminiamo le sessioni..

@@ -469,7 +469,7 @@ function intesta_html($_tdoc, $_tipo, $dati, $dati_doc)
         printf("<td align=left>Ragione Sociale : <input type=\"text\" name=\"dragsoc\" value=\"%s\" size=\"42\" maxlength=\"40\"><br>", $dati['dragsoc']);
         printf("Ragione sociale 2 : <input type=\"text\" name=\"dragsoc2\" value=\"%s\" size=\"41\" maxlength=\"50\"><br>", $dati['dragsoc2']);
         printf("Indirizzo : <input type=\"text\" name=\"dindirizzo\" value=\"%s\" size=\"49\" maxlength=\"50\"><br>", $dati['dindirizzo']);
-        printf("Cap :<input type=\"text\" name=\"dcap\" value=\"%s\" size=\"6\" maxlength=\"5\">", $dati['dcap']);
+        printf("Cap :<input type=\"text\" name=\"dcap\" value=\"%s\" size=\"9\" maxlength=\"8\">", $dati['dcap']);
         printf("Citt&agrave;:<input type=\"text\" name=\"dcitta\" value=\"%s\" size=\"30\" maxlength=\"50\">", $dati['dcitta']);
         printf("Prov. :<input type=\"text\" name=\"dprov\" value=\"%s\" size=\"3\" maxlength=\"2\"></td>", $dati['dprov']);
         echo "</tr><tr>";
@@ -1386,8 +1386,8 @@ function gestisci_dettaglio($_cosa, $_archivi, $_tdoc, $_anno, $_suffix, $_ndoc,
                 $articoli = tabella_articoli("aggiorna_ultimo_acq", $_codice, $_parametri);
                         
             //qui mettiamo il magazzino
-            $query = "insert into magazzino( tdoc, anno, suffix, ndoc, datareg, tut, rigo, utente, articolo, qtacarico, valoreacq, ddtfornitore, fatturacq, protoiva, status)
-				    values('$_tdoc', '$_anno', '$_suffix' ,'$_ndoc', '$_parametri[datareg]', 'f', '$_rigo', '$_utente', '$_codice', '$_parametri[quantita]', '$_parametri[totriga]', '$_parametri[ddtfornitore]', '$_parametri[fatturacq]', '$_parametri[protoiva]', '$_parametri[status]')";
+            $query = "insert into magazzino( tdoc, anno, suffix, ndoc, datareg, tut, rigo, utente, articolo, qtacarico, valoreacq, ddtfornitore, fatturacq, protoiva, suffix_proto, anno_proto, status)
+				    values('$_tdoc', '$_anno', '$_suffix' ,'$_ndoc', '$_parametri[datareg]', 'f', '$_rigo', '$_utente', '$_codice', '$_parametri[quantita]', '$_parametri[totriga]', '$_parametri[ddtfornitore]', '$_parametri[fatturacq]', '$_parametri[protoiva]', '$_parametri[suffix_proto]', '$_parametri[anno_proto]', '$_parametri[status]')";
             
             
         }
@@ -2995,9 +2995,29 @@ function schermata_visualizza($_cosa, $dati_ute, $dati_doc, $_archivio, $_anno, 
             echo "<td bg color=\"#FFFFFF\" align=\"left\"><font face=\"arial\" size=\"1\" valign=\"top\"><i>Numero fattura fornitore</i></font><br>$dati_doc[fatturacq]</td>\n";
             echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"arial\" size=\"2\" valign=\"top\"><i>Pagina</i><br></font></td>\n";
             echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"arial\" size=\"2\" valign=\"top\"><i>Documento N.</i></font><br><b><font face=\"arial\" size=\"3\">\n";
+            
             echo "<input type=\"radio\" name=\"suffix\" value=\"$dati_doc[suffix]\" checked >$dati_doc[suffix] - <input type=\"radio\" name=\"ndoc\" value=\"$dati_doc[ndoc]\" checked >$dati_doc[ndoc]/<input type=\"radio\" name=\"anno\" value=\"$dati_doc[anno]\" checked>$dati_doc[anno]</b><br>Rev. n. $dati_doc[rev]</font></td>\n";
             echo "</tr><tr>\n";
-            echo "<td bg color=\"#FFFFFF\" align=\"left\"><font face=\"arial\" size=\"1\" valign=\"top\"><i>Protocollo iva </i></font><br><b>$dati_doc[protoiva]</b></font></td>\n";
+            echo "<td bg color=\"#FFFFFF\" align=\"left\"><font face=\"arial\" size=\"1\" valign=\"top\"><i>Protocollo iva </i></font><br><b>$dati_doc[protoiva] / $dati_doc[suffix_proto] - $dati_doc[anno_proto]</b></font>\n";
+            
+            if(($dati_doc[suffix_proto] != "") AND ($dati_doc[anno_proto] != "") AND ($dati_doc[protoiva] != ""))
+            {
+                //verifichiamo se abbiamo un file con lo stesso nome..
+                if (is_file($_percorso."../setting/fatture_acq/FA_".$dati_doc[anno_proto].$dati_doc[suffix_proto].$dati_doc[protoiva].".pdf" ))
+                {
+                    //vuo dire che c'è..
+                    echo "<br><font color=\"green\"><a href=\"".$_percorso."../setting/fatture_acq/FA_".$dati_doc[anno_proto].$dati_doc[suffix_proto].$dati_doc[protoiva].".pdf\" target=\"_blank\"> Trovata Fattura <img src=\"$_percorso/images/pdf.png\" width=\"35px\"> </a></font>\n";
+
+                }
+                else
+                {
+                    echo "<font color=\"white\">Nessuna Fattura in pdf trovata</font>\n";
+                }
+
+            }
+            
+            
+            echo "</td>\n";
             echo "<td bg color=\"#FFFFFF\" align=\"left\"><font face=\"arial\" size=\"1\" valign=\"top\"><i>Numero ddt fornitore</i></font><br>$dati_doc[ddtfornitore]</font></td>\n";
             echo "<td bgcolor=\"#FFFFFF\"><font face=\"arial\" size=\"1\" valign=\"top\"><i>Status Documento</i></font><br>$dati_doc[status]</font></td>\n";
             echo "<td bgcolor=\"#FFFFFF\" align=\"center\"><font face=\"arial\" size=\"2\" valign=\"top\"><i>Data Documento</i></font><br><font face=\"arial\" size=\"3\"><b>$dati_doc[datareg]</b></font></td>\n";
@@ -3623,6 +3643,8 @@ function scrivi_doc($_cosa, $id, $_tdoc, $dati, $_ndoc, $_anno, $_suffix, $_data
             $dati2['ddtfornitore'] = $_parametri['ddtfornitore'];
             $dati2['fatturacq'] = $_parametri['fatturacq'];
             $dati2['protoiva'] = $_parametri['protoiva'];
+            $dati2['suffix_proto'] = $_parametri['suffix_proto'];
+            $dati2['anno_proto'] = $_parametri['anno_proto'];
             $dati2['status'] = $_parametri['status'];
         }
         

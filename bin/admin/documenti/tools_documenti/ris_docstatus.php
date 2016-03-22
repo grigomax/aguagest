@@ -57,17 +57,7 @@ if ($_SESSION['user']['setting'] > "2")
 
     $query = sprintf("update $_dbdoc[testacalce] set status=\"%s\" where anno=\"%s\" and suffix='$_suffix' and ndoc=\"%s\"", $_status, $_anno, $_ndoc);
 
-    $result = $conn->exec($query);
-
-    if ($conn->errorCode() != "00000")
-    {
-        $_errore = $conn->errorInfo();
-        echo $_errore['2'];
-        //aggiungiamo la gestione scitta dell'errore..
-        $_errori['descrizione'] = "Errore Query = $query - $_errore[2]";
-        $_errori['files'] = "$_SERVER[SCRIPT_FILENAME]";
-        scrittura_errori($_cosa, $_percorso, $_errori);
-    }
+    $result = domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
 
 
     echo "<b> Documento aggiornato perfettamente </b></td></tr>\n";

@@ -35,13 +35,34 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 		$_azione = $_POST['azione'];
 		$_file = $_POST['file'];
 		$_orfile = $_POST['orfile'];
+                $_tipo = $_POST['tipo'];
 	}
 	else
 	{
 		$_azione = $_GET['azione'];
+                $_tipo = $_GET['tipo'];
 		$_file = $_GET['file'];
 	}
 
+        
+        if ($_tipo == "immagini")
+        {
+            $_link = "imm-art";
+            $_immagine = "immagine";
+        }
+        elseif ($_tipo == "disegni")
+        {
+             $_link = "imm-art/disegni";
+            $_immagine = "immagine2";
+        }
+        else
+        {
+             $_link = "imm-art/prestazioni";
+            $_immagine = "immagine3";
+        }
+        
+        
+        
 
 	echo "<table border=\"0\" width=\"80%\" ><tr><td align=\"center\">";
 
@@ -49,13 +70,13 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 	{
 		//elinazione file..
 
-		unlink("../../../../imm-art/$_POST[file]");
+		unlink("../../../../setting/$_link/$_POST[file]");
 
 		echo "<h3>File Eliminato con successo... !</h3>\n";
 
 		echo "Aggiornamento database...<br>\n";
 
-		$query = "UPDATE articoli SET immagine='' where immagine='$_file'";
+		$query = "UPDATE articoli SET $_immagine='' where $_immagine='$_file'";
 
 		//eseguiamo
 		domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
@@ -69,13 +90,13 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			//rinomina file...
 			echo "<h3>Rinominazione File.. </h3>\n";
 
-			rename("../../../../imm-art/$_orfile", "../../../../imm-art/$_file");
+			rename("../../../../setting/$_link/$_orfile", "../../../../setting/$_link/$_file");
 
 			echo "<h3>File Rinominato con Successo</h3>\n";
 
 			echo "<h3>Aggiornamento database...</h3>\n";
 
-			$query = "UPDATE articoli SET immagine='$_file' where immagine='$_orfile'";
+			$query = "UPDATE articoli SET $_immagine='$_file' where $_immagine='$_orfile'";
 
 			//eseguiamo
 			domanda_db("exec", $query, $_cosa, $_ritorno, "verbose");
@@ -86,13 +107,14 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
 		echo "<form action=\"visualizza_imm.php\" method=\"post\">\n";
 		echo "<h3>Cosa desideri fare con questa immagine.. ?</h3>";
+                echo "<input name=\"tipo\" type=\"hidden\" value=\"$_tipo\" />\n";
 		echo "<input type=\"radio\" name=\"orfile\" value=\"$_file\" checked>$_file <br>";
 		echo "<input type=\"text\" name=\"file\" value=\"$_file\" size=\"50\" maxlength=\"50\" ><br>";
 		echo "<input type=\"submit\" name=\"azione\" value=\"Elimina\" onclick=\"if(!confirm('Sicuro di voler Eliminare L immagine ?')) return false;\"> Oppure <input type=\"submit\" name=\"azione\" value=\"Rinomina\">\n";
 //visualizziamo l'immagine e chiediamo se la si vuole cancellare rinominare oppure se è tutto ok..
 		echo "</form>\n";
 
-		echo "<p style='text-align:center;'><img src=\"../../../../imm-art/$_file\" >";
+		echo "<p style='text-align:center;'><img src=\"../../../../setting/$_link/$_file\" width=\"500px\" height=\"500px\">";
 
 		echo "</table>";
 // ************************************************************************************** -->

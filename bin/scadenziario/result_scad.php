@@ -259,10 +259,22 @@ if ($_SESSION['user']['scadenziario'] > "1")
 
 
         //fine modifica..   
+        
+        //vediamo se c'è da caricare un files..
+        
+        if($_FILES['file'] != "")
+        {
+            //echo "cuai maeda";
+            //c'è il file..
+            carica_file($_cosa, $_FILES, "pdf", "../../setting/fatture_acq/", "FA_".$_parametri[anno_proto].$_parametri[suffix_proto].$_parametri[nproto], ".pdf");
+            
+            
+        }
 
 
 
         $_risultato = tabella_scadenziario("aggiorna", $_percorso, $_parametri);
+        
         $_scritta = "<h5>Aggiornamento dati</h5>\n";
     }
     elseif ($_POST['azione'] == "Elimina")
@@ -289,7 +301,7 @@ if ($_SESSION['user']['scadenziario'] > "1")
     else
     {
         echo $_scritta;
-        echo "<h5>Ok. Operazione andata a buon Fine</h5>\n";
+        echo "<h5><font color=\"green\">Ok. Operazione andata a buon Fine</font></h5>\n";
 
         echo "<h3>$_messaggio</h3>\n";
         if (($_POST['primanota'] == "SI") AND ( $_azione != "Annulla"))

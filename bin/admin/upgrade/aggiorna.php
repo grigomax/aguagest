@@ -59,10 +59,10 @@ if ($_aguavecchio != $AGUAGEST)
 			exit;
 		}
 
-		if (file_exists("$_a.update.inc"))
+		if (file_exists("$_a.update.php"))
 		{
 			echo "lettura file esterno <br>\n";
-			include("$_a.update.inc");
+			include("$_a.update.php");
 
 			if ($fine != "1")
 			{

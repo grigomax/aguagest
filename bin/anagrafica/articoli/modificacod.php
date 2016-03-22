@@ -528,7 +528,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         printf("<option value\"%s\">%s</option>", $dati['immagine'], $dati['immagine']);
 
 
-        exec("ls ../../../imm-art/ ", $resrAr);
+        exec("ls ../../../setting/imm-art/ ", $resrAr);
         while (list($key, $val) = each($resrAr))
         {
             echo "<option value=\"$val\">$val\n";
@@ -542,7 +542,20 @@ if ($_SESSION['user']['anagrafiche'] > "2")
         printf("<option value\"%s\">%s</option>", $dati['immagine2'], $dati['immagine2']);
 
 
-        exec("ls ../../../imm-art/disegni/ ", $resrAr);
+        exec("ls ../../../setting/imm-art/disegni/ ", $resrAr);
+        while (list($key, $val) = each($resrAr))
+        {
+            echo "<option value=\"$val\">$val\n";
+        }
+        echo "</select></td></tr>";
+        
+        echo "<tr><td align=\"right\"><span class=\"testo_blu\">Prestazioni articolo:&nbsp;</span></td>";
+        echo "<td align=\"left\"><select name=\"immagine3\">";
+
+        printf("<option value\"%s\">%s</option>", $dati['immagine3'], $dati['immagine3']);
+
+
+        exec("ls ../../../setting/imm-art/prestazioni/ ", $resrAr);
         while (list($key, $val) = each($resrAr))
         {
             echo "<option value=\"$val\">$val\n";

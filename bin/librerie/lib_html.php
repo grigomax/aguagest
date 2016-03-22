@@ -1604,8 +1604,8 @@ function menu_tendina($_cosa, $_percorso)
         echo "<li class=\"menu\"><a href=\"$sito/bin/admin/backup/back_archivi.php\">Backup Archivi</a></li>\n";
         echo "<li class=\"menu\"><a href=\"$sito/bin/admin/backup/salva_impostazioni.php\">Backup Parametri</a></li>\n";
         echo "<li class=\"menu\"><a href=\"$sito/bin/admin/backup/salva_fatturePA.php\">Backup Fattura PA</a></li>\n";
+        echo "<li class=\"menu\"><a href=\"$sito/bin/admin/backup/salva_fatture_acq.php\">Backup Fatture Acquisto</a></li>\n";
         echo "<li class=\"menu\"><a href=\"$sito/bin/admin/backup/salva_immagini.php\">Backup Immagini</a></li>\n";
-        echo "<li class=\"menu\"><a href=\"$sito/bin/admin/backup/index.php\">Backup Plug-ins</a></li>\n";
         echo "<li class=\"menu\"><a href=\"$sito/upload/upload.php?cosa=parametri\">Carica Parametri</a></li>\n";
 
         echo "</ul>\n";
@@ -1637,10 +1637,12 @@ function menu_tendina($_cosa, $_percorso)
 
     echo "<li class=\"menu\"><a href=\"#\">Immagini</a><span class=\"dropRight\"></span>\n";
     echo "<ul class=\"menu\">\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/seleziona_imm.php\">Carica Immagini</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/elenco_imm.php\">Visualizza Immagini</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/seleziona_dis.php\">Carica Disegni</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/elenco_dis.php\">Visualizza Disegni</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/seleziona_imm.php?tipo=immagini\">Carica Immagini</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/elenco_imm.php?tipo=immagini\">Visualizza Immagini</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/seleziona_imm.php?tipo=disegni\">Carica Disegni</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/elenco_imm.php?tipo=disegni\">Visualizza Disegni</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/seleziona_imm.php?tipo=prestazioni\">Carica Prestazioni</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/anagrafica/articoli/immagini/elenco_imm.php?tipo=prestazioni\">Visualizza Prestazioni</a></li>\n";
     echo "</ul>\n";
     echo "</li>\n";
 
@@ -2029,7 +2031,7 @@ function menu_tendina($_cosa, $_percorso)
     echo "<ul class=\"menu\">\n";
 
     echo "<li class=\"menu\"><a href=\"$sito/bin/scadenziario/index.php\">Calendario</a></li>\n";
-    echo "<li class=\"menu\"><a href=\"$sito/bin/scadenziario/scadenza.php?azione=nuova\">Inserisci</a></li>\n";
+    echo "<li class=\"menu\"><a href=\"$sito/bin/scadenziario/scadenza.php?azione=nuo\">Inserisci</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/scadenziario/cerca_scad.php\">Cerca e modifica</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/scadenziario/stampa_scad.php\">Stampa</a></li>\n";
     echo "<li class=\"menu\"><a href=\"$sito/bin/scadenziario/esporta_dati.php\">Esporta</a></li>\n";
@@ -4586,4 +4588,88 @@ function importi($_pagamento, $_totimpo, $_totiva, $_totdoc)
 
     return array("valore" => $importo, "numero" => $_rate, "trata" => $_trata);
 }
-?>
+
+function carica_file($_cosa, $_name, $_type, $_pathdest, $_newname, $_newtype)
+{
+    //la funzione mi permette di caricare ogni tipo di file e di mandarlo dove voglio
+    global $_percorso;
+    global $_conn;
+    global $_FILES;
+
+    //dobbiamo fare un array per i tipi di files..
+    
+    $estensione['txt'] = "text/plain";
+    $estensione['csv'] = "text/comma-separated-values";
+    $estensione['ods'] = "application/vnd.oasis.opendocument.spreadsheet";
+    $estensione['png'] = "image/png";
+    $estensione['jpg'] = "image/jpg";
+    $estensione['jpg'] = "image/jpeg";
+    $estensione['pdf'] = "application/pdf";
+    
+    echo "Nome File: " . $_FILES["file"]["name"] . "<br>";
+                    //il mime-type
+    echo "Tipo File: " . $_FILES["file"]["type"] . "<br>";
+    
+//controlliamo che il file rispetti le dimensioni impostate
+        if ($_FILES["file"]["size"] < "16777216")
+        {
+            //controlliamo se ci sono stati errori durante l'upload
+            if ($_FILES["file"]["error"] > 0)
+            {
+                echo "Codice Errore: " . $_FILES["file"]["error"] . "";
+            }
+            else
+            {
+                //vediamo se il file arrivato è del formato richiesto..
+                
+                if($_FILES["file"]["type"] != $estensione[$_type])
+                {
+                    echo "file richiesto = $_pdf";
+                    echo "file arrivato ".$_FILES["file"]["type"];
+                    exit;
+                }
+                
+                
+                
+                if($_type == "immagine")
+                {
+                    //stampo alcune informazioni sul file
+                    //il nome originale
+                    echo "Nome File: " . $_FILES["file"]["name"] . "<br>";
+                    //il mime-type
+                    echo "Tipo File: " . $_FILES["file"]["type"] . "<br>";
+
+
+                    // Ottengo le informazioni sull'immagine
+                    list($width, $height, $type, $attr) = getimagesize($_FILES['file']['tmp_name']);
+
+                    // Controllo che il file sia in uno dei formati GIF, JPG o PNG
+                    //if (($type!=1) && ($type!=2) && ($type!=3))
+                    if (($type != 1) && ($type != 2) && ($type != 3))
+                    {
+
+                        echo "<br><h3>ATTENZIONE il file caricato non &egrave; tipo JPEG</h3>\n";
+                        echo "<br><h3>Operazione Abortita si prega di tornare indietro</h3>\n";
+                        exit;
+                    }
+                }
+                
+
+                //la dimensione in byte
+                echo "Dimensione [byte]: " . $_FILES["file"]["size"] . "<br>";
+                //il nome del file temporaneo
+                //	echo "Nome Temporaneo: " . $_FILES["file"]["tmp_name"] . "<br>";
+                //controllo se il file esiste già sul server
+                //sposto il file caricato dalla cartella temporanea alla destinazione finale
+                move_uploaded_file($_FILES["file"]["tmp_name"], "$_pathdest" . $_newname.$_newtype);
+                
+                //echo "File caricato nella cartella immagini   " . $_FILES["file"]["name"];
+            }
+        }
+        else
+        {
+            echo "File troppo grande!!";
+            exit;
+        }
+    }
+    ?>

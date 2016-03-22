@@ -29,25 +29,42 @@ menu_tendina($_cosa, $_percorso);
 if ($_SESSION['user']['anagrafiche'] > "1")
 {
 
+    $_tipo = $_GET['tipo'];
     echo "<table border=\"0\" width=\"100%\"><tr><td align=\"center\">";
 
 //progrmma che elenca tutte le immagini..
 // CAMPO seleziona immagine
-    echo "<h3>Elenco immagini.. </h3>\n";
+    echo "<h3>Elenco $_tipo.. </h3>\n";
+    
+    if ($_tipo == "immagini")
+        {
+            $_link = "imm-art";
+            $_immagine = "immagine";
+        }
+        elseif ($_tipo == "disegni")
+        {
+             $_link = "imm-art/disegni";
+            $_immagine = "immagine2";
+        }
+        else
+        {
+             $_link = "imm-art/prestazioni";
+            $_immagine = "immagine3";
+        }
 
     echo "<table align=\"center\" border=\"1\">\n";
 //leggiamo la cartella..
-    exec("ls ../../../../imm-art/ ", $resrAr);
+    exec("ls ../../../../setting/$_link/ ", $resrAr);
     while (list($key, $val) = each($resrAr))
     {
 	echo "<tr>\n";
-	echo "<td align=\"center\"><a href=\"visualizza_imm.php?azione=visual&file=$val\"><img src=\"../../../../imm-art/$val\" width=\"50px\" height=\"50px\"><br><font size=\"1\">$val</a></td>\n";
+	echo "<td align=\"center\"><a href=\"visualizza_imm.php?tipo=$_tipo&azione=visual&file=$val\"><img src=\"../../../../setting/$_link/$val\" width=\"150px\" height=\"150px\"><br><font size=\"1\">$val</a></td>\n";
 
-	for ($a = 1; $a <= 3; $a++)
+	for ($a = 1; $a <= 4; $a++)
 	{
 	    list($key, $val) = each($resrAr);
 	    
-	    echo "<td align=\"center\"><a href=\"visualizza_imm.php?azione=visual&file=$val\"><img src=\"../../../../imm-art/$val\" width=\"50px\" height=\"50px\"><br><font size=\"1\">$val</a></td>\n";
+	    echo "<td align=\"center\"><a href=\"visualizza_imm.php?tipo=$_tipo&azione=visual&file=$val\"><img src=\"../../../../setting/$_link/$val\" width=\"150px\" height=\"150px\"><br><font size=\"1\">$val</a></td>\n";
 	}
 	echo "</tr>";
     }

@@ -385,8 +385,8 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(80, 5, $dati2['indirizzo'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
-	$pdf->Cell(13, 5, $dati2['cap'], 0, 0, 'L');
-	$pdf->Cell(70, 5, substr($dati2['citta'],0,30), 0, 0, 'L');
+	$pdf->Cell(15, 5, $dati2['cap'], 0, 0, 'L');
+	$pdf->Cell(68, 5, substr($dati2['citta'],0,30), 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
 	$pdf->Cell(70, 5, $dati2['codnazione'], 0, 1, 'L');
@@ -412,8 +412,8 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
             $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	    $pdf->Cell(80, 5, $dati['dindirizzo'], 0, 1, 'L');
 	    $pdf->SetX(($MARGINE_SINISTRO + 100));
-	    $pdf->Cell(13, 5, $dati['dcap'], 0, 0, 'L');
-	    $pdf->Cell(70, 5, $dati['dcitta'], 0, 0, 'L');
+	    $pdf->Cell(15, 5, $dati['dcap'], 0, 0, 'L');
+	    $pdf->Cell(68, 5, $dati['dcitta'], 0, 0, 'L');
 	    $pdf->Cell(10, 5, $dati['dprov'], 0, 1, 'L');
 	    $pdf->SetX(($MARGINE_SINISTRO + 100));
 	    $pdf->Cell(70, 5, $dati['dcodnazione'], 0, 1, 'L');
@@ -475,7 +475,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
 	$pdf->Cell(15, 5, $TC015, 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati2['banca'], 0, 0, 'L');
 	$pdf->SetXY($MARGINE_SINISTRO, 90);
-	$pdf->Cell(15, 5, $TC016, 0, 0, 'L');
+	$pdf->Cell(20, 5, $TC016, 0, 0, 'L');
 	$pdf->Cell(30, 5, $dati2['swift'], 0, 0, 'L');
 	$pdf->Cell(13, 5, $TC017, 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati2['iban'], 0, 0, 'L');
@@ -506,8 +506,8 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(83, 5, $dati2['indirizzo'], 0, 1, 'L');
 	$pdf->SetX(($MARGINE_SINISTRO + 100));
-	$pdf->Cell(15, 5, $dati2['cap'], 0, 0, 'L');
-	$pdf->Cell(75, 5, $dati2['citta'], 0, 0, 'L');
+	$pdf->Cell(18, 5, $dati2['cap'], 0, 0, 'L');
+	$pdf->Cell(70, 5, $dati2['citta'], 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX(($MARGINE_SINISTRO + 100));
 	$pdf->Cell(70, 5, $dati2['codnazione'], 0, 1, 'L');
@@ -527,8 +527,8 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(83, 5, $dati['dindirizzo'], 0, 1, 'L');
 	$pdf->SetX(($MARGINE_SINISTRO + 100));
-	$pdf->Cell(15, 5, $dati['dcap'], 0, 0, 'L');
-	$pdf->Cell(75, 5, $dati['dcitta'], 0, 0, 'L');
+	$pdf->Cell(18, 5, $dati['dcap'], 0, 0, 'L');
+	$pdf->Cell(70, 5, $dati['dcitta'], 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati['dprov'], 0, 1, 'L');
         $pdf->SetX(($MARGINE_SINISTRO + 100));
         $pdf->Cell(10, 5, "Fax ".$dati['faxdest'], 0, 1, 'L');
@@ -559,7 +559,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(80, 5, $dati2['indirizzo'], 0, 1, 'L');
 	$pdf->SetX(110);
-	$pdf->Cell(12, 5, $dati2['cap'], 0, 0, 'L');
+	$pdf->Cell(18, 5, $dati2['cap'], 0, 0, 'L');
 	$pdf->Cell(70, 5, substr($dati2['citta'],0,30), 0, 0, 'L');
 	$pdf->Cell(11, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX(110);
@@ -591,7 +591,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
         $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	$pdf->Cell(80, 5, $dati2['indirizzo'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
-	$pdf->Cell(13, 5, $dati2['cap'], 0, 0, 'L');
+	$pdf->Cell(18, 5, $dati2['cap'], 0, 0, 'L');
 	$pdf->Cell(70, 5, substr($dati2['citta'],0,30), 0, 0, 'L');
 	$pdf->Cell(10, 5, $dati2['prov'], 0, 1, 'L');
 	$pdf->SetX($MARGINE_SINISTRO);
@@ -616,7 +616,7 @@ function testata_doc_pdf($datidoc, $dati, $dati2, $_datait, $_pg, $pagina, $_pag
             $pdf->SetFont($datidoc[ST_FONTINTEST], '', $datidoc[ST_FONTINTESTSIZE]-1);
 	    $pdf->Cell(80, 5, $dati['dindirizzo'], 0, 1, 'L');
 	    $pdf->SetX(110);
-	    $pdf->Cell(13, 5, $dati['dcap'], 0, 0, 'L');
+	    $pdf->Cell(18, 5, $dati['dcap'], 0, 0, 'L');
 	    $pdf->Cell(70, 5, $dati['dcitta'], 0, 0, 'L');
 	    $pdf->Cell(10, 5, $dati['dprov'], 0, 1, 'L');
 	    $pdf->SetX(110);
@@ -1272,11 +1272,12 @@ function corpo_doc_pdf($datidoc, $result, $LINGUA, $corpo_doc)
                         $ciao = $pdf->GetY();
                     }
                     
+                    
                     $descY = ($pdf->GetY() - $corpoy - 4);
                     
                     if($ciao != "")
                     {
-                        $pdf->SetXY($corpox, $ciao -4);
+                        $pdf->SetXY($corpox, $corpoy);
                     }
                     else
                     {

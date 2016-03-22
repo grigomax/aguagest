@@ -136,6 +136,7 @@ CREATE TABLE `articoli` (
   `egpz` char(2) DEFAULT 'NO',
   `immagine2` varchar(100) DEFAULT NULL,
   `es_selezione` char(2) NOT NULL DEFAULT 'NO',
+  `immagine3` varchar(100) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`articolo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -189,7 +190,7 @@ CREATE TABLE `bv_bolle` (
   `dragsoc` varchar(40) DEFAULT NULL,
   `dragsoc2` varchar(60) DEFAULT NULL,
   `dindirizzo` varchar(30) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(30) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` varchar(30) DEFAULT NULL,
@@ -344,7 +345,7 @@ CREATE TABLE `clienti` (
   `ragsoc` varchar(100) NOT NULL DEFAULT '',
   `ragsoc2` varchar(100) DEFAULT NULL,
   `indirizzo` varchar(60) DEFAULT NULL,
-  `cap` varchar(5) DEFAULT NULL,
+  `cap` varchar(8) DEFAULT NULL,
   `citta` varchar(60) DEFAULT NULL,
   `prov` char(2) DEFAULT NULL,
   `codnazione` varchar(30) DEFAULT NULL,
@@ -373,7 +374,7 @@ CREATE TABLE `clienti` (
   `dragsoc` varchar(100) DEFAULT NULL,
   `dragsoc2` varchar(100) DEFAULT NULL,
   `dindirizzo` varchar(60) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(60) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` varchar(30) DEFAULT NULL,
@@ -399,6 +400,7 @@ CREATE TABLE `clienti` (
   `cod_ute_dest` varchar(15) DEFAULT NULL,
   `es_selezione` char(2) NOT NULL DEFAULT 'NO',
   `es_pubblicita` char(2) NOT NULL DEFAULT 'NO',
+  `email_certi` varchar(100) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`codice`),
   UNIQUE KEY `pi` (`piva`)
@@ -444,7 +446,7 @@ CREATE TABLE `co_testacalce` (
   `dragsoc` varchar(40) DEFAULT NULL,
   `dragsoc2` varchar(60) DEFAULT NULL,
   `dindirizzo` varchar(30) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(30) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` char(3) DEFAULT NULL,
@@ -482,7 +484,7 @@ CREATE TABLE `destinazioni` (
   `dragsoc` varchar(40) DEFAULT NULL,
   `dragsoc2` varchar(60) DEFAULT NULL,
   `dindirizzo` varchar(30) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(30) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` varchar(30) DEFAULT NULL,
@@ -573,7 +575,7 @@ CREATE TABLE `fornitori` (
   `ragsoc` varchar(100) NOT NULL DEFAULT '',
   `ragsoc2` varchar(100) DEFAULT NULL,
   `indirizzo` varchar(60) DEFAULT NULL,
-  `cap` varchar(5) DEFAULT NULL,
+  `cap` varchar(8) DEFAULT NULL,
   `citta` varchar(60) DEFAULT NULL,
   `prov` char(2) DEFAULT NULL,
   `codnazione` varchar(30) DEFAULT NULL,
@@ -600,7 +602,7 @@ CREATE TABLE `fornitori` (
   `dragsoc` varchar(100) DEFAULT NULL,
   `dragsoc2` varchar(100) DEFAULT NULL,
   `dindirizzo` varchar(60) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(60) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` varchar(30) DEFAULT NULL,
@@ -620,6 +622,7 @@ CREATE TABLE `fornitori` (
   `indice_pa` varchar(7) DEFAULT NULL,
   `cod_ute_dest` varchar(15) DEFAULT NULL,
   `es_selezione` char(2) NOT NULL DEFAULT 'NO',
+  `email_certi` varchar(100) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`codice`),
   UNIQUE KEY `pi` (`piva`)
@@ -664,7 +667,7 @@ CREATE TABLE `fv_testacalce` (
   `dragsoc` varchar(40) DEFAULT NULL,
   `dragsoc2` varchar(60) DEFAULT NULL,
   `dindirizzo` varchar(30) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(30) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` varchar(30) DEFAULT NULL,
@@ -779,6 +782,8 @@ CREATE TABLE `magastorico` (
   `ddtfornitore` varchar(20) DEFAULT '',
   `fatturacq` varchar(20) DEFAULT '',
   `protoiva` char(5) DEFAULT NULL,
+  `suffix_proto` char(2) NOT NULL DEFAULT 'A',
+  `anno_proto` year(4) NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -801,6 +806,8 @@ CREATE TABLE `magazzino` (
   `ddtfornitore` varchar(20) DEFAULT '',
   `fatturacq` varchar(20) DEFAULT '',
   `protoiva` char(5) DEFAULT NULL,
+  `suffix_proto` char(2) NOT NULL DEFAULT 'A',
+  `anno_proto` year(4) NOT NULL,
   `status` varchar(10) DEFAULT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -845,7 +852,7 @@ CREATE TABLE `oc_testacalce` (
   `dragsoc` varchar(40) DEFAULT NULL,
   `dragsoc2` varchar(60) DEFAULT NULL,
   `dindirizzo` varchar(30) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(30) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` char(3) DEFAULT NULL,
@@ -912,7 +919,7 @@ CREATE TABLE `of_testacalce` (
   `dragsoc` varchar(40) DEFAULT NULL,
   `dragsoc2` varchar(60) DEFAULT NULL,
   `dindirizzo` varchar(30) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(30) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` char(3) DEFAULT NULL,
@@ -1109,7 +1116,7 @@ CREATE TABLE `pv_testacalce` (
   `dragsoc` varchar(40) DEFAULT NULL,
   `dragsoc2` varchar(60) DEFAULT NULL,
   `dindirizzo` varchar(30) DEFAULT NULL,
-  `dcap` varchar(5) DEFAULT NULL,
+  `dcap` varchar(8) DEFAULT NULL,
   `dcitta` varchar(30) DEFAULT NULL,
   `dprov` char(2) DEFAULT NULL,
   `dcodnazione` char(3) DEFAULT NULL,
@@ -1264,7 +1271,7 @@ CREATE TABLE `tipart` (
   `codice` varchar(18) NOT NULL,
   `tipoart` varchar(70) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=230 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=231 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS todo;
 

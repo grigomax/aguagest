@@ -66,6 +66,7 @@ if ($_SESSION['user']['setting'] > "2")
 
     printf("<br><br><form action=\"ris_docstatus.php?tdoc=$_tdoc\" method=\"POST\">");
     printf("Anno Corrente<input type=\"radio\" name=\"anno\" value=\"%s\" checked>$_anno", $_anno);
+    printf("Suffisso <input type=\"radio\" name=\"suffix\" value=\"%s\" checked>$_suffix", $_suffix);
 
     echo "<br><b>Selezionare il documento</b><br>";
     echo "<select name=\"ndoc\">\n";

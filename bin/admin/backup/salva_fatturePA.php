@@ -28,12 +28,8 @@ if ($_SESSION['user']['setting'] > "3")
     $filename = "AGFPA_aguagest_fatturePA_" . date("Ymd") . ".zip";
     
     //rimuoviamo il vecchio se cè
-    
-    if (file_exists("../../../spool/$filename"))
-    {
-        unlink("../../../spool/$filename");
-    }
-
+    //eliminiamo i file .zip
+    array_map('unlink', glob("../../../spool/*.zip"));
 
     header("Cache-Control: no-store, no-cache, must-revalidate");
     header("Cache-Control: post-check=0, pre-check=0", false);
@@ -53,12 +49,12 @@ if ($_SESSION['user']['setting'] > "3")
 //    echo "numfiles: " . $zip->numFiles . "\n";
 //    echo "status:" . $zip->status . "\n";
     $zip->close();
-    header("Content-Length: " . filesize("../../../spool/$backupFile"));
+    //header("Content-Length: " . filesize("../../../spool/$backupFile"));
     readfile("../../../spool/$filename");
 
 
 
-    echo "<h1 align=\"center\"> Copie eseguite si può chiuedere la finestra.. </h1>\n";
+    //echo "<h1 align=\"center\"> Copie eseguite si può chiuedere la finestra.. </h1>\n";
 }
 else
 {

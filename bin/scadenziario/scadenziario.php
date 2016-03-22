@@ -105,7 +105,7 @@ if ($_SESSION['user']['scadenziario'] > "1")
             echo "<tr>";
             echo "<td align=\"center\"><span class=\"testo_blu\">$dati[nscad]</span></td>\n";
             echo "<td align=\"center\"><span class=\"testo_blu\">$dati[scadenza]</span></td>\n";
-            echo "<td align=\"left\"><span class=\"testo_blu\"><a href=\"scadenza.php?azione=visualizza&anno=$dati[anno]&nscad=$dati[nscad]\">$dati[descrizione]</a></span></td>";
+            echo "<td align=\"left\"><span class=\"testo_blu\"><a href=\"scadenza.php?azione=vis$dati[anno]$dati[nscad]\">$dati[descrizione]</a></span></td>";
             echo "<td align=\"right\"><span class=\"testo_blu\">$dati[status]</span></td>\n";
             echo "<td align=\"right\"><span class=\"testo_blu\"><b>$dati[impeff]</b></span></td>\n";
             echo "<td align=\"center\"><span class=\"testo_blu\">$dati[banca]</span></td>\n";

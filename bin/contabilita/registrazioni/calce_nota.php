@@ -126,12 +126,26 @@ if ($_SESSION['user']['contabilita'] > "2")
 	echo "<table width=\"90%\" border=\"0\">\n";
 
 	echo "<td colspan=\"3\">Data registrazione $_data_reg</td><td colspan=\"3\">Data Contabile $_data_cont</td></tr>\n";
-	echo "<form action=\"result_nota.php\" method=\"POST\"><tr><td colspan=\"6\"><br>Descrizione Movimento   <b>$_testo</b></td></tr>\n";
+	echo "<form action=\"result_nota.php\" enctype=\"multipart/form-data\" method=\"POST\">\n";
+        echo "<tr><td colspan=\"6\"><br>Descrizione Movimento   <b>$_testo</b></td></tr>\n";
 	echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
 
 	schermate_calcenota($_finestra, $_parametri);
 
 
+        if($_causale == "FA")
+        {
+            //inseriamo la gestione del file fattura..
+            echo "<tr><td colspan=\"6\"><hr></td></tr>\n";
+            echo "<tr><td colspan=\"3\"><font color=\"red\">Allegare file in pdf fornitore ?</font></td>\n";
+            echo "<td align=\"left\" colspan=\"3\">\n";
+            echo "<input name=\"MAX_FILE_SIZE\" type=\"hidden\" value=\"16777216\" />\n";
+        #<!--campo per la scelta del file-->
+            echo "<input size=\"50\" id=\"file\" name=\"file\" type=\"file\"  /><br>&nbsp;\n";
+            echo "</td></tr>\n";
+        }
+        
+        
 	if ($SPESOMETRO == "SI")
 	{
 		echo "<tr><td colspan=\"6\"><hr></td></tr>\n";

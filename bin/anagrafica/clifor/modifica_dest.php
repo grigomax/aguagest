@@ -138,7 +138,7 @@ if ($_SESSION['user']['anagrafiche'] > "2")
 
 // CAMPO Cap ---------------------------------------------------------------------------------------
         echo "<tr><td align=\"left\"  >Cap destinazione :&nbsp;</td>";
-        printf("<td align=\"left\" ><input type=\"text\" name=\"dcap\" value=\"%s\" size=\"6\" maxlength=\"6\"></td></tr>", $dati['dcap']);
+        printf("<td align=\"left\" ><input type=\"text\" name=\"dcap\" value=\"%s\" size=\"9\" maxlength=\"8\"></td></tr>", $dati['dcap']);
 
 // CAMPO citt�---------------------------------------------------------------------------------------
         echo "<tr><td align=\"left\"  >Citt&agrave; destinazione:&nbsp;</td>";

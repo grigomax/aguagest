@@ -33,16 +33,38 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 {
 
     $_azione = $_POST['azione'];
+    $_tipo = $_POST['tipo'];
 
     echo "<table border=\"0\" width=\"80%\" ><tr><td align=\"center\">";
+
+    if ($_tipo == "immagini")
+    {
+        $_link = "imm-art";
+        $_immagine = "immagine";
+    }
+    elseif ($_tipo == "disegni")
+    {
+        $_link = "imm-art/disegni";
+        $_immagine = "immagine2";
+    }
+    else
+    {
+        $_link = "imm-art/prestazioni";
+        $_immagine = "immagine3";
+    }
 
     if ($_azione == "Elimina")
     {
         //elinazione file..
 
-        unlink("../../../../imm-art/$_POST[file]");
-
-        echo "<h3>File Eliminato con successo... !</h3>\n";
+        if (unlink("../../../../setting/$_link/$_POST[file]"))
+        {
+            echo "<h3>File Eliminato con successo... !</h3>\n";
+        }
+        else
+        {
+            echo "<h3>impossibile eliminare il file... !</h3>\n";
+        }
     }
     else
     {
@@ -83,8 +105,39 @@ if ($_SESSION['user']['anagrafiche'] > "1")
                     //	echo "Nome Temporaneo: " . $_FILES["file"]["tmp_name"] . "<br>";
                     //controllo se il file esiste già sul server
                     //sposto il file caricato dalla cartella temporanea alla destinazione finale
-                    move_uploaded_file($_FILES["file"]["tmp_name"], "../../../../imm-art/" . $_FILES["file"]["name"]);
-                    echo "File caricato nella cartella immagini   " . $_FILES["file"]["name"];
+                    if ($_tipo == "immagini")
+                    {
+                        if (move_uploaded_file($_FILES["file"]["tmp_name"], "../../../../setting/imm-art/" . $_FILES["file"]["name"]))
+                        {
+                            echo "File caricato nella cartella immagini   " . $_FILES["file"]["name"];
+                        }
+                        else
+                        {
+                            echo "Impossibile spostare il file..   " . $_FILES["file"]["name"];
+                        }
+                    }
+                    elseif ($_tipo == "disegni")
+                    {
+                        if (move_uploaded_file($_FILES["file"]["tmp_name"], "../../../../setting/imm-art/disegni/" . $_FILES["file"]["name"]))
+                        {
+                            echo "File caricato nella cartella immagini   " . $_FILES["file"]["name"];
+                        }
+                        else
+                        {
+                            echo "Impossibile spostare il file..   " . $_FILES["file"]["name"];
+                        }
+                    }
+                    else
+                    {
+                        if (move_uploaded_file($_FILES["file"]["tmp_name"], "../../../../setting/imm-art/prestazioni/" . $_FILES["file"]["name"]))
+                        {
+                            echo "File caricato nella cartella immagini   " . $_FILES["file"]["name"];
+                        }
+                        else
+                        {
+                            echo "Impossibile spostare il file..   " . $_FILES["file"]["name"];
+                        }
+                    }
                 }
             }
             else
@@ -96,7 +149,18 @@ if ($_SESSION['user']['anagrafiche'] > "1")
             echo "<br>Inizio conversione immagine.. ";
 //qui iniziamo ad alaborare il file... per ridimensionarlo a 500 per 500 pixel..
 // Ottengo le informazioni sull'immagine originale
-            list($width, $height, $type, $attr) = getimagesize('../../../../imm-art/' . $_FILES['file']['name']);
+            if ($_tipo == "immagini")
+            {
+                list($width, $height, $type, $attr) = getimagesize('../../../../setting/imm-art/' . $_FILES['file']['name']);
+            }
+            elseif ($_tipo == "disegni")
+            {
+                list($width, $height, $type, $attr) = getimagesize('../../../../setting/imm-art/disegni/' . $_FILES['file']['name']);
+            }
+            else
+            {
+                list($width, $height, $type, $attr) = getimagesize('../../../../setting/imm-art/prestazioni/' . $_FILES['file']['name']);
+            }
 
 //se l'immagine ' è più grande inizio a convertirla.
 //
@@ -121,11 +185,40 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 
                 // Creo la versione 120*90 dell'immagine (thumbnail)
                 $thumb = imagecreatetruecolor($_width, $_height);
-                $source = imagecreatefromjpeg('../../../../imm-art/' . $_FILES['file']['name']);
+
+
+
+                if ($_tipo == "immagini")
+                {
+                    $source = imagecreatefromjpeg('../../../../setting/imm-art/' . $_FILES['file']['name']);
+                }
+                elseif ($_tipo == "disegni")
+                {
+                    $source = imagecreatefromjpeg('../../../../setting/imm-art/disegni/' . $_FILES['file']['name']);
+                }
+                else
+                {
+                    $source = imagecreatefromjpeg('../../../../setting/imm-art/prestazioni/' . $_FILES['file']['name']);
+                }
+
+
                 imagecopyresized($thumb, $source, 0, 0, 0, 0, $_width, $_height, $width, $height);
 
                 // Salvo l'immagine ridimensionata
-                imagejpeg($thumb, '../../../../imm-art/' . $_FILES['file']['name'], 90);
+
+
+                if ($_tipo == "immagini")
+                {
+                    imagejpeg($thumb, '../../../../setting/imm-art/' . $_FILES['file']['name'], 90);
+                }
+                elseif ($_tipo == "disegni")
+                {
+                    imagejpeg($thumb, '../../../../setting/imm-art/disegni/' . $_FILES['file']['name'], 90);
+                }
+                else
+                {
+                    imagejpeg($thumb, '../../../../setting/imm-art/prestazioni/' . $_FILES['file']['name'], 90);
+                }
             }
 
             $_file = $_FILES['file']['name'];
@@ -134,7 +227,19 @@ if ($_SESSION['user']['anagrafiche'] > "1")
         {
             //rinomina file...
 
-            rename("../../../../imm-art/$_POST[orfile]", "../../../../imm-art/$_POST[file]");
+            if(rename("../../../../setting/imm-art/$_POST[orfile]", "../../../../setting/$_link/$_POST[file]"))
+            {
+                echo "<h3>Rinomina file $_POST[orfile] in $_POS[file] riuscita </h3>\n";
+            }
+            else
+            {
+                echo "<h3>Errore Rinomina file $_POST[orfile] in $_POS[file] riuscita </h3>\n";
+            }
+
+            
+
+
+
 
             $_file = $_POST['file'];
 
@@ -148,7 +253,7 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 //visualizziamo l'immagine e chiediamo se la si vuole cancellare rinominare oppure se è tutto ok..
         echo "</form>\n";
 
-        echo "<p style='text-align:center;'><img src=\"../../../../imm-art/$_file\" >";
+        echo "<p style='text-align:center;'><img src=\"../../../../setting/$_link/$_file\" >";
 
         echo "</table>";
 // ************************************************************************************** -->

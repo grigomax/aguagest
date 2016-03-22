@@ -1816,6 +1816,8 @@ function schermate_calcenota($_finestra, $_parametri)
 
 function schermate_visualizza_reg($_causale, $_anno, $_nreg, $_parametri)
 {
+    global $_percorso;
+    
 	if ($_causale == "ST")
 	{
 		//apriamo una tabella nuova..
@@ -1862,7 +1864,25 @@ function schermate_visualizza_reg($_causale, $_anno, $_nreg, $_parametri)
             <td colspan=\"2\" align=\"center\" class=\"tabella\">Cod. Pagamento</td>
             </tr>\n";
 		echo "<tr><td align=\"center\" class=\"tabella_elenco\">$_parametri[segno]</td>
-            <td class=\"tabella_elenco\" align=\"center\">$_parametri[nproto] / $_parametri[suffix_proto]</td>
+            <td class=\"tabella_elenco\" align=\"center\">$_parametri[nproto] / $_parametri[suffix_proto]<br>\n";
+            if(($_parametri[nproto] != "") AND ($_parametri[suffix_proto] != "") AND ($_parametri[anno_proto] != ""))
+        {
+            //verifichiamo se abbiamo un file con lo stesso nome..
+            if (is_file($_percorso."../setting/fatture_acq/FA_".$_parametri['anno_proto'].$_parametri['suffix_proto'].$_parametri['nproto'].".pdf" ))
+            {
+                //vuo dire che c'è..
+                echo "<font color=\"green\"><a href=\"".$_percorso."../setting/fatture_acq/FA_".$_parametri[anno_proto].$_parametri[suffix_proto].$_parametri[nproto].".pdf\" target=\"_blank\"> Trovata Fattura <img src=\"$_percorso/images/pdf.png\" width=\"35px\"> </a></font>\n";
+                
+            }
+            else
+            {
+                echo "<font color=\"white\">Nessuna Fattura in pdf trovata</font>\n";
+            }
+            
+        }
+                
+                
+                echo "</td>
             <td class=\"tabella_elenco\" align=\"center\">$_parametri[anno_proto]</td>
             <td align=\"left\" width=\"50%\" class=\"tabella_elenco\">$_parametri[ndoc]-$_parametri[suffix_doc] / $_parametri[anno_doc] del $_parametri[data_doc]</td>
             <td align=\"center\" class=\"tabella_elenco\">$_parametri[tipopag]</td>

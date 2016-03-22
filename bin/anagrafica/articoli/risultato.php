@@ -130,13 +130,13 @@ if ($_SESSION['user']['anagrafiche'] > "1")
 			echo "<tr>";
 			if (($_campi == "articolo") OR ($_campi == "descrizione"))
 			{
-				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
+				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../setting/imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
 				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['articolo']);
 				printf("<td align=\"center\"><span class=\"testo_blu\">%s</span></td>", $dati['artfor']);
 			}
 			else
 			{
-				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
+				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\"><img src=\"../../../setting/imm-art/%s\" height=\"50\" width=\"50\"></a></span></td>", $dati['articolo'], $dati['immagine']);
 				printf("<td align=\"center\"><span class=\"testo_blu\"><a href=\"visualizzacod.php?codice=%s\" class=\"testo_blu\">%s</a></span></td>", $dati['articolo'], $dati['articolo']);
 				if($_campi == "codbar")
 				{

@@ -233,9 +233,12 @@ if ($_SESSION['user']['anagrafiche'] > "1")
     printf("<td align=\"left\" ><a href=\"mailto:%s\">%s</td></tr>", $dati['email2'], $dati['email2']);
 
 // ---------------------------------------------------------------------------------------
-    echo "<tr><td align=\"left\" >email Conabilità .:&nbsp;</td>";
+    echo "<tr><td align=\"left\" >email Contabilità .:&nbsp;</td>";
     printf("<td align=\"left\" ><a href=\"mailto:%s\">%s</td></tr>", $dati['email3'], $dati['email3']);
 
+    echo "<tr><td align=\"left\" >email certificata .:&nbsp;</td>";
+    printf("<td align=\"left\" ><a href=\"mailto:%s\">%s</td></tr>", $dati['email_certi'], $dati['email_certi']);
+    
 
     echo "</table>\n";
     echo "</div>\n";

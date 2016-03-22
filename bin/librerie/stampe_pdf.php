@@ -252,10 +252,15 @@ function intesta_pagina($_cosa, $_titolo, $_parametri)
         if($dati[immagine] != "")
         {
             // inserisco l'immagine con l'intestazione
-            $pdf->Image("../../../imm-art/$dati[immagine]", 20, 50, 60, 60);
+            $pdf->Image("../../../setting/imm-art/$dati[immagine]", 15, 50, 60, 60);
             if ($dati['immagine2'] != "")
             {
-                $pdf->Image("../../../imm-art/disegni/$dati[immagine2]", 110, 50, 60, 60);
+                $pdf->Image("../../../setting/imm-art/disegni/$dati[immagine2]", 85, 50, 60, 60);
+            }
+            
+            if ($dati['immagine3'] != "")
+            {
+                $pdf->Image("../../../setting/imm-art/prestazioni/$dati[immagine3]", 140, 50, 60, 60);
             }
         }
         
